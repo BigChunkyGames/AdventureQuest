@@ -1,10 +1,14 @@
+visitedareas = {}
+
 def visited():
     try:
-        if visited:
-            print("This is your second time here.")
-    except NameError:
-        print("This is your first time here.")
-        visited = True
+        if visitedareas['tavern']:  # If 'tavern' is in 'visitedareas' dictionary
+            pass
+        return True
+    except KeyError:  # If 'tavern' is not in 'visitedareas' dictionary
+        visitedareas['tavern'] = True
+        return False
 
-visited()
-visited()
+print(visited())
+print(visited())
+print(visited())
