@@ -40,7 +40,7 @@ elif opponent == 1 and guess == 3:
    win = 0
 elif opponent == 2 and guess == 1:
    print("Paper covers rock!")
-   print("You lofst!")
+   print("You lost!")
    win = 0
 elif opponent == 2 and guess == 3:
    print("Scissors beats paper!")
