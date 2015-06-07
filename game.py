@@ -5,7 +5,7 @@ import os   # Used to clear terminal
 # Your comments are lame
 
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
-print("Welcome to ADVENTURE QUEST Version 0.00.20P! The P stands for python.")
+print("Welcome to ADVENTURE QUEST Version 0.00.21P! The P stands for python.")
 
 aspect = {}  # Beginning inputs
 visitedareas = {}  # Determines if a room is visited
@@ -18,25 +18,18 @@ def show(text):
     raw_input("... ")
 
 # User inputs
-
-    # Name
 def name():
     name = raw_input("Enter your hero's name: ").lower().strip().title()
     while name == "":
         name = raw_input("You must enter your hero's name: ").lower().strip().title()
     return name
-aspect['name'] = name()
 
-    # Gender
 def gender():
     gender = raw_input("Enter your hero's gender, boy or girl: ").lower()
     while gender != "boy" and gender != "girl":
         gender = raw_input("Select boy or girl: ").lower()
     return gender
 
-aspect['gender'] = gender()
-
-        # Pronouns
 def pronouns():
     if aspect['gender'] == "boy":
         heshe = "he"
@@ -49,9 +42,7 @@ def pronouns():
     else:
         exit("Error on line %s: Program attempted to create pronouns, but characters gender is not 'boy' or 'girl'." % getframeinfo(currentframe()).lineno)
     return heshe, HeShe, hisher
-aspect['heshe'], aspect['HeShe'], aspect['hisher'] = pronouns()
 
-        # Improper Nouns
 def improperNouns():
     nam = "n occupation"
     for x in xrange(0, 4):
@@ -73,9 +64,7 @@ def improperNouns():
         else:
             exit("Error on line %s: Program attempted to assign input to variable in category 'Improper Nouns', but variable was out of range." % getframeinfo(currentframe()).lineno)
     return occ, viverb, skill1, skill2
-aspect['occ'], aspect['viverb'], aspect['skill1'], aspect['skill2'] = improperNouns()
 
-    # Proper Nouns
 def properNouns():
     nam = "town"
     for x in xrange(0, 2):
@@ -91,9 +80,7 @@ def properNouns():
         else:
             exit("Error on line %s: Program attempted to assign input to variable in category 'Proper Nouns', but variable was out of range." % getframeinfo(currentframe()).lineno)
     return town, hills
-aspect['town'], aspect['hills'] = properNouns()
 
-    # Adjectives
 def adjectives():
     while True:
         try:
@@ -115,9 +102,15 @@ def adjectives():
         except IndexError:
             print("Your list doesn't seem to be long enough, try again.")
 
-aspect['adj1'], aspect['adj2'], aspect['adj3'], aspect['adj4'], aspect['adj5'] = adjectives()
+def charCreation():
+    aspect['name'] = name()
+    aspect['gender'] = gender()
+    aspect['heshe'], aspect['HeShe'], aspect['hisher'] = pronouns()
+    aspect['occ'], aspect['viverb'], aspect['skill1'], aspect['skill2'] = improperNouns()
+    aspect['town'], aspect['hills'] = properNouns()
+    aspect['adj1'], aspect['adj2'], aspect['adj3'], aspect['adj4'], aspect['adj5'] = adjectives()
 
-# Introduction
+
 def introduction():
     os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
     show("In a time before the world fell into the splitting fires of hell, we looked to the legends.")
@@ -129,17 +122,23 @@ def introduction():
     raw_input("... ")
     print("")
     show("but first, %s was thirsty." % aspect['heshe'])
-    print("")
-    show("You recognize your humble town's tavern to the north.")
-    move = raw_input("Type 'north' to enter to the tavern. ").lower().strip()
-    while move != "tavern":
-        move = raw_input("No, it's spelled t-a-v-e-r-n. ").lower().strip()
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print("You recognize your humble town's tavern to the north.")
+    move = raw_input("Type 'north' to enter the tavern. ").lower().strip()
+    while move != "north":
+        if move == 'south' or move == 'east' or move == 'west':
+            move = raw_input("You really want to go to the tavern. ")
+        else:
+            move = raw_input("No, it's spelled n-o-r-t-h. ").lower().strip()
     # Tavern
     show("The tavern in %s is old and rugged. Beaten down by countless travelers, it has acquired quite the homey atmosphere." % aspect['town'])
     print('You approach the bartender. "Ey, what\'le it be for ya?" he says.')
     drink = raw_input("On the shelf is a bottle of rum and a can of Mountain Dew. Which do you choose? (rum, dew) ").lower()
     while drink != "rum" and drink != "dew":
-        drink = raw_input("Come on, 'rum' or 'dew'. ")
+        if drink == 'neither':
+            drink = raw_input("You've got to drink something. What'll it be? ")
+        else:
+            drink = raw_input("Come on, 'rum' or 'dew'. ")
     if drink == "rum":
         show("\"I'll 'ave the rum, sir,\" you say.")
     elif drink == "dew":
@@ -161,6 +160,7 @@ def introduction():
     else:
         exit("Error on line %s: Program attempted to interpret variable 'drink', but variable was out of range." % getframeinfo(currentframe()).lineno)
 
+charCreation()
 introduction()
 
 print("That's the end of this version of the game.")
