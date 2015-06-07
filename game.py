@@ -8,6 +8,7 @@ os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
 print("Welcome to ADVENTURE QUEST Version 0.00.20P! The P stands for python.")
 
 aspect = {}  # Beginning inputs
+visitedareas = {}  # Determines if a room is visited
 
 # Define Functions
 
@@ -129,38 +130,37 @@ def introduction():
     print("")
     show("but first, %s was thirsty." % aspect['heshe'])
     print("")
+    show("You recognize your humble town's tavern to the north.")
+    move = raw_input("Type 'north' to enter to the tavern. ").lower().strip()
+    while move != "tavern":
+        move = raw_input("No, it's spelled t-a-v-e-r-n. ").lower().strip()
+    # Tavern
+    show("The tavern in %s is old and rugged. Beaten down by countless travelers, it has acquired quite the homey atmosphere." % aspect['town'])
+    print('You approach the bartender. "Ey, what\'le it be for ya?" he says.')
+    drink = raw_input("On the shelf is a bottle of rum and a can of Mountain Dew. Which do you choose? (rum, dew) ").lower()
+    while drink != "rum" and drink != "dew":
+        drink = raw_input("Come on, 'rum' or 'dew'. ")
+    if drink == "rum":
+        show("\"I'll 'ave the rum, sir,\" you say.")
+    elif drink == "dew":
+        show('"Gimme dat dew," you say. "I knew you were a dank one," the bartender says knowingly. You tip your fedora gently to show how euphoric you are about this dew.')
+        show('"XDDDDDDDDDD," says the bartender. You throw down a one dollar bill. "I think this will cover it."')
+        print("")
+        show('"Holy fucking shit!" exclaims the bartender. "Did you see that??????"')
+        show('"Hold on m8," you say. "I need to take a closer look." You begin to examine the bill.')
+        show('"There is something fishy about this bill... could it be?"')
+        show("You connect the three sides of the strange shape on the back of the bill and realize what you had been missing all along.")
+        show("The three sides would connect to form none other than the illumrunarti triange. Then everything goes black.")
+        show('You wake up to find yourself in a green haze in an unreal dimension. Ahead of you a light begins to appear. "Who\'s there??" you ask.')
+        show('"You know who I am," the voice says. A wave of euphoria rushes over you as Snoop Dogg steps into view.')
+        show("\"And you know why you're here, for only you, %s, have the swagger dank enough to defeat the greatest enemy of all... the illum-\"" % aspect['name'])
+        show('You wake up on the floor of the tavern covered in doritos and see the bartender standing over you. "I know what I must do," you say.')
+        show("Looking into your eyes with a piercing stare, the bartender speaks the word that will change your life forever.")
+        print("")
+        show('"k."')
+    else:
+        exit("Error on line %s: Program attempted to interpret variable 'drink', but variable was out of range." % getframeinfo(currentframe()).lineno)
 
 introduction()
-
-move = raw_input("Type 'Tavern' to go to the tavern. ").lower().strip()
-while move != "tavern":
-    move = raw_input("No, it's spelled t-a-v-e-r-n. ").lower().strip()
-
-# Tavern
-show("The tavern in %s is old and rugged. Beaten down by countless travelers, it has acquired quite the homey atmosphere." % aspect['town'])
-print('You approach the bartender. "Ey, what\'le it be for ya?" he says.')
-drink = raw_input("On the shelf is a bottle of rum and a can of Mountain Dew. Which do you choose? (rum, dew) ").lower()
-while drink != "rum" and drink != "dew":
-    drink = raw_input("Come on, 'rum' or 'dew'. ")
-if drink == "rum":
-    show("\"I'll 'ave the rum, sir,\" you say.")
-elif drink == "dew":
-    show('"Gimme dat dew," you say. "I knew you were a dank one," the bartender says knowingly. You tip your fedora gently to show how euphoric you are about this dew.')
-    show('"XDDDDDDDDDD," says the bartender. You throw down a one dollar bill. "I think this will cover it."')
-    print("")
-    show('"Holy fucking shit!" exclaims the bartender. "Did you see that??????"')
-    show('"Hold on m8," you say. "I need to take a closer look." You begin to examine the bill.')
-    show('"There is something fishy about this bill... could it be?"')
-    show("You connect the three sides of the strange shape on the back of the bill and realize what you had been missing all along.")
-    show("The three sides would connect to form none other than the illumrunarti triange. Then everything goes black.")
-    show('You wake up to find yourself in a green haze in an unreal dimension. Ahead of you a light begins to appear. "Who\'s there??" you ask.')
-    show('"You know who I am," the voice says. A wave of euphoria rushes over you as Snoop Dogg steps into view.')
-    show("\"And you know why you're here, for only you, %s, have the swagger dank enough to defeat the greatest enemy of all... the illum-\"" % aspect['name'])
-    show('You wake up on the floor of the tavern covered in doritos and see the bartender standing over you. "I know what I must do," you say.')
-    show("Looking into your eyes with a piercing stare, the bartender speaks the word that will change your life forever.")
-    print("")
-    show('"k."')
-else:
-    exit("Error on line %s: Program attempted to interpret variable 'drink', but variable was out of range." % getframeinfo(currentframe()).lineno)
 
 print("That's the end of this version of the game.")
