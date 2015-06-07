@@ -1,14 +1,17 @@
 posx = 1
 posy = 1
 
-def room(x, y, door1, door2 = 'none', door3 = 'none', door4 = 'none'):
+def room(x, y):
     global path, roomx, roomy
-    if door1 == 'all':
-        door1 = 'north'
-        door2 = 'south'
-        door3 = 'east'
-        door4 = 'west'
-    path = [door1, door2, door3, door4]
+    path = []
+    if x == 1 and y == 1 or x == 1 and y == 2 or x == 1 and y == 3 or x == 2 and y == 2 or x == 2 and y == 3:
+        path.append('east')
+    if x == 1 and y == 2 or x == 2 and y == 1 or x == 3 and y == 1 or x == 3 and y == 2:
+        path.append('north')
+    if x == 1 and y == 3 or x == 2 and y == 2 or x == 3 and y == 2 or x == 3 and y == 3:
+        path.append('south')
+    if x == 2 and y == 1 or x == 2 and y == 2 or x == 2 and y == 3 or x == 3 and y == 2 or x == 3 and y == 3:
+        path.append('west')
     roomx = x
     roomy = y
     move()
@@ -28,7 +31,15 @@ def move():
         else:
             print("That move isn't possible.")
     print("You move %s." % direction)
-    return posx, posy
 
-room(1, 1, 'all')  # Input (room's X position, room's Y postiion, and directions (or the word 'all'))
-print "You are now in room {0}, {1}".format(posx, posy)
+while True:
+    room(posx, posy)
+    print "You are now in room {0}, {1}".format(posx, posy)
+
+
+#  The map looks like this
+#  X-X-X
+#  |   |
+#  X-X-X
+#    | |
+#  X-X X
