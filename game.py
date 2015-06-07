@@ -1,6 +1,8 @@
 from inspect import currentframe, getframeinfo  # Used for error messages
 import os   # Used to clear terminal
 
+# I have made a comment
+
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
 print("Welcome to ADVENTURE QUEST Version 0.00.20P! The P stands for python.")
 
