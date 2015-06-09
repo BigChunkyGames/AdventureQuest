@@ -5,8 +5,8 @@ os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
 print("Welcome to ADVENTURE QUEST Version 0.00.22P! The P stands for python.")
 
 # Global Dictionaries
-aspect = {}  # Beginning inputs
-visitedareas = {}  # Determines if a room is visited
+aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
+visitedareas = {}  # Determines if a room is visited (unused)
 
 # Define Functions
 
@@ -15,7 +15,7 @@ def show(text):
     print(text)
     raw_input("... ")
 
-# User inputs
+# Used in charCreation()
 def name():
     name = raw_input("Enter your hero's name: ").lower().strip().title()
     while name == "":
@@ -100,6 +100,7 @@ def adjectives():
         except IndexError:
             print("Your list doesn't seem to be long enough, try again.")
 
+
 def charCreation():
     aspect['name'] = name()
     aspect['gender'] = gender()
@@ -107,7 +108,6 @@ def charCreation():
     aspect['occ'], aspect['viverb'], aspect['skill1'], aspect['skill2'] = improperNouns()
     aspect['town'], aspect['hills'] = properNouns()
     aspect['adj1'], aspect['adj2'], aspect['adj3'], aspect['adj4'], aspect['adj5'] = adjectives()
-
 
 def introduction():
     os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
@@ -160,9 +160,11 @@ def introduction():
     print("")
     show('"k."')
 
+
 def main():
     charCreation()
     introduction()
+
 
 main()
 print("That's the end of this version of the game.")
