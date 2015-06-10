@@ -35,7 +35,7 @@ def slot_machine_play():
     c = random.randrange(0, 12)
     autowin = random.randrange(0, 30)
     if autowin == 0:
-        a = random.randrange(1, 12)
+        a = random.randrange(6, 12)
         a = b = c
     # cheater
     # a=b=c= 0
@@ -51,13 +51,13 @@ def slot_machine_play():
     elif tiles[a] == tiles[b] == tiles[c] == "(hitmarker)":
         #1/24 chance
         mult = random.randrange(1, 31)
-        win = 20 + mult*2
+        win = 20 + mult*3
         dogecoin += win
         print("Congratulations, you won %s Dogecoin.") %win
     elif tiles[a] == tiles[b] == tiles[c] == "(Sample Text)":
         #1/72 chance
         mult = random.randrange(1, 11)
-        win = 1 + (mult**2) *2
+        win = 1 + (mult**2) *3
         dogecoin += win
         print("Congratulations, you won %s Dogecoin.") %win
     elif tiles[a] == tiles[b] == tiles[c] == "(Mountain Dew)":
@@ -82,12 +82,18 @@ def slot_machine_play():
         # PerkPoint()
     else:
         print("You didn't win anything this time.")
+        if dogecoin == 420:
+            print("You have 420 dogecoin. That's really dank.")
+            print("You earned 1 dank point.")
+            dankpoints += 1
     print("Hit p to play again. (You have %s Dogecoin.)") % dogecoin
     again = raw_input("").lower().strip()
     if again == "p":
         slot_machine_play()
     else:
         print('You\'re getting pretty bored. "Maybe I should leave..." you think.')
+
+
 def randomweapon():
     print("random weapon not implemented")
 
