@@ -45,7 +45,7 @@ print("You enter the room and find holy shit its {enemy}.").format(enemy = enemy
     # Assign base stats to variables to potentially be changed (ex. enemyHP will be changed by player damage, enemyAttack could be changed by weakness potions, etc)
 enemyHP = combat.enemyhp(level)
 enemyAttack = combat.enemyattack(level)
-print("The enemy is a level {level} with {enemyhp} HP and {enemyattack}  attack.").format(level = level, enemyhp = str(enemyHP), enemyattack = str(enemyAttack))
+print("The enemy is a level {level} with {enemyhp} HP and {enemyattack} attack.").format(level = level, enemyhp = str(enemyHP), enemyattack = str(enemyAttack))
 #print(drop)
 if combat.dropchance(50) == True:
     print("Its gonna drop something.")
