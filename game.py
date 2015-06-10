@@ -6,7 +6,7 @@ print("Welcome to ADVENTURE QUEST Version 0.00.22P! The P stands for python.")
 
 # Global Dictionaries
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
-visitedareas = {}  # Determines if a room is visited (unused)
+visitedareas = {}  # Determines if a room is visited
 
 # Define Functions
 
@@ -19,8 +19,7 @@ def show(text):
 def visited(area):
     try:
         if visitedareas[area]:  # If 'area' is in 'visitedareas' dictionary
-            pass
-        return True
+            return True
     except KeyError:  # If 'area' is not in 'visitedareas' dictionary
         visitedareas[area] = True
         return False

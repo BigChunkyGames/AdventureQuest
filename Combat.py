@@ -1,66 +1,53 @@
 import random
 
+
 class Combat():
     def enemy(self, biome, level):
-        #list of bad guys
+        # List of bad guys
         if biome == "forest":
-            enemysList = ["Spooderman", "a Squidward", "(weed)", "(hitmarker)", "(hitmarker)", "(weed)", "(hitmarker)", "(Sample Text)", "(Sample Text)", "(Mountain Dew)", "(Sniper Rifle)", "(Doritos)"]
-            x = 10 #total number of types of bad guy (not gonna be ten)
-        elif biome == "planes":
-            enemysList = ["Spooderman", "(weed)", "(weed)", "(hitmarker)", "(hitmarker)", "(weed)", "(hitmarker)", "(Sample Text)", "(Sample Text)", "(Mountain Dew)", "(Sniper Rifle)", "(Doritos)"]
-            x = 10
+            enemieslist = ["Forest_Spooderman", "Forest_a Squidward", "Forest_mob1", "Forest_mob2"]
+        elif biome == "plains":
+            enemieslist = ["Plains_Spooderman", "Plains_mob1", "Plains_mob2", "Plains_mob3"]
         else:
             print("this area has no biome what the jizz")
-        enemy = random.randrange(0, x)
-        #may later be affected by level as well as biome
-        return enemysList[enemy]
+        enemy = random.randrange(0, len(enemieslist))
+        # TODO: May later be affected by level as well as biome
+        return enemieslist[enemy]
 
-    def EnemyHP(self, level):
-    #math used to find enemy stats
-            #HP is between level *2 and level *3
+    def enemyhp(self, level):
+            # HP is between (level * 2) and (level * 3)
         enemyHP = level*2 + random.randrange(0, level)
         return enemyHP
 
-    def EnemyAttack(self, level):
-            #attack is btween 1+level and 1+level * 1.5
+    def enemyattack(self, level):
+            # Attack is between (1 + level( and (1 + level * 1.5)
         enemyAttack = 1 + level + random.randrange(0, level/2)
         return enemyAttack
 
-    def Dropchance(self):
-            #some math about drop chances
-            #2 increasing chances from 40 and if one is maybe 4 or less drop = true
-            #this is kind of crazy but we'll wait to playtest before changing
-        dropchance1 = random.randrange(0, 40)
-        #print (dropchance1)
-        dropchance2 = random.randrange(0, dropchance1+1)
-        #print (dropchance2)
-        dropchance3 = random.randrange(0, 3)
-       # print (dropchance3)
-        dropchance = dropchance2 - dropchance3
-        #print (dropchance)
-        if dropchance <= 0:
+    def dropchance(self, percent):
+        dropchance = random.randint(1, 100)
+        if dropchance <= percent:
             drop = True
         else:
             drop = False
         return drop
 
-combat = Combat() #declare var combat a class
-print("You're in the forest or something")
-#stuff that will change somehow
-biome = "forest"
-level = 5
-    #go gets what the enemy is based on just biome so far
-enemy = combat.enemy(biome, level)
-print("You enter the room and find holy shit its " + enemy + ".")
-    #go find stuff about enemy stats
-enemyHP = combat.EnemyHP(level)
-enemyAttack = combat.EnemyAttack(level)
-drop = combat.Dropchance()
-print("The enemy has " + str(enemyHP) + " HP and " + str(enemyAttack) + " attack.")
-#print(drop)
-if drop == True:
-    print("Its gonna drop something. ")
-    #drop stuff function for items and/or weapons
+combat = Combat()
+# Variables
+if random.randint(0,1) == 0:  # Random for testing purposes
+    biome = 'forest'
 else:
-    print("Its not gonna drop something. ")
-
+    biome = 'plains'
+level = random.randint(1,10)  # Random for testing purposes TODO: enemy level based on biome and player level
+enemy = combat.enemy(biome, level)
+print("You're in the {biome}").format(biome = biome)
+print("You enter the room and find holy shit its {enemy}.").format(enemy = enemy)
+    # Assign base stats to variables to potentially be changed (ex. enemyHP will be changed by player damage, enemyAttack could be changed by weakness potions, etc)
+enemyHP = combat.enemyhp(level)
+enemyAttack = combat.enemyattack(level)
+print("The enemy is a level {level} with {enemyhp} HP and {enemyattack}  attack.").format(level = level, enemyhp = str(enemyHP), enemyattack = str(enemyAttack))
+#print(drop)
+if combat.dropchance(50) == True:
+    print("Its gonna drop something.")
+else:
+    print("Its not gonna drop something.")
