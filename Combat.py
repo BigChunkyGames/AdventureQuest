@@ -39,10 +39,9 @@ class Combat():
         dropchance = dropchance2 - dropchance3
         #print (dropchance)
         if dropchance <= 0:
-            #if you can fix that to not be a string go ahead
-            drop = "true"
+            drop = True
         else:
-            drop = "false"
+            drop = False
         return drop
 
 combat = Combat() #declare var combat a class
@@ -59,10 +58,9 @@ enemyAttack = combat.EnemyAttack(level)
 drop = combat.Dropchance()
 print("The enemy has " + str(enemyHP) + " HP and " + str(enemyAttack) + " attack.")
 #print(drop)
-if drop == "true":
+if drop == True:
     print("Its gonna drop something. ")
     #drop stuff function for items and/or weapons
 else:
     print("Its not gonna drop something. ")
 
-#faction, weapon
