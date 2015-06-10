@@ -15,6 +15,16 @@ def show(text):
     print(text)
     raw_input("... ")
 
+# Returns True if function has been visited, else False.
+def visited(area):
+    try:
+        if visitedareas[area]:  # If 'area' is in 'visitedareas' dictionary
+            pass
+        return True
+    except KeyError:  # If 'area' is not in 'visitedareas' dictionary
+        visitedareas[area] = True
+        return False
+
 # Used in charCreation()
 def name():
     name = raw_input("Enter your hero's name: ").lower().strip().title()
