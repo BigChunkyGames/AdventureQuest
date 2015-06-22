@@ -2,11 +2,11 @@ from inspect import currentframe, getframeinfo  # Used for error messages
 import os   # Used to clear terminal
 
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
-print("Welcome to ADVENTURE QUEST Version 0.00.22P! The P stands for python.")
+print("Welcome to ADVENTURE QUEST Version 0.00.23P! The P stands for python.")
 
 # Global Dictionaries
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
-visitedareas = {}  # Determines if a room is visited
+visitedareas = {"house" : 0, "default_tavern" : 0}  # Add names of rooms here and : 0
 
 # Define Functions
 
@@ -15,14 +15,11 @@ def show(text):
     print(text)
     raw_input("... ")
 
-# Returns True if function has been visited, else False.
+# Edit: returns number of times visited
 def visited(area):
-    try:
-        if visitedareas[area]:  # If 'area' is in 'visitedareas' dictionary
-            return True
-    except KeyError:  # If 'area' is not in 'visitedareas' dictionary
-        visitedareas[area] = True
-        return False
+    times = visitedareas[area] + 1
+    visitedareas[area] = visitedareas[area] + 1
+    return times
 
 # Used in charCreation()
 def name():
@@ -131,12 +128,9 @@ def introduction():
     show("but first, %s was thirsty." % aspect['heshe'])
     os.system('cls' if os.name == 'nt' else 'clear')
     print("You recognize your humble town's tavern to the north.")
-    move = raw_input("Type 'north' to enter the tavern. ").lower().strip()
-    while move != "north":
-        if move == 'south' or move == 'east' or move == 'west':
-            move = raw_input("You really want to go to the tavern. ")
-        else:
-            move = raw_input("No, it's spelled n-o-r-t-h. ").lower().strip()
+    move = raw_input("Type 'tavern' to enter the tavern. ").lower().strip()
+    while move != "tavern":
+        move = raw_input("No, it's spelled t-a-v-e-r-n. ").lower().strip()
     # Tavern
     show("The tavern in %s is old and rugged. Beaten down by countless travelers, it has acquired quite the homey atmosphere." % aspect['town'])
     print('You approach the bartender. "Ey, what\'le it be for ya?" he says.')
@@ -168,7 +162,24 @@ def introduction():
     show("Looking into your eyes with a piercing stare, the bartender speaks the word that will change your life forever.")
     print("")
     show('"k."')
+    print("You sprint to your house to grab your shit.")
+    move = raw_input('Type "house" to go to your house.').lower()
+    while move != "house":
+        move = raw_input('No. Type "house"')
+    house()
 
+def house():
+    visits = visited("house")
+    if visits == 1:
+        show('"Mom! I\'m going on an adventure!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"')
+        show('"Alright son, take this."')
+        print('You have acquired the camera. Press "i" to access your inventory. ')
+        #add this ability
+        #add initial story
+    else:
+        print("youve been here twice")#add defualt go to your house dialog
+
+    print("")
 
 def main():
     charCreation()
