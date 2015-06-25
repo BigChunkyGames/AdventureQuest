@@ -6,7 +6,7 @@ print("Welcome to ADVENTURE QUEST Version 0.00.23P! The P stands for python.")
 
 # Global Dictionaries
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
-visitedareas = {"house" : 0, "default_tavern" : 0}  # Add names of rooms here and : 0
+visitedareas = {}
 
 # Define Functions
 
@@ -17,9 +17,13 @@ def show(text):
 
 # Edit: returns number of times visited
 def visited(area):
-    times = visitedareas[area] + 1
-    visitedareas[area] = visitedareas[area] + 1
-    return times
+    try:
+        if visitedareas[area]:
+            visitedareas[area] = visitedareas[area] + 1
+            return visitedareas[area]
+    except KeyError:
+        visitedareas[area] = 1
+        return 1
 
 # Used in charCreation()
 def name():
@@ -121,7 +125,7 @@ def introduction():
     show("Only one true hero could save us from our arriving, inevitable fate. The legends spoke of a place long ago, before the fire.")
     print("Past the {0} hills of {1} was a town named {2}. Here resided the adventurer, {3}, a {4} and {5} {6}."
           ).format(aspect['adj1'], aspect['hills'], aspect['town'], aspect['name'], aspect['adj2'], aspect['adj3'], aspect['occ'])
-    raw_input("... ")
+    raw_input("... ")  # TODO: Replace "a" with "an" when followed by a vowel
     print "{0} was a {1} {2}, ready to {3} what evil would ever cross {4} path.".format(aspect['HeShe'], aspect['adj4'], aspect['occ'], aspect['viverb'], aspect['hisher'])
     raw_input("... ")
     print("")
@@ -169,22 +173,21 @@ def introduction():
     house()
 
 def house():
-    visits = visited("house")
-    if visits == 1:
-        show('"Mom! I\'m going on an adventure!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"')
-        show('"Alright son, take this."')
+    if visited("house") == 1:
+        show('You enter your house, hoping mum will get the camera. "Mom! I\'m going on an adventure!!1!!!!1one!!"')
+        show('She looks up from the dick sock she\'s knitting. "Alright sweetie, be safe! Here, take this."')
         print('You have acquired the camera. Press "i" to access your inventory. ')
         #add this ability
         #add initial story
     else:
-        print("youve been here twice")#add defualt go to your house dialog
+        show("You enter your house through the familiar front door, taking in the sights of your childhood abode, reminicing about all the dank shit you did as a kid.")
+        show("You figure that there isn't much to do here at the moment, so you turn 360 degrees and walk away.")
 
     print("")
 
 def main():
     charCreation()
     introduction()
-
 
 main()
 print("That's the end of this version of the game.")
