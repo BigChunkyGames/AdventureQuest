@@ -1,11 +1,8 @@
 import os   # Used to clear terminal
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
-<<<<<<< HEAD
 print("Welcome to ADVENTURE QUEST Version 0.00.24P! The P stands for python.")
-=======
 print("Welcome to ADVENTURE QUEST Version 0.00.24P! The P stands for "
       "python.")
->>>>>>> origin/master
 
 # Global Dictionaries
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
@@ -14,7 +11,6 @@ visitedareas = {}
 # Define Functions
 
 
-<<<<<<< HEAD
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
     print(text)
@@ -26,14 +22,12 @@ def checklevel(xp):
         if xp < (x**1.68)*100:
             return x - 1
 
-=======
 def show(text):  # Displays text, waits for 'enter' before continuing.
     print(text)
     raw_input("... ")
 
 
 # Returns number of times visited, including current visit
->>>>>>> origin/master
 def visited(area):
     #  Returns number of times visited
     try:
@@ -115,7 +109,6 @@ def propernouns():
 
 def adjectives():
     while True:
-<<<<<<< HEAD
         try:
             adjinput = raw_input("Enter five adjectives separated by commas: ").lower()
             adjinputlist = adjinput.split(',')            # creates list from input split by commas
@@ -136,7 +129,6 @@ def adjectives():
 
 
 def charCreation():
-=======
         adjinput = raw_input("Enter five adjectives separated by "
                              "commas: ").lower()
         adjinputlist = adjinput.split(',')
@@ -150,7 +142,6 @@ def charCreation():
 
 
 def charcreation():
->>>>>>> origin/master
     aspect['name'] = name()
     aspect['gender'] = gender()
     aspect['heshe'], aspect['HeShe'], aspect['hisher'] = pronouns()
@@ -245,7 +236,6 @@ def introduction():
     move = raw_input('Type "house" to go to your house.').lower()\
         .strip()
     while move != "house":
-<<<<<<< HEAD
         move = raw_input('No. Type "house"')
     house()
 
@@ -259,7 +249,6 @@ def house():
     else:
         show("You enter your house through the familiar front door, taking in the sights of your childhood abode, reminiscing about all the dank shit you did as a kid.")
         show("You figure that there isn't much to do here at the moment, so you turn 360 degrees and walk away.")
-=======
         if move == "tavern":
             print("You just came from there, you need to go to your "
                   "house.")
@@ -275,7 +264,6 @@ def house():
           'inventory. ')
     # TODO: add this ability
     # TODO: add initial story
->>>>>>> origin/master
 
 
 def main():
