@@ -2,7 +2,7 @@ from inspect import currentframe, getframeinfo  # Used for error messages
 import os   # Used to clear terminal
 
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
-print("Welcome to ADVENTURE QUEST Version 0.00.23P! The P stands for python.")
+print("Welcome to ADVENTURE QUEST Version 0.00.24P! The P stands for python.")
 
 # Global Dictionaries
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
@@ -10,13 +10,20 @@ visitedareas = {}
 
 # Define Functions
 
-# Displays text, waits for 'enter' before continuing.
+
 def show(text):
+    #  Displays text, waits for 'enter' before continuing.
     print(text)
     raw_input("... ")
 
-# Edit: returns number of times visited
+# Might be useful later in the game
+def checklevel(xp):
+    for x in range(1,10001):
+        if xp < (x**1.68)*100:
+            return x - 1
+
 def visited(area):
+    #  Returns number of times visited
     try:
         if visitedareas[area]:
             visitedareas[area] = visitedareas[area] + 1
@@ -104,7 +111,6 @@ def adjectives():
             except IndexError:
                 if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3] and adjlist[4]:
                     return adjlist[:]
-                    break
                 else:
                     print("Adjective may not be blank.")
         except IndexError:
@@ -180,7 +186,7 @@ def house():
         #add this ability
         #add initial story
     else:
-        show("You enter your house through the familiar front door, taking in the sights of your childhood abode, reminicing about all the dank shit you did as a kid.")
+        show("You enter your house through the familiar front door, taking in the sights of your childhood abode, reminiscing about all the dank shit you did as a kid.")
         show("You figure that there isn't much to do here at the moment, so you turn 360 degrees and walk away.")
 
     print("")
