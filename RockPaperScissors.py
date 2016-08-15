@@ -9,7 +9,6 @@ def choicename(int):
         return "scissors"
 
 def guess():
-    print("Let's play rock paper scissors!")
     guess = int(raw_input("play 1 for rock, 2 for paper, and 3 for "
                           "scissors. "))
     while guess != 1 and guess != 2 and guess != 3:
@@ -24,6 +23,7 @@ def aiguess():
     return opponent
 
 def game():
+    print("Let's play rock paper scissors!")
     choice = guess()
     opchoice = aiguess()
     if opchoice == choice - 1 or opchoice == choice + 2:

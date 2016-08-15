@@ -1,8 +1,6 @@
 import os   # Used to clear terminal
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
-print("Welcome to ADVENTURE QUEST Version 0.00.24P! The P stands for python.")
-print("Welcome to ADVENTURE QUEST Version 0.00.24P! The P stands for "
-      "python.")
+print("Welcome to ADVENTURE QUEST Version 0.00.25P! The P stands for python.")
 
 # Global Dictionaries
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
@@ -21,10 +19,6 @@ def checklevel(xp):
     for x in range(1,10001):
         if xp < (x**1.68)*100:
             return x - 1
-
-def show(text):  # Displays text, waits for 'enter' before continuing.
-    print(text)
-    raw_input("... ")
 
 
 # Returns number of times visited, including current visit
@@ -110,9 +104,12 @@ def propernouns():
 def adjectives():
     while True:
         try:
-            adjinput = raw_input("Enter five adjectives separated by commas: ").lower()
-            adjinputlist = adjinput.split(',')            # creates list from input split by commas
-            adjlist = [x.strip() for x in adjinputlist]   # creates another list, strips whitespace
+            adjinput = raw_input("Enter five adjectives separated by commas: ")\
+                .lower()
+            adjinputlist = adjinput.split(',')
+            # creates list from input split by commas
+            adjlist = [x.strip() for x in adjinputlist]
+            # creates another list, strips whitespace
             if adjlist[4]:
                 pass
             try:
@@ -120,25 +117,13 @@ def adjectives():
                     pass
                 print("Your list is too long.")
             except IndexError:
-                if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3] and adjlist[4]:
+                if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3]\
+                        and adjlist[4]:
                     return adjlist[:]
                 else:
                     print("Adjective may not be blank.")
         except IndexError:
             print("Your list doesn't seem to be long enough, try again.")
-
-
-def charCreation():
-        adjinput = raw_input("Enter five adjectives separated by "
-                             "commas: ").lower()
-        adjinputlist = adjinput.split(',')
-        adjlist = [x.strip() for x in adjinputlist]
-        if len(adjlist) == 5:
-            return adjlist
-        elif len(adjlist) > 5:
-            print("Your list is too long.")
-        elif len(adjlist) < 5:
-            print("Your list isn't long enough.")
 
 
 def charcreation():
@@ -174,26 +159,26 @@ def introduction():
     show("but first, %s was thirsty." % aspect['heshe'])
     os.system('cls' if os.name == 'nt' else 'clear')
     print("You recognize your humble town's tavern to the north.")
-    move = raw_input("Type 'tavern' to enter the tavern. ").lower()\
-        .strip()
+    move = raw_input("Type 'tavern' to enter the tavern. ").lower().strip()
     while move != "tavern":
-        move = raw_input("No, it's spelled t-a-v-e-r-n. ").lower()\
-            .strip()
+        if move == "house":
+            print "Calm down there m8, we'll get there later."
+        move = raw_input("It's spelled t-a-v-e-r-n. ").lower().strip()
     # Tavern
+    visited("tavern")
     show("The tavern in %s is old and rugged. Beaten down by countless "
-         "travelers, it's acquired a homey atmosphere." %
-         aspect['town'])
-    print('You approach the bartender. "Ey, what\'le it be for ya?" he '
+         "travelers, it's acquired a homey atmosphere." % aspect['town'])
+    print('You approach the bartender. "Ey, what\'ll it be for ya?" he '
           'says.')
-    drink = raw_input("On the shelf is a bottle of rum and a can of "
-                      "Mountain Dew. Which do you choose? (rum, dew) ")\
-        .lower()
+    print("On the shelf is a bottle of rum and a can of Mountain Dew. "
+          "Which do you choose? (rum, dew) ")
+    drink = raw_input("> ").lower()
     while drink != "rum" and drink != "dew":
         if drink == 'neither':
-            drink = raw_input("You've got to drink something. What'll "
-                              "it be? ")
+            print("You've got to drink something. What'll it be? ")
         else:
-            drink = raw_input("Come on, 'rum' or 'dew'. ")
+            print("Come on, 'rum' or 'dew'. ")
+        drink = raw_input("> ").lower()
     if drink == "rum":
         show("You start to reach for the rum, and then realize that "
              "you're way too MLG for that weak shit.")
@@ -233,42 +218,24 @@ def introduction():
     print("")
     show('"k."')
     show("You sprint to your house to grab your shit.")
-    move = raw_input('Type "house" to go to your house.').lower()\
-        .strip()
+    print('Type "house" to go to your house.')
+    move = raw_input("> ").lower().strip()
     while move != "house":
-        move = raw_input('No. Type "house"')
-    house()
-
-def house():
-    if visited("house") == 1:
-        show('You enter your house, hoping mum will get the camera. "Mom! I\'m going on an adventure!!1!!!!1one!!"')
-        show('She looks up from the dick sock she\'s knitting. "Alright sweetie, be safe! Here, take this."')
-        print('You have acquired the camera. Press "i" to access your inventory. ')
-        #add this ability
-        #add initial story
-    else:
-        show("You enter your house through the familiar front door, taking in the sights of your childhood abode, reminiscing about all the dank shit you did as a kid.")
-        show("You figure that there isn't much to do here at the moment, so you turn 360 degrees and walk away.")
         if move == "tavern":
             print("You just came from there, you need to go to your "
                   "house.")
-            move = raw_input('Type "house" to go to your house.')\
-                .lower().strip()
         else:
-            move = raw_input('No. Type "house" ')
-    show('You enter your house, hoping mum will get the camera. "Mom! '
-         'I\'m going on an adventure!!1!!!!1one!!"')
+            print('No. Type "house"')
+        move = raw_input("> ").lower().strip()
+    show('You enter your house, hoping mum will get the camera. "Mom! I\'m '
+         'going on an adventure!!1!!!!1one!!"')
     show('She looks up from the dick sock she\'s knitting. "Alright '
          'sweetie, be safe! Here, take this."')
-    print('You have acquired the camera. Press "i" to access your '
-          'inventory. ')
-    # TODO: add this ability
-    # TODO: add initial story
-
+    print('You have acquired the camera.')
 
 def main():
     charcreation()
     introduction()
 
 main()
-print("That's the end of this version of the game.")
+print("That's the end of this version of the game. GG, Tasteless.")

@@ -14,17 +14,11 @@ class Combat:
             enemieslist = ["Plains_Spooderman", "Plains_mob1",
                            "Plains_mob2", "Plains_mob3"]
         else:
-
-            print("this area has no biome what the heck in the world")
-        enemy = random.randrange(0, len(enemieslist))
-
-            print("this area has no biome what the jizz")
-            enemieslist = ["generic_mob"]
+            print("this area has no predefined biome for some reason pls fix")
+            enemieslist = ["undefined_mob"]
         chosenenemy = random.randrange(0, len(enemieslist))
-
         # TODO: May later be affected by level as well as biome
         return enemieslist[chosenenemy]
-
 
     def enemyhp(self, level):
         # HP is between (level * 48) and (level * 52)
@@ -36,17 +30,6 @@ class Combat:
             return 2
         else:
             return level * random.randint(10, 15)
-
-    def enemyhp(self, enemylevel):
-            # HP is between (level * 2) and (level * 3)
-        enemyhp = enemylevel*2 + random.randrange(0, level)
-        return enemyhp
-
-    def enemyattack(self, enemylevel):
-            # Attack is between (1 + level( and (1 + level * 1.5)
-        enemyattack = 1 + enemylevel + random.randrange(0, level/2)
-        return enemyattack
-
 
     def dropchance(self, percent):
         dropchance = random.randint(1, 100)
