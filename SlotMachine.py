@@ -5,7 +5,7 @@ dankpoints = 0
 perkpoints = 0
 
 def dankadjective():
-    adjs = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity", ]
+    adjs = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity" ]
     return adjs[random.randint(0, len(adjs)-1)]
 
 

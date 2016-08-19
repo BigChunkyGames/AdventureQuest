@@ -231,11 +231,64 @@ def introduction():
          'going on an adventure!!1!!!!1one!!"')
     show('She looks up from the dick sock she\'s knitting. "Alright '
          'sweetie, be safe! Here, take this."')
-    print('You have acquired the camera.')
+    show('You have acquired the camera.')
+    show('After taking the camera, you leave your house and walk into town, '
+         'ready to head into whatever building you choose.')
+    #  TODO: transition smoothly into town
+
+def home():
+    if visited("home") == 1:
+        show("Woo, first time visiting home. cool.")
+    else:
+        show("It's not your first time visiting home, so enjoy this "
+              "euphoric flavor text.")
+        show("You enter your house through the familiar front door, taking in "
+             "the sights of your childhood abode, reminiscing about all the "
+             "dank shit you did as a kid.")
+        show("You figure that there isn't much to do here at the moment, so "
+             "you turn 360 degrees and walk away.")
+
+def tavern():
+    show("You walk into the old tavern once again, determined to find some "
+          "dank shit to do here or something.")
+    show("You have a look around to see what's up.")
+    print("")
+
+def store():
+    show("You stride into the sedentary sales store supplementing the not-so-silent "
+         "town of %s, where succulent sweets are sold. " % aspect['town'])
+
+def blacksmith():
+    show("Blacksmith not implemented")
+
+
+def maintown():
+    while True:
+        print("You stand in the homey town of %s, a lovely place. Where do you"
+              "want to go?") % aspect['town']
+        print("You could go 'home' and talk to your mom.")
+        print("The 'tavern' is always a cool place to hang out.")
+        print("The 'store' is probably open.")
+        print("The 'blacksmith' might appreciate you buying something.")
+        print("Where do you want to go?")
+        place = raw_input("> ").lower().strip()
+        while place == "":
+            place = raw_input("> ").lower().strip()
+        if place == "home":
+            home()
+        elif place == "tavern":
+            tavern()
+        elif place == "store":
+            store()
+        elif place == "blacksmith":
+            blacksmith()
+        else:
+            print "You've got to pick one of the places listed."
+            print("")
 
 def main():
     charcreation()
     introduction()
+    maintown()
 
 main()
-print("That's the end of this version of the game. GG, Tasteless.")
