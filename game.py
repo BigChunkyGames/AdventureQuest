@@ -1,4 +1,5 @@
 import os   # Used to clear terminal
+from SlotMachine import Slots  # Slot machine from SlotMachine.py
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
 print("Welcome to ADVENTURE QUEST Version 0.00.25P! The P stands for python.")
 
@@ -34,8 +35,7 @@ def visited(area):
 
 
 def name():  # Used in charCreation()
-    charname = raw_input("Enter your hero's name: ").lower().strip()\
-        .title()
+    charname = raw_input("Enter your hero's name: ").lower().strip().title()
     while charname == "":
         charname = raw_input("You must enter your hero's name: ")\
             .lower().strip().title()
@@ -237,36 +237,61 @@ def introduction():
     #  TODO: transition smoothly into town
 
 def home():
-    if visited("home") == 1:
-        show("Woo, first time visiting home. cool.")
-    else:
-        show("It's not your first time visiting home, so enjoy this "
-              "euphoric flavor text.")
-        show("You enter your house through the familiar front door, taking in "
-             "the sights of your childhood abode, reminiscing about all the "
-             "dank shit you did as a kid.")
-        show("You figure that there isn't much to do here at the moment, so "
-             "you turn 360 degrees and walk away.")
+    show("You enter your house through the familiar front door, taking in "
+         "the sights of your childhood abode, reminiscing about all the "
+         "dank shit you did as a kid.")
+    show("You could 'leave' or you could 'look' around some more.")
+    action = raw_input("> ").lower().strip()
+    while action != "leave" and action != "look":
+        action = raw_input("> ")
+    if action == "leave":
+        show("You figure that there isn't much to do here at the moment, "
+             "so you turn 360 degrees and walk away.")
+    elif action == "look":
+        if visited("bedroom") == 1:
+            show("You head upstairs to your room and look around for a bit. "
+                 "You realize that you left your can of Mtn Dew laying on top "
+                 "of your dresser.")
+            show("You grab the can just in case you need it later.")
+            # TODO: add the can to your inventory
+        else:
+            show("You look around your house for a bit, but there isn't much "
+                 "to find that you haven't already.")
+            # TODO: add more stuff to do in your house
 
 def tavern():
     show("You walk into the old tavern once again, determined to find some "
           "dank shit to do here or something.")
     show("You have a look around to see what's up.")
+    show("In front of you lies a pretty dope looking slot machine")
+    Slots().slot_machine()
     print("")
+    # TODO: add more stuff to the tavern
 
 def store():
-    show("You stride into the sedentary sales store supplementing the not-so-silent "
-         "town of %s, where succulent sweets are sold. " % aspect['town'])
+    show("You stride into the sedentary sales store supplementing the "
+         "not-so-silent town of %s, where succulent sweets "
+         "are sold. " % aspect['town'])
+    show("You approach the shopkeeper, an old and wary gentleman with age on "
+         "his face and experience in his eyes.")
+    show('"What\'ll it be for ya today?"')
+    # TODO: add the shop
 
 def blacksmith():
-    show("Blacksmith not implemented")
-
+    show("You head over to the blacksmith's place to take a look at some "
+         "quality goods.")
+    show("You walk over to your town's forge and approach the blacksmith, "
+         "she's 6'5\" and the strongest one in your town.")
+    show('"Hello!" she reaches out to shake your hand and ends up hurting it '
+         'slightly.')
+    show("You have lost 1 HP")  # TODO: lose 1 hp
+    # TODO: blacksmith
 
 def maintown():
     while True:
         print("You stand in the homey town of %s, a lovely place. Where do you"
               "want to go?") % aspect['town']
-        print("You could go 'home' and talk to your mom.")
+        print("You could go 'home' and check that out.")
         print("The 'tavern' is always a cool place to hang out.")
         print("The 'store' is probably open.")
         print("The 'blacksmith' might appreciate you buying something.")
@@ -283,7 +308,7 @@ def maintown():
         elif place == "blacksmith":
             blacksmith()
         else:
-            print "You've got to pick one of the places listed."
+            print("You've got to pick one of the places listed.")
             print("")
 
 def main():
