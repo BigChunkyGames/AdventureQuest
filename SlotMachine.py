@@ -75,7 +75,7 @@ class Slots():
             # cheater
             # a=b=c= 0
             print ("(-10 Dogecoin) The rollers spin and land on \n")
-            print tiles[a], " ", tiles[b], " ", tiles[c], "\n"
+            print (tiles[a] + " " + tiles[b] + " " + tiles[c] + "\n")
             # winnings
             if tiles[a] == tiles[b] == tiles[c] == "(weed)":
                 # 1/24 chance

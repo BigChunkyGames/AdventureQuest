@@ -43,17 +43,17 @@ def name():  # Used in charCreation()
 
 
 def gender():
-    chargender = raw_input("Enter your hero's gender, 'boy' or "
-                           "'girl': ").lower()
-    while chargender != "boy" and chargender != "girl":
-        chargender = raw_input("Select 'boy' or 'girl': ").lower()
+    chargender = raw_input("Enter your hero's gender: 'boi' or "
+                           "'gril': ").lower()
+    while chargender != "boi" and chargender != "gril":
+        chargender = raw_input("Select 'boi' or 'gril': ").lower()
     return chargender
 
 
 def pronouns():
-    if aspect['gender'] == "boy":
+    if aspect['gender'] == "boi":
         return "he", "He", "his"
-    elif aspect['gender'] == "girl":
+    elif aspect['gender'] == "gril":
         return "she", "She", "her"
 
 
