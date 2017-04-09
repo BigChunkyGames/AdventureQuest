@@ -1,5 +1,6 @@
 import os   # Used to clear terminal
 from SlotMachine import Slots  # Slot machine from SlotMachine.py
+from RockPaperScissors import RPSGame  # RPSGame from RockPaperScissors.py
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
 print("Welcome to ADVENTURE QUEST Version 0.00.25P! The P stands for python.")
 
@@ -251,14 +252,11 @@ def home():
     show("You enter your house through the familiar front door, taking in "
          "the sights of your childhood abode, reminiscing about all the "
          "dank shit you did as a kid.")
-    show("You could 'leave' or you could 'look' around some more.")
+    show("You could 'look' around some more, or just leave.")
     action = raw_input("> ").lower().strip()
     while action != "leave" and action != "look":
         action = raw_input("> ")
-    if action == "leave":
-        show("You figure that there isn't much to do here at the moment, "
-             "so you turn 360 degrees and walk away.")
-    elif action == "look":
+    if action == "look":
         if visited("bedroom") == 1:
             show("You head upstairs to your room and look around for a bit. "
                  "You realize that you left your can of Mtn Dew laying on top "
@@ -269,15 +267,54 @@ def home():
             show("You look around your house for a bit, but there isn't much "
                  "to find that you haven't already.")
             # TODO: add more stuff to do in your house
+    else:
+        show("You figure that there isn't much to do here at the moment, "
+             "so you turn 360 degrees and walk away.")
 
 def tavern():
-    show("You walk into the old tavern once again, determined to find some "
+    if visited("tavern") == 1:
+        show("You walk into the old tavern, wanting to visit the old place "
+             "once again.")
+        show("As you walk in, several patrons of the bar turn around to look "
+             "at you.")
+        show('"Ah, it\'s you." The bartender says. "Make sure to watch how '
+             'much Mtn Dew you have this time!" The whole bar laughs jovially.')
+    else:
+        show("You walk into the old tavern once again, determined to find some "
           "dank shit to do here or something.")
-    show("You have a look around to see what's up.")
-    show("In front of you lies a pretty dope looking slot machine")
-    Slots().slot_machine()
+    print("You have a look around to see what's up:")
+    print("In front of you lies a pretty dope looking 'slot' machine")
+    print("You could 'ask' the bartender for some rumors")
+    print("It looks like one of the patrons is challenging others to a 'game'")
+    print("Or you could just leave.")
+    action = raw_input("> ").lower().strip()
+    if action == "slot":
+        Slots().slot_machine()
+        show("After your exciting go on the slot machine, you decide you've "
+             "had enough of the tavern for now.")
+    elif action == "ask":
+        show("You walk up to the bartender and ask for some rumors.")
+        # TODO: Rumors
+    elif action == "game":
+        show("You saunter up to the gentleman who seems to be looking for "
+             "someone willing to play a game with him.")
+        show("The old pirate sitting at the table looks up at you and takes a "
+             "sip out of his flask.")
+        show('"I\'ve been challenging travelers across these lands to the '
+             'game of my people for many years. You think you\'ve got what '
+             'it takes to beat me?" (y/n)')
+        if yesno():
+            show('"Hah! Let\'s see how good you really are!')
+            RPSGame().game()
+            show("After your rousing game, you decide you've had enough fun at the "
+             "tavern for now.")
+        else:
+            show('"Just as I figured, maybe you can come back when you\'re not '
+                 'such a fuckin whimp lol')
+            show("You're so upset by his unkind words that you don't even want "
+                 "to be here anymore.")
+    show("You leave the tavern, heading outside to the rest of the town.")
     print("")
-    # TODO: add more stuff to the tavern
 
 def store():
     show("You stride into the sedentary sales store supplementing the "
