@@ -207,5 +207,3 @@ class Slots():
 
     def randomweapon(self):
         return "random weapon (not implemented)"
-
-Slots().slot_machine()
