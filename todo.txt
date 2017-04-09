@@ -1,0 +1,3 @@
+make gui
+make savable to binary file and check points
+progress story

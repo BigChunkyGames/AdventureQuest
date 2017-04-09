@@ -15,6 +15,17 @@ def show(text):
     print(text)
     raw_input("... ")
 
+def yesno():
+    #  Returns True if user input is yes, returns False if no.
+    while True:
+        userinput = raw_input("> ").lower().strip()
+        if userinput == "yes" or userinput == "y":
+            return True
+        elif userinput == "no" or userinput == "n":
+            return False
+        else:
+            print("You must choose 'yes' or 'no'.")
+
 # Might be useful later in the game
 def checklevel(xp):
     for x in range(1,10001):
@@ -43,17 +54,17 @@ def name():  # Used in charCreation()
 
 
 def gender():
-    chargender = raw_input("Enter your hero's gender, 'boy' or "
-                           "'girl': ").lower()
-    while chargender != "boy" and chargender != "girl":
-        chargender = raw_input("Select 'boy' or 'girl': ").lower()
+    chargender = raw_input("Enter your hero's gender: 'boi' or "
+                           "'gril': ").lower()
+    while chargender != "boi" and chargender != "gril":
+        chargender = raw_input("Select 'boi' or 'gril': ").lower()
     return chargender
 
 
 def pronouns():
-    if aspect['gender'] == "boy":
+    if aspect['gender'] == "boi":
         return "he", "He", "his"
-    elif aspect['gender'] == "girl":
+    elif aspect['gender'] == "gril":
         return "she", "She", "her"
 
 
