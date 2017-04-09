@@ -14,6 +14,17 @@ def show(text):
     print(text)
     raw_input("... ")
 
+def yesno():
+    #  Returns True if user input is yes, returns False if no.
+    while True:
+        userinput = raw_input("> ").lower().strip()
+        if userinput == "yes" or userinput == "y":
+            return True
+        elif userinput == "no" or userinput == "n":
+            return False
+        else:
+            print("You must choose 'yes' or 'no'.")
+
 # Might be useful later in the game
 def checklevel(xp):
     for x in range(1,10001):
