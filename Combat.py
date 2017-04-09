@@ -38,7 +38,7 @@ class Combat:
         else:
             return False
 
-combat = Combat()
+
 # Variables
 if random.randint(0, 1) == 0:  # Random for testing purposes
     biome = 'forest'
@@ -46,21 +46,23 @@ else:
     biome = 'plains'
 level = random.randint(1, 10)
 # TODO: enemy level based on both player level and biome
-enemy = combat.enemy(biome)
+
+
+enemyname = Combat().enemy(biome)
 print "You're in the {biome}".format(biome=biome)
-print "You enter the room and find holy shit its {enemy}." \
-    .format(enemy=enemy)
+print "You enter the room and find holy shit its {enemyname}." \
+    .format(enemyname=enemyname)
 """ Assign base stats to variables to potentially be changed
 (ex. enemyHP will be changed by player damage, enemyAttack
 could be changed by weakness potions, etc) """
-enemyHP = combat.enemyhp(level)
-enemyAttack = combat.enemyattack(level)
+enemyHP = Combat().enemyhp(level)
+enemyAttack = Combat().enemyattack(level)
 print("The enemy is a level {level} with {enemyhp} HP and "
       "{enemyattack} attack.").format(level=level,
                                       enemyhp=str(enemyHP),
                                       enemyattack=str(enemyAttack))
 # print(drop)
-if combat.dropchance(50):
+if Combat().dropchance(50):
     print("Its gonna drop something.")
 else:
     print("Its not gonna drop something.")
