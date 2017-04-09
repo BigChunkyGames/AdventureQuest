@@ -28,7 +28,15 @@ class Slots():
         play = raw_input("Give it a go? Press P to play (Pay 10 Dogecoin), "
                          "or anything else to leave. \n").lower().strip()
         if play == "p":
+            beginningdogecoin = dogecoin
             self.slot_machine_play()
+            netdoge = (dogecoin - beginningdogecoin)
+            if netdoge > 0:
+                print("You got lucky today, managing to walk away with %s more dogecoin than you came in with.") % netdoge
+            elif netdoge < 0:
+                print("Looks like today wasn't your lucky day, your pockets are %s dogecoin lighter than they were when you walked in.") % abs(netdoge)
+            elif netdoge == 0:
+                print("You leave the machine, not having gained or lost any dogecoin. You're still luckier than most who try their hand at gambling!")
         else:
             print("You decide that you're too %s for this shit and peace "
                   "right out of there.") % dankadjective().lower()
@@ -153,7 +161,8 @@ class Slots():
                 pass
             else:
                 if freerun == True:
-                    print("Your next spin is free, are you sure you want to leave and waste this opportunity? (y/n)")
+                    print("Your next spin is free, are you sure you want to "
+                          "leave and waste this opportunity? (y/n)")
                     while True:
                         usercontinue = raw_input("> ").lower().strip()
                         if usercontinue == "n":
