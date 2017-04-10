@@ -1,6 +1,12 @@
 import os   # Used to clear terminal
+import random
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
 print("Welcome to ADVENTURE QUEST Version 0.00.25P! The P stands for python.")
+
+# Global Variables - Used by SlotMachine
+dogecoin = 500
+dankpoints = 0
+perkpoints = 0
 
 # Global Dictionaries
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
@@ -8,6 +14,9 @@ visitedareas = {}
 
 # Define Functions
 
+def dankadjective():
+    adjs = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity" ]
+    return adjs[random.randint(0, len(adjs)-1)]
 
 def show(text):
     #  Displays text, waits for 'enter' before continuing.

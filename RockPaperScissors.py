@@ -1,5 +1,3 @@
-from random import randint
-
 class RPSGame():
 
     def choicename(self, int):
@@ -20,7 +18,7 @@ class RPSGame():
         return guess
 
     def aiguess(self):
-        opponent = randint(1,3)
+        opponent = random.randint(1,3)
         print("I picked %s." % self.choicename(opponent))
         return opponent
 

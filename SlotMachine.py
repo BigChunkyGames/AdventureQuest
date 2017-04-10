@@ -1,16 +1,3 @@
-# Slot machine to be added in the arcade, or something.
-import random
-dogecoin = 500
-dankpoints = 0
-perkpoints = 0
-
-def dankadjective():
-    adjs = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity" ]
-    return adjs[random.randint(0, len(adjs)-1)]
-
-
-# dont include that ^
-
 class Slots():
 
     def playcheck(self):
@@ -207,3 +194,4 @@ class Slots():
 
     def randomweapon(self):
         return "random weapon (not implemented)"
+        # TODO: random weapon
