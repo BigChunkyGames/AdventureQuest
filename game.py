@@ -1,7 +1,7 @@
 import os   # Used to clear terminal
 import random
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
-print("Welcome to ADVENTURE QUEST Version 0.00.25P! The P stands for python.")
+print("Welcome to ADVENTURE QUEST Version 0.00.41P! The P stands for python.")
 
 # Global Variables - Used by SlotMachine
 dogecoin = 500
@@ -30,6 +30,18 @@ def yesno():
         if userinput == "yes" or userinput == "y":
             return True
         elif userinput == "no" or userinput == "n":
+            return False
+        else:
+            print("You must choose 'yes' or 'no'.")
+
+def dichotomy(option1, option2):
+    # Returns True if user input is option1, returns False if option2.
+    # Make sure the options are in stripped lowercase form
+    while True:
+        userinput = raw_input("> ").lower().strip()
+        if userinput == option1:
+            return True
+        elif userinput == option2:
             return False
         else:
             print("You must choose 'yes' or 'no'.")
