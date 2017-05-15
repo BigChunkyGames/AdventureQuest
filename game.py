@@ -334,7 +334,7 @@ def tavern():
              "someone willing to play a game with him.")
         show("The old pirate sitting at the table looks up at you and takes a "
              "sip out of his flask.")
-        show('"I\'ve been challenging travelers across these lands to the '
+        print('"I\'ve been challenging travelers across these lands to the '
              'game of my people for many years. You think you\'ve got what '
              'it takes to beat me?" (y/n)')
         if yesno():
@@ -346,7 +346,7 @@ def tavern():
             show('"Hah, new to the game, are you? I can feel in your hand '
                  'what you\'re about to play!"')
             show("You gulp nervously and ready your fist, mentally preparing "
-                 "yourself for the beginning of the match")
+                 "yourself for the beginning of the match.")
             yourchoice, opchoice, outcome = RPSGame().game()
             show('"Enough waiting around! Let\'s do this!"')
             show("The world seems to fade away around you as the only thing "
@@ -361,15 +361,16 @@ def tavern():
                 show("The pirate slams his closed fist down into his open "
                      "palm. He played rock!")
             else:
-                show("The pirate opens his hand a split second before slamming "
-                     "his fist into his open palm, revealing is true choice: "
+                print("The pirate opens his hand a split second before slamming "
+                     "his fist into his open palm, revealing his true choice: "
                      "%s!" % opchoice)
+                raw_input("... ")
             show("The bar erupts in cheers when they see the outcome of your "
                  "match.")
             if outcome == 'win':
-                show("You look down into your own hand. {0} beats {1}! You "
-                     "actually beat him!")\
-                    .format(yourchoice, opchoice)
+                print("You look down into your own hand. {0} beats {1}! You "
+                     "actually beat him!").format(yourchoice, opchoice)
+                raw_input("... ")
                 show("The pirate looks up at you, clearly impressed.")
                 show('"Not many can beat me at this game. I think you deserve '
                      'to be in my clan, it houses only the best rock paper '
@@ -378,8 +379,7 @@ def tavern():
                 show("You have joined The Pirates' Clan! [Pyr8]")
             else:
                 show("You look down into your own hand. {0} beats {1}! He beat "
-                     "you!")\
-                    .format(opchoice, yourchoice)
+                     "you!").format(opchoice.title(), yourchoice)
                 show('"Heh heh, well that\'s alright. Not everybody has what '
                      'it takes to play with the best of them."')
             show("After your rousing game, you decide you've had enough fun at the "
