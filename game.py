@@ -9,6 +9,7 @@ dankpoints = 0
 perkpoints = 0
 
 # Global Dictionaries
+debug = 1
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
 visitedareas = {}
 
@@ -159,14 +160,22 @@ def adjectives():
 
 
 def charcreation():
-    aspect['name'] = name()
-    aspect['gender'] = gender()
-    aspect['heshe'], aspect['HeShe'], aspect['hisher'] = pronouns()
-    aspect['occ'], aspect['viverb'], aspect['skill1'], aspect['skill2']\
-        = impropernouns()
-    aspect['town'], aspect['hills'] = propernouns()
-    aspect['adj1'], aspect['adj2'], aspect['adj3'], aspect['adj4'], \
-        aspect['adj5'] = adjectives()
+    if debug == 1:
+        aspect['name'] = "name"
+        aspect['gender'] = "boi"
+        aspect['heshe'], aspect['HeShe'], aspect['hisher'] = "he", "He", "his"
+        aspect['occ'], aspect['viverb'], aspect['skill1'], aspect['skill2'] = "fireman", "stab", "sewing", "rubiks cube solving"
+        aspect['town'], aspect['hills'] = "Swagsburgh", "Peak's Hills"
+        aspect['adj1'], aspect['adj2'], aspect['adj3'], aspect['adj4'], aspect['adj5'] = "cool", "neato", "sick nasty", "wiggity wiggity whack", "excellent"
+    else:
+        aspect['name'] = name()
+        aspect['gender'] = gender()
+        aspect['heshe'], aspect['HeShe'], aspect['hisher'] = pronouns()
+        aspect['occ'], aspect['viverb'], aspect['skill1'], aspect['skill2']\
+            = impropernouns()
+        aspect['town'], aspect['hills'] = propernouns()
+        aspect['adj1'], aspect['adj2'], aspect['adj3'], aspect['adj4'], \
+            aspect['adj5'] = adjectives()
 
 
 def introduction():
