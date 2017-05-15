@@ -211,7 +211,6 @@ def introduction():
             print "Calm down there m8, we'll get there later."
         move = raw_input("It's spelled t-a-v-e-r-n. ").lower().strip()
     # Tavern
-    visited("tavern")
     show("The tavern in %s is old and rugged. Beaten down by countless "
          "travelers, it's acquired a homey atmosphere." % aspect['town'])
     print('You approach the bartender. "Ey, what\'ll it be for ya?" he '
@@ -280,7 +279,6 @@ def introduction():
     show('You have acquired the camera.')
     show('After taking the camera, you leave your house and walk into town, '
          'ready to head into whatever building you choose.')
-    #  TODO: transition smoothly into town
 
 def home():
     show("You enter your house through the familiar front door, taking in "
@@ -312,7 +310,8 @@ def tavern():
         show("As you walk in, several patrons of the bar turn around to look "
              "at you.")
         show('"Ah, it\'s you." The bartender says. "Make sure to watch how '
-             'much Mtn Dew you have this time!" The whole bar laughs jovially.')
+             'much Mtn Dew you have this time!" Several of the bar\'s guests '
+             'chuckle jovially.')
     else:
         show("You walk into the old tavern once again, determined to find some "
           "dank shit to do here or something.")
@@ -328,7 +327,9 @@ def tavern():
              "had enough of the tavern for now.")
     elif action == "ask":
         show("You walk up to the bartender and ask for some rumors.")
-        # TODO: Rumors
+        show("He lets you know that he hasn't heard anything since the last "
+             "time you asked.")
+        # TODO: Rumors (random maybe?)
     elif action == "game":
         show("You saunter up to the gentleman who seems to be looking for "
              "someone willing to play a game with him.")
@@ -399,6 +400,10 @@ def store():
     show("You approach the shopkeeper, an old and wary gentleman with age on "
          "his face and experience in his eyes.")
     show('"What\'ll it be for ya today?"')
+    show("You make a point of considering the shopkeeper's wares, but you're "
+         "not in the market for anything he's selling at the moment.")
+    show("He looks a little irritated that you didn't buy anything as you "
+         "head back to the town center.")
     # TODO: add the shop
 
 def blacksmith():
@@ -409,6 +414,8 @@ def blacksmith():
     show('"Hello!" she reaches out to shake your hand and ends up hurting it '
          'slightly.')
     show("You have lost 1 HP")  # TODO: lose 1 hp
+    show("You look at the blacksmith's wares, but she doesn't have anything "
+         "you need at the moment. You decide to head back into the town.")
     # TODO: blacksmith
 
 def maintown():
