@@ -2,11 +2,12 @@ import os   # Used to clear terminal
 from SlotMachine import Slots  # Slot machine from SlotMachine.py
 from RockPaperScissors import RPSGame  # RPSGame from RockPaperScissors.py
 os.system('cls' if os.name == 'nt' else 'clear')  # Clears terminal
-print("Welcome to ADVENTURE QUEST Version 0.00.25P! The P stands for python.")
+print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
 
-# Global Dictionaries
+# Global Dictionaries and Variables
 aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
 visitedareas = {}
+clantags = []
 
 # Define Functions
 
@@ -305,7 +306,49 @@ def tavern():
              'it takes to beat me?" (y/n)')
         if yesno():
             show('"Hah! Let\'s see how good you really are!')
-            RPSGame().game()
+            show("The pirate cracks his knuckles and offers his hand to you "
+                 "for a friendly handshake.")
+            show("You accept his offer, shaking his hand, when he suddenly "
+                 "grins at you.")
+            show('"Hah, new to the game, are you? I can feel in your hand '
+                 'what you\'re about to play!"')
+            show("You gulp nervously and ready your fist, mentally preparing "
+                 "yourself for the beginning of the match")
+            yourchoice, opchoice, outcome = RPSGame().game()
+            show('"Enough waiting around! Let\'s do this!"')
+            show("The world seems to fade away around you as the only thing "
+                 "you focus on is your own hand and that of your opponent.")
+            show("Over the rushing sound in your ears you hear the patrons of "
+                 "the bar chanting, your fist hitting your open hand.")
+            show('"ROCK"')
+            show('"PAPER"')
+            show('"SCISSORS"')
+            show('"SHOOT!"')
+            if opchoice == 'rock':
+                show("The pirate slams his closed fist down into his open "
+                     "palm. He played rock!")
+            else:
+                show("The pirate opens his hand a split second before slamming "
+                     "his fist into his open palm, revealing is true choice: "
+                     "%s!" % opchoice)
+            show("The bar erupts in cheers when they see the outcome of your "
+                 "match.")
+            if outcome == 'win':
+                show("You look down into your own hand. {0} beats {1}! You "
+                     "actually beat him!")\
+                    .format(yourchoice, opchoice)
+                show("The pirate looks up at you, clearly impressed.")
+                show('"Not many can beat me at this game. I think you deserve '
+                     'to be in my clan, it houses only the best rock paper '
+                     'scissors players in the entire world."')
+                clantags.append("[Pyr8]")
+                show("You have joined The Pirates' Clan! [Pyr8]")
+            else:
+                show("You look down into your own hand. {0} beats {1}! He beat "
+                     "you!")\
+                    .format(opchoice, yourchoice)
+                show('"Heh heh, well that\'s alright. Not everybody has what '
+                     'it takes to play with the best of them."')
             show("After your rousing game, you decide you've had enough fun at the "
              "tavern for now.")
         else:

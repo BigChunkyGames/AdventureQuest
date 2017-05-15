@@ -9,7 +9,7 @@ class RPSGame():
             return "scissors"
 
     def guess(self):
-        guess = int(raw_input("play 1 for rock, 2 for paper, and 3 for "
+        guess = int(raw_input("Press 1 to play rock, 2 for paper, and 3 for "
                               "scissors. "))
         while guess != 1 and guess != 2 and guess != 3:
             guess = int(raw_input("Either pick 1 (rock,) 2 (paper,) "
