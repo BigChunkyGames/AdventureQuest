@@ -14,23 +14,34 @@ class RPSGame():
         while guess != 1 and guess != 2 and guess != 3:
             guess = int(raw_input("Either pick 1 (rock,) 2 (paper,) "
                                   "or 3 (scissors.) "))
-        print("You chose %s!" % self.choicename(guess))
         return guess
 
-    def aiguess(self):
-        opponent = random.randint(1,3)
-        print("I picked %s." % self.choicename(opponent))
-        return opponent
+    def aiguess(self, choice, luck, AlwaysPicksRock):
+        if AlwaysPicksRock == "Only Rock":
+            opchoice = 1
+        else:
+            if 100 * random.random() < (33.33333333 - (abs(50 - luck))*.66666666):
+                opchoice = choice
+            else:
+                if random.randint(0, 99) >= luck:
+                    if choice == 3:
+                        opchoice = 1
+                    else:
+                        opchoice = choice + 1
+                else:
+                    if choice == 1:
+                        opchoice = 3
+                    else:
+                        opchoice = choice - 1
+        return opchoice
 
-    def game(self):
+    def game(self, luck = 50, AlwaysPicksRock = "No"):
         choice = self.guess()
-        opchoice = self.aiguess()
+        opchoice = self.aiguess(choice, luck, AlwaysPicksRock)
         if opchoice == choice - 1 or opchoice == choice + 2:
-            print ("{} beats {}! You win!").format(self.choicename(choice),
-                                                   self.choicename(opchoice))
+            finaloutcome = "win"
         elif opchoice == choice + 1 or opchoice == choice - 2:
-            print ("{} beats {}! You lost!").format(self.choicename(opchoice)
-                                                     .title(),
-                                                     self.choicename(choice))
-        elif opchoice == choice:
-            print("We tied!")
+            finaloutcome = "loss"
+        else:
+            finaloutcome = "tie"
+        return self.choicename(choice), self.choicename(opchoice), finaloutcome
