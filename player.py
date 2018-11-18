@@ -1,34 +1,43 @@
 # the player class holds all of the information about the player. This class also handles input for player information
+
 class Player:
 
 # this function gets called when the player is initialized (player = Player()) It stores class variables and sets default values. 
 # Get their values in this class like this ex. self.clantags[]
 # or in another file like this ex. player.clantags[]
+
     def __init__(self): 
-        self.aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
-        self.visitedareas = {} # a dict of visited areas
+        self.aspect = {}        # Beginning inputs used in storytelling
+        self.visitedareas = {}  # a dict of visited areas
         self.clantags = []
         self.dogecoin = 500
         self.dankpoints = 0
         self.perkpoints = 0
         self.hp = 10
+        self.maxhp = 10
 
     def charcreation(self):
         self.aspect['name'] = self.name()
         self.aspect['gender'] = self.gender()
-        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
-        self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2']\
-            = self.impropernouns()
+        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], \
+        self.aspect['hisher'] = self.pronouns()
+        self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], \
+        self.aspect['skill2'] = self.impropernouns()
         self.aspect['town'], self.aspect['hills'] = self.propernouns()
-        self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], \
-            self.aspect['adj5'] = self.adjectives()
+        self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], \
+        self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
 
-    def name(self):  # Used in charCreation()
+    def name(self):
         charname = raw_input("Enter your hero's name: ").lower().strip().title()
         while charname == "":
-            charname = raw_input("You must enter your hero's name: ")\
+            charname = raw_input("Your hero may not be nameless: ")\
                 .lower().strip().title()
         return charname
+
+    def gender(self):
+        chargender = raw_input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
+            .lower()
+        return chargender
 
     def pronouns(self):
         charpronouns = raw_input("Enter your three pronouns (e.g. 'he him his'): ")
@@ -38,11 +47,6 @@ class Player:
                 charpronouns = raw_input("Make sure to enter 3 pronouns: ")
             else:
                 return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
-
-    def gender(self):
-        chargender = raw_input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
-            .lower()
-        return chargender
 
     def impropernouns(self):
         occ = raw_input("Enter the name of your hero's occupation: ")\
@@ -109,8 +113,7 @@ class Player:
                         print("Adjective may not be blank.")
             except IndexError:
                 print("Your list doesn't seem to be long enough, try again.")
-    
-        # Returns number of times visited, including current visit
+
     def getTimesVisited(self, area, checkonly=False):
         #  Returns number of times visited
         try:
