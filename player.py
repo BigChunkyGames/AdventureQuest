@@ -31,16 +31,18 @@ class Player:
         return charname
 
     def pronouns(self):
-        if self.aspect['gender'] == "boi":
-            return "he", "He", "his"
-        elif self.aspect['gender'] == "gril":
-            return "she", "She", "her"
+        charpronouns = raw_input("Enter your three pronouns (e.g. 'he him his'): ")
+        while 1:
+            #FIXME: crashes if you dont input 3 words
+            charpronouns = charpronouns.split(" ")
+            if len(charpronouns) != 3:
+                charpronouns = raw_input("Make sure to enter 3 pronouns: ")
+            else:
+                return charpronouns[0], charpronouns[1], charpronouns[2]
 
     def gender(self):
-        chargender = raw_input("Enter your hero's gender: 'boi' or "
-                               "'gril': ").lower()
-        while chargender != "boi" and chargender != "gril":
-            chargender = raw_input("Select 'boi' or 'gril': ").lower()
+        chargender = raw_input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
+            .lower()
         return chargender
 
     def impropernouns(self):
