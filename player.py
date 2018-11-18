@@ -33,7 +33,6 @@ class Player:
     def pronouns(self):
         charpronouns = raw_input("Enter your three pronouns (e.g. 'he him his'): ")
         while 1:
-            #FIXME: crashes if you dont input 3 words
             charpronouns = charpronouns.split(" ")
             if len(charpronouns) != 3:
                 charpronouns = raw_input("Make sure to enter 3 pronouns: ")
