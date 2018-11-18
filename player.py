@@ -16,7 +16,7 @@ class Player:
     def charcreation(self):
         self.aspect['name'] = self.name()
         self.aspect['gender'] = self.gender()
-        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = self.pronouns()
+        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
         self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2']\
             = self.impropernouns()
         self.aspect['town'], self.aspect['hills'] = self.propernouns()
@@ -37,7 +37,7 @@ class Player:
             if len(charpronouns) != 3:
                 charpronouns = raw_input("Make sure to enter 3 pronouns: ")
             else:
-                return charpronouns[0], charpronouns[1], charpronouns[2]
+                return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
 
     def gender(self):
         chargender = raw_input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
