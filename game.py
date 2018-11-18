@@ -81,18 +81,15 @@ def name():  # Used in charCreation()
 
 
 def gender():
-    chargender = raw_input("Enter your hero's gender: 'boi' or "
-                           "'gril': ").lower()
-    while chargender != "boi" and chargender != "gril":
-        chargender = raw_input("Select 'boi' or 'gril': ").lower()
+    chargender = raw_input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
+        .lower()
     return chargender
 
 
 def pronouns():
-    if aspect['gender'] == "boi":
-        return "he", "He", "his"
-    elif aspect['gender'] == "gril":
-        return "she", "She", "her"
+    charpronouns = raw_input("Enter your three pronouns (e.g. 'he him his')")
+    charpronouns = charpronouns.split(" ")
+    return charpronouns[0], charpronouns[0].title(), charpronouns[2], charpronouns[1]
 
 
 def impropernouns():
@@ -167,7 +164,7 @@ def adjectives():
 def charcreation():
     aspect['name'] = name()
     aspect['gender'] = gender()
-    aspect['heshe'], aspect['HeShe'], aspect['hisher'] = pronouns()
+    aspect['heshe'], aspect['HeShe'], aspect['hisher'], aspect["himher"] = pronouns()
     aspect['occ'], aspect['viverb'], aspect['skill1'], aspect['skill2']\
         = impropernouns()
     aspect['town'], aspect['hills'] = propernouns()
