@@ -111,13 +111,16 @@ class Player:
                 print("Your list doesn't seem to be long enough, try again.")
     
         # Returns number of times visited, including current visit
-    def getTimesVisited(self, area):
+    def getTimesVisited(self, area, checkonly=False):
         #  Returns number of times visited
-        # FIXME: this function checks times visited but also incriments times visited. So if you check multiple times it still incriments which could be bad.
         try:
             if self.visitedareas[area]:
-                self.visitedareas[area] += 1
+                if not checkonly:
+                    self.visitedareas[area] += 1
                 return self.visitedareas[area]
         except KeyError:
-            self.visitedareas[area] = 1
-            return 1
+            if checkonly:
+                return 0
+            else:
+                self.visitedareas[area] = 1
+                return 1
