@@ -15,7 +15,7 @@ player = Player() #make new player object in player.py
 
 
 
-debug = 0
+debug = 1
 
 
 # Define Functions
