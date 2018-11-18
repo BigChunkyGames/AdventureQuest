@@ -18,7 +18,6 @@ player = Player() #make new player object in player.py
 debug = 0
 
 
-
 # Define Functions
 
 def main():
