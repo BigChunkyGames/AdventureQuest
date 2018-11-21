@@ -1,10 +1,12 @@
 # The purpose of this file is to hold utility functions that are commonly used
 
 import os   # Used to clear terminal
+import random
+from colorama import *
+init(autoreset=True) # init colors and reset to white each time
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
-
 
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
@@ -39,3 +41,15 @@ def checklevel(xp):
     for x in range(1,10001):
         if xp < (x**1.68)*100:
             return x - 1
+
+# takes an array returns a random index
+def getRandomIndex(arr):
+    return arr[random.randint(0, len(arr)-1)]
+
+def input():
+    return raw_input("> ").lower().strip()
+    
+# HOW TO PRINT COLOR
+#print(Fore.RED + 'some red text')
+#print(Back.GREEN + 'and with a green background')
+#print(Style.DIM + 'and in dim text') # doesnt work?

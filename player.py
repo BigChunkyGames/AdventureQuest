@@ -1,17 +1,49 @@
 # the player class holds all of the information about the player. This class also handles input for player information
+
+from lists import *
+
 class Player:
 
 # this function gets called when the player is initialized (player = Player()) It stores class variables and sets default values. 
 # Get their values in this class like this ex. self.clantags[]
 # or in another file like this ex. player.clantags[]
     def __init__(self): 
+         # lists
         self.aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
         self.visitedareas = {} # a dict of visited areas
         self.clantags = []
+        # points
         self.dogecoin = 500
         self.dankpoints = 0
         self.perkpoints = 0
+        # stats
         self.hp = 10
+        self.maxhp = 10
+        self.strength = 1 # base attack
+        self.level = 0
+        # 
+        self.currentLocation = [0,0] # set this before saving (coordinates of tile)
+
+    def addVisit(self, area):
+        if area in self.visitedareas:
+            self.visitedareas[area] += 1
+        else :
+            self.visitedareas[area] = 1
+
+    def getVisits(self, area):
+        #  Returns number of times visited
+        if area in self.visitedareas:
+            return self.visitedareas[area]
+        else:
+            return 0
+
+    def takeDamage(self, d):
+        self.hp = self.hp - d
+        print "You took",
+        print (Fore.RED + str(d) + " damage!") 
+        show(getRandomPainNoise())
+        if self.hp <= 0:
+            print "you dead" # TODO
 
     def charcreation(self):
         self.aspect['name'] = self.name()
@@ -109,15 +141,4 @@ class Player:
                         print("Adjective may not be blank.")
             except IndexError:
                 print("Your list doesn't seem to be long enough, try again.")
-    
-        # Returns number of times visited, including current visit
-    def getTimesVisited(self, area):
-        #  Returns number of times visited
-        # FIXME: this function checks times visited but also incriments times visited. So if you check multiple times it still incriments which could be bad.
-        try:
-            if self.visitedareas[area]:
-                self.visitedareas[area] += 1
-                return self.visitedareas[area]
-        except KeyError:
-            self.visitedareas[area] = 1
-            return 1
+
