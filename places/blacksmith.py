@@ -7,7 +7,7 @@ def blacksmith(player):
          "she's 6'5\" and the strongest one in your town.")
     show('"Hello!" she reaches out to shake your hand and ends up hurting it '
          'slightly.')
-    show("You have lost 1 HP")  # TODO: lose 1 hp
+    player.takeDamage(1)
     show("You look at the blacksmith's wares, but she doesn't have anything "
          "you need at the moment. You decide to head back into the town.")
     # TODO: blacksmith
