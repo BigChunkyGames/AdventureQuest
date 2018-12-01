@@ -1,8 +1,15 @@
 # The purpose of this file is to hold lists like a list of all dank memes
 
+
+import random
 from utils import *
 from colorama import Fore
 from colorama import Style
+
+def getWeaponPrefix
+
+def getRandomMemePeople():
+    return getRandomIndex(DANKNAMES)
 
 def getRandomDankAdjective():
     return getRandomIndex(DANKADJECTIVES)
@@ -22,11 +29,22 @@ def getRandomEnemyName(biome):
     else:
         return "Void Creature"
 
+def getReaction(reactionlevel):
+    reaction = []
+    if reactionlevel == 1:
+        reaction = ["ehh", "pff"]
+    elif reactionlevel == 2:
+        reaction = ["oh cool", "neat"]
+    elif reactionlevel == 3:
+        reaction = ["whoa dude", "that was sick"]
+    return reaction[random.randint(0, len(reaction)-1)]
+
 #################### lists #############################################################
 # these are constants. thats why they're all caps
 # these list items should never have leading or trailing spaces and always have captial first letters of words ##########
 
 DANKADJECTIVES = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity" ]
+DANKNAMES = ["Caillou", "Gabe Newell", "Batman", "Sanic", "Peppa Pig", "Pepe", "Famous Basketball Player Shaquille O'Neal", "Big Man Tyrone", "Voiceover Pete", "Shrek", "Neil deGrasse Tyson", "Bill Nye the Science Guy", "xXx_Sinpars_xXx", "Nicholas Cage", "Sergei Rachmaninoff"]
 
 # these can have duplicate names for different biomes and even duplicates within biome
 # format like... "A wild [Shrek] appeared!" or "[Big huge rat monster] attacked and did 3 damage!"
