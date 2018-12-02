@@ -1,6 +1,4 @@
 import random
-from SlotMachine import Slots  # Slot machine from SlotMachine.py
-from RockPaperScissors import RPSGame  # RPSGame from RockPaperScissors.py
 from utils import * # import all functions from utils
 from intro import *
 from player import *

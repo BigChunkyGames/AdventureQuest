@@ -7,11 +7,11 @@ from utils import *
 
 
 def maintown(player):
-    player.addVisit("Main Town")
-    # places inside of this while loop return to the while loop when they are finished
+    player.addVisit(player.aspect['town']) # places inside of this here while loop return to the while loop when they are finished
+    player.addToTeleportableAreas(player.aspect['town'], maintown)
     while True:
-        print("Here you stand in the homey town of %s, a lovely place. Where do you "
-              "want to go?") % player.aspect['town']
+        print("You stand in the homey town of {0}, just passed the hills of {1}, a lovely place. Where do you "
+              "want to go?").format(player.aspect['town'] , player.aspect['hills'])
         print("You could go 'home' and check that out.")
         print("The 'tavern' is always a cool place to hang out.")
         print("The 'store' is probably open at this time of day.")
@@ -30,11 +30,10 @@ def maintown(player):
         elif place == "blacksmith" or place == "b":
             blacksmith(player)
         elif place == "leave" or place == "l":
-            if player.getVisits("Main Town") == 1:
-                show("Off to find your grandpa eh? Mom said to head ~east~.")
-            else:
-                show("Once again you head off into the world.")
-            break # leaves maintown() to advance to world()
+            if player.getVisits("maintown") == 1:
+                show("Off to find your grandpa eh? Mom said to head EAST.")
+            world(player)
+            break # this break right here is really important
         else:
             print("You've got to pick one of the places listed.")
             print("")

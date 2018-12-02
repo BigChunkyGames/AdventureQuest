@@ -2,7 +2,6 @@ from utils import *
 from RockPaperScissors import *
 import sys
 sys.path.append('../') # i dont really know whats going on here but it lets you import from sibling directories
-from SlotMachine import *
 
 
 def tavern(player):
