@@ -2,7 +2,7 @@ from utils import *
 
 def store(player):
     show("You stride into the sedentary sales store supplementing the "
-         "not-so-silent town of %s, where succulent sweets "
+         "not-so-silent town of %s, where succulent sweets and sundries "
          "are sold. " % player.aspect['town'])
     show("You approach the shopkeeper, an old and wary gentleman with age on "
          "his face and experience in his eyes.")
@@ -10,5 +10,5 @@ def store(player):
     show("You make a point of considering the shopkeeper's wares, but you're "
          "not in the market for anything he's selling at the moment.")
     show("He looks a little irritated that you didn't buy anything as you "
-         "head back to the town center.")
+         "head back to the town center, having accomplished nothing at all.")
     # TODO: add the shop

@@ -22,12 +22,14 @@ def introduction(player):
     show("but first, %s was thirsty." % player.aspect['heshe'])
     clear()    
     print("You recognize your humble town's tavern to the north.")
-    move = raw_input("Type 'tavern' to enter the tavern. ").lower().strip()
+    print("Type 'tavern' to enter the tavern. ")
+    move = input()
     while move != "tavern":
         if move == "house":
             print "Calm down there m8, we'll get there later."
-        move = raw_input("It's spelled t-a-v-e-r-n. ").lower().strip()
-    # Tavern in intro is unique to tavern.py
+        print("It's spelled t-a-v-e-r-n.")
+        move = input()
+    # Tavern in intro is different from tavern.py
     show("The tavern in %s is old and rugged. Beaten down by countless "
          "travelers, it's acquired a homey atmosphere." % player.aspect['town'])
     print('You approach the bartender. "Ey, what\'ll it be for ya?" he '
@@ -78,44 +80,24 @@ def introduction(player):
     show("Looking into your eyes with a piercing stare, the bartender "
          "speaks the word that will change your life forever.")
     print("")
+    show("...")
+    show(". . .")
+    show(".    .    .")
     show('"k."')
     show("You sprint to your house to grab your shit.")
     print('Type "house" to go to your house.')
-    move = raw_input("> ").lower().strip()
+    move = input()
     while move != "house":
-        if move == "tavern":
+        if move == "tavern" or move == "t":
             print("You just came from there, you need to go to your "
                   "house.")
         else:
             print('No. Type "house"')
-        move = raw_input("> ").lower().strip()
+        move = input()
     show('You enter your house, hoping mum will get the camera. "Mom! I\'m '
          'going on an adventure!!1!!!!1one!!"')
     show('She looks up from the dick sock she\'s knitting. "Alright '
          'sweetie, be safe! Here, take this."')
-    show('You have acquired the camera.')
+    show('You have acquired the camera.') # TODO: add to inventory
     show('After taking the camera, you leave your house and walk into town, '
          'ready to head into whatever building you choose.')
-
-def home():
-    show("You enter your house through the familiar front door, taking in "
-         "the sights of your childhood abode, reminiscing about all the "
-         "dank shit you did as a kid.")
-    show("You could 'look' around some more, or just leave.")
-    action = raw_input("> ").lower().strip()
-    while action != "leave" and action != "look":
-        action = raw_input("> ")
-    if action == "look":
-        if visited("bedroom") == 1:
-            show("You head upstairs to your room and look around for a bit. "
-                 "You realize that you left your can of Mtn Dew laying on top "
-                 "of your dresser.")
-            show("You grab the can just in case you need it later.")
-            # TODO: add the can to your inventory
-        else:
-            show("You look around your house for a bit, but there isn't much "
-                 "to find that you haven't already.")
-            # TODO: add more stuff to do in your house
-    else:
-        show("You figure that there isn't much to do here at the moment, "
-             "so you turn 360 degrees and walk away.")
