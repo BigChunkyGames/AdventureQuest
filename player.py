@@ -24,7 +24,7 @@ class Player:
 
         self.strength = 1 # base attack
         self.level = 0
-        # 
+
         self.currentLocation = [0,0] # set this before saving (coordinates of tile)
 
     def addVisit(self, area):
