@@ -13,6 +13,7 @@ def getWeaponPrefix():
 def getRandomMemePeople():
     return getRandomIndex(DANKNAMES)
 
+
 def getRandomDankAdjective():
     return getRandomIndex(DANKADJECTIVES)
 

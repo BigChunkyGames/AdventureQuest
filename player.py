@@ -9,10 +9,10 @@ class Player:
 # or in another file like this ex. player.clantags[]
 
     def __init__(self): 
-
-        self.aspect = {}        # Beginning inputs used in storytelling
-        self.visitedareas = {}  # a dict of visited areas
-        # lists
+         # lists
+        self.aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
+        self.visitedareas = {} # a dict of visited areas
+        self.teleportableAreas = {}
         self.clantags = []
         # points
         self.dogecoin = 500
@@ -26,6 +26,14 @@ class Player:
         self.level = 0
 
         self.currentLocation = [0,0] # set this before saving (coordinates of tile)
+
+    def levelUp(self):
+        self.level = self.level +1
+        show("You leveled up!") #TODO italisize
+
+    def addToTeleportableAreas(self, placeName, function):
+        if placeName not in self.teleportableAreas:
+            self.teleportableAreas[placeName.lower().strip()] = function
 
     def addVisit(self, area):
         if area in self.visitedareas:

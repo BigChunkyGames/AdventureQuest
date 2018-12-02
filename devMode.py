@@ -11,6 +11,8 @@ def devMode(player):
     player.hp = 9999999
     player.dogecoin = 8000
 
+    
+
     # teleport player - make sure to import that place
     from places.maintown import *
     maintown(player)
