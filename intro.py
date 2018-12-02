@@ -1,7 +1,7 @@
 
 from utils import *
 
-def introduction(player):
+def introduction(player): #TODO i think we should change the intro to be less demanding of the player first thing. maybe we can add an option to have the lore given to the player or if they player can write the lore themselves
     clear()
     show("In a time before the world fell into the splitting fires of "
          "hell, we looked to the legends.")
@@ -33,8 +33,8 @@ def introduction(player):
          "travelers, it's acquired a homey atmosphere." % player.aspect['town'])
     print('You approach the bartender. "Ey, what\'ll it be for ya?" he '
           'says.')
-    print("On the shelf is a bottle of rum and a can of Mountain Dew. "
-          "Which do you choose? (rum, dew) ")
+    print("On the shelf is a bottle of 'rum' and a can of Mountain 'Dew'. "
+          "Which do you choose? ('rum', 'dew') ")
     drink = raw_input("> ").lower()
     while drink != "rum" and drink != "dew":
         if drink == 'neither':
@@ -81,7 +81,7 @@ def introduction(player):
     print("")
     show('"k."')
     show("You sprint to your house to grab your shit.")
-    print('Type "house" to go to your house.')
+    print("Type 'house' to go to your house.")
     move = raw_input("> ").lower().strip()
     while move != "house":
         if move == "tavern":
@@ -95,6 +95,7 @@ def introduction(player):
     show('She looks up from the dick sock she\'s knitting. "Alright '
          'sweetie, be safe! Here, take this."')
     show('You have acquired the camera.')
+    show("At any time, press 'i' to open your inventory.")
     show('After taking the camera, you leave your house and walk into town, '
          'ready to head into whatever building you choose.')
 

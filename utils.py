@@ -11,7 +11,18 @@ def clear():
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
     print(text)
-    raw_input("... ")
+    input = raw_input("... ")
+    from game import g #briefly import the player object
+    if input == "i":
+        g.getPlayer().openInventory()
+
+def input(): # alwase use this unless you dont want the inventory to be able to be opened
+    input = raw_input("> ").lower().strip()
+    if input == "i":
+        from game import g #briefly import the entire game object #FIXME
+        g.getPlayer().openInventory()
+    else:
+        return input
 
 def yesno():
     #  Returns True if user input is yes, returns False if no.
@@ -45,9 +56,6 @@ def checklevel(xp):
 # takes an array returns a random index
 def getRandomIndex(arr):
     return arr[random.randint(0, len(arr)-1)]
-
-def input():
-    return raw_input("> ").lower().strip()
     
 # HOW TO PRINT COLOR
 #print(Fore.RED + 'some red text')

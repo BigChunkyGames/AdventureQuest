@@ -1,6 +1,7 @@
 # the player class holds all of the information about the player. This class also handles input for player information
 
 from lists import *
+from inventory import *
 
 class Player:
 
@@ -9,7 +10,7 @@ class Player:
 # or in another file like this ex. player.clantags[]
     def __init__(self): 
          # lists
-        self.aspect = {}  # Beginning inputs (name, gender, etc) used in storytelling
+        self.aspect = {'name' : 'no name'}  # Beginning inputs (name, gender, etc) used in storytelling
         self.visitedareas = {} # a dict of visited areas
         self.clantags = []
         # points
@@ -23,6 +24,13 @@ class Player:
         self.level = 0
         # 
         self.currentLocation = [0,0] # set this before saving (coordinates of tile)
+        self.inventory = Inventory(self) # this is kind of sketchy not sure if this will cause problems later
+        
+    def getAspect(self, s):
+        return self.aspect[s]
+
+    def openInventory(self):
+        self.inventory.open()
 
     def addVisit(self, area):
         if area in self.visitedareas:

@@ -1,5 +1,7 @@
  # player comes here when they are not inside of a place or experiancing an event
 
+from utils import *
+
 def world(player):
     while True:
         show("There are four directions you can go:")
