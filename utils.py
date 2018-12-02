@@ -2,8 +2,9 @@
 
 import os   # Used to clear terminal
 import random
-from colorama import *
-init(autoreset=True) # init colors and reset to white each time
+# from colorama import *
+import time
+# init(autoreset=True) # init colors and reset to white each time
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
@@ -12,6 +13,9 @@ def show(text):
     #  Displays text, waits for 'enter' before continuing.
     print(text)
     raw_input("... ")
+
+def wait(seconds):
+    time.sleep(seconds)
 
 def yesno():
     #  Returns True if user input is yes, returns False if no.

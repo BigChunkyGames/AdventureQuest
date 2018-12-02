@@ -14,10 +14,7 @@ print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
 
 # if newgame:
 player = Player() #make new player object in player.py
-
-player = Player() #make new player object in player.py
-debug = 1
-if debug==1: devMode(player) # make player into a god and teleport somehwere
+devMode(player) # make player into a god and teleport somehwere
 
 # Define Functions
 
@@ -26,6 +23,8 @@ def start():
 
     introduction(player)
     maintown(player)
+    show("NOW LOADING: literally the entire world")
+    world(player)
     
 if debug != 1 : start()
 

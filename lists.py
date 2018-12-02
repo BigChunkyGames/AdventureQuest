@@ -3,10 +3,12 @@
 
 import random
 from utils import *
-from colorama import Fore
-from colorama import Style
+# from colorama import Fore
+# from colorama import Style
 
-def getWeaponPrefix
+def getWeaponPrefix():
+    pass
+    # TODO
 
 def getRandomMemePeople():
     return getRandomIndex(DANKNAMES)
@@ -16,6 +18,12 @@ def getRandomDankAdjective():
 
 def getRandomPainNoise():
     return getRandomIndex(PAIN_NOISES)
+
+def getRandomDankClothing():
+    return getRandomIndex(DANKCLOTHING)
+
+def getMotherlyPlattitude():
+    return getRandomIndex(MOTHERLYPLATITUDES)
 
 def getRandomEnemyName(biome):
     if biome == "plains":
@@ -41,10 +49,11 @@ def getReaction(reactionlevel):
 
 #################### lists #############################################################
 # these are constants. thats why they're all caps
-# these list items should never have leading or trailing spaces and always have captial first letters of words ##########
 
 DANKADJECTIVES = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity" ]
 DANKNAMES = ["Caillou", "Gabe Newell", "Batman", "Sanic", "Peppa Pig", "Pepe", "Famous Basketball Player Shaquille O'Neal", "Big Man Tyrone", "Voiceover Pete", "Shrek", "Neil deGrasse Tyson", "Bill Nye the Science Guy", "xXx_Sinpars_xXx", "Nicholas Cage", "Sergei Rachmaninoff"]
+DANKCLOTHING = ["dick sock", "red bandana", "blue bandana", "single sock", "ski mask", "Christmas stocking"]
+MOTHERLYPLATITUDES = ["There's no 'I' in 'Team'!", "Everybody makes mistakes. Don't forget to save often!", "Time heals all wounds. If you're injured, find a place to sleep!", "Work smarter, not harder. A lot of times, you can just type the first letter of a choice instead of the whole word."]
 
 # these can have duplicate names for different biomes and even duplicates within biome
 # format like... "A wild [Shrek] appeared!" or "[Big huge rat monster] attacked and did 3 damage!"

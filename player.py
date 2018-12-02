@@ -43,10 +43,16 @@ class Player:
     def takeDamage(self, d):
         self.hp = self.hp - d
         print "You took",
-        print (Fore.RED + str(d) + " damage!") 
+        print (str(d) + " damage!")
         show(getRandomPainNoise())
+        print("You now have " + str(self.hp) + " HP.")
         if self.hp <= 0:
             print "you dead" # TODO
+
+    def sleep(self):
+        self.hp = self.maxhp
+        print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
+        show("Your HP has been restored to full!")
 
 
     def charcreation(self):
