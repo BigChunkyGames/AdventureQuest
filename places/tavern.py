@@ -1,7 +1,7 @@
 from utils import *
-from RockPaperScissors import *
+from miniGames import RockPaperScissors
 import sys
-sys.path.append('../') # i dont really know whats going on here but it lets you import from sibling directories
+# sys.path.append('../') # this is unnecessary - see what I did above for an example of importing from sibling directories
 
 
 def tavern(player):
@@ -66,7 +66,7 @@ def tavernGame(player):
              'what you\'re about to play!"')
         show("You gulp nervously and ready your fist, mentally preparing "
              "yourself for the beginning of the match.")
-        yourchoice, opchoice, outcome = RPSGame().game()
+        yourchoice, opchoice, outcome = RockPaperScissors.RPSGame().game()
         show('"Enough waiting around! Let\'s do this!"')
         show("The world seems to fade away around you as the only thing "
              "you focus on is your own hand and that of your opponent.")

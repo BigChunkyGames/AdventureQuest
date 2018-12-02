@@ -5,8 +5,7 @@ def introduction(player):
     show("In a time before the world fell into the splitting fires of "
          "hell, we looked to the legends.")
     show("Only one true hero could save us from our seemingly "
-         "inevitable fate. The legends spoke of a time long ago, "
-         "before the fire.")
+         "inevitable fate. The legends spoke of a time long ago.")
     print("Past the {0} hills of {1} was a town named {2}. Here "
           "resided the adventurer, {3}, a {4} and {5} {6}."
           ).format(player.aspect['adj1'], player.aspect['hills'], player.aspect['town'],
@@ -80,9 +79,13 @@ def introduction(player):
     show("Looking into your eyes with a piercing stare, the bartender "
          "speaks the word that will change your life forever.")
     print("")
-    show("...")
-    show(". . .")
-    show(".    .    .")
+    raw_input(" ")
+    print("...")
+    raw_input(" ")
+    print(". . .")
+    raw_input(" ")
+    print(".    .    .")
+    raw_input(" ")
     show('"k."')
     show("You sprint to your house to grab your shit.")
     print('Type "house" to go to your house.')
