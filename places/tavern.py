@@ -5,8 +5,7 @@ import sys
 
 
 def tavern(player):
-    player.addVisit("Main Town Tavern")
-    if player.getVisits("Main Town Tavern") == 1:
+    if player.getVisits("Main Town Tavern", "add") == 1:
         show("You walk into the old tavern, wanting to visit the old place "
              "once again.")
         show("As you walk in, several patrons of the bar turn around to look "

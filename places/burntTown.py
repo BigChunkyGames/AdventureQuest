@@ -1,8 +1,7 @@
 from utils import *
 
 def burntTown(player):
-    player.addVisit("burntTown")
-    if player.getVisits("burntTown") ==1 :
+    if player.getVisits("burntTown", "add") ==1 :
         show("As you continue walking down the dusty road, you notice smoke rising in the distance.")
         show("You start to run.")
         show("The town has been burnt to the ground. Embers on ruined buildings are still burning. The fire was recent.")

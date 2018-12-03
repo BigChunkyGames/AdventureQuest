@@ -43,8 +43,10 @@ class Player:
         else :
             self.visitedareas[area] = 1
 
-    def getVisits(self, area):
+    def getVisits(self, area, add = ""):
         #  Returns number of times visited
+        if add == "add":
+            self.addVisit(area)
         if area in self.visitedareas:
             return self.visitedareas[area]
         else:
