@@ -22,23 +22,23 @@ def tavern(player):
         print("In front of you lies a pretty dope looking 'slot' machine")
         print("You could 'ask' the bartender for some rumors")
         print("It looks like one of the patrons is challenging others to a 'game'")
-        print("You could get a room to 'sleep' for the night")
+        print("You could get a room to 'rest' for the night")
         print("Or you could just 'leave'.")
         action = input()
-        if action == "slot":
+        if action == "slot" or action == "s":
             # Slots(player).slot_machine() TODO: fix this
             # until that gets fixed, run this line instead:
             show("You try your best at the slot machine, but it conveniently results in no net change of dogecoin for you.")
-        elif action == "ask":
+        elif action == "ask" or action == "a":
             show("You walk up to the bartender and ask for some rumors.")
             show("He lets you know that he hasn't heard anything since the last "
                  "time you asked.")
             # TODO: Rumors (random maybe?)
-        elif action == "game":
+        elif action == "game" or action == "g":
                 tavernGame(player)
-        elif action == "sleep":
+        elif action == "rest" or action =="r":
             pass # TODO
-        elif action == "leave":
+        elif action == "leave" or action == "l":
             show("You've had enough fun at the tavern for today, and decide to blow this popsicle stand.")
             break
         else:
@@ -68,47 +68,52 @@ def tavernGame(player):
              "yourself for the beginning of the match.")
         yourchoice, opchoice, outcome = RockPaperScissors.RPSGame().game()
         show('"Enough waiting around! Let\'s do this!"')
-        show("The world seems to fade away around you as the only thing "
-             "you focus on is your own hand and that of your opponent.")
-        show("Over the rushing sound in your ears you hear the patrons of "
-             "the bar chanting, your fist hitting your open hand.")
-        show('"ROCK"')
-        show('"PAPER"')
-        show('"SCISSORS"')
-        show('"SHOOT!"')
-        if opchoice == 'rock':
-            show("The pirate slams his closed fist down into his open "
-                 "palm. He played rock!")
-        else:
-            print("The pirate opens his hand a split second before slamming "
-                 "his fist into his open palm, revealing his true choice: "
-                 "%s!" % opchoice)
-            raw_input("... ")
-        show("The bar erupts in cheers when they see the outcome of your "
-             "match.")
-        if outcome == 'win':
-            print("You look down into your own hand. {0} beats {1}! You "
-                 "actually won!").format(yourchoice, opchoice)
-            raw_input("... ")
-            show("The pirate looks up at you, clearly impressed.")
-            show('"Not many can beat me at this game. I think you deserve '
-                 'to be in my clan, it houses only the best rock paper '
-                 'scissors players in the entire world."')
-            # player.clantags.append("[Pyr8]")  TODO: add this
-            show("You have joined The Pirates' Clan! [Pyr8]")
-        elif outcome == 'tie':
-            print("You look down into your own hand. Both of you played {0}! "
-                 "It's a tie!").format(yourchoice)
-            raw_input("... ")
-            show('"What a match! It looks like we\'re fairly even in skill," the pirate says.')
-            show('"Challenge me to another match any time you like!"')
-        else:
-            print("You look down into your own hand. {0} beats {1}! He beat "
-                 "you!").format(opchoice.title(), yourchoice)
-            raw_input("... ")
-            show('"Heh heh, well that\'s alright. Not everybody has what '
-                 'it takes to play with the best of them. Better luck next time!"')
-        show("After your rousing game, you head back to the front of the tavern.")
+        while True:
+          yourchoice, opchoice, outcome = RockPaperScissors.RPSGame().game()
+          show("The world seems to fade away around you as the only thing "
+               "you focus on is your own hand and that of your opponent.")
+          show("Over the rushing sound in your ears you hear the patrons of "
+               "the bar chanting, your fist hitting your open hand.")
+          show('"ROCK"')
+          show('"PAPER"')
+          show('"SCISSORS"')
+          show('"SHOOT!"')
+          if opchoice == 'rock':
+               show("The pirate slams his closed fist down into his open "
+                    "palm. He played rock!")
+          else:
+               print("The pirate opens his hand a split second before slamming "
+                    "his fist into his open palm, revealing his true choice: "
+                    "%s!" % opchoice)
+               raw_input("... ")
+          show("The bar erupts in cheers when they see the outcome of your "
+               "match.")
+          if outcome == 'win':
+               print("You look down into your own hand. {0} beats {1}! You "
+                    "actually won!").format(yourchoice, opchoice)
+               raw_input("... ")
+               show("The pirate looks up at you, clearly impressed.")
+               show('"Not many can beat me at this game. I think you deserve '
+                    'to be in my clan, it houses only the best rock paper '
+                    'scissors players in the entire world."')
+               player.clantags.append("[Pyr8]")
+               show("You have joined The Pirates' Clan! [Pyr8]")
+               show("After your rousing game, you head back to the front of the tavern.")
+               break
+          elif outcome == 'tie':
+               print("You look down into your own hand. Both of you played {0}! "
+                    "It's a tie!").format(yourchoice)
+               raw_input("... ")
+               show('"What a match! It looks like we\'re fairly even in skill," the pirate says.')
+               show('"Let\'s play again to settle who really is the better player!"')
+          else:
+               print("You look down into your own hand. {0} beats {1}! He beat "
+                    "you!").format(opchoice.title(), yourchoice)
+               raw_input("... ")
+               show('"Heh heh, well that\'s alright. Not everybody has what '
+                    'it takes to play with the best of them. Better luck next time!"')
+               show("After your rousing game, you head back to the front of the tavern.")
+               break
     else:
         show('"Just as I figured, maybe you can come back when you\'re not '
              'such a fuckin whimp lol')
