@@ -53,8 +53,12 @@ def getRandomIndex(arr):
 def input(player):
     while True:
         inp = raw_input("> ").lower().strip()
-        if player.devmode and inp == "damage":
+        if player.devmode and inp == "debug damage":
             player.takeDamage(int(raw_input("How much damage? : ")))
+        elif player.devmode and inp == "debug level up":
+            player.levelUp()
+        elif player.devmode and inp == "debug add xp":
+            player.addExperience(int(raw_input("How much XP?: ")), raw_input("Scale? (True or False): "))
         elif inp == "hp":
             print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
             print("("),

@@ -20,7 +20,7 @@ class Player:
         self.dankpoints = 0
         self.perkpoints = 0
         self.experiencepoints = 0
-        self.levelupxp = 100
+        self.levelupxp = 10
         # stats
         self.hp = 10
         self.maxhp = 10
@@ -32,24 +32,33 @@ class Player:
         self.currentLocation = [0,0] # set this before saving (coordinates of tile)
 
     def levelUp(self):
-        self.level = self.level + 1
-        print("")
-        print("You are now level " + str(self.level) + "!")
-        self.experiencepoints = self.experiencepoints - self.levelupxp
-        self.strength = self.strength + 1
-        print("You now have " + str(self.strength) + " strength!")
-        if self.hp == self.maxhp:
-            self.hp + 2
-        self.maxhp = self.maxhp + 2
-        print("You now have " + str(self.maxhp) + " maximum HP!")
-        self.levelupxp = self.levelupxp  + 0 # TODO
-        print("You'll need " + str(self.levelupxp) + " XP to level up again.")
+        while True:
+            self.level = self.level + 1
+            print("")
+            print("You are now level " + str(self.level) + "!")
+            self.experiencepoints = self.experiencepoints - self.levelupxp
+            if self.experiencepoints < 0:
+                self.experiencepoints = 0
+            self.strength = self.strength + 1
+            print("You now have " + str(self.strength) + " strength!")
+            if self.hp == self.maxhp:
+                self.hp + 2
+            self.maxhp = self.maxhp + 2
+            print("You now have " + str(self.maxhp) + " maximum HP!")
+            self.levelupxp = (2 ** (self.level)) * 10
+            if self.experiencepoints >= self.levelupxp:
+                print("You have enough XP to level up again!")
+            else:
+                print("You'll need " + str(self.levelupxp) + " XP to level up again.")
+                break
         print("")
         #TODO italisize
 
-    def addExperience(self, xp):
+    def addExperience(self, xp, scale = True):
+        if scale:
+            xp = xp * (2 ** (self.level))
         self.experiencepoints = self.experiencepoints + xp
-        if self.experiencepoints <= self.levelupxp:
+        if self.experiencepoints < self.levelupxp:
             print("You have gained " + str(xp) + " experience!")
             print("You now have " + str(self.experiencepoints) + " points out of " + str(self.levelupxp) + " needed to level up.")
         else:
