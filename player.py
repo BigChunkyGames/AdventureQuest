@@ -2,6 +2,7 @@
 
 
 from lists import *
+from utils import *
 class Player:
 
 # this function gets called when the player is initialized (player = Player()) It stores class variables and sets default values. 
@@ -24,6 +25,7 @@ class Player:
 
         self.strength = 1 # base attack
         self.level = 0
+        self.devmode = False
 
         self.currentLocation = [0,0] # set this before saving (coordinates of tile)
 
@@ -41,8 +43,10 @@ class Player:
         else :
             self.visitedareas[area] = 1
 
-    def getVisits(self, area):
+    def getVisits(self, area, add = ""):
         #  Returns number of times visited
+        if add == "add":
+            self.addVisit(area)
         if area in self.visitedareas:
             return self.visitedareas[area]
         else:
@@ -52,8 +56,8 @@ class Player:
         self.hp = self.hp - d
         print "You took",
         print (str(d) + " damage!")
-        show(getRandomPainNoise())
-        print("You now have " + str(self.hp) + " HP.")
+        print(getRandomPainNoise())
+        show("You now have " + str(self.hp) + " HP.")
         if self.hp <= 0:
             print "you dead" # TODO
 
@@ -64,15 +68,28 @@ class Player:
 
 
     def charcreation(self):
-        self.aspect['name'] = self.name()
-        self.aspect['gender'] = self.gender()
-        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], \
-        self.aspect['hisher'] = self.pronouns()
-        self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], \
-        self.aspect['skill2'] = self.impropernouns()
-        self.aspect['town'], self.aspect['hills'] = self.propernouns()
-        self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], \
-        self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
+        while True:
+            print("Would you like to 'create' your own character or 'roleplay' one created for you?")
+            dec = input()
+            if dec == "create" or dec == "c":
+                self.aspect['name'] = self.name()
+                self.aspect['gender'] = self.gender()
+                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
+                self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = self.impropernouns()
+                self.aspect['town'], self.aspect['hills'] = self.propernouns()
+                self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
+                break
+            elif dec == "roleplay" or dec == "r":
+                self.aspect['name'] = "Michael"
+                self.aspect['gender'] = "boi"
+                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
+                self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
+                self.aspect['town'], self.aspect['hills'] = "Swagsburgh", "Peak's Hills"
+                self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
+                break
+            else:
+                pass
+        
 
     def name(self):
         charname = raw_input("Enter your hero's name: ").lower().strip().title()

@@ -8,7 +8,7 @@ def world(player):
     while True:
         print("There are four directions you can go:")
         print("To the 'North' you can see a huge TODO sign")
-        if player.getVisits("world") ==1 :
+        if player.getVisits("world") == 1:
             print("To the 'East' you can see your objective")
         print("Or you can 'travel' back to somewhere you've already been.")
         print("Which direction would you like to go?")

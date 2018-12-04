@@ -10,8 +10,7 @@ def home(player):
         print("You could 'explore' your house some more, 'sleep', 'play' a console game, or just 'leave'.")
         action = input()
         if action == "explore" or action == "e":
-            player.addVisit("Explore House")
-            if player.getVisits("Explore House") == 1:
+            if player.getVisits("Explore House", "add") == 1:
                 show("You head upstairs to your room and look around for a bit. "
                      "You realize that you left your can of Mtn Dew laying on top "
                      "of your dresser.")
