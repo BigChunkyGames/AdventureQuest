@@ -47,9 +47,9 @@ def burntTown(player):
         show("You look down at your hands.")
         show("They are wet from tears.")
         show('"No," you say.')
-        show('"This is not the time for tears"')
-        show('"This is the time for action"')
-        show('"I am an adult now"')
+        show('"This is not the time for tears."')
+        show('"This is the time for action."')
+        show('"I am an adult now."')
         player.levelUp()
 
 
