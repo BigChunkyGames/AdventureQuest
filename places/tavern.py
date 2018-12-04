@@ -23,7 +23,7 @@ def tavern(player):
         print("It looks like one of the patrons is challenging others to a 'game'")
         print("You could get a room to 'rest' for the night")
         print("Or you could just 'leave'.")
-        action = input()
+        action = input(player)
         if action == "slot" or action == "s":
             # Slots(player).slot_machine() TODO: fix this
             # until that gets fixed, run this line instead:
@@ -55,7 +55,7 @@ def tavernGame(player):
     print('"I\'ve been challenging travelers across these lands to the '
          'game of my people for many years. You think you\'ve got what '
          'it takes to beat me?" (y/n)')
-    if yesno():
+    if yesno(player):
         show('"Hah! Let\'s see how good you really are!')
         show("The pirate cracks his knuckles and offers his hand to you "
              "for a friendly handshake.")

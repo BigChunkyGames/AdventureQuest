@@ -91,9 +91,10 @@ class Player:
             print("Anyway, on with the game... ")
             # TODO
         else:
-            print ("You took" + str(d) + " damage!")
+            print("You took " + str(d) + " damage!")
             print(getRandomPainNoise())
-            show("You now have " + str(self.hp) + " HP.")
+            print("You now have " + str(self.hp) + " HP.")
+            print("")
     
     def regenHealth(self, r):
         self.hp = self.hp + r
@@ -112,7 +113,7 @@ class Player:
     def charcreation(self):
         while True:
             print("Would you like to 'create' your own character or 'roleplay' one created for you?")
-            dec = input()
+            dec = input(player)
             if dec == "create" or dec == "c":
                 self.aspect['name'] = self.name()
                 self.aspect['gender'] = self.gender()
@@ -154,7 +155,7 @@ class Player:
                 return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
 
     def impropernouns(self):
-        occ = raw_input("Enter the name of your hero's occupation: ").lower().strip()
+        occ = raw_input("Enter the name of your hero's occupation (e.g. 'firefighter'): ").lower().strip()
         while occ == "":
             print("Your occupation can not be blank. ")
             occ = raw_input("Enter the name of your hero's occupation: ").lower().strip()

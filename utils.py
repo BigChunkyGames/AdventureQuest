@@ -17,10 +17,10 @@ def show(text):
 def wait(seconds):
     time.sleep(seconds)
 
-def yesno():
+def yesno(player):
     #  Returns True if user input is yes, returns False if no.
     while True:
-        userinput = raw_input("> ").lower().strip()
+        userinput = input(player)
         if userinput == "yes" or userinput == "y":
             return True
         elif userinput == "no" or userinput == "n":
@@ -50,8 +50,22 @@ def checklevel(xp):
 def getRandomIndex(arr):
     return arr[random.randint(0, len(arr)-1)]
 
-def input():
-    return raw_input("> ").lower().strip()
+def input(player):
+    while True:
+        inp = raw_input("> ").lower().strip()
+        if player.devmode and inp == "damage":
+            player.takeDamage(int(raw_input("How much damage? : ")))
+        elif inp == "hp":
+            print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
+            print("("),
+            print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
+            print("% )")
+        elif inp == "i" or inp == "inventory":
+            print("Your inventory is currently not implemented.")
+        elif inp == "me":
+            print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.dogecoin) + " dogecoin to your name.")
+        else:
+            return inp
     
 # HOW TO PRINT COLOR
 #print(Fore.RED + 'some red text')

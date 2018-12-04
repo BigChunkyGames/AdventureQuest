@@ -12,7 +12,7 @@ def world(player):
             print("To the 'East' you can see your objective")
         print("Or you can 'travel' back to somewhere you've already been.")
         print("Which direction would you like to go?")
-        x = input()
+        x = input(player)
         if( x == "east" or x == "e"):
             #todo actually go east
             burntTown(player)
@@ -22,7 +22,7 @@ def world(player):
                 print("You can travel to one of these places:")
                 for i in player.teleportableAreas:
                     print(i)
-                x = input()
+                x = input(player)
                 if x in player.teleportableAreas:
                     print("You decided to get back on your way to"),
                     print("%s." %x),

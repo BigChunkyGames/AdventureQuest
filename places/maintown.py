@@ -17,7 +17,7 @@ def maintown(player):
         print("The 'blacksmith' might appreciate you buying something.")
         print("Or you could always 'leave' your humble town to explore the world.")
         print("Where do you want to go?")
-        place = input()
+        place = input(player)
         if place == "home" or place == "h":
             home(player)
         elif place == "tavern" or place == "t":
