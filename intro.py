@@ -22,12 +22,12 @@ def introduction(player):
     clear()    
     print("You recognize your humble town's tavern to the north.")
     print("Type 'tavern' to enter the tavern. ")
-    move = input()
+    move = input(player)
     while move != "tavern":
         if move == "house":
             print "Calm down there m8, we'll get there later."
         print("It's spelled t-a-v-e-r-n.")
-        move = input()
+        move = input(player)
     # Tavern in intro is different from tavern.py
     show("The tavern in %s is old and rugged. Beaten down by countless "
          "travelers, it's acquired a homey atmosphere." % player.aspect['town'])
@@ -89,14 +89,14 @@ def introduction(player):
     show('"k."')
     show("You sprint to your house to grab your shit.")
     print('Type "house" to go to your house.')
-    move = input()
+    move = input(player)
     while move != "house":
         if move == "tavern" or move == "t":
             print("You just came from there, you need to go to your "
                   "house.")
         else:
             print('No. Type "house"')
-        move = input()
+        move = input(player)
     show('You enter your house, hoping mum will get the camera. "Mom! I\'m '
          'going on an adventure!!1!!!!1one!!"')
     show('She looks up from the dick sock she\'s knitting. "Alright '

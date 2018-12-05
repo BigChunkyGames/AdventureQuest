@@ -8,7 +8,7 @@ def burntTown(player):
         show("You walk to where the town square used to be. There is no one else in sight.")
         print("You can try to find your 'grandpa's house, or 'search' around for survivers.")
         while True:
-            x = input()
+            x = input(player)
             if (x == "grandpa" or x == "g"):
                 show("You need to find out if your grandpa is alright. You start walking towards where you remember coming as a child so many times.")
                 show("The buildings have all been charred by the fire. Most of them have caved in completely.")
@@ -47,9 +47,9 @@ def burntTown(player):
         show("You look down at your hands.")
         show("They are wet from tears.")
         show('"No," you say.')
-        show('"This is not the time for tears"')
-        show('"This is the time for action"')
-        show('"I am an adult now"')
+        show('"This is not the time for tears."')
+        show('"This is the time for action."')
+        show('"I am an adult now."')
         player.levelUp()
 
 

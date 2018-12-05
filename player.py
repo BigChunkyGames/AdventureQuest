@@ -19,6 +19,8 @@ class Player:
         self.dogecoin = 500
         self.dankpoints = 0
         self.perkpoints = 0
+        self.experiencepoints = 0
+        self.levelupxp = 10
         # stats
         self.hp = 10
         self.maxhp = 10
@@ -30,8 +32,40 @@ class Player:
         self.currentLocation = [0,0] # set this before saving (coordinates of tile)
 
     def levelUp(self):
-        self.level = self.level +1
-        show("You leveled up!") #TODO italisize
+        while True:
+            self.level = self.level + 1
+            print("")
+            print("You are now level " + str(self.level) + "!")
+            self.experiencepoints = self.experiencepoints - self.levelupxp
+            if self.experiencepoints < 0:
+                self.experiencepoints = 0
+            self.strength = self.strength + 1
+            print("You now have " + str(self.strength) + " strength!")
+            if self.hp == self.maxhp:
+                self.hp + 2
+            self.maxhp = self.maxhp + 2
+            print("You now have " + str(self.maxhp) + " maximum HP!")
+            self.levelupxp = (2 ** (self.level)) * 10
+            if self.experiencepoints >= self.levelupxp:
+                print("You have enough XP to level up again!")
+            else:
+                print("You'll need " + str(self.levelupxp) + " XP to level up again.")
+                break
+        print("")
+        #TODO italisize
+
+    def addExperience(self, xp, scale = True):
+        if scale:
+            xp = xp * (2 ** (self.level))
+        self.experiencepoints = self.experiencepoints + xp
+        if self.experiencepoints < self.levelupxp:
+            print("You have gained " + str(xp) + " experience!")
+            print("You now have " + str(self.experiencepoints) + " points out of " + str(self.levelupxp) + " needed to level up.")
+        else:
+            print("You have gained " + str(xp) + " experience! That's enough to level up!")
+            raw_input("... ")
+            self.levelUp()
+        raw_input("... ")
 
     def addToTeleportableAreas(self, placeName, function):
         if placeName not in self.teleportableAreas:
@@ -54,12 +88,29 @@ class Player:
 
     def takeDamage(self, d):
         self.hp = self.hp - d
-        print "You took",
-        print (str(d) + " damage!")
-        print(getRandomPainNoise())
-        show("You now have " + str(self.hp) + " HP.")
         if self.hp <= 0:
-            print "you dead" # TODO
+            hp = 0
+            print("You take " + str(d) + " damage, leaving you unable to stand any longer.")
+            raw_input("... ")
+            show("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:")
+            show('*I think I left the oven on at home*')
+            show("With that, everything goes dark.")
+            print(""); print(""); print("")
+            show("You're dead. You should feel pretty lucky that death doesn't have an effect yet.")
+            print("Anyway, on with the game... ")
+            # TODO
+        else:
+            print("You took " + str(d) + " damage!")
+            print(getRandomPainNoise())
+            print("You now have " + str(self.hp) + " HP.")
+            print("")
+    
+    def regenHealth(self, r):
+        self.hp = self.hp + r
+        if self.hp > max.hp:
+            self.hp = max.hp
+        print "You regained " + str(r) + " HP!"
+        show("You now have " + str(self.hp) + " HP.")
 
     def sleep(self):
         self.hp = self.maxhp
@@ -67,10 +118,11 @@ class Player:
         show("Your HP has been restored to full!")
 
 
+
     def charcreation(self):
         while True:
             print("Would you like to 'create' your own character or 'roleplay' one created for you?")
-            dec = input()
+            dec = input(player)
             if dec == "create" or dec == "c":
                 self.aspect['name'] = self.name()
                 self.aspect['gender'] = self.gender()
@@ -90,7 +142,6 @@ class Player:
             else:
                 pass
         
-
     def name(self):
         charname = raw_input("Enter your hero's name: ").lower().strip().title()
         while charname == "":
@@ -108,57 +159,44 @@ class Player:
         while 1:
             charpronouns = charpronouns.split(" ")
             if len(charpronouns) != 3:
-                charpronouns = raw_input("Make sure to enter 3 pronouns: ")
+                charpronouns = raw_input("Make sure to enter 3 pronouns separated by a single space each: ")
             else:
                 return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
 
     def impropernouns(self):
-        occ = raw_input("Enter the name of your hero's occupation: ")\
-            .lower().strip()
+        occ = raw_input("Enter the name of your hero's occupation (e.g. 'firefighter'): ").lower().strip()
         while occ == "":
             print("Your occupation can not be blank. ")
-            occ = raw_input("Enter the name of your hero's occupation: ")\
-                .lower().strip()
-        viverb = raw_input("Enter the name of a violent verb: ").lower()\
-            .strip()
+            occ = raw_input("Enter the name of your hero's occupation: ").lower().strip()
+        viverb = raw_input("Enter the name of a violent verb: ").lower().strip()
         while viverb == "":
             print("The verb can not be blank. ")
-            viverb = raw_input("Enter the name of a violent verb: ")\
-                .lower().strip()
-        skill1 = raw_input("Enter the name of a special skill: ").lower()\
-            .strip()
+            viverb = raw_input("Enter the name of a violent verb: ").lower().strip()
+        skill1 = raw_input("Enter the name of a special skill: ").lower().strip()
         while skill1 == "":
             print("The special skill can not be blank. ")
-            skill1 = raw_input("Enter the name of a special skill: ")\
-                .lower().strip()
-        skill2 = raw_input("Enter the name of a second special skill: ")\
-            .lower().strip()
+            skill1 = raw_input("Enter the name of a special skill: ").lower().strip()
+        skill2 = raw_input("Enter the name of a second special skill: ").lower().strip()
         while skill2 == "":
             print("The special skill can not be blank. ")
-            skill2 = raw_input("Enter the name of a second special "
-                               "skill: ").lower().strip()
+            skill2 = raw_input("Enter the name of a second special skill: ").lower().strip()
         return occ, viverb, skill1, skill2
 
     def propernouns(self):
-        town = raw_input("Enter the name of the town: ").lower().title()\
-            .strip()
+        town = raw_input("Enter the name of the town: ").lower().title().strip()
         while town == "":
             print("The name of the town can not be blank.")
-            town = raw_input("Enter the name of the town: ").lower()\
-                .title().strip()
-        hills = raw_input("Enter the name of the hills: ").lower().title()\
-            .strip()
+            town = raw_input("Enter the name of the town: ").lower().title().strip()
+        hills = raw_input("Enter the name of the hills: ").lower().title().strip()
         while hills == "":
             print("The name of the hills can not be blank.")
-            hills = raw_input("Enter the name of the hills: ").lower()\
-                .title().strip()
+            hills = raw_input("Enter the name of the hills: ").lower().title().strip()
         return town, hills
 
     def adjectives(self):
         while True:
             try:
-                adjinput = raw_input("Enter five adjectives separated by commas: ")\
-                    .lower()
+                adjinput = raw_input("Enter five adjectives separated by commas: ").lower()
                 adjinputlist = adjinput.split(',')
                 # creates list from input split by commas
                 adjlist = [x.strip() for x in adjinputlist]
@@ -170,8 +208,7 @@ class Player:
                         pass
                     print("Your list is too long.")
                 except IndexError:
-                    if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3]\
-                            and adjlist[4]:
+                    if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3] and adjlist[4]:
                         return adjlist[:]
                     else:
                         print("Adjective may not be blank.")

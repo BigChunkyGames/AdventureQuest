@@ -8,7 +8,7 @@ def home(player):
          "dank shit you did as a kid.")
     while True:
         print("You could 'explore' your house some more, 'sleep', 'play' a console game, or just 'leave'.")
-        action = input()
+        action = input(player)
         if action == "explore" or action == "e":
             if player.getVisits("Explore House", "add") == 1:
                 show("You head upstairs to your room and look around for a bit. "
