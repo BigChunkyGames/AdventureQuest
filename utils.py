@@ -4,6 +4,7 @@ import os   # Used to clear terminal
 import random
 # from colorama import *
 import time
+import pickle
 # init(autoreset=True) # init colors and reset to white each time
 
 def clear():
@@ -68,6 +69,12 @@ def input(player):
             print("Your inventory is currently not implemented.")
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.dogecoin) + " dogecoin to your name.")
+        elif inp == "save":
+            pickle.dump(player, open("AdventureQuestSave.meme", "w"))
+            show("Game saved!")
+        elif inp == "load":
+            player = pickle.load(open("AdventureQuestSave.meme", "r"))
+            show("Game loaded!")
         else:
             return inp
     
