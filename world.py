@@ -6,7 +6,6 @@ from places.burntTown import *
 def world(player):
     player.addVisit("world")
     while True:
-        print("There are four directions you can go:")
         print("To the 'North' you can see a huge TODO sign")
         if player.getVisits("world") == 1:
             print("To the 'East' you can see your objective")
@@ -17,6 +16,8 @@ def world(player):
             #todo actually go east
             burntTown(player)
             break
+        elif (x == "back" or x == "b" or x = "cancel" or x = "c"):
+            return
         elif (x == "t" or x == "travel"):
             while True:
                 print("You can travel to one of these places:")

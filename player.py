@@ -1,5 +1,5 @@
 # the player class holds all of the information about the player. This class also handles input for player information
-
+from inventory import *
 from lists import *
 from utils import *
 class Player:

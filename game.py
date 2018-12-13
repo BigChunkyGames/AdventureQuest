@@ -19,17 +19,14 @@ class Game: # perhaps this is what should be saved
         return self.player
 
     def start(self):
-        if not player.devmode:
-            player.charcreation() 
-            introduction(player)
-        maintown(player)
+        if not self.devMode:
+            self.player.charcreation() 
+            introduction(self.player)
+            maintown(self.player)
+        else:
+            devMode(self.player)
         show("NOW LOADING: literally the entire world")
-        world(player)
-
-    def start():
-        self.player.charcreation() 
-        introduction(self.player)
-        maintown(self.player)
+        world(self.player)
         
 #TODO: assuming new game each time. Should ask to load saved game data or start 
 # new game. Below line creates a new game object but should load if loading saved game
