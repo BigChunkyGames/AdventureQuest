@@ -2,8 +2,9 @@
 
 import os   # Used to clear terminal
 import random
-from colorama import *
-init(autoreset=True) # init colors and reset to white each time
+# from colorama import *
+import time
+# init(autoreset=True) # init colors and reset to white each time
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
@@ -23,6 +24,9 @@ def input(): # alwase use this unless you dont want the inventory to be able to 
         g.getPlayer().openInventory()
     else:
         return input
+
+def wait(seconds):
+    time.sleep(seconds)
 
 def yesno():
     #  Returns True if user input is yes, returns False if no.
