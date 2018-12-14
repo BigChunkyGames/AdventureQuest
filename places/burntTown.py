@@ -1,4 +1,4 @@
-from utils import *
+from utils import show, input
 
 def burntTown(player):
     if player.getVisits("burntTown", "add") ==1 :
@@ -19,7 +19,7 @@ def burntTown(player):
             elif (x == "search" or x == "s"):
                 show("It's eerily quiet.")
                 show("There is nothing around but charred wooden buildings that use to house the inhabitants of this place. The ground is still hot.")
-                breakA
+                break
             else:
                 print("'grandpa' or 'search' ")
         show("From somewhere behind you you can hear faint wimpering.")

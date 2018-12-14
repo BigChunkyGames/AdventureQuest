@@ -66,7 +66,7 @@ def input(player):
             print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
             print("% )")
         elif inp == "i" or inp == "inventory":
-            print("Your inventory is currently not implemented.")
+            player.openInventory()
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.dogecoin) + " dogecoin to your name.")
         elif inp == "save":
