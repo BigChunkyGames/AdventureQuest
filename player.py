@@ -2,6 +2,7 @@
 from inventory import *
 from lists import *
 from utils import *
+from map import *
 class Player:
 
 # this function gets called when the player is initialized (player = Player()) It stores class variables and sets default values. 
@@ -25,9 +26,15 @@ class Player:
         self.strength = 1 # base attack
         self.level = 0
         self.devmode = False
-
-        self.currentLocation = [0,0] # set this before saving (coordinates of tile)
+        
         self.inventory = Inventory(self) # this is kind of sketchy not sure if this will cause problems later
+
+        self.currentLocationX = 6
+        self.currentLocationY = 5 # maintown
+        self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
+
+    def getTileAtCurrentLocation(self):
+        return self.map.getTile(self.currentLocationX, self.currentLocationY)
         
     def getAspect(self, s):
         return self.aspect[s]

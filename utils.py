@@ -12,18 +12,18 @@ def clear():
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
     print(text)
-    input = raw_input("... ")
-    from game import g #briefly import the player object
-    if input == "i":
-        g.getPlayer().openInventory()
+    x = raw_input("... ")
+    # from game import g #briefly import the entire game object
+    # if input == "i":
+        # g.getPlayer().openInventory()
 
 def input(): # alwase use this unless you dont want the inventory to be able to be opened
-    input = raw_input("> ").lower().strip()
-    if input == "i":
+    x = raw_input("> ").lower().strip()
+    if x == "i":
         from game import g #briefly import the entire game object #FIXME
         g.getPlayer().openInventory()
     else:
-        return input
+        return x
 
 def wait(seconds):
     time.sleep(seconds)
