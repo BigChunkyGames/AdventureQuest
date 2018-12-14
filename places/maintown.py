@@ -1,8 +1,10 @@
 from world import *
 from utils import *
+from lists import *
 import sys
 sys.path.append('../') # i dont really know whats going on here but it lets you import from sibling directories
-from SlotMachine import *
+#from miniGames.SlotMachine import *
+from miniGames.RockPaperScissors import *
 
 
 def maintown(player):
@@ -16,7 +18,7 @@ def maintown(player):
         print("The 'blacksmith' might appreciate you buying something.")
         print("Or you could always 'leave' your humble town to explore the world.")
         print("Where do you want to go?")
-        place = input()
+        place = input(player)
         if place == "home" or place == "h":
             home(player)
         elif place == "tavern" or place == "t":
@@ -41,7 +43,7 @@ def home(player):
          "dank shit you did as a kid.")
     while True:
         print("You could 'explore' your house some more, 'sleep', 'play' a console game, or just 'leave'.")
-        action = input()
+        action = input(player)
         if action == "explore" or action == "e":
             if player.getVisits("Explore House", "add") == 1:
                 show("You head upstairs to your room and look around for a bit. "
@@ -116,7 +118,7 @@ def tavern(player):
         print("It looks like one of the patrons is challenging others to a 'game'")
         print("You could get a room to 'rest' for the night")
         print("Or you could just 'leave'.")
-        action = input()
+        action = input(player)
         if action == "slot" or action == "s":
             # Slots(player).slot_machine() TODO: fix this
             # until that gets fixed, run this line instead:
@@ -148,7 +150,7 @@ def tavernGame(player):
     print('"I\'ve been challenging travelers across these lands to the '
          'game of my people for many years. You think you\'ve got what '
          'it takes to beat me?" (y/n)')
-    if yesno():
+    if yesno(player):
         show('"Hah! Let\'s see how good you really are!')
         show("The pirate cracks his knuckles and offers his hand to you "
              "for a friendly handshake.")
@@ -158,10 +160,10 @@ def tavernGame(player):
              'what you\'re about to play!"')
         show("You gulp nervously and ready your fist, mentally preparing "
              "yourself for the beginning of the match.")
-        yourchoice, opchoice, outcome = RockPaperScissors.RPSGame().game()
+        yourchoice, opchoice, outcome = RPSGame().game()
         show('"Enough waiting around! Let\'s do this!"')
         while True:
-          yourchoice, opchoice, outcome = RockPaperScissors.RPSGame().game()
+          yourchoice, opchoice, outcome = RPSGame().game()
           show("The world seems to fade away around you as the only thing "
                "you focus on is your own hand and that of your opponent.")
           show("Over the rushing sound in your ears you hear the patrons of "

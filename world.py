@@ -17,7 +17,7 @@ def world(player):
         print("To the 'West'  you can see"),
         print player.map.getTileDescription(player.currentLocationX -1, player.currentLocationY )
         print("Or you can 'travel' back to somewhere you've already been.")
-        x = input()
+        x = input(player)
         if( x == "north" or x == "n"):
             player.map.goTo(player.currentLocationX , player.currentLocationY - 1, player)
             
@@ -38,7 +38,7 @@ def world(player):
                 print("You can travel to one of these places:")
                 for i in player.teleportableAreas:
                     print(i)
-                x = input()
+                x = input(player)
                 if x in player.teleportableAreas:
                     print("You decided to get back on your way to"),
                     print("%s." %x),
