@@ -1,1 +1,1 @@
-# initialize the game package
+# initialize the AdventureQuest package
