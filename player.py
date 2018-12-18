@@ -1,7 +1,8 @@
 # the player class holds all of the information about the player. This class also handles input for player information
-
-
+from inventory import *
 from lists import *
+from utils import *
+from map import *
 class Player:
 
 # this function gets called when the player is initialized (player = Player()) It stores class variables and sets default values. 
@@ -9,23 +10,79 @@ class Player:
 # or in another file like this ex. player.clantags[]
 
     def __init__(self): 
-
-        self.aspect = {}        # Beginning inputs used in storytelling
-        self.visitedareas = {}  # a dict of visited areas
-        # lists
+         # lists
+        self.aspect = {'name' : 'no name'}  # Beginning inputs (name, gender, etc) used in storytelling
+        self.visitedareas = {} # a dict of visited areas
+        self.teleportableAreas = {}
         self.clantags = []
         # points
         self.dogecoin = 500
         self.dankpoints = 0
         self.perkpoints = 0
+        self.experiencepoints = 0
+        self.levelupxp = 10
         # stats
         self.hp = 10
         self.maxhp = 10
 
         self.strength = 1 # base attack
         self.level = 0
+        self.devmode = False
+        
+        self.inventory = Inventory(self) # this is kind of sketchy not sure if this will cause problems later
 
-        self.currentLocation = [0,0] # set this before saving (coordinates of tile)
+        self.currentLocationX = 6
+        self.currentLocationY = 5 # maintown
+        self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
+
+    def getTileAtCurrentLocation(self):
+        return self.map.getTile(self.currentLocationX, self.currentLocationY)
+        
+    def getAspect(self, s):
+        return self.aspect[s]
+
+    def openInventory(self):
+        self.inventory.open()
+
+    def levelUp(self):
+        while True:
+            self.level = self.level + 1
+            print("")
+            print("You are now level " + str(self.level) + "!")
+            self.experiencepoints = self.experiencepoints - self.levelupxp
+            if self.experiencepoints < 0:
+                self.experiencepoints = 0
+            self.strength = self.strength + 1
+            print("You now have " + str(self.strength) + " strength!")
+            if self.hp == self.maxhp:
+                self.hp + 2
+            self.maxhp = self.maxhp + 2
+            print("You now have " + str(self.maxhp) + " maximum HP!")
+            self.levelupxp = (2 ** (self.level)) * 10
+            if self.experiencepoints >= self.levelupxp:
+                print("You have enough XP to level up again!")
+            else:
+                print("You'll need " + str(self.levelupxp) + " XP to level up again.")
+                break
+        print("")
+        #TODO italisize
+
+    def addExperience(self, xp, scale = True):
+        if scale:
+            xp = xp * (2 ** (self.level))
+        self.experiencepoints = self.experiencepoints + xp
+        if self.experiencepoints < self.levelupxp:
+            print("You have gained " + str(xp) + " experience!")
+            print("You now have " + str(self.experiencepoints) + " points out of " + str(self.levelupxp) + " needed to level up.")
+        else:
+            print("You have gained " + str(xp) + " experience! That's enough to level up!")
+            raw_input("... ")
+            self.levelUp()
+        raw_input("... ")
+
+    def addToTeleportableAreas(self, placeName, function):
+        if placeName not in self.teleportableAreas:
+            self.teleportableAreas[placeName.lower().strip()] = function
 
     def addVisit(self, area):
         if area in self.visitedareas:
@@ -33,8 +90,10 @@ class Player:
         else :
             self.visitedareas[area] = 1
 
-    def getVisits(self, area):
+    def getVisits(self, area, add = ""):
         #  Returns number of times visited
+        if add == "add":
+            self.addVisit(area)
         if area in self.visitedareas:
             return self.visitedareas[area]
         else:
@@ -42,12 +101,29 @@ class Player:
 
     def takeDamage(self, d):
         self.hp = self.hp - d
-        print "You took",
-        print (str(d) + " damage!")
-        show(getRandomPainNoise())
-        print("You now have " + str(self.hp) + " HP.")
         if self.hp <= 0:
-            print "you dead" # TODO
+            hp = 0
+            print("You take " + str(d) + " damage, leaving you unable to stand any longer.")
+            raw_input("... ")
+            show("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:")
+            show('*I think I left the oven on at home*')
+            show("With that, everything goes dark.")
+            print(""); print(""); print("")
+            show("You're dead. You should feel pretty lucky that death doesn't have an effect yet.")
+            print("Anyway, on with the game... ")
+            # TODO
+        else:
+            print("You took " + str(d) + " damage!")
+            print(getRandomPainNoise())
+            print("You now have " + str(self.hp) + " HP.")
+            print("")
+    
+    def regenHealth(self, r):
+        self.hp = self.hp + r
+        if self.hp > max.hp:
+            self.hp = max.hp
+        print "You regained " + str(r) + " HP!"
+        show("You now have " + str(self.hp) + " HP.")
 
     def sleep(self):
         self.hp = self.maxhp
@@ -55,17 +131,30 @@ class Player:
         show("Your HP has been restored to full!")
 
 
-    def charcreation(self):
-        self.aspect['name'] = self.name()
-        self.aspect['gender'] = self.gender()
-        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], \
-        self.aspect['hisher'] = self.pronouns()
-        self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], \
-        self.aspect['skill2'] = self.impropernouns()
-        self.aspect['town'], self.aspect['hills'] = self.propernouns()
-        self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], \
-        self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
 
+    def charcreation(self):
+        while True:
+            print("Would you like to 'create' your own character or 'roleplay' one created for you?")
+            dec = input(player)
+            if dec == "create" or dec == "c":
+                self.aspect['name'] = self.name()
+                self.aspect['gender'] = self.gender()
+                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
+                self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = self.impropernouns()
+                self.aspect['town'], self.aspect['hills'] = self.propernouns()
+                self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
+                break
+            elif dec == "roleplay" or dec == "r":
+                self.aspect['name'] = "Michael"
+                self.aspect['gender'] = "boi"
+                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
+                self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
+                self.aspect['town'], self.aspect['hills'] = "Swagsburgh", "Peak's Hills"
+                self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
+                break
+            else:
+                pass
+        
     def name(self):
         charname = raw_input("Enter your hero's name: ").lower().strip().title()
         while charname == "":
@@ -83,57 +172,44 @@ class Player:
         while 1:
             charpronouns = charpronouns.split(" ")
             if len(charpronouns) != 3:
-                charpronouns = raw_input("Make sure to enter 3 pronouns: ")
+                charpronouns = raw_input("Make sure to enter 3 pronouns separated by a single space each: ")
             else:
                 return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
 
     def impropernouns(self):
-        occ = raw_input("Enter the name of your hero's occupation: ")\
-            .lower().strip()
+        occ = raw_input("Enter the name of your hero's occupation (e.g. 'firefighter'): ").lower().strip()
         while occ == "":
             print("Your occupation can not be blank. ")
-            occ = raw_input("Enter the name of your hero's occupation: ")\
-                .lower().strip()
-        viverb = raw_input("Enter the name of a violent verb: ").lower()\
-            .strip()
+            occ = raw_input("Enter the name of your hero's occupation: ").lower().strip()
+        viverb = raw_input("Enter the name of a violent verb: ").lower().strip()
         while viverb == "":
             print("The verb can not be blank. ")
-            viverb = raw_input("Enter the name of a violent verb: ")\
-                .lower().strip()
-        skill1 = raw_input("Enter the name of a special skill: ").lower()\
-            .strip()
+            viverb = raw_input("Enter the name of a violent verb: ").lower().strip()
+        skill1 = raw_input("Enter the name of a special skill: ").lower().strip()
         while skill1 == "":
             print("The special skill can not be blank. ")
-            skill1 = raw_input("Enter the name of a special skill: ")\
-                .lower().strip()
-        skill2 = raw_input("Enter the name of a second special skill: ")\
-            .lower().strip()
+            skill1 = raw_input("Enter the name of a special skill: ").lower().strip()
+        skill2 = raw_input("Enter the name of a second special skill: ").lower().strip()
         while skill2 == "":
             print("The special skill can not be blank. ")
-            skill2 = raw_input("Enter the name of a second special "
-                               "skill: ").lower().strip()
+            skill2 = raw_input("Enter the name of a second special skill: ").lower().strip()
         return occ, viverb, skill1, skill2
 
     def propernouns(self):
-        town = raw_input("Enter the name of the town: ").lower().title()\
-            .strip()
+        town = raw_input("Enter the name of the town: ").lower().title().strip()
         while town == "":
             print("The name of the town can not be blank.")
-            town = raw_input("Enter the name of the town: ").lower()\
-                .title().strip()
-        hills = raw_input("Enter the name of the hills: ").lower().title()\
-            .strip()
+            town = raw_input("Enter the name of the town: ").lower().title().strip()
+        hills = raw_input("Enter the name of the hills: ").lower().title().strip()
         while hills == "":
             print("The name of the hills can not be blank.")
-            hills = raw_input("Enter the name of the hills: ").lower()\
-                .title().strip()
+            hills = raw_input("Enter the name of the hills: ").lower().title().strip()
         return town, hills
 
     def adjectives(self):
         while True:
             try:
-                adjinput = raw_input("Enter five adjectives separated by commas: ")\
-                    .lower()
+                adjinput = raw_input("Enter five adjectives separated by commas: ").lower()
                 adjinputlist = adjinput.split(',')
                 # creates list from input split by commas
                 adjlist = [x.strip() for x in adjinputlist]
@@ -145,8 +221,7 @@ class Player:
                         pass
                     print("Your list is too long.")
                 except IndexError:
-                    if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3]\
-                            and adjlist[4]:
+                    if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3] and adjlist[4]:
                         return adjlist[:]
                     else:
                         print("Adjective may not be blank.")

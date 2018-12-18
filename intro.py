@@ -1,12 +1,11 @@
 from utils import *
 
-def introduction(player):
+def introduction(player): #TODO i think we should change the intro to be less demanding of the player first thing. maybe we can add an option to have the lore given to the player or if they player can write the lore themselves
     clear()
     show("In a time before the world fell into the splitting fires of "
          "hell, we looked to the legends.")
     show("Only one true hero could save us from our seemingly "
-         "inevitable fate. The legends spoke of a time long ago, "
-         "before the fire.")
+         "inevitable fate. The legends spoke of a time long ago.")
     print("Past the {0} hills of {1} was a town named {2}. Here "
           "resided the adventurer, {3}, a {4} and {5} {6}."
           ).format(player.aspect['adj1'], player.aspect['hills'], player.aspect['town'],
@@ -23,19 +22,19 @@ def introduction(player):
     clear()    
     print("You recognize your humble town's tavern to the north.")
     print("Type 'tavern' to enter the tavern. ")
-    move = input()
+    move = input(player)
     while move != "tavern":
         if move == "house":
             print "Calm down there m8, we'll get there later."
         print("It's spelled t-a-v-e-r-n.")
-        move = input()
+        move = input(player)
     # Tavern in intro is different from tavern.py
     show("The tavern in %s is old and rugged. Beaten down by countless "
          "travelers, it's acquired a homey atmosphere." % player.aspect['town'])
     print('You approach the bartender. "Ey, what\'ll it be for ya?" he '
           'says.')
-    print("On the shelf is a bottle of rum and a can of Mountain Dew. "
-          "Which do you choose? (rum, dew) ")
+    print("On the shelf is a bottle of 'rum' and a can of Mountain 'Dew'. "
+          "Which do you choose? ('rum', 'dew') ")
     drink = raw_input("> ").lower()
     while drink != "rum" and drink != "dew":
         if drink == 'neither':
@@ -80,24 +79,29 @@ def introduction(player):
     show("Looking into your eyes with a piercing stare, the bartender "
          "speaks the word that will change your life forever.")
     print("")
-    show("...")
-    show(". . .")
-    show(".    .    .")
+    raw_input(" ")
+    print("...")
+    raw_input(" ")
+    print(". . .")
+    raw_input(" ")
+    print(".    .    .")
+    raw_input(" ")
     show('"k."')
     show("You sprint to your house to grab your shit.")
     print('Type "house" to go to your house.')
-    move = input()
+    move = input(player)
     while move != "house":
         if move == "tavern" or move == "t":
             print("You just came from there, you need to go to your "
                   "house.")
         else:
             print('No. Type "house"')
-        move = input()
+        move = input(player)
     show('You enter your house, hoping mum will get the camera. "Mom! I\'m '
          'going on an adventure!!1!!!!1one!!"')
     show('She looks up from the dick sock she\'s knitting. "Alright '
          'sweetie, be safe! Here, take this."')
-    show('You have acquired the camera.') # TODO: add to inventory
+    show('You have acquired the camera.')
+    show("At any time, press 'i' to open your inventory.")
     show('After taking the camera, you leave your house and walk into town, '
          'ready to head into whatever building you choose.')

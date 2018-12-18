@@ -1,6 +1,4 @@
 import random
-from SlotMachine import Slots  # Slot machine from SlotMachine.py
-from RockPaperScissors import RPSGame  # RPSGame from RockPaperScissors.py
 from utils import * # import all functions from utils
 from intro import *
 from player import *
@@ -10,22 +8,30 @@ from devMode import *
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
 
-# TODO: Ask to load saved game data or start new game
-
-# if newgame:
-player = Player() #make new player object in player.py
-devMode(player) # make player into a god and teleport somehwere
-
 # Define Functions
 
-def start():
-    player.charcreation() 
+class Game: # perhaps this is what should be saved
+    def __init__(self):
+        self.player= Player()
+        self.devMode = 1 # on
 
-    introduction(player)
-    maintown(player)
-    show("NOW LOADING: literally the entire world")
-    world(player)
-    
-if debug != 1 : start()
+    def getPlayer(self):
+        return self.player
+
+    def start(self):
+        if not self.devMode:
+            self.player.charcreation() 
+            introduction(self.player)
+            maintown(self.player)
+        else:
+            devMode(self.player)
+        show("NOW LOADING: literally the entire world")
+        world(self.player)
+        
+#TODO: assuming new game each time. Should ask to load saved game data or start 
+# new game. Below line creates a new game object but should load if loading saved game
+g = Game()
+g.start()
+
 
 print "the end"
