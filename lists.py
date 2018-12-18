@@ -13,7 +13,6 @@ def getWeaponPrefix():
 def getRandomMemePeople():
     return getRandomIndex(DANKNAMES)
 
-
 def getRandomDankAdjective():
     return getRandomIndex(DANKADJECTIVES)
 
@@ -48,6 +47,10 @@ def getReaction(reactionlevel):
         reaction = ["whoa dude", "that was sick"]
     return reaction[random.randint(0, len(reaction)-1)]
 
+def getInvalidOptionText():
+    return getRandomIndex(INVALID_OPTION)
+    
+
 #################### lists #############################################################
 # these are constants. thats why they're all caps
 
@@ -68,6 +71,12 @@ ATTACK_VERBS_EXTREME = ["nuke", "fireblast", "falcon punch", "no-scope", "ult"]
 
 PAIN_NOISES = ["Youch!", "Oof!", "Ouch!", "Owwee!", "That has got to hurt.", "Should have dodged that.", 
     "That looked like it hurt!", "Dang!", "Ooch!", "Ow!", "~ouch~"]
+
+INVALID_OPTION = ["That is not a good choice." ,"Pick something else.", "I'm really going to need you to input a valid option.",
+ "Try that again.", "Try that again but this time choose a valid option.", "THROW EXCEPTION: \"You suck.\"", "raise AssertionError(\"User can't type.\")", 
+ "I'm really sorry but that's just not a valid option", ]
+
+
 
 # ex.
 #print "look out! here comes a " + getRandomDankAdjective() + " " + getRandomEnemyName("forest")

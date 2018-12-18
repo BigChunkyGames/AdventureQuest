@@ -42,6 +42,13 @@ class Map:
         self.initializeMap() # sets self.map to be a new INITIAL_MAP
         self.initializeTileAttributes()
 
+        self.FOREST_SYNONYMS = ["a forest", "some trees", "a woods" ,"an aesthetic arberetum of luscious shrubbery"]
+        self.PLAINS_SYNONYMS = ["some plains" , "a vast expanse of grass ;)", "a flowing green field", "the open exapnse of nature", "an open prairie", "wide lowlands"]
+        self.DESERT_SYNONYMS = ["an expanse of dunes", "a desert", "naked golden fields of sand", ]
+        self.MOUNTAINS_SYNONYMS = ["a specious assortment of unbridled peaks", "some mountains", "shimmering peaks of aestitic rapture", "huge rocks", "just a fucking ton of huge gigantic fucking rocks"]
+        self.TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way toward", "You thought there was nothing but when you turned around you saw", "On your left you see",
+         "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say ,\"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
+
     def addToMap(self, tile):
         self.map[tile.x][tile.y] = tile
 
@@ -58,14 +65,29 @@ class Map:
         if not self.getTile(x,y).description == None: # if description exists
             return self.getTile(x,y).description # return it
         elif not self.getTile(x,y).getBiome() == None: #elif biome exists
-            # TODO: add flavor text depending on biome ie. rolling hills instead of plains
             return self.getTile(x,y).getBiome()
+            
         elif self.getTile(x,y).type == "town":
             return "a town." # shoould never see this, only will if a town has not been given a description
         elif self.getTile(x,y).type == "impassible":
             return "a cliff off the edge of the world." #TODO add a bunch of things it can say as descriptions for impassible areas (random each time)
         else:
             return "nothing at all don't even worry about it." # if you see this it means a place was not given a description
+
+    def makeWildernessEvent(self, x,y):
+
+        print(getRandomIndex(self.TRANSIT_SYNONYMS)),
+
+        if self.getTile(x,y).getBiome() == "forest":
+            show( getRandomIndex(self.FOREST_SYNONYMS) + "." )
+        elif self.getTile(x,y).getBiome() == "plains":
+            show( getRandomIndex(self.PLAINS_SYNONYMS) + ".")
+        elif self.getTile(x,y).getBiome() == "desert":
+            show( getRandomIndex(self.DESERT_SYNONYMS) + ".")
+        elif self.getTile(x,y).getBiome() == "mountains":
+            show( getRandomIndex(self.MOUNTAINS_SYNONYMS) + ".")
+        else:
+            show("nothing don't even worry about it")
 
     def initializeTileAttributes(self):
         #TODO: add description for each town
@@ -84,8 +106,9 @@ class Map:
             return
         player.currentLocationX = x
         player.currentLocationY = y
-        if not self.getTile(x,y).placeFunction:
+        if not (self.getTile(x,y).placeFunction):
             # no interesting thing at this tile,
+            self.makeWildernessEvent(x,y)
             if self.getTile(x,y).fightChance > random.uniform(0, 1):
                 # if chance of fight is greater than ranom float 
                 #TODO initiate combat
@@ -95,6 +118,7 @@ class Map:
             self.getTile(x,y).placeFunction(player)
 
 
-# m = Map()
+m = Map()
+m.getTileDescription(13,13)
 # print m.getTileDescription(6,5)
 # for testing

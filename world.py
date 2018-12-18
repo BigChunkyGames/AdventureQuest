@@ -1,6 +1,7 @@
  # player comes here when they are not inside of a place or experiancing an event
 
 from utils import input, clear, show
+from lists import getInvalidOptionText
 
 def world(player):
     player.addVisit("world")
@@ -50,7 +51,8 @@ def world(player):
             break
         else:
             clear()
-            print "I'm really sorry but that's just not a valid option.\n" #TODO falvor text
+            show(getInvalidOptionText())
+            
             # you tried to go that way but it didn't make any sense
             # uou went that way but ended up right back where you started
             

@@ -40,6 +40,7 @@ def burntTown(player):
         show("But what do they want with your grandpa?")
         show("You take a moment to reminisce about all the great times you had with your grandpa as a child...")
         show("The time he taught you to no-scope...")
+        show("The time he got a 360 tamahawk from accross the map...")
         show("The time he taught you to kickflip...")
         show("The time he showed you his emblem collection...")
         show("The time he taught you to dunk...")
