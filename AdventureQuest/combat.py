@@ -24,13 +24,12 @@ class Combat:
 
     def alert(self):
         # map.getTileDescription prints something about where you are.
-        print "From over your shoulder you notice ",
+        print "From over your shoulder you notice",
         print self.enemy.name,
         print "attempting to", # TODO flavor text about realizing your're being attacked
         attack = getRandomAttackVerb() 
         if attack[-1] == "*": # if attack finishes the sentence
-            attack = attack[:-1] # remove *
-            print attack
+            print attack[:-1] # remove *
         else :
             print attack,
             print "you!"

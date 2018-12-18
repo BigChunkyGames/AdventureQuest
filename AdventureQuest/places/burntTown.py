@@ -1,4 +1,4 @@
-from utils import show, input
+from AdventureQuest.utils import show, input
 
 def burntTown(player):
     if player.getVisits("burntTown", "add") ==1 :

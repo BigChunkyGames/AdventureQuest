@@ -1,8 +1,9 @@
 
 import random
+from lists import FOREST_SYNONYMS,PLAINS_SYNONYMS,DESERT_SYNONYMS,MOUNTAINS_SYNONYMS,TRANSIT_SYNONYMS
 from utils import *
 from tile import *
-from COMBAT import * # no idea why this needs to be caps
+from combat import * 
 # this is going to need to import all places
 from places.maintown import *
 from places.burntTown import *
@@ -43,12 +44,7 @@ class Map:
         self.initializeMap() # sets self.map to be a new INITIAL_MAP
         self.initializeTileAttributes()
 
-        self.FOREST_SYNONYMS = ["a forest", "some trees", "a woods" ,"an aesthetic arberetum of luscious shrubbery"]
-        self.PLAINS_SYNONYMS = ["some plains" , "a vast expanse of grass ;)", "a flowing green field", "the open exapnse of nature", "an open prairie", "wide lowlands"]
-        self.DESERT_SYNONYMS = ["an expanse of dunes", "a desert", "naked golden fields of sand", ]
-        self.MOUNTAINS_SYNONYMS = ["a specious assortment of unbridled peaks", "some mountains", "shimmering peaks of aestitic rapture", "huge rocks", "just a fucking ton of huge gigantic fucking rocks"]
-        self.TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way toward", "You thought there was nothing but when you turned around you saw", "On your left you see",
-         "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say ,\"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
+        
 
     def addToMap(self, tile):
         self.map[tile.x][tile.y] = tile
@@ -77,16 +73,15 @@ class Map:
 
     def makeWildernessEvent(self, x,y):
 
-        print(getRandomIndex(self.TRANSIT_SYNONYMS)),
-
+        print(getRandomIndex(TRANSIT_SYNONYMS)),
         if self.getTile(x,y).getBiome() == "forest":
-            show( getRandomIndex(self.FOREST_SYNONYMS) + "." )
+            show( getRandomIndex(FOREST_SYNONYMS) + "." )
         elif self.getTile(x,y).getBiome() == "plains":
-            show( getRandomIndex(self.PLAINS_SYNONYMS) + ".")
+            show( getRandomIndex(PLAINS_SYNONYMS) + ".")
         elif self.getTile(x,y).getBiome() == "desert":
-            show( getRandomIndex(self.DESERT_SYNONYMS) + ".")
+            show( getRandomIndex(DESERT_SYNONYMS) + ".")
         elif self.getTile(x,y).getBiome() == "mountains":
-            show( getRandomIndex(self.MOUNTAINS_SYNONYMS) + ".")
+            show( getRandomIndex(MOUNTAINS_SYNONYMS) + ".")
         else:
             show("nothing don't even worry about it")
 

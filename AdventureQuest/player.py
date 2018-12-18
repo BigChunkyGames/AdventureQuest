@@ -120,8 +120,8 @@ class Player:
     
     def regenHealth(self, r):
         self.hp = self.hp + r
-        if self.hp > self.max.hp:
-            self.hp = self.max.hp
+        if self.hp > self.maxhp:
+            self.hp = self.maxhp
         print "You regained " + str(r) + " HP!"
         show("You now have " + str(self.hp) + " HP.")
 
@@ -130,12 +130,10 @@ class Player:
         print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
         show("Your HP has been restored to full!")
 
-
-
     def charcreation(self):
         while True:
             print("Would you like to 'create' your own character or 'roleplay' one created for you?")
-            dec = input(player)
+            dec = input(self) # TODO handle inventory 
             if dec == "create" or dec == "c":
                 self.aspect['name'] = self.name()
                 self.aspect['gender'] = self.gender()

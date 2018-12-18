@@ -1,10 +1,10 @@
-from world import *
-from utils import *
-from lists import *
+
 import sys
-sys.path.append('../') # i dont really know whats going on here but it lets you import from sibling directories
+#sys.path.append('../') # i dont really know whats going on here but it lets you import from sibling directories
 #from miniGames.SlotMachine import *
-from miniGames.RockPaperScissors import *
+from AdventureQuest.utils import *
+from AdventureQuest.lists import *
+from AdventureQuest.miniGames.RockPaperScissors import *
 
 
 def maintown(player):
@@ -32,7 +32,7 @@ def maintown(player):
                 show("Off to find your grandpa eh? Mom said to head EAST.")
             else:
                 show("You decide to leave your home town for greener pastures.")
-            break # this break right here is really important
+            break # this break right here is really important. now code continues where maintown was called (hopefully in world)
         else:
             print("You've got to pick one of the places listed.")
             print("")

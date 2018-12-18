@@ -6,3 +6,6 @@
 *.xml
 
 *.pyc
+
+launch.json
+settings.json

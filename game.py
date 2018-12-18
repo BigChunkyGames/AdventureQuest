@@ -1,9 +1,10 @@
 import random
-from utils import * # import all functions from utils
-from intro import *
-from player import *
-from places.maintown import *
-from devMode import *
+from AdventureQuest.utils import * # import all functions from utils
+from AdventureQuest.intro import *
+from AdventureQuest.player import *
+from AdventureQuest.places.maintown import *
+from AdventureQuest.devMode import *
+from AdventureQuest.world import *
 
 
 clear() 
