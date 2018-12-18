@@ -120,8 +120,8 @@ class Player:
     
     def regenHealth(self, r):
         self.hp = self.hp + r
-        if self.hp > max.hp:
-            self.hp = max.hp
+        if self.hp > self.max.hp:
+            self.hp = self.max.hp
         print "You regained " + str(r) + " HP!"
         show("You now have " + str(self.hp) + " HP.")
 
