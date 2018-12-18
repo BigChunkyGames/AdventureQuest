@@ -5,6 +5,7 @@ from player import *
 from places.maintown import *
 from devMode import *
 
+
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
 

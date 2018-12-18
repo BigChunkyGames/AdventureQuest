@@ -1,12 +1,13 @@
-# this is the constant map of the realm
-# each index of the 2d array is a tile object
+
 
 import random
 from utils import *
 from tile import *
+from COMBAT import * # no idea why this needs to be caps
 # this is going to need to import all places
 from places.maintown import *
 from places.burntTown import *
+
 
 class Map:
 
@@ -19,6 +20,8 @@ class Map:
         d = lambda x, y : self.addToMap(Tile(x,y,"wilderness", None, "desert", .5, None) )
         m = lambda x, y : self.addToMap(Tile(x,y,"wilderness", None, "mountains", .5, None) )
         t = lambda x, y : self.addToMap(Tile(x,y,"town", None, None, 0 , None))
+        # this is the constant map of the realm
+        # each index of the 2d array is a tile object
         self.INITIAL_MAP = [  # 16 x 17
         # 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 X
         [ x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x ], # 0 
@@ -80,7 +83,7 @@ class Map:
     def goTo(self,x,y, player):
         clear()
         if self.getTile(x,y).type == "impassible":
-            print "you can't go that way." #TODO add flavor text
+            print "You can't go that way." #TODO add flavor text
             return
         player.currentLocationX = x
         player.currentLocationY = y
@@ -89,7 +92,7 @@ class Map:
             if self.getTile(x,y).fightChance > random.uniform(0, 1):
                 # if chance of fight is greater than ranom float 
                 #TODO initiate combat
-                print "oh shit u just got attacked"
+                Combat(player, self.getTile(x,y).getBiome())
                 return
         else:
             self.getTile(x,y).placeFunction(player)
