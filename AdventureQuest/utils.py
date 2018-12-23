@@ -4,8 +4,9 @@ import os   # Used to clear terminal
 import random
 # from colorama import *
 import time
-import pickle
+import pickle 
 # init(autoreset=True) # init colors and reset to white each time
+
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
