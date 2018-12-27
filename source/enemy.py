@@ -13,7 +13,8 @@ class Enemy:
         self.name = getRandomEnemyName(biome)
         # stats
         self.enemyLevel = player.level # for now enemies are always same level TODO
-        self.hp = self.setHP()
+        self.maxhp = self.setHP()
+        self.hp = self.maxhp #max hp by default
         self.attack = self.setAttack()
 
     def setHP(self):

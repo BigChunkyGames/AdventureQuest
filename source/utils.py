@@ -1,12 +1,13 @@
 # The purpose of this file is to hold utility functions that are commonly used
 
+from __future__ import unicode_literals, print_function
 import os   # Used to clear terminal
 import random
 # from colorama import *
 import time
 import pickle 
 # init(autoreset=True) # init colors and reset to white each time
-
+from prompt_toolkit import print_formatted_text, HTML
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
@@ -15,6 +16,41 @@ def show(text):
     #  Displays text, waits for 'enter' before continuing.
     print(text)
     raw_input("... ")
+
+# prints colored text
+def color(text, color):
+    if color == "red":
+        s =  '<ansired>' + text + '</ansired>'
+        print_formatted_text(HTML(s))
+
+# formats text in ways besides color. only bold and underline seem to work
+def formatText(text, format):
+    if format == "bold" or format == "b":
+        s = '<b>' + text + '</b>'
+        print_formatted_text(HTML(s))
+    if format == "blink":
+        s = '<blink>' + text + '</blink>'
+        print_formatted_text(HTML(s))
+    if format == "italic" or format == "i":
+        s = '<i>' + text + '</i>'
+        print_formatted_text(HTML(s))
+    if format == "reverse" or format == "r":
+        s = '<reverse>' + text + '</reverse>'
+        print_formatted_text(HTML(s))
+    if format == "underline" or format == "u":
+        s = '<underline>' + text + '</underline>'
+        print_formatted_text(HTML(s))
+    if format == "hidden" or format == "h":
+        s = '<hidden>' + text + '</hidden>'
+        print_formatted_text(HTML(s))
+
+# tests
+# formatText("bold", "bold")
+# formatText("blink", "blink") # doesnt work for me
+# formatText("italic", "italic") # doesnt work for me
+# formatText("reverse", "reverse") # highlights with white?
+# formatText("underline", "underline") 
+# formatText("hidden", "hidden") # still visible
 
 def wait(seconds):
     time.sleep(seconds)

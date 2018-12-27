@@ -683,9 +683,9 @@ class HorizontalLine(object):
 
 class ProgressBar(object):
     def __init__(self):
-        self._percentage = 60
+        self._percentage = 100
 
-        self.label = Label('60%')
+        self.label = Label('empty lable')
         self.container = FloatContainer(
             content=Window(height=1),
             floats=[
@@ -710,9 +710,10 @@ class ProgressBar(object):
 
     @percentage.setter
     def percentage(self, value):
-        assert isinstance(value, int)
+        
+        # assert isinstance(value, int)
         self._percentage = value
-        self.label.text = '{0}%'.format(value)
+        #self.label.text = '{0}%'.format(value)
 
     def __pt_container__(self):
         return self.container

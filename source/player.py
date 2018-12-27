@@ -3,6 +3,7 @@ from inventory import *
 from lists import *
 from utils import *
 from map import *
+
 class Player:
 
 # this function gets called when the player is initialized (player = Player()) It stores class variables and sets default values. 

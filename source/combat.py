@@ -2,6 +2,7 @@ import random
 from utils import show, clear
 from lists import getRandomEnemyName, getRandomAttackVerb
 from enemy import *
+from combatUI import *
 #  TODO: consult other adventure games to see what a good attack:HP ratio is
 
 class Combat:
@@ -36,16 +37,11 @@ class Combat:
         show("You're being attacked!") #TODO color
 
     def startCombat(self):
-        # player goes first
-        self.displayAttackOptions()
+        c = CombatUI(self.player, self.enemy)
+        c.run()
         
-    def displayAttackOptions(self):
-        while True:
-            print(
-        "test"  
-
-
-
-            )
-            break
+if __name__ == '__main__': # i think this means, if this is the file that was run, do this
+    from player import Player
+    c = Combat(Player(), "forest")   
+    c.startCombat()
 

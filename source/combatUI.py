@@ -15,19 +15,26 @@ from prompt_toolkit.layout.layout import Layout
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.layout.menus import CompletionsMenu
 from prompt_toolkit.styles import Style
-from prompt_toolkit.widgets import TextArea, Label, Frame, Box, Checkbox, Dialog, Button, MenuContainer, MenuItem, ProgressBar
-from customBase import RadioList # had to make some changes
+from prompt_toolkit.widgets import TextArea, Label, Frame, Box, Checkbox, Dialog, Button, MenuContainer, MenuItem
+from utilities.customBase import RadioList, ProgressBar # had to make some changes
 from pygments.lexers.html import HtmlLexer
+from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
+from prompt_toolkit import print_formatted_text, HTML
 
-class BattleUI():
+# from player import Player
+# from enemy import Enemy
 
-    def __init__(self):
+class CombatUI():
+
+    def __init__(self, player, enemy):
+        self.player = player
+        self.enemy = enemy
         self.playerHPBar = ProgressBar()
-        self.setHealthProgressBar(self.playerHPBar, 100) #TODO make actual current health
+        self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp)) 
         self.enemyHPBar = ProgressBar()
         self.setHealthProgressBar(self.enemyHPBar, 100) 
 
-        self.battleLog = 'jiggles'
+        self.battleLog = ''
 
         self.radios = RadioList(
             values=[ #value, lable
@@ -61,24 +68,28 @@ class BattleUI():
             mouse_support=True,
             full_screen=True)
 
-
     # TODO call when escape successful or enemy dies
     def do_exit(self):
         get_app().exit(result=False)
 
     # call this function to change the value a progress bar (prog) to a percent
-    def setHealthProgressBar(self,prog, percent):
-        prog._percentage = percent
-        prog.container = FloatContainer(
+    def setHealthProgressBar(self,progbar, percent):
+        if percent < 0:
+            percent = 1
+        progbar._percentage = percent
+        progbar.container = FloatContainer(
             content=Window(height=1),
             floats=[
                 Float(left=0, top=0, right=0, bottom=0, content=VSplit([
                     Window(style='bg:#00cc00', # health, green
-                            width=lambda: D(weight=int(prog._percentage))),
+                            width=lambda: D(weight=int(progbar._percentage))),
                     Window(style='bg:#ff0000', # damage, red
-                            width=lambda: D(weight=int(100 - prog._percentage))),
+                            width=lambda: D(weight=int(100 - progbar._percentage))),
                 ])),
             ])
+
+    def toPercent(self, value, max):
+        return int(100*(float(value)/float(max)))
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
@@ -89,7 +100,7 @@ class BattleUI():
                     body=HSplit([
                         self.radios,
                         Label(
-                            text="text", 
+                            text="this text changes depending on what action is highlighted", #TODO 
                             dont_extend_height=False)])),
                 Frame(
                     body=self.playerHPBar,
@@ -98,13 +109,22 @@ class BattleUI():
             HSplit([
                 Dialog(
                     title = 'Battle Log',
-                    body=Label(
-                        text=self.battleLog, 
-                        dont_extend_height=False)),
+                    body=TextArea(
+                        scrollbar=True,
+                        line_numbers=True,
+                        wrap_lines=True,
+                        dont_extend_height=False,
+                        focusable=True,
+                        focus_on_click=True,
+                        read_only=False,
+                        text=self.battleLog,  
+                        ),
+                    ),
                 Frame(
                     body=self.enemyHPBar,
                     title='Progress bar'), # TODO get name of enemy
-            ], padding=1),
+                
+            ], padding=1)
         ])
         return root_container
 
@@ -113,13 +133,18 @@ class BattleUI():
         choice = self.radios.current_value
         #TODO do something depending on current value
         if choice == "Attack":
-            self.battleLog += "\nYou tried to attack..."
+            self.battleLog += "You tried to attack..."
+            damage = 13 #TODO
+            self.battleLog += " and did " 
+            self.battleLog += str(damage)
+            self.battleLog += "damage!\n" # TODO color
+            self.enemyHPBar.percentage = self.toPercent(self.enemy.hp - damage, self.enemy.maxhp)
         elif choice == "Dodge":
-            self.battleLog += "\nYou tried to dodge..."
+            self.battleLog += "You tried to dodge...\n"
         elif choice == "Item":
             self.battleLog += "" #TODO item selection
         elif choice == "Run":
-            self.battleLog += "\nYou tried to run..." # TODO run
+            self.battleLog += "You tried to run...\n" # TODO run
         else:
             pass
         self.refresh()
@@ -150,6 +175,6 @@ class BattleUI():
     def run(self):
         self.application.run()
 
-if __name__ == '__main__': # i think this means, if this is the file that was run, do this
-        b = BattleUI()
-        b.run()   
+# if __name__ == '__main__': # i think this means, if this is the file that was run, do this
+#         b = CombatUI(Player(),Enemy(Player(), "forest"))
+#         b.run()   

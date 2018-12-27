@@ -1,10 +1,12 @@
 
-import sys
-#sys.path.append('../') # i dont really know whats going on here but it lets you import from sibling directories
-#from miniGames.SlotMachine import *
-from AdventureQuest.utils import *
-from AdventureQuest.lists import *
-from AdventureQuest.miniGames.RockPaperScissors import *
+# import os,sys,inspect
+# currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+# parentdir = os.path.dirname(currentdir)
+# sys.path.insert(0,parentdir) 
+
+from source.utils import *
+from source.lists import *
+import source.miniGames.RockPaperScissors 
 
 
 def maintown(player):

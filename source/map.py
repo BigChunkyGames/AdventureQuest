@@ -7,6 +7,7 @@ from combat import *
 # this is going to need to import all places
 from places.maintown import *
 from places.burntTown import *
+from place.dogeTown import *
 
 class Map:
 
@@ -24,7 +25,7 @@ class Map:
         self.INITIAL_MAP = [  # 16 x 17
         # 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 X
         [ x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x ], # 0 
-        [ x, x, x, x, m, f, f, f, o, o, o, o, o, o, o, o, x ], # 1 
+        [ x, x, x, x, m, f, f, t, o, o, o, o, o, o, o, o, x ], # 1 
         [ x, x, x, m, f, f, f, f, o, o, o, o, o, o, o, o, x ], # 2
         [ x, m, m, m, f, t, f, f, o, o, o, o, o, o, o, o, x ], # 3
         [ x, m, x, m, p, p, p, p, o, o, t, o, o, o, o, o, x ], # 4
@@ -86,14 +87,17 @@ class Map:
             show("nothing don't even worry about it")
 
     def initializeTileAttributes(self):
-        #TODO: add description for each town
+        #TODO: add description for each town ie to the north you see ...
         #TODO: add place functions too
         # try to keep these organized by y then x
+        self.getTile(7,1).description = "a number of cute doggos prancing about."
+        self.getTile(7,1).placeFunction = lambda player: dogeTown(player) 
         self.getTile(6,5).description = "your home town." # maintown
         self.getTile(6,5).placeFunction = lambda player: maintown(player) 
         self.getTile(8,5).description = "a beatiful field of flowers." # maintown
         self.getTile(10,5).description = "smoke billowing from over the hills."
         self.getTile(10,5).placeFunction = lambda player: burntTown(player) 
+        
 
     def goTo(self,x,y, player):
         clear()

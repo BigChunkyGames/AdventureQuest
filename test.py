@@ -1,40 +1,52 @@
 #!/usr/bin/env python
 """
-Styled similar to tqdm, another progress bar implementation in Python.
-See: https://github.com/noamraph/tqdm
+Demonstration of how to print using the HTML class.
 """
-from __future__ import unicode_literals
-from prompt_toolkit.shortcuts import ProgressBar
-from prompt_toolkit.styles import Style
-from prompt_toolkit.shortcuts.progress_bar import formatters
-import time
+from __future__ import unicode_literals, print_function
+from prompt_toolkit import print_formatted_text, HTML
 
-style = Style.from_dict({
-    '': 'cyan',
-})
+print = print_formatted_text
+
+
+def title(text):
+    print(HTML('\n<u><b>{}</b></u>').format(text))
 
 
 def main():
-    custom_formatters = [
-        formatters.Label(suffix=': '),
-        formatters.Bar(start='|', end='|', sym_a='#', sym_b='#', sym_c='-'),
-        formatters.Text(' '),
-        formatters.Progress(),
-        formatters.Text(' '),
-        formatters.Percentage(),
-        formatters.Text(' [elapsed: '),
-        formatters.TimeElapsed(),
-        formatters.Text(' left: '),
-        formatters.TimeLeft(),
-        formatters.Text(', '),
-        formatters.IterationsPerSecond(),
-        formatters.Text(' iters/sec]'),
-        formatters.Text('  '),
-    ]
+    title('Special formatting')
+    print(HTML('    <b>Bold</b>'))
+    print(HTML('    <blink>Blink</blink>'))
+    print(HTML('    <i>Italic</i>'))
+    print(HTML('    <reverse>Reverse</reverse>'))
+    print(HTML('    <u>Underline</u>'))
+    print(HTML('    <hidden>Hidden</hidden> (hidden)'))
 
-    with ProgressBar(style=style, formatters=custom_formatters) as pb:
-        for i in pb(range(1600), label='Installing'):
-            time.sleep(.01)
+    # Ansi colors.
+    title('ANSI colors')
+
+    print(HTML('    <ansired>ANSI Red</ansired>'))
+    print(HTML('    <ansiblue>ANSI Blue</ansiblue>'))
+
+    # Other named colors.
+    title('Named colors')
+
+    print(HTML('    <orange>orange</orange>'))
+    print(HTML('    <purple>purple</purple>'))
+
+    # Background colors.
+    title('Background colors')
+
+    print(HTML('    <style fg="ansiwhite" bg="ansired">ANSI Red</style>'))
+    print(HTML('    <style fg="ansiwhite" bg="ansiblue">ANSI Blue</style>'))
+
+    # Interpolation.
+    title('HTML interpolation (see source)')
+
+    print(HTML('    <i>{}</i>').format('<test>'))
+    print(HTML('    <b>{text}</b>').format(text='<test>'))
+    print(HTML('    <u>%s</u>') % ('<text>', ))
+
+    print()
 
 
 if __name__ == '__main__':
