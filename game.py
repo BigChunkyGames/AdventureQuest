@@ -1,11 +1,11 @@
 import random
-from AdventureQuest.utils import * # import all functions from utils
-from AdventureQuest.intro import *
-from AdventureQuest.player import *
-from AdventureQuest.places.maintown import *
-from AdventureQuest.devMode import *
-from AdventureQuest.world import *
-
+from source.utils import * # import all functions from utils
+from source.intro import *
+from source.player import *
+from source.places.maintown import *
+from source.devMode import *
+from source.world import *
+from source.places.dogeTown import *
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
@@ -27,8 +27,8 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else:
             devMode(self.player)
-        show("NOW LOADING: literally the entire world")
-        world(self.player)
+            dogeTown(self.player)
+            #world(self.player)
         
 #TODO: assuming new game each time. Should ask to load saved game data or start 
 # new game. Below line creates a new game object but should load if loading saved game

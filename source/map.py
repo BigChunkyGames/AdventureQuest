@@ -7,7 +7,7 @@ from combat import *
 # this is going to need to import all places
 from places.maintown import *
 from places.burntTown import *
-from place.dogeTown import *
+from places.dogeTown import *
 
 class Map:
 

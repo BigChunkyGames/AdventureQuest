@@ -14,33 +14,54 @@ def clear():
 
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
-    print(text)
-    raw_input("... ")
+    #  Given syntax like "this word is *colored*yellow*" will color all text between first two *'s. ie colored becomes yellow
+    # please only one color per show call
+    t = text.split('*')
+    if len(t) == 1: #no * in string
+        print(text)
+        raw_input("... ")
+    else: # color
+        printWithColor(t[1],t[2], before=t[0], after = t[3])
+        raw_input("... ")
 
 # prints colored text
-def color(text, color):
+def printWithColor(text, color, before="", after=""):
+    s = before
     if color == "red":
-        s =  '<ansired>' + text + '</ansired>'
-        print_formatted_text(HTML(s))
+        s +=  '<ansired>' + text + '</ansired>'
+    elif color == "green":
+        s +=  '<ansigreen>' + text + '</ansigreen>'
+    elif color == "yellow":
+        s +=  '<ansiyellow>' + text + '</ansiyellow>'
+    elif color == "blue":
+        s +=  '<ansiblue>' + text + '</ansiblue>'
+    elif color == "magenta":
+        s +=  '<ansimagenta>' + text + '</ansimagenta>'
+    elif color == "cyan":
+        s +=  '<ansicyan>' + text + '</ansicyan>'
+    else:
+        s +=  '<ansiwhite>' + text + '</ansiwhite>'
+    s += after
+    print_formatted_text(HTML(s))
 
-# formats text in ways besides color. only bold and underline seem to work
+# formats text in ways besides color. only bold and underline and reverse seem to work in my vs code terminal
 def formatText(text, format):
     if format == "bold" or format == "b":
         s = '<b>' + text + '</b>'
         print_formatted_text(HTML(s))
-    if format == "blink":
+    elif format == "blink":
         s = '<blink>' + text + '</blink>'
         print_formatted_text(HTML(s))
-    if format == "italic" or format == "i":
+    elif format == "italic" or format == "i":
         s = '<i>' + text + '</i>'
         print_formatted_text(HTML(s))
-    if format == "reverse" or format == "r":
+    elif format == "reverse" or format == "r": # swap text color and background color
         s = '<reverse>' + text + '</reverse>'
         print_formatted_text(HTML(s))
-    if format == "underline" or format == "u":
+    elif format == "underline" or format == "u":
         s = '<underline>' + text + '</underline>'
         print_formatted_text(HTML(s))
-    if format == "hidden" or format == "h":
+    elif format == "hidden" or format == "h":
         s = '<hidden>' + text + '</hidden>'
         print_formatted_text(HTML(s))
 
@@ -48,7 +69,7 @@ def formatText(text, format):
 # formatText("bold", "bold")
 # formatText("blink", "blink") # doesnt work for me
 # formatText("italic", "italic") # doesnt work for me
-# formatText("reverse", "reverse") # highlights with white?
+# formatText("reverse", "reverse") 
 # formatText("underline", "underline") 
 # formatText("hidden", "hidden") # still visible
 
