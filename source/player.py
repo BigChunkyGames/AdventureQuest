@@ -17,7 +17,7 @@ class Player:
         self.teleportableAreas = {}
         self.clantags = []
         # points
-        self.dogecoin = 500
+        self.dogecoin = 5
         self.dankpoints = 0
         self.perkpoints = 0
         self.experiencepoints = 0
@@ -28,6 +28,7 @@ class Player:
 
         self.strength = 1 # base attack
         self.level = 0
+        self.healthRegen = 2
         self.devmode = False
         
         self.inventory = Inventory(self) # this is kind of sketchy not sure if this will cause problems later
@@ -45,20 +46,31 @@ class Player:
     def openInventory(self):
         self.inventory.open()
 
+    # max hp inceases by 2
+    # current hp increases by 2 unless greater than max
+    # strength increases by 1
+    # health regen increased by 1
+    # xp needed for next level is  2^currentLevel
     def levelUp(self):
         while True:
             self.level = self.level + 1
             print("")
-            print("You are now level " + str(self.level) + "!")
+            print "You are now level ", 
+            printWithColor(str(self.level), "magenta", after= "!")
             self.experiencepoints = self.experiencepoints - self.levelupxp
             if self.experiencepoints < 0:
                 self.experiencepoints = 0
             self.strength = self.strength + 1
             print("You now have " + str(self.strength) + " strength!")
-            if self.hp == self.maxhp:
-                self.hp + 2
+
             self.maxhp = self.maxhp + 2
+            self.hp = self.hp + 2
+            if self.hp > self.maxhp: self.hp = self.maxhp
             print("You now have " + str(self.maxhp) + " maximum HP!")
+
+            self.healthRegen = self.healthRegen + 1
+            print("You now regenerate " + str(self.healthRegen) + " after each battle!")
+
             self.levelupxp = (2 ** (self.level)) * 10
             if self.experiencepoints >= self.levelupxp:
                 print("You have enough XP to level up again!")
@@ -70,11 +82,11 @@ class Player:
 
     def addExperience(self, xp, scale = True):
         if scale:
-            xp = xp * (2 ** (self.level))
+            xp = xp * (2 ** (self.level)) # gain xp based on base xp * 2^level
         self.experiencepoints = self.experiencepoints + xp
         if self.experiencepoints < self.levelupxp:
-            print("You have gained " + str(xp) + " experience!")
-            print("You now have " + str(self.experiencepoints) + " points out of " + str(self.levelupxp) + " needed to level up.")
+            print("You have gained " + str(xp) + " XP!")
+            print("You now have " + str(self.experiencepoints) + "/" + str(self.levelupxp) + " needed to level up.")
         else:
             print("You have gained " + str(xp) + " experience! That's enough to level up!")
             raw_input("... ")
@@ -104,32 +116,43 @@ class Player:
         self.hp = self.hp - d
         if self.hp <= 0:
             hp = 0
-            print("You take " + str(d) + " damage, leaving you unable to stand any longer.")
+            print("You take "),
+            printWithColor(str(d) + " damage", after=", leaving you unable to stand any longer.")
             raw_input("... ")
-            show("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:")
-            show('*I think I left the oven on at home*')
-            show("With that, everything goes dark.")
-            print(""); print(""); print("")
-            show("You're dead. You should feel pretty lucky that death doesn't have an effect yet.")
-            print("Anyway, on with the game... ")
-            # TODO
+            self.death()
         else:
-            print("You took " + str(d) + " damage!")
+            print("You took "),
+            printWithColor(str(d) + " damage", after="!")
             print(getRandomPainNoise())
             print("You now have " + str(self.hp) + " HP.")
             print("")
+
+    def death(self):
+        show("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:")
+        show('*I think I left the oven on at home*')
+        show("With that, everything goes dark.")
+        print(""); print(""); print("")
+        show("You're dead. You should feel pretty lucky that death doesn't have an effect yet.")
+        print("Anyway, on with the game... ")
+        # TODO
     
-    def regenHealth(self, r):
-        self.hp = self.hp + r
+    def regenHealth(self, r = None):
+        if r == None:
+            self.hp = self.hp + self.healthRegen
+            print "You regained ",
+            printWithColor(str(self.healthRegen) + " HP", "green", after = "!")
+        else:
+            self.hp = self.hp + r
+            print "You regained ",
+            printWithColor(str(r) + " HP", "green", after = "!")
         if self.hp > self.maxhp:
             self.hp = self.maxhp
-        print "You regained " + str(r) + " HP!"
-        show("You now have " + str(self.hp) + " HP.")
+        show("You now have " + str(self.hp) + "/" + str(self.maxhp) + " HP.")
 
     def sleep(self):
         self.hp = self.maxhp
         print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
-        show("Your HP has been restored to full!")
+        show("@Your HP has been restored to full!@green@")
 
     def charcreation(self):
         while True:

@@ -129,7 +129,7 @@ class TextArea(object):
                  line_numbers=False, get_line_prefix=None, scrollbar=False,
                  style='', search_field=None, preview_search=True, prompt='',
                  input_processors=None):
-        assert isinstance(text, six.text_type)
+       # assert isinstance(text, six.text_type)
 
         if search_field is None:
             search_control = None
@@ -360,7 +360,7 @@ class Frame(object):
     def __init__(self, body, title='', style='', width=None, height=None,
                  key_bindings=None, modal=False):
         assert is_container(body)
-        assert is_formatted_text(title)
+        #assert is_formatted_text(title)
         assert isinstance(style, six.text_type)
         assert is_dimension(width)
         assert is_dimension(height)
@@ -403,7 +403,7 @@ class Frame(object):
                 filter=has_title),
             ConditionalContainer(
                 content=top_row_without_title,
-                filter=not has_title), #
+                filter= has_title), #
             VSplit([
                 fill(width=1, char=Border.VERTICAL),
                 DynamicContainer(lambda: self.body),

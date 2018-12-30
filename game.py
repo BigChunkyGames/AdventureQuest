@@ -32,8 +32,14 @@ class Game: # perhaps this is what should be saved
         
 #TODO: assuming new game each time. Should ask to load saved game data or start 
 # new game. Below line creates a new game object but should load if loading saved game
-g = Game()
-g.start()
+# g = Game()
+# g.start()
+
 
 
 print "the end"
+
+
+# tests
+c = Combat(Player(),Enemy(Player(), "forest"))
+

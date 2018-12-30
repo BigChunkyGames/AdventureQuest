@@ -27,11 +27,11 @@ def dogeTown(player):
     while True:
         show("The enterence to DogeTown leads to a courtyard were digdogs of all sizes wag their tails run inbetween the strucutrers. ")
         show("Around you are a few buildings with doors large enough for you to enter.")
-        show("There is one called *'party'*yellow* puppo's puppy palace.")
-        show("Another is *'Bony'*yellow*s Convenience Store.")
-        show("On your left rests a towering structure that looks like a *'church'*yellow*. You hear howling from inside. ")
-        show("There is also a path to what looks to be the *'king'*yellow*s quarters.")
-        show("Or you can *'leave'*yellow*.")
+        show("There is one called @'party'@yellow@ puppo's puppy palace.")
+        show("Another is @'Bony'@yellow@s Convenience Store.")
+        show("On your left rests a towering structure that looks like a @'church'@yellow@. You hear howling from inside. ")
+        show("There is also a path to what looks to be the @'king'@yellow@s quarters.")
+        show("Or you can @'leave'@yellow@.")
         x = input(player)
         if (x == "party" or x == "p"):
             show("Party puppo's puppy palace prick's your fancy so you prop open the door and walk inside.")

@@ -14,9 +14,9 @@ def clear():
 
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
-    #  Given syntax like "this word is *colored*yellow*" will color all text between first two *'s. ie colored becomes yellow
+    #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
     # please only one color per show call
-    t = text.split('*')
+    t = text.split('@')
     if len(t) == 1: #no * in string
         print(text)
         raw_input("... ")

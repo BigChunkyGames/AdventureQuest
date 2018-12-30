@@ -39,9 +39,17 @@ class Combat:
     def startCombat(self):
         c = CombatUI(self.player, self.enemy)
         c.run()
+        clear()
+        if c.result == "win":
+            show("You defeated " + self.enemy.name + "!")
+            self.player.addExperience(self.enemy.xpworth) # gain xp
+            self.player.regenHealth()# gain health
+            if self.tryForDrop(10): # TODO after inventory
+                show("You got some loot!")
+        elif c.result == "lose":
+            self.player.death()
+        elif c.result == "escaped":
+            show("You escaped from " + self.enemy.name + "! That was a close one!")
+        return
         
-if __name__ == '__main__': # i think this means, if this is the file that was run, do this
-    from player import Player
-    c = Combat(Player(), "forest")   
-    c.startCombat()
-
+        

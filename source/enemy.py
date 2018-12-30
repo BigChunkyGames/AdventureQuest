@@ -12,10 +12,12 @@ class Enemy:
         self.biome = biome
         self.name = getRandomEnemyName(biome)
         # stats
-        self.enemyLevel = player.level # for now enemies are always same level TODO
+        self.enemyLevel = player.level # for now enemies are always same level TODO should chnange based on difficulty of tile
         self.maxhp = self.setHP()
         self.hp = self.maxhp #max hp by default
         self.attack = self.setAttack()
+        self.missChancePercent = self.setMissChancePercent()
+        self.xpworth = self.setxpworth()
 
     def setHP(self):
         return 5 + self.enemyLevel * self.enemyLevel + random.randint(self.player.level, self.player.level * 2)
@@ -25,9 +27,19 @@ class Enemy:
     def setAttack(self):
         return 1 + self.enemyLevel * (self.player.level / 2) 
         # 1 + product of enemy level and half of player level 
-        # so if levels are 3 and 3, attack = 7
-        # or 0 and 0, attack = 1
+        # so if levels are:
+        # 0 and 0, attack = 1
+        # 1 and 1, attack = 2
+        # 2 and 2, attack = 3
+        # 3 and 3, attack = 7
         
+
+    def setxpworth(self):
+        return random.randint(2,3) # with this it always takes about 4 encounters to level up
+
+    # each level, enemies have 3% greater chance to hit starting at 60%
+    def setMissChancePercent(self):
+        return int(40 - (self.enemyLevel * 3) )
 
         
 # TODO: will have to playtest to see which functions are better for hp and attack        
