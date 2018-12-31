@@ -36,6 +36,12 @@ def printc(text):
             printWithColor(t[0],t[1], after = t[2])
         else: printc( t[4:] )
 
+    # cases: @ 0 @ 1 @
+    #      0 @ 1 @ 2 @ 
+    #        @ 0 @ 1 @ 2
+    #      0 @ 1 @ 2 @ 3 # get to this
+    
+
 # prints colored text
 def printWithColor(text, color, before="", after=""):
     s = before
