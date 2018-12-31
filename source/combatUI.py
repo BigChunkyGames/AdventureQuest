@@ -17,7 +17,7 @@ from prompt_toolkit.layout.menus import CompletionsMenu
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea, Label, Frame, Box, Checkbox, Dialog, Button, MenuContainer, MenuItem
 from utilities.customBase import RadioList, ProgressBar # had to make some changes
-from pygments.lexers.html import HtmlLexer
+#from pygments.lexers.html import HtmlLexer
 from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
 from prompt_toolkit import print_formatted_text, HTML
 
@@ -142,7 +142,7 @@ class CombatUI():
         # for now, always try to attack TODO
         self.playerGoesNext = True
         self.battleLog += self.enemy.name + " tried to " 
-        attack = getRandomAttackVerb() 
+        attack = self.enemy.getRandomAttack() 
         if attack[-1] == "*": # if attack finishes the sentence
             self.battleLog += attack[:-1] # remove *
         else :

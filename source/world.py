@@ -1,6 +1,6 @@
  # player comes here when they are not inside of a place or experiancing an event
 
-from utils import input, clear, show
+from utils import input, clear, show, printc
 from lists import getInvalidOptionText
 
 def world(player):
@@ -9,15 +9,11 @@ def world(player):
     while True:
         # print player.currentLocationX
         # print player.currentLocationY 
-        print("To the 'North' you can see" ),
-        print player.map.getTileDescription(player.currentLocationX , player.currentLocationY - 1)
-        print("To the 'East'  you can see"),
-        print player.map.getTileDescription(player.currentLocationX +1 , player.currentLocationY )
-        print("To the 'South' you can see"),
-        print player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)
-        print("To the 'West'  you can see"),
-        print player.map.getTileDescription(player.currentLocationX -1, player.currentLocationY )
-        print("Or you can 'travel' back to somewhere you've already been.")
+        printc("To the @'North'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY - 1)), 
+        printc("To the @'East'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX +1 , player.currentLocationY )), 
+        printc("To the @'South'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),
+        printc("To the @'West'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX -1, player.currentLocationY )), 
+        printc("Or you can @'travel'@blue@ back to somewhere you've already been.")
         x = input(player)
         if( x == "north" or x == "n"):
             player.map.goTo(player.currentLocationX , player.currentLocationY - 1, player)

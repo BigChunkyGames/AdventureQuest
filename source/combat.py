@@ -6,13 +6,16 @@ from combatUI import *
 #  TODO: consult other adventure games to see what a good attack:HP ratio is
 
 class Combat:
-    def __init__(self, player, biome):
+    def __init__(self, player, biome=None, alert=True, enemy=None, startCombatNow=True):
         self.player = player
         self.biome = biome
-        self.enemy = Enemy(player,biome)
+        if not enemy == None: 
+            self.enemy = enemy
+        else: 
+            self.enemy = Enemy(player,biome) # make random enemy with given biome
         self.dropchance = 0 # TODO drops
-        self.alert()
-        self.startCombat()
+        if alert: self.alert()
+        if startCombatNow: self.startCombat()
 
         # TODO: May later be affected by level as well as biome
 

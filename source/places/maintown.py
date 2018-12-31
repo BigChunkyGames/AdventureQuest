@@ -53,6 +53,8 @@ def home(player):
                      "of your dresser.")
                 show("You grab the can just in case you need it later.")
                 # TODO: add the can to your inventory
+                show("You take a look at the framed picture of your childhood dog on your bedside table.")
+                show("Bud must be in a better place now.")
             else:
                 show("You look around the house, but shockingly can't find anywhere you haven't already explored")
         elif action == "sleep" or action == "s":

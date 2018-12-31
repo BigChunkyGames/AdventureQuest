@@ -14,15 +14,27 @@ def clear():
 
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
-    #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
-    # please only one color per show call
     t = text.split('@')
-    if len(t) == 1: #no * in string
+    if len(t) == 1: #no @ in string
         print(text)
         raw_input("... ")
     else: # color
         printWithColor(t[1],t[2], before=t[0], after = t[3])
         raw_input("... ")
+
+def printc(text):
+    #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
+    # please only one color per call
+    t = text.split('@')
+    if len(t) == 1: #no @ in string
+        print(text)
+    else: # color
+        try:
+            if t[4] == None:
+                printWithColor(t[1],t[2], before=t[0], after = t[3])
+        except IndexError:
+            printWithColor(t[0],t[1], after = t[2])
+        else: printc( t[4:] )
 
 # prints colored text
 def printWithColor(text, color, before="", after=""):
@@ -73,6 +85,12 @@ def formatText(text, format):
 # formatText("underline", "underline") 
 # formatText("hidden", "hidden") # still visible
 
+# returns true if input = choice or input = first char of choice
+def checkInput(inp, choice):
+    if inp == choice or inp == choice[0]:
+        return True
+    else: return False
+
 def wait(seconds):
     time.sleep(seconds)
 
@@ -85,7 +103,7 @@ def yesno(player):
         elif userinput == "no" or userinput == "n":
             return False
         else:
-            print("You must choose 'yes' or 'no'.")
+            printc("@'yes'@yellow@ or @'no'@yellow@.")
 
 def dichotomy(option1, option2):
     # Returns True if user input is option1, returns False if option2.

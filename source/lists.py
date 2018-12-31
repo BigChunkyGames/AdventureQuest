@@ -61,6 +61,8 @@ def getReaction(reactionlevel): # FIXME not currently used i dont think
 def getInvalidOptionText():
     return getRandomIndex(INVALID_OPTION)
     
+def getRandomDogNoise():
+    return getRandomIndex(DOG_NOISES)
 
 #################### lists #############################################################
 # these are constants. thats why they're all caps
@@ -112,7 +114,7 @@ ATTACK_VERBS_EXTREME = ["nuke", "fireblast", "falcon punch", "no-scope", "ult"]
 
 PAIN_NOISES = ["Youch!", "Oof!", "Ouch!", "Owwee!", "That has got to hurt.", "Should have dodged that.", 
     "That looked like it hurt!", "Dang!", "Ooch!", "Ow!", "~ouch~"]
-
+DOG_NOISES = ["bark", "woof", "scrrf","yarrar","boof","birf","huuurg","ruff","rough","yip","yip yip", "bark bark","gruph","bow", "bow wow", "grrrrr"]
 
 
 # ex.

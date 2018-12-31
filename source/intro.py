@@ -17,16 +17,33 @@ def introduction(player): #TODO i think we should change the intro to be less de
                                       player.aspect['occ'], player.aspect['viverb'],
                                       player.aspect['hisher'])
     raw_input("... ")
-    print("")
-    show("but first, %s was thirsty." % player.aspect['heshe'])
+    show("...but first, %s was thirsty." % player.aspect['heshe'])
     clear()    
-    print("You recognize your humble town's tavern to the north.")
+    print("You recognize your humble town's 'tavern' to the north.")
     print("Type 'tavern' to enter the tavern. ")
+    attempts = 0
+    dies = 0
     move = input(player)
     while move != "tavern":
+        attempts = attempts +1
         if move == "house":
             print "Calm down there m8, we'll get there later."
-        print("It's spelled t-a-v-e-r-n.")
+        elif attempts ==1:
+            print("Come on now, it's spelled t-a-v-e-r-n.")
+        elif move == "die" and dies == 0:
+            dies = dies +1
+            show("Though extremely thirsty, you refuse to go to the tavern and drink.")
+            print("If you don't go to the 'tavern' soon, you really might keel over from dehydration.")
+        elif move == "die" and dies > 0:
+            dies = dies +1
+            show("Your throat dries and cracks like splintering ice.")
+            show("You feel the last bit of moisture leave your skin.")
+            show("Your eyes are raisins.")
+            player.death()
+        else:
+            print("If you really don't want to go to the tavern you can always type 'die' to die of dehydration.")
+            
+        
         move = input(player)
     # Tavern in intro is different from tavern.py
     show("The tavern in %s is old and rugged. Beaten down by countless "
@@ -88,15 +105,6 @@ def introduction(player): #TODO i think we should change the intro to be less de
     raw_input(" ")
     show('"k."')
     show("You sprint to your house to grab your shit.")
-    print('Type "house" to go to your house.')
-    move = input(player)
-    while move != "house":
-        if move == "tavern" or move == "t":
-            print("You just came from there, you need to go to your "
-                  "house.")
-        else:
-            print('No. Type "house"')
-        move = input(player)
     show('You enter your house, hoping mum will get the camera. "Mom! I\'m '
          'going on an adventure!!1!!!!1one!!"')
     show('She looks up from the dick sock she\'s knitting. "Alright '

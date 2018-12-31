@@ -18,6 +18,7 @@ class Enemy:
         self.attack = self.setAttack()
         self.missChancePercent = self.setMissChancePercent()
         self.xpworth = self.setxpworth()
+        self.listOfAttacks = None
 
     def setHP(self):
         return 5 + self.enemyLevel * self.enemyLevel + random.randint(self.player.level, self.player.level * 2)
@@ -33,7 +34,6 @@ class Enemy:
         # 2 and 2, attack = 3
         # 3 and 3, attack = 7
         
-
     def setxpworth(self):
         return random.randint(2,3) # with this it always takes about 4 encounters to level up
 
@@ -41,6 +41,14 @@ class Enemy:
     def setMissChancePercent(self):
         return int(40 - (self.enemyLevel * 3) )
 
+    def getRandomAttack(self):
+        if self.listOfAttacks == None: return getRandomAttackVerb()  
+        else: return getRandomIndex(self.listOfAttacks)
+
+    def setName(self, text): # idk why i need this but e.name = ... doesnt work
+        self.name = text
+    def setListOfAttacks(self, listt):
+        self.listOfAttacks= listt
         
 # TODO: will have to playtest to see which functions are better for hp and attack        
     # def enemyhp(self, level):

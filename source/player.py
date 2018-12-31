@@ -117,12 +117,12 @@ class Player:
         if self.hp <= 0:
             hp = 0
             print("You take "),
-            printWithColor(str(d) + " damage", after=", leaving you unable to stand any longer.")
+            printWithColor(str(d) + " damage", "red", after=", leaving you unable to stand any longer.")
             raw_input("... ")
             self.death()
         else:
             print("You took "),
-            printWithColor(str(d) + " damage", after="!")
+            printWithColor(str(d) + " damage", "red", after="!")
             print(getRandomPainNoise())
             print("You now have " + str(self.hp) + " HP.")
             print("")
@@ -171,7 +171,7 @@ class Player:
                 self.aspect['gender'] = "boi"
                 self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
                 self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
-                self.aspect['town'], self.aspect['hills'] = "Swagsburgh", "Peak's Hills"
+                self.aspect['town'], self.aspect['hills'] = "Swagsburgh", "Peak's Summit"
                 self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
                 break
             else:

@@ -1,4 +1,3 @@
-
 import random
 from lists import FOREST_SYNONYMS,PLAINS_SYNONYMS,DESERT_SYNONYMS,MOUNTAINS_SYNONYMS,TRANSIT_SYNONYMS
 from utils import *
@@ -74,7 +73,7 @@ class Map:
 
     def makeWildernessEvent(self, x,y):
 
-        print(getRandomIndex(TRANSIT_SYNONYMS)),
+        print(getRandomIndex(TRANSIT_SYNONYMS) + " "),
         if self.getTile(x,y).getBiome() == "forest":
             show( getRandomIndex(FOREST_SYNONYMS) + "." )
         elif self.getTile(x,y).getBiome() == "plains":
