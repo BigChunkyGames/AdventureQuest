@@ -22,6 +22,8 @@ from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
 from prompt_toolkit import print_formatted_text, HTML
 
 from lists import getRandomAttackVerb
+from utils import wait
+import re
 import random
 
 class CombatUI():
@@ -52,6 +54,8 @@ class CombatUI():
                 # inventory - opens the inventory manager (instead of item)
             ]
         )
+
+        self.maxHeightOfBattleLogWindow = 10 # FIXME find a way to fit text inside battle log
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -61,6 +65,9 @@ class CombatUI():
         self.bindings.add('c-m')(self.handleEnter)
         # TODO escape key tries to flee
         # TODO: make secret easter egg key bindings # self.bindings.add('a', 'a')(self.test)  
+        self.style = Style.from_dict({
+            'dialog.body':        'bg:#000000 #ffcccc', #background color, text color
+        })
 
         self.application = Application(
             layout=Layout(
@@ -92,8 +99,6 @@ class CombatUI():
 
     def toPercent(self, value, max):
         return int(100*(float(value)/float(max)))
-
-
 
     def handleEnter(self, event):
         if self.enemy.hp == 0: # check if he dead
@@ -141,13 +146,14 @@ class CombatUI():
     def enemyTurn(self):
         # for now, always try to attack TODO
         self.playerGoesNext = True
-        self.battleLog += self.enemy.name + " tried to " 
+        s=''
+        s += self.enemy.name + " tried to " 
         attack = self.enemy.getRandomAttack() 
         if attack[-1] == "*": # if attack finishes the sentence
-            self.battleLog += attack[:-1] # remove *
+            s += attack[:-1] # remove *
         else :
-            self.battleLog += str(attack)
-            self.battleLog += " you... "
+            s += str(attack)
+            s += " you... "
             
         # calculate hit chance and handle
         dodgeModifier = 0
@@ -156,13 +162,13 @@ class CombatUI():
             self.playerJustDodged = False
         if self.enemy.missChancePercent + dodgeModifier > random.randint(0,100):
             # missed
-            if not attack[-1] == "*": self.battleLog += " but missed!\n"
-            else: self.battleLog += " It missed!\n"
+            if not attack[-1] == "*": s += " but missed!\n"
+            else: s += " It missed!\n"
         else:
             # hit
             damage = self.enemy.attack
-            if not attack[-1] == "*": self.battleLog += " and dealt " + str(damage) + " damage!\n"
-            else: self.battleLog += " It dealt " + str(damage) + " damage!\n"
+            if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!\n"
+            else: s += " It dealt " + str(damage) + " damage!\n"
             self.player.hp = self.player.hp - damage
             if self.player.hp < 0:
                 self.player.hp = 0
@@ -171,15 +177,33 @@ class CombatUI():
                 self.result = "lose"
                 get_app().exit(result="lose")
                 return
+        self.battleLog += s
         self.refresh()
-        
+
     def refresh(self):
+        #self.application.style=self.style
+        #self.battleLog += "changing color to " + str(self.currentStyle)
+        slicedBattleLog = self.battleLog.split('\n')
+        if len(slicedBattleLog) >= self.maxHeightOfBattleLogWindow: # dont let battlelog get too long
+            self.battleLog = self.battleLog[self.battleLog.index('\n')+1:]
         self.application.layout=Layout(
             self.getRootContainer(),
             focused_element=self.radios)
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
+        t = TextArea(
+            scrollbar=True,
+            line_numbers=False,
+            wrap_lines=True,
+            dont_extend_height=False,
+            dont_extend_width=False,
+            focusable=True,
+            focus_on_click=True,
+            read_only=False,
+            text=self.battleLog,  
+            style='bg:#000000',
+            )
         root_container = VSplit([
             HSplit([
                 Dialog(
@@ -188,42 +212,25 @@ class CombatUI():
                         self.radios,
                         Label(
                             text="this text changes depending on what action is highlighted #TODO ", 
-                            dont_extend_height=False)])),
+                            style='class:dialog.body',
+                            dont_extend_height=False
+                            )])),
                 Frame(
                     body=self.playerHPBar,
                     title='Health'), # TODO get name of player
-            ], padding=1),
+            ], padding=1, ),
             HSplit([
                 Dialog(
                     title = 'Battle Log',
-                    body=TextArea(
-                        scrollbar=True,
-                        line_numbers=False,
-                        wrap_lines=True,
-                        dont_extend_height=False,
-                        dont_extend_width=False,
-                        focusable=True,
-                        focus_on_click=True,
-                        read_only=False,
-                        text=self.battleLog,  
-                        ),
+                    body=t,
                     ),
                 Frame(
                     body=self.enemyHPBar,
                     title='Progress bar'), # TODO get name of enemy
-                
             ], padding=1)
         ])
         return root_container
 
-    style = Style.from_dict({
-        'textarea':           'bg:#66ff99',
-
-        'dialog':             'bg:#88ff88',
-        'dialog frame-label': 'bg:#ffffff #000000',
-        'dialog.body':        'bg:#000000 #ffcccc', #background color, text color
-        'dialog shadow':      'bg:#00aa00',
-    })
 
     def run(self):
         self.application.run()

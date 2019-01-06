@@ -101,7 +101,7 @@ def checkInput(inp, choice):
         return True
     else: return False
 
-def wait(seconds):
+def wait(seconds): # accepts floats
     time.sleep(seconds)
 
 def yesno(player):
