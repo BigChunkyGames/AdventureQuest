@@ -23,7 +23,7 @@ def introduction(player): #TODO i think we should change the intro to be less de
     print("Type 'tavern' to enter the tavern. ")
     attempts = 0
     dies = 0
-    move = input(player)
+    move = getInput(player)
     while move != "tavern":
         attempts = attempts +1
         if move == "house":
@@ -44,7 +44,7 @@ def introduction(player): #TODO i think we should change the intro to be less de
             print("If you really don't want to go to the tavern you can always type 'die' to die of dehydration.")
             
         
-        move = input(player)
+        move = getInput(player)
     # Tavern in intro is different from tavern.py
     show("The tavern in %s is old and rugged. Beaten down by countless "
          "travelers, it's acquired a homey atmosphere." % player.aspect['town'])

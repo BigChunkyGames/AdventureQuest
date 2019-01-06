@@ -1,4 +1,5 @@
-# The purpose of this file is to hold utility functions that are commonly used
+# -*- coding: utf-8 -*-
+# # The purpose of this file is to hold utility functions that are commonly used
 
 from __future__ import unicode_literals, print_function
 import os   # Used to clear terminal
@@ -8,42 +9,19 @@ import time
 import pickle 
 # init(autoreset=True) # init colors and reset to white each time
 from prompt_toolkit import print_formatted_text, HTML
+import getpass
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
 
 def show(text):
     #  Displays text, waits for 'enter' before continuing.
-    t = text.split('@')
-    if len(t) == 1: #no @ in string
-        print(text)
-        raw_input("... ")
-    else: # color
-        printWithColor(t[1],t[2], before=t[0], after = t[3])
-        raw_input("... ")
+    printc(text)
+    prompt='... '.encode('ascii','ignore')
+    x=getpass.getpass(prompt) # waits for enter, doesnt show typed input becuase it's treated like a password
 
-def printc(text):
-    #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
-    # please only one color per call
-    t = text.split('@')
-    if len(t) == 1: #no @ in string
-        print(text)
-    else: # color
-        try:
-            if t[4] == None:
-                printWithColor(t[1],t[2], before=t[0], after = t[3])
-        except IndexError:
-            printWithColor(t[0],t[1], after = t[2])
-        else: printc( t[4:] )
-
-    # cases: @ 0 @ 1 @
-    #      0 @ 1 @ 2 @ 
-    #        @ 0 @ 1 @ 2
-    #      0 @ 1 @ 2 @ 3 # get to this
-    
-
-# prints colored text
-def printWithColor(text, color, before="", after=""):
+# prints colored text. if more=true, will return s
+def printWithColor(text, color, before="", after="", more=False):
     s = before
     if color == "red":
         s +=  '<ansired>' + text + '</ansired>'
@@ -60,7 +38,33 @@ def printWithColor(text, color, before="", after=""):
     else:
         s +=  '<ansiwhite>' + text + '</ansiwhite>'
     s += after
+    if more:
+        return s
     print_formatted_text(HTML(s))
+
+def printc(text, stringList=False): # now supports multiple colors per call
+    #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
+    if not stringList: # if stringlist false
+        t = text.split('@')
+    else:
+        t=stringList
+    if len(t) == 1: #no @ in string
+        print(text)
+    elif (len(t)%3) -1 == 0: # has right amount of @'s
+        if len(t) == 4:
+            if stringList: # if using stringlist
+                printWithColor(t[1],t[2], before=text + t[0], after = t[3])
+            else: 
+                printWithColor(t[1],t[2], before=t[0], after = t[3])
+        else: 
+            if stringList:
+                s = text+ printWithColor(t[1],t[2], before=t[0], after = "", more=True)
+            else:
+                s = printWithColor(t[1],t[2], before=t[0], after = "", more=True)
+            printc( s, stringList=t[3:] )
+    else: printc("@You used the at sign syntax wrong.@red@")
+#printc('@test@red@uncollored@color@blue@@color@yellow@')
+
 
 # formats text in ways besides color. only bold and underline and reverse seem to work in my vs code terminal
 def formatText(text, format):
@@ -103,7 +107,7 @@ def wait(seconds):
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
     while True:
-        userinput = input(player)
+        userinput = getInput(player)
         if userinput == "yes" or userinput == "y":
             return True
         elif userinput == "no" or userinput == "n":
@@ -133,7 +137,7 @@ def checklevel(xp):
 def getRandomIndex(arr):
     return arr[random.randint(0, len(arr)-1)]
 
-def input(player):
+def getInput(player):
     while True:
         inp = raw_input("> ").lower().strip()
         if player.devmode and inp == "debug damage":

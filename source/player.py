@@ -157,7 +157,7 @@ class Player:
     def charcreation(self):
         while True:
             print("Would you like to 'create' your own character or 'roleplay' one created for you?")
-            dec = input(self) # TODO handle inventory 
+            dec = getInput(self) # TODO handle inventory 
             if dec == "create" or dec == "c":
                 self.aspect['name'] = self.name()
                 self.aspect['gender'] = self.gender()

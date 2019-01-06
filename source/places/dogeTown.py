@@ -1,4 +1,4 @@
-from source.utils import show, input, checkInput, yesno, printc
+from source.utils import show, getInput, checkInput, yesno, printc
 from source.lists import getInvalidOptionText
 from source.enemy import *
 from source.combat import *
@@ -17,11 +17,11 @@ def dogeTown(player):
         show("You reach the top of the staircase and are halted by 2 shoobers armed with spears crossed to block your path.")
         show("Another doggo approaches. This doge, a shibe, greets you with the grandeur of a king. He is surely the doggest. ")
         show('"Bork."')
-        x = input(player)
+        x = getInput(player)
         show('"Woof bork!"')
-        x = input(player)
+        x = getInput(player)
         show('"Yip yip bark boof woof, bork yip bark boof?"')
-        x = input(player)
+        x = getInput(player)
         show("The doge nods his head to the shoober soliders and they uncross their spears. It seems that thanks to your cunning choice of words you have been granted access into Dogetown.")
         
         # gabe
@@ -34,7 +34,7 @@ def dogeTown(player):
         printc("On your left rests a towering structure that looks like a @'church'@yellow@. You hear howling from inside. ")
         printc("There is also a path to what looks to be the @'king'@yellow@s quarters.")
         printc("Or you can @'leave'@yellow@.")
-        x = input(player)
+        x = getInput(player)
         if (x == "party" or x == "p"):
             show("Party puppo's puppy palace prick's your fancy so you prop open the door and walk inside.")
             show("The club music blasts and the dance floor is crowded with floofers and doges getting down to the hip hop beat.")
@@ -43,7 +43,7 @@ def dogeTown(player):
             show("Feeling like you don't have enough in your pockets, you decide to purchase some poochmerch.")
             show("Inside the quaint shop, a diggy sploot leans up against the counter.")
             print('"Bow bow."')
-            x = input(player)
+            x = getInput(player)
             print('"Gruph."')
             print("Look at his wares?")
             if yesno(player):
@@ -77,7 +77,7 @@ def dogeTown(player):
                         print s
                         if count == 4 or count > 10:
                             printc ("(if you ever get tired of talking you can always type @'leave'@yellow@)")
-                        x = input(player)
+                        x = getInput(player)
                         if checkInput(x,"leave"):
                             break
                         elif checkInput(x,"bork bork bork woof bork"): # TODO find this code somewhere
@@ -139,7 +139,7 @@ def dogeTown(player):
                 show("This chanting continues for several minutes, but you cannot leave. Something about Buddhog captivates you.")
                 show("The sermon finishes and all of the dogles leave.")
                 show("You can talk to @'Buddhog'@yellow@ or @'leave'@yellow@.")
-                x = input(player)
+                x = getInput(player)
                 if checkInput(x, "Buddhog"):
                     show("You approach the holy dog.")
                     show("You're nervous, something about him makes your heart beat fast.")
@@ -166,7 +166,7 @@ def party(player):
     show("Towards the right you notice a picture of a fire hydrant and an arrow pointing towards the end of a @'hallway'@yellow@.")
     while (True):
         print("Where will you go now?")
-        x = input(player)
+        x = getInput(player)
         if x == 'bar' or x == 'b':
             show("You decide that it's about time to get a drink and take a seat at the bar.")
             show("The barktender, a plump bulldoger, grunts and gestures to his selection of doogie booze.")
@@ -244,7 +244,7 @@ def party(player):
             raw_input("... ")
             while True:
                 print("Which door will you choose?")
-                x = input(player)
+                x = getInput(player)
                 if checkInput(x, "left"):
                     if player.getVisits("dogeTown boy's bathroom"):
                         show("You probably want to choose the other door.")

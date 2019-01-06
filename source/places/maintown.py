@@ -20,7 +20,7 @@ def maintown(player):
         print("The 'blacksmith' might appreciate you buying something.")
         print("Or you could always 'leave' your humble town to explore the world.")
         print("Where do you want to go?")
-        place = input(player)
+        place = getInput(player)
         if place == "home" or place == "h":
             home(player)
         elif place == "tavern" or place == "t":
@@ -45,7 +45,7 @@ def home(player):
          "dank shit you did as a kid.")
     while True:
         print("You could 'explore' your house some more, 'sleep', 'play' a console game, or just 'leave'.")
-        action = input(player)
+        action = getInput(player)
         if action == "explore" or action == "e":
             if player.getVisits("Explore House", "add") == 1:
                 show("You head upstairs to your room and look around for a bit. "
@@ -122,7 +122,7 @@ def tavern(player):
         print("It looks like one of the patrons is challenging others to a 'game'")
         print("You could get a room to 'rest' for the night")
         print("Or you could just 'leave'.")
-        action = input(player)
+        action = getInput(player)
         if action == "slot" or action == "s":
             # Slots(player).slot_machine() TODO: fix this
             # until that gets fixed, run this line instead:

@@ -1,4 +1,4 @@
-from source.utils import show, input
+from source.utils import show, getInput
 
 def burntTown(player):
     if player.getVisits("burntTown", "add") ==1 :
@@ -8,7 +8,7 @@ def burntTown(player):
         show("You walk to where the town square used to be. There is no one else in sight.")
         print("You can try to find your 'grandpa's house, or 'search' around for survivers.")
         while True:
-            x = input(player)
+            x = getInput(player)
             if (x == "grandpa" or x == "g"):
                 show("You need to find out if your grandpa is alright. You start walking towards where you remember coming as a child so many times.")
                 show("The buildings have all been charred by the fire. Most of them have caved in completely.")
