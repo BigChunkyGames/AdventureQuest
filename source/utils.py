@@ -20,6 +20,8 @@ def show(text):
     prompt='... '.encode('ascii','ignore')
     x=getpass.getpass(prompt) # waits for enter, doesnt show typed input becuase it's treated like a password
 
+
+# more ansi colors: https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/examples/print-text/ansi-colors.py
 # prints colored text. if more=true, will return s
 def printWithColor(text, color, before="", after="", more=False):
     s = before
@@ -64,7 +66,6 @@ def printc(text, stringList=False): # now supports multiple colors per call
             printc( s, stringList=t[3:] )
     else: printc("@You used the at sign syntax wrong.@red@")
 #printc('@test@red@uncollored@color@blue@@color@yellow@')
-
 
 # formats text in ways besides color. only bold and underline and reverse seem to work in my vs code terminal
 def formatText(text, format):

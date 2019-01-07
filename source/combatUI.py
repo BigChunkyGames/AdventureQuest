@@ -20,6 +20,7 @@ from utilities.customBase import RadioList, ProgressBar # had to make some chang
 #from pygments.lexers.html import HtmlLexer
 from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
 from prompt_toolkit import print_formatted_text, HTML
+from prompt_toolkit.formatted_text import FormattedText
 
 from lists import getRandomAttackVerb
 from utils import wait
@@ -30,11 +31,18 @@ class CombatUI():
 
     def __init__(self, player, enemy):
         self.player = player
+        self.playerClans = ' '.join(self.player.clantags)
+        self.playerName = FormattedText([
+            ('#ffffff', unicode(player.aspect['name'], "utf-8")),
+            ('', ' '),
+            ('#cc00cc', self.playerClans, "utf-8"),
+        ]) 
         self.enemy = enemy
 
         self.playerGoesNext = False # by default, enemy always gets first strike
         self.playerJustDodged = False
         self.battleLog = ''
+        self.selectedIndexText = ''
         self.result = None
 
         self.playerHPBar = ProgressBar()
@@ -55,7 +63,7 @@ class CombatUI():
             ]
         )
 
-        self.maxHeightOfBattleLogWindow = 10 # FIXME find a way to fit text inside battle log
+        self.maxHeightOfBattleLogWindow = 11 # FIXME find a way to fit text inside battle log
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -63,7 +71,8 @@ class CombatUI():
         self.bindings.add('s-tab')(focus_previous)
         self.bindings.add('left')(focus_previous)
         self.bindings.add('c-m')(self.handleEnter)
-        # TODO escape key tries to flee
+        # self.bindings.add('escape')(self.tryToEscape)
+        # self.bindings.add('up')(self.setSelectedIndexTextUp)
         # TODO: make secret easter egg key bindings # self.bindings.add('a', 'a')(self.test)  
         self.style = Style.from_dict({
             'dialog.body':        'bg:#000000 #ffcccc', #background color, text color
@@ -78,6 +87,7 @@ class CombatUI():
             style=self.style,
             mouse_support=True,
             full_screen=True,
+
             )
 
         self.enemyTurn() # enemy goes first
@@ -131,17 +141,25 @@ class CombatUI():
         elif choice == "Item":
             self.battleLog += "" #TODO item selection
         elif choice == "Run":
-            self.battleLog += "You tried to run..." 
-            if 20 > random.randint(0,100): # chance to escape is always 20% i guess
-                self.battleLog += " and escaped the combat!"
-                self.result = "escaped"
-                get_app().exit(result="escaped")
-                return
-            else:
-                self.battleLog += " but failed to escape!\n"
+            self.tryToEscape()
+            self.refresh()
+            return
         else:
             self.battleLog += "How did you do that!?"
         self.refresh()
+        self.enemyTurn()
+    
+    def tryToEscape(self, event=None):
+        self.battleLog += "You tried to run..." 
+        if -2> random.randint(0,100): # chance to escape is always 20% i guess
+            self.battleLog += " and escaped the combat!"
+            self.result = "escaped"
+            get_app().exit(result="escaped")
+            return
+        else:
+            self.battleLog += " but failed to escape!\n"
+            self.refresh()
+            self.enemyTurn()
 
     def enemyTurn(self):
         # for now, always try to attack TODO
@@ -168,7 +186,8 @@ class CombatUI():
             # hit
             damage = self.enemy.attack
             if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!\n"
-            else: s += " It dealt " + str(damage) + " damage!\n"
+            else: 
+                s += " It dealt " + str(damage) + " damage!\n"
             self.player.hp = self.player.hp - damage
             if self.player.hp < 0:
                 self.player.hp = 0
@@ -190,60 +209,80 @@ class CombatUI():
             self.getRootContainer(),
             focused_element=self.radios)
 
+    def makeFormattedText(self, text, color='#ffffff'):
+        return FormattedText([
+            (color, unicode(text, "utf-8")) # this shit is shit
+        ])
+
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
+        enemyName = self.makeFormattedText(self.enemy.name) 
+        battleLogTitle = FormattedText([
+            ('#ffffff', "Battle Log") # this shit is shit
+        ])
+        actionsTitle = FormattedText([
+            ('#ffffff', "Actions") # this shit is shit
+        ])
         t = TextArea(
-            scrollbar=True,
+            scrollbar=False,
             line_numbers=False,
             wrap_lines=True,
-            dont_extend_height=False,
-            dont_extend_width=False,
+            dont_extend_height=True,
+            dont_extend_width=True,
             focusable=True,
             focus_on_click=True,
             read_only=False,
             text=self.battleLog,  
             style='bg:#000000',
+            height=10,
             )
         root_container = VSplit([
             HSplit([
                 Dialog(
-                    title='Actions',
+                    title=actionsTitle,
                     body=HSplit([
                         self.radios,
-                        Label(
-                            text="this text changes depending on what action is highlighted #TODO ", 
-                            style='class:dialog.body',
-                            dont_extend_height=False
-                            )])),
+                        # Label(
+                        #     text="t",
+                        #     style='class:dialog.body',
+                        #     dont_extend_height=True
+                        # )
+                    ], height= 10)
+                ),
                 Frame(
                     body=self.playerHPBar,
-                    title='Health'), # TODO get name of player
-            ], padding=1, ),
+                    title=self.playerName,
+                ),
+            ], padding=0, width = 100 ),
             HSplit([
                 Dialog(
-                    title = 'Battle Log',
+                    title = battleLogTitle,
                     body=t,
-                    ),
+                ),
                 Frame(
                     body=self.enemyHPBar,
-                    title='Progress bar'), # TODO get name of enemy
-            ], padding=1)
+                    title=enemyName
+                ), 
+            ], padding=0, width = 100)
         ])
         return root_container
+
+    # def setSelectedIndexTextUp(self, event): 
+    #     self.radios.up()
+    #     self.setSelectedIndexText("up")
+    # def setSelectedIndexTextDown(self, event): 
+    #     self.radios.down()
+    #     self.setSelectedIndexText("down")
+
+
+        
 
 
     def run(self):
         self.application.run()
-
-# if __name__ == '__main__': # i think this means, if this is the file that was run, do this
-#     from player import *
-#     from enemy import *
-#     b = CombatUI(Player(),Enemy(Player(), "forest"))
-#     b.run()   
-
-
+ 
 # STILL TODO
 # fix scrolling issue in battelog
 # fix color of battlelog
 # description of selection text
-# hpbar names, might just skip
+# what the hell is this dumb line at the bottom of the battlelog

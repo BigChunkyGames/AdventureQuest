@@ -6,7 +6,7 @@
 
 from source.utils import *
 from source.lists import *
-import source.miniGames.RockPaperScissors 
+from source.miniGames.RockPaperScissors import RPSGame
 
 
 def maintown(player):
@@ -14,11 +14,11 @@ def maintown(player):
     player.addToTeleportableAreas(player.aspect['town'], maintown)
     while True:
         print("You stand in the homey town of {0}, just passed the hills of {1}, a lovely place.").format(player.aspect['town'] , player.aspect['hills'])
-        print("You could go 'home' and check that out.")
-        print("The 'tavern' is always a cool place to hang out.")
-        print("The 'store' is probably open at this time of day.")
-        print("The 'blacksmith' might appreciate you buying something.")
-        print("Or you could always 'leave' your humble town to explore the world.")
+        printc("You could go @'home'@yellow@ and check that out.")
+        printc("The @'tavern'@yellow@ is always a cool place to hang out.")
+        printc("The @'store'@yellow@ is probably open at this time of day.")
+        printc("The @'blacksmith'@yellow@ might appreciate you buying something.")
+        printc("Or you could always @'leave'@yellow@ your humble town to explore the world.")
         print("Where do you want to go?")
         place = getInput(player)
         if place == "home" or place == "h":
@@ -36,15 +36,14 @@ def maintown(player):
                 show("You decide to leave your home town for greener pastures.")
             break # this break right here is really important. now code continues where maintown was called (hopefully in world)
         else:
-            print("You've got to pick one of the places listed.")
-            print("")
+            show(getInvalidOptionText())
 
 def home(player):
     show("You enter your house through the familiar front door, taking in "
          "the sights of your childhood abode, reminiscing about all the "
          "dank shit you did as a kid.")
     while True:
-        print("You could 'explore' your house some more, 'sleep', 'play' a console game, or just 'leave'.")
+        printc("You could @'explore'@yellow@ your house some more, @'sleep'@yellow@, @'play'@yellow@ a console game, or just @'leave'@yellow@.")
         action = getInput(player)
         if action == "explore" or action == "e":
             if player.getVisits("Explore House", "add") == 1:
@@ -117,11 +116,11 @@ def tavern(player):
           "dank shit to do here or something.")
     while True:
         print("You have a look around to see what's up:")
-        print("In front of you lies a pretty dope looking 'slot' machine")
-        print("You could 'ask' the bartender for some rumors")
-        print("It looks like one of the patrons is challenging others to a 'game'")
-        print("You could get a room to 'rest' for the night")
-        print("Or you could just 'leave'.")
+        printc("In front of you lies a pretty dope looking @'slot'@yellow@ machine")
+        printc("You could @'ask'@yellow@ the bartender for some rumors")
+        printc("It looks like one of the patrons is challenging others to a @'game'@yellow@")
+        printc("You could get a room to @'rest'@yellow@ for the night")
+        printc("Or you could just @'leave'@yellow@.")
         action = getInput(player)
         if action == "slot" or action == "s":
             # Slots(player).slot_machine() TODO: fix this
@@ -153,7 +152,7 @@ def tavernGame(player):
          "sip out of his flask.")
     print('"I\'ve been challenging travelers across these lands to the '
          'game of my people for many years. You think you\'ve got what '
-         'it takes to beat me?" (y/n)')
+         'it takes to beat me?" ')
     if yesno(player):
         show('"Hah! Let\'s see how good you really are!')
         show("The pirate cracks his knuckles and offers his hand to you "
@@ -164,7 +163,6 @@ def tavernGame(player):
              'what you\'re about to play!"')
         show("You gulp nervously and ready your fist, mentally preparing "
              "yourself for the beginning of the match.")
-        yourchoice, opchoice, outcome = RPSGame().game()
         show('"Enough waiting around! Let\'s do this!"')
         while True:
           yourchoice, opchoice, outcome = RPSGame().game()
@@ -191,12 +189,15 @@ def tavernGame(player):
                     "actually won!").format(yourchoice, opchoice)
                raw_input("... ")
                show("The pirate looks up at you, clearly impressed.")
-               show('"Not many can beat me at this game. I think you deserve '
-                    'to be in my clan, it houses only the best rock paper '
-                    'scissors players in the entire world."')
-               player.clantags.append("[Pyr8]")
-               show("You have joined The Pirates' Clan! [Pyr8]")
-               show("After your rousing game, you head back to the front of the tavern.")
+               if player.getVisits('maintown_tavern_rps_win', add='add') == 1:
+                    show('"Not many can beat me at this game. I think you deserve '
+                         'to be in my clan, it houses only the best rock paper '
+                         'scissors players in the entire world."')
+                    player.clantags.append("[Pyr8]")
+                    show("You have joined The Pirates' Clan! @[Pyr8]@magenta@")
+               else:
+                    show("Again you have defeated me. You are truly are an RPS master and I am honored to have you in my clan!")
+               show("After your rousing game, you return to the front of the tavern.")
                break
           elif outcome == 'tie':
                print("You look down into your own hand. Both of you played {0}! "

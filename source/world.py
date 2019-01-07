@@ -44,10 +44,9 @@ def world(player):
                     break
                 elif x == "cancel" or x == "c" or x == "escape" or x == "e" or x == "back" or x == "b":
                     break 
-            break
         else:
             clear()
-            show(getInvalidOptionText())
+            show(getInvalidOptionText(traveling=True))
             
             # you tried to go that way but it didn't make any sense
             # uou went that way but ended up right back where you started

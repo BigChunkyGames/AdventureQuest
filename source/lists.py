@@ -58,8 +58,9 @@ def getReaction(reactionlevel): # FIXME not currently used i dont think
         reaction = ["whoa dude", "that was sick"]
     return reaction[random.randint(0, len(reaction)-1)]
 
-def getInvalidOptionText():
-    return getRandomIndex(INVALID_OPTION)
+def getInvalidOptionText(traveling=False):
+    if not traveling: return getRandomIndex(INVALID_OPTION)
+    else: return getRandomIndex(INVALID_OPTION_TRAVELING)
     
 def getRandomDogNoise():
     return getRandomIndex(DOG_NOISES)
@@ -75,7 +76,8 @@ DANKCLOTHING = ["dick sock", "red bandana", "blue bandana", "single sock", "ski 
 MOTHERLYPLATITUDES = ["There's no 'I' in 'Team'!", "Everybody makes mistakes. Don't forget to save often!", "Time heals all wounds. If you're injured, find a place to sleep!", "Work smarter, not harder. A lot of times, you can just type the first letter of a choice instead of the whole word."]
 INVALID_OPTION = ["That is not a good choice." ,"Pick something else.", "I'm really going to need you to input a valid option.",
  "Try that again.", "Try that again but this time choose a valid option.", "THROW EXCEPTION: \"User chose an option that wasn't one of the options surrounded by single quotes like they should have\"", "raise AssertionError(\"User can't type.\")", 
- "I'm really sorry but that's just not a valid option", "I like what you're thinking but choose an option that is valid.", "The words with 'single quotes' around them are the ones that can be chosen so make sure to type one of those." ]
+ "I'm really sorry but that's just not a valid option", "I like what you're thinking but choose an option that is valid.", "The words with 'single quotes' around them are the ones that can be chosen so make sure to type one of those.", "The yellow words. Pick one of those.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."  ]
+INVALID_OPTION_TRAVELING = ["You tried to go that way but it didn't make any sense.", "You tried to go there but ended up right back where you started.", "That is no place you should be going right now.", "Sorry, that is off-limits.", "You thought about going that way but changed your mind.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."]
 ### enemies ##############################################################################
 
 # these can have duplicate names for different biomes and even duplicates within biome

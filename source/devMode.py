@@ -1,5 +1,5 @@
 def devMode(player):
-    player.aspect['name'] = "name"
+    player.aspect['name'] = "devMode"
     player.aspect['gender'] = "boi"
     player.aspect['heshe'], player.aspect['HeShe'], player.aspect['hisher'] = "he", "He", "his"
     player.aspect['occ'], player.aspect['viverb'], player.aspect['skill1'], player.aspect['skill2'] = "fireman", "stab", "sewing", "rubiks cube solving"
@@ -11,6 +11,9 @@ def devMode(player):
     player.hp = 9999999
     player.dogecoin = 8000
     player.devmode = True
+    player.clantags.append('[test]')
+    player.clantags.append('[test]')
+    player.clantags.append('[test]')
 
     
 

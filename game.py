@@ -27,13 +27,16 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            dogeTown(self.player)
+            c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
+            #dogeTown(self.player)
+            maintown(self.player)
             world(self.player)
         
 #TODO: assuming new game each time. Should ask to load saved game data or start 
-# new game. Below line creates a new game object but should load if loading saved game
-# g = Game()
-# g.start()
+# new game. Below line creates a new game object but should
+# \ load if loading saved game
+g = Game()
+g.start()
 
 
 
@@ -41,5 +44,6 @@ print "the end"
 
 
 # tests
-c = Combat(Player(),Enemy(Player(), "forest")) # jump to combat
+#
+
 

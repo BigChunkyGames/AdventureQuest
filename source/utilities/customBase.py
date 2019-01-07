@@ -563,6 +563,7 @@ class RadioList(object):
         self.values = values
         self.current_value = values[0][0]
         self._selected_index = 0
+        self.description = '' # TODO set default to whatever weapon text is
 
         # Key bindings.
         kb = KeyBindings()
@@ -570,11 +571,13 @@ class RadioList(object):
         @kb.add('up')
         def _(event):
             self._selected_index = max(0, self._selected_index - 1)
+            self.setDescription()
 
         @kb.add('down')
         def _(event):
             self._selected_index = min(
                 len(self.values) - 1, self._selected_index + 1)
+            self.setDescription()
 
         @kb.add('pageup')
         def _(event):
@@ -583,6 +586,7 @@ class RadioList(object):
                 0,
                 self._selected_index - len(w.render_info.displayed_lines)
             )
+            self.setDescription()
 
         @kb.add('pagedown')
         def _(event):
@@ -591,6 +595,8 @@ class RadioList(object):
                 len(self.values) - 1,
                 self._selected_index + len(w.render_info.displayed_lines)
             )
+            self.setDescription()
+            
 
         # @kb.add('enter')
         # @kb.add(' ')
@@ -619,6 +625,17 @@ class RadioList(object):
             ],
             dont_extend_height=True)
 
+    def setDescription(self):
+        index = self._selected_index
+        if index == 0:
+            self.description = "Use your fists?" # TODO inventory. text changes with weapon 
+        elif index == 1:
+            self.description = "Attempt to avoid attack?"
+        elif index == 2:
+            self.description = "Open your inventory?"
+        elif index == 3:
+            self.description = ""
+
     def _get_text_fragments(self):
         result = []
         for i, value in enumerate(self.values):
@@ -631,22 +648,22 @@ class RadioList(object):
             if selected:
                 style += ' class:radio-selected'
 
-            result.append((style, '('))
+            result.append((style, '<'))
 
             if selected:
                 result.append(('[SetCursorPosition]', ''))
 
             if checked:
-                result.append((style, '*'))
+                result.append((style, ' '))
             else:
                 result.append((style, ' '))
 
-            result.append((style, ')'))
+            result.append((style, '>'))
             result.append(('class:radio', ' '))
             result.extend(to_formatted_text(value[1], style='class:radio'))
             result.append(('', '\n'))
-
-        result.pop()  # Remove last newline.
+        #result.pop()  # Remove last newline.
+        result.append(('',self.description))
         return result
 
     def __pt_container__(self):

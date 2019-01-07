@@ -13,8 +13,8 @@ class RPSGame():
         guess = raw_input("Press 1 to play rock, 2 for paper, and 3 for "
                               "scissors. ")
         while guess != '1' and guess != '2' and guess != '3':
-            guess = raw_input("Either pick 1 (rock,) 2 (paper,) "
-                                  "or 3 (scissors.) ")
+            guess = raw_input("Either pick 1 (rock) 2 (paper) "
+                                  "or 3 (scissors). ")
         return int(guess)
 
     def aiguess(self, choice, luck, AlwaysPicksRock):

@@ -85,10 +85,10 @@ class Player:
             xp = xp * (2 ** (self.level)) # gain xp based on base xp * 2^level
         self.experiencepoints = self.experiencepoints + xp
         if self.experiencepoints < self.levelupxp:
-            print("You have gained " + str(xp) + " XP!")
-            print("You now have " + str(self.experiencepoints) + "/" + str(self.levelupxp) + " needed to level up.")
+            printc("You have gained @" + str(xp) + " XP!@yellow@")
+            printc("You now have " + str(self.experiencepoints) + "/" + str(self.levelupxp) + " needed to level up.")
         else:
-            print("You have gained " + str(xp) + " experience! That's enough to level up!")
+            printc("You have gained " + str(xp) + " experience! That's enough to level up!")
             raw_input("... ")
             self.levelUp()
         raw_input("... ")
@@ -108,7 +108,7 @@ class Player:
         if add == "add":
             self.addVisit(area)
         if area in self.visitedareas:
-            return self.visitedareas[area]
+            return self.visitedareas[area] # return amount of times visited including this time if added
         else:
             return 0
 
