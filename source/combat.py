@@ -3,6 +3,7 @@ from utils import show, clear
 from lists import getRandomEnemyName, getRandomAttackVerb
 from enemy import *
 from combatUI import *
+from item import tryForDrop
 #  TODO: consult other adventure games to see what a good attack:HP ratio is
 
 class Combat:
@@ -19,13 +20,6 @@ class Combat:
 
         # TODO: May later be affected by level as well as biome
 
-    def tryForDrop(self, percent): # TODO drops
-        dropchance = random.randint(1, 100)
-        if dropchance <= percent:
-            return True
-        else:
-            return False
-
     def alert(self):
         # map.getTileDescription prints something about where you are.
         print "From over your shoulder you notice",
@@ -37,7 +31,7 @@ class Combat:
         else :
             print attack,
             print "you!"
-        show("You're being attacked!") #TODO color
+        show("@You're being attacked!@red@") 
 
     def startCombat(self):
         c = CombatUI(self.player, self.enemy)
@@ -47,7 +41,7 @@ class Combat:
             show("You defeated " + self.enemy.name + "!")
             self.player.addExperience(self.enemy.xpworth) # gain xp
             self.player.regenHealth()# gain health
-            if self.tryForDrop(10): # TODO after inventory
+            if tryForDrop(10): # TODO after inventory
                 show("You got some loot!")
         elif c.result == "lose":
             self.player.death()

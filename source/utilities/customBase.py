@@ -669,6 +669,118 @@ class RadioList(object):
     def __pt_container__(self):
         return self.window
 
+class RadioList2(object): # inventory
+    """
+    List of radio buttons. Only one can be checked at the same time.
+
+    :param values: List of (value, label) tuples.
+    """
+    def __init__(self, values, app):
+        assert isinstance(values, list)
+        assert len(values) > 0
+        assert all(isinstance(i, tuple) and len(i) == 2
+                   for i in values)
+
+        self.values = values
+        self.current_value = values[0][0]
+        self._selected_index = 0
+        self.description = 'default' # TODO set default to whatever weapon text is
+        self.app = app
+
+        # Key bindings.
+        kb = KeyBindings()
+
+        @kb.add('up')
+        def _(event):
+            self._selected_index = max(0, self._selected_index - 1)
+            self.setDescription()
+            self.app.refresh()
+
+        @kb.add('down')
+        def _(event):
+            self._selected_index = min(
+                len(self.values) - 1, self._selected_index + 1)
+            self.setDescription()
+            self.app.refresh()
+
+        @kb.add('pageup')
+        def _(event):
+            w = event.app.layout.current_window
+            self._selected_index = max(
+                0,
+                self._selected_index - len(w.render_info.displayed_lines)
+            )
+            self.setDescription()
+            self.app.refresh()
+
+        @kb.add('pagedown')
+        def _(event):
+            w = event.app.layout.current_window
+            self._selected_index = min(
+                len(self.values) - 1,
+                self._selected_index + len(w.render_info.displayed_lines)
+            )
+            self.setDescription()
+            self.app.refresh()
+
+
+        @kb.add(Keys.Any)
+        def _(event):
+            # We first check values after the selected value, then all values.
+            for value in self.values[self._selected_index + 1:] + self.values:
+                if value[1].startswith(event.data):
+                    self._selected_index = self.values.index(value)
+                    return
+
+        # Control and window.
+        self.control = FormattedTextControl(
+            self._get_text_fragments,
+            key_bindings=kb,
+            focusable=True)
+
+        self.window = Window(
+            content=self.control,
+            style='class:radio-list',
+            right_margins=[
+                ScrollbarMargin(display_arrows=True),
+            ],
+            dont_extend_height=True)
+
+    def setDescription(self):
+        self.description = self.values[self._selected_index][0]
+
+    def _get_text_fragments(self):
+        result = []
+        for i, value in enumerate(self.values):
+            checked = (value[0] == self.current_value)
+            selected = (i == self._selected_index)
+
+            style = ''
+            if checked:
+                style += ' class:radio-checked'
+            if selected:
+                style += ' class:radio-selected'
+
+            result.append((style, '<'))
+
+            if selected:
+                result.append(('[SetCursorPosition]', ''))
+
+            if checked:
+                result.append((style, ' '))
+            else:
+                result.append((style, ' '))
+
+            result.append((style, '>'))
+            result.append(('class:radio', ' '))
+            result.extend(to_formatted_text(value[1], style='class:radio'))
+            result.append(('', '\n'))
+        #result.pop()  # Remove last newline.
+        #result.append(('',self.description))
+        return result
+
+    def __pt_container__(self):
+        return self.window
 
 class VerticalLine(object):
     """

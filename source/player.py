@@ -1,8 +1,8 @@
 # the player class holds all of the information about the player. This class also handles input for player information
-from inventory import *
 from lists import *
 from utils import *
 from map import *
+from inventoryUI import *
 
 class Player:
 
@@ -31,11 +31,32 @@ class Player:
         self.healthRegen = 2
         self.devmode = False
         
-        self.inventory = Inventory(self) # this is kind of sketchy not sure if this will cause problems later
+        self.inventory = [] # list of item objects
+        self.inventoryUI = InventoryUI(self ) # passes self, (this player object)
 
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
+
+    def getAllInventoryItemsAsString(self,_type=None):
+        '''Can specify all inventory items of type weapon, armour, consumable, or quest'''
+        i = 0
+        s = ''
+        while i < len(self.inventory):
+            if self.inventory[i].type == _type or _type==None:
+                s += self.inventory[i].name + '\n'
+            i = i + 1
+        return s
+
+    def getAllInventoryItemsAsObjectList(self,_type=None):
+        '''Can specify all inventory items of type weapon, armour, consumable, or quest'''
+        i = 0
+        l = []
+        while i < len(self.inventory):
+            if self.inventory[i].type == _type or _type==None:
+                l.append(self.inventory[i])
+            i = i + 1
+        return l
 
     def getTileAtCurrentLocation(self):
         return self.map.getTile(self.currentLocationX, self.currentLocationY)
@@ -44,13 +65,8 @@ class Player:
         return self.aspect[s]
 
     def openInventory(self):
-        self.inventory.open()
+        self.inventoryUI.run()
 
-    # max hp inceases by 2
-    # current hp increases by 2 unless greater than max
-    # strength increases by 1
-    # health regen increased by 1
-    # xp needed for next level is  2^currentLevel
     def levelUp(self):
         while True:
             self.level = self.level + 1
@@ -60,18 +76,26 @@ class Player:
             self.experiencepoints = self.experiencepoints - self.levelupxp
             if self.experiencepoints < 0:
                 self.experiencepoints = 0
+            
+            # strength
             self.strength = self.strength + 1
             print("You now have " + str(self.strength) + " strength!")
 
-            self.maxhp = self.maxhp + 2
-            self.hp = self.hp + 2
-            if self.hp > self.maxhp: self.hp = self.maxhp
+            # max hp
+            self.maxhp = 10 * (2 ** (self.level)) # SCALING
             print("You now have " + str(self.maxhp) + " maximum HP!")
 
-            self.healthRegen = self.healthRegen + 1
-            print("You now regenerate " + str(self.healthRegen) + " after each battle!")
+            # regain all health
+            gain = self.maxhp - self.hp
+            printc("You have regained @" + str(gain) + " HP!@green@")
+            self.hp = self.maxhp # SCALING
 
-            self.levelupxp = (2 ** (self.level)) * 10
+            # health regen
+            self.healthRegen = (2 ** (self.level)) # SCALING
+            print("You now regain " + str(self.healthRegen) + " after each battle!")
+
+            # next level xp
+            self.levelupxp = 10 * (2 ** (self.level)) # SCALING
             if self.experiencepoints >= self.levelupxp:
                 print("You have enough XP to level up again!")
             else:

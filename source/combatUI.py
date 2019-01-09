@@ -32,11 +32,17 @@ class CombatUI():
     def __init__(self, player, enemy):
         self.player = player
         self.playerClans = ' '.join(self.player.clantags)
-        self.playerName = FormattedText([
-            ('#ffffff', unicode(player.aspect['name'], "utf-8")),
-            ('', ' '),
-            ('#cc00cc', self.playerClans, "utf-8"),
-        ]) 
+        if len(self.player.clantags) > 0 : 
+            self.playerName = FormattedText([
+                ('#ffffff', unicode(player.aspect['name'], "utf-8")),
+                ('', ' '),
+                ('#cc00cc', self.playerClans, "utf-8"),
+            ]) 
+        else: 
+            self.playerClans =  self.playerName = FormattedText([
+                ('#ffffff', unicode(player.aspect['name'], "utf-8")),
+            ]) 
+
         self.enemy = enemy
 
         self.playerGoesNext = False # by default, enemy always gets first strike
@@ -44,6 +50,7 @@ class CombatUI():
         self.battleLog = ''
         self.selectedIndexText = ''
         self.result = None
+        self.escapeChancePercent = 20
 
         self.playerHPBar = ProgressBar()
         self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp)) 
@@ -71,7 +78,7 @@ class CombatUI():
         self.bindings.add('s-tab')(focus_previous)
         self.bindings.add('left')(focus_previous)
         self.bindings.add('c-m')(self.handleEnter)
-        # self.bindings.add('escape')(self.tryToEscape)
+        self.bindings.add('escape')(self.tryToEscape)
         # self.bindings.add('up')(self.setSelectedIndexTextUp)
         # TODO: make secret easter egg key bindings # self.bindings.add('a', 'a')(self.test)  
         self.style = Style.from_dict({
@@ -151,7 +158,7 @@ class CombatUI():
     
     def tryToEscape(self, event=None):
         self.battleLog += "You tried to run..." 
-        if -2> random.randint(0,100): # chance to escape is always 20% i guess
+        if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
             self.battleLog += " and escaped the combat!"
             self.result = "escaped"
             get_app().exit(result="escaped")
@@ -242,11 +249,6 @@ class CombatUI():
                     title=actionsTitle,
                     body=HSplit([
                         self.radios,
-                        # Label(
-                        #     text="t",
-                        #     style='class:dialog.body',
-                        #     dont_extend_height=True
-                        # )
                     ], height= 10)
                 ),
                 Frame(
@@ -266,17 +268,6 @@ class CombatUI():
             ], padding=0, width = 100)
         ])
         return root_container
-
-    # def setSelectedIndexTextUp(self, event): 
-    #     self.radios.up()
-    #     self.setSelectedIndexText("up")
-    # def setSelectedIndexTextDown(self, event): 
-    #     self.radios.down()
-    #     self.setSelectedIndexText("down")
-
-
-        
-
 
     def run(self):
         self.application.run()

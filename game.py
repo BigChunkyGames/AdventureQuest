@@ -27,10 +27,13 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
-            #dogeTown(self.player)
-            maintown(self.player)
-            world(self.player)
+            x = InventoryUI(self.player)
+            x.run()
+            print x.result
+            #maintown(self.player)
+
+            #world(self.play
+            # er)
         
 #TODO: assuming new game each time. Should ask to load saved game data or start 
 # new game. Below line creates a new game object but should
@@ -43,7 +46,9 @@ g.start()
 print "the end"
 
 
-# tests
-#
+''' tests
+c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
 
 
+
+'''

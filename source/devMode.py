@@ -1,3 +1,6 @@
+from item import generateRandomWeapon
+
+
 def devMode(player):
     player.aspect['name'] = "devMode"
     player.aspect['gender'] = "boi"
@@ -14,6 +17,10 @@ def devMode(player):
     player.clantags.append('[test]')
     player.clantags.append('[test]')
     player.clantags.append('[test]')
+    player.inventory.append(generateRandomWeapon(player))
+    player.inventory.append(generateRandomWeapon(player))
+    player.inventory.append(generateRandomWeapon(player))
+    #print player.getAllInventoryItems()
 
     
 
@@ -21,5 +28,6 @@ def devMode(player):
     # from places.maintown import *
     # maintown(player)
     # teleporting disabled - instead just modify game.py and change what debug mode skips
+
 
     return

@@ -19,12 +19,15 @@ def introduction(player): #TODO i think we should change the intro to be less de
     raw_input("... ")
     show("...but first, %s was thirsty." % player.aspect['heshe'])
     clear()    
-    print("You recognize your humble town's 'tavern' to the north.")
-    print("Type 'tavern' to enter the tavern. ")
+    printc("You recognize your humble town's @'tavern'@yellow@ to the north.")
+    print("Type 'tavern' and press enter to enter the tavern. ")
     attempts = 0
     dies = 0
     move = getInput(player)
     while move != "tavern":
+        if move == "'tavern'":
+            print "Good job but you don't need to type the 'single quotes'."
+            break
         attempts = attempts +1
         if move == "house":
             print "Calm down there m8, we'll get there later."

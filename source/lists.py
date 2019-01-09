@@ -2,7 +2,7 @@
 # above is a 'magic comment' which specifies the ascii encoding type
 
 # The purpose of this file is to hold lists like a list of all dank memes
-
+# TODO im prety sure all of these lists would be better (faster) as tuples but i dont really care enough to change it right now
 
 import random
 from utils import *
@@ -42,6 +42,23 @@ def getRandomEnemyName(biome):
     else:
         return "Void Creature" # couldnt find a biome 
 
+def getRandomWeaponName(extreme=False):
+    if extreme: return getRandomIndex(WEAPON_EXTREME)
+    else: return getRandomIndex(WEAPON)
+
+def getRandomItemPrefix(goodness = 3):
+    ''' 1=shitty, 2=bad, 3=ok, 4=good, 5=really good '''
+    if goodness <= 1:
+        return getRandomIndex(ITEM_PREFIX_SHITTY)
+    elif goodness == 2:
+        return getRandomIndex(ITEM_PREFIX_BAD)
+    elif goodness == 3:
+        return getRandomIndex(ITEM_PREFIX_OK)
+    elif goodness == 4:
+        return getRandomIndex(ITEM_PREFIX_GOOD)
+    elif goodness >= 5:
+        return getRandomIndex(ITEM_PREFIX_REALLYGOOD)
+
 def getRandomAttackVerb():
     return getRandomIndex(ATTACK_VERBS)
 
@@ -65,9 +82,8 @@ def getInvalidOptionText(traveling=False):
 def getRandomDogNoise():
     return getRandomIndex(DOG_NOISES)
 
-#################### lists #############################################################
-# these are constants. thats why they're all caps
 
+# these are constants. thats why they're all caps
 ### misc ##############################################################################
 
 DANKADJECTIVES = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity" ]
@@ -78,6 +94,17 @@ INVALID_OPTION = ["That is not a good choice." ,"Pick something else.", "I'm rea
  "Try that again.", "Try that again but this time choose a valid option.", "THROW EXCEPTION: \"User chose an option that wasn't one of the options surrounded by single quotes like they should have\"", "raise AssertionError(\"User can't type.\")", 
  "I'm really sorry but that's just not a valid option", "I like what you're thinking but choose an option that is valid.", "The words with 'single quotes' around them are the ones that can be chosen so make sure to type one of those.", "The yellow words. Pick one of those.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."  ]
 INVALID_OPTION_TRAVELING = ["You tried to go that way but it didn't make any sense.", "You tried to go there but ended up right back where you started.", "That is no place you should be going right now.", "Sorry, that is off-limits.", "You thought about going that way but changed your mind.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."]
+
+### items ##############################################################################
+WEAPON = ['Great Sword', 'Claymore', 'Dagger', 'Staff', 'Hatchet', 'Nunchucks', 'Ninja Stars', 'Switchblade', 'Butterfly Knife', 'Mace', 'Club', 'Boomerang', 'Trident', 'Spear', 'Sickle', 'Bow and Arrow', 'Sheers', 'Sling',  'Whip', 'Spade', 'Hammer']
+WEAPON_EXTREME = ['Pirate Ship Cannon']
+ARMOUR_HEAD = ['Army Helmet', 'Gas Mask', 'Beanie', 'Top Hat', 'Knight Helmet' ]
+ARMOUR_OFFHAND = ['Shield', 'Gauntlet', 'Japanese Fan', ]
+ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty']
+ITEM_PREFIX_BAD = ["Bad"]
+ITEM_PREFIX_OK = ["Ok"]
+ITEM_PREFIX_GOOD = ["Good"]
+ITEM_PREFIX_REALLYGOOD = ["Really Good"]
 ### enemies ##############################################################################
 
 # these can have duplicate names for different biomes and even duplicates within biome

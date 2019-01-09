@@ -21,9 +21,10 @@ class Enemy:
         self.listOfAttacks = None
 
     def setHP(self):
-        return 5 + self.enemyLevel * self.enemyLevel + random.randint(self.player.level, self.player.level * 2)
+        # return 5 + self.enemyLevel * self.enemyLevel + random.randint(self.player.level, self.player.level * 2)
         # 5 + the product of enemy and player levels + a random amount between player level and twice player level
         # this means that player's attack should scale close to the square of their level
+        return 10 * (2 ** (self.player.level)) 
 
     def setAttack(self):
         return 1 + self.enemyLevel * (self.player.level / 2) 
