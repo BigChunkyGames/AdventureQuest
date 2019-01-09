@@ -44,15 +44,38 @@ class InventoryUI():
             ]) 
         self.result = None
 
+        self.radiosCategoriesContents = []
+        t = self.getItemText('weapon')
+        if not t == '': 
+            tup = []
+            tup.append(t)
+            tup.append('Weapons')
+            self.radiosCategoriesContents.append( tuple(tup) )
+
+        t = self.getItemText('armour')
+        if not t == '': 
+            tup = []
+            tup.append(t)
+            tup.append('Armour')
+            self.radiosCategoriesContents.append( tuple(tup) )
+
+        t = self.getItemText('consumable')
+        if not t == '': 
+            tup = []
+            tup.append(t)
+            tup.append('Consumable')
+            self.radiosCategoriesContents.append( tuple(tup) )
+            
+        t = self.getItemText('quest')
+        if not t == '': 
+            tup = []
+            tup.append(t)
+            tup.append('Quest')
+            self.radiosCategoriesContents.append( tuple(tup) )
+
         self.radiosCategories = RadioList2(
-            values=[ #value, lable
-                (self.unicodify(self.player.getAllInventoryItemsAsString(_type='weapon')), 'Weapons'),
-                (self.unicodify(self.player.getAllInventoryItemsAsString(_type='armour')), 'Armour'),
-                (self.unicodify(self.player.getAllInventoryItemsAsString(_type='consumable')), 'Consumable'),
-                (self.unicodify(self.player.getAllInventoryItemsAsString(_type='quest')), 'Quest') ,
-            ],
-            app = self
-        )
+            values=self.radiosCategoriesContents,
+            app = self)
         self.radiosCategories.description = self.unicodify(self.player.getAllInventoryItemsAsString(_type='weapon')) # set default before selecting
 
         self.currentRadios = self.radiosCategories
@@ -81,6 +104,9 @@ class InventoryUI():
             full_screen=True,
             )
 
+    def getItemText(self, _type):
+        return self.unicodify(self.player.getAllInventoryItemsAsString(_type=_type))
+
     def handleEscape(self, event):
         if self.currentRadios == self.radiosCategories:
             self.done()
@@ -108,6 +134,8 @@ class InventoryUI():
         self.refresh()
 
     def tuplify(self, listt):
+        if len(listt) == 0:
+            return [('Nothing here!', 'empty')]
         newlist=[]
         for i in range(len(listt)):
             l = []

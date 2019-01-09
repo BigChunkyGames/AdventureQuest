@@ -684,7 +684,7 @@ class RadioList2(object): # inventory
         self.values = values
         self.current_value = values[0][0]
         self._selected_index = 0
-        self.description = 'default' # TODO set default to whatever weapon text is
+        self.description = 'empty' # TODO set default to whatever weapon text is
         self.app = app
 
         # Key bindings.

@@ -32,7 +32,6 @@ class Player:
         self.devmode = False
         
         self.inventory = [] # list of item objects
-        self.inventoryUI = InventoryUI(self ) # passes self, (this player object)
 
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown
@@ -65,7 +64,8 @@ class Player:
         return self.aspect[s]
 
     def openInventory(self):
-        self.inventoryUI.run()
+        x = InventoryUI(self)
+        x.run()
 
     def levelUp(self):
         while True:

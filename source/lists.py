@@ -101,9 +101,9 @@ WEAPON_EXTREME = ['Pirate Ship Cannon']
 ARMOUR_HEAD = ['Army Helmet', 'Gas Mask', 'Beanie', 'Top Hat', 'Knight Helmet' ]
 ARMOUR_OFFHAND = ['Shield', 'Gauntlet', 'Japanese Fan', ]
 ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty']
-ITEM_PREFIX_BAD = ["Bad"]
-ITEM_PREFIX_OK = ["Ok"]
-ITEM_PREFIX_GOOD = ["Good"]
+ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy"]
+ITEM_PREFIX_OK = ["Ok", "Wieldy"]
+ITEM_PREFIX_GOOD = ["Good", "Pretty Good"]
 ITEM_PREFIX_REALLYGOOD = ["Really Good"]
 ### enemies ##############################################################################
 
