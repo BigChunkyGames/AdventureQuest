@@ -4,40 +4,63 @@ import random
 from lists import getRandomWeaponName, getRandomItemPrefix
 
 class Item():
-    def __init__(self, player, name, description="", rarity = 'common', _type=None, damage=0, block=0, sellValue = None):
+    def __init__(self, player, name, customDescription='', rarity = None, _type=None, damage=0, block=0, sellValue = None):
         '''
-        Rarities: common, rare, epic, legendary
+        Rarities: None, common, rare, epic, legendary
         Types: weapon, armour, consumable, quest
+        make customDescription None to have no description at all.
+        Items don't know if they are equipped, only player does
+        Set sellValue to None to generate a default value
         '''
         self.player = player
         self.name = name
-        self.description = description
         self.rarity = rarity 
         self.type = _type    
-
         self.damage = damage
         self.block = block
 
-        if sellValue == None: self.sellValue = self.getSellValue() 
+        if sellValue == None: self.sellValue = self.generateSellValue() 
+        else: self.sellValue = sellValue
 
-    def getSellValue(self):
+        if customDescription == None:  self.description == ''
+        else: self.description = self.buildItemDescriptionString(custom=customDescription)
+        
+    def generateSellValue(self):
         mult =1
-        if self.rarity == 'rare': mult =2
-        if self.rarity == 'epic': mult =3
-        if self.rarity == 'legendary': mult =4
-        return int( random.randint(self.player.level,self.player.level * 2) * mult ) # SCALING
+        if self.rarity == None: mult =1
+        elif self.rarity == 'rare': mult =2
+        elif self.rarity == 'epic': mult =3
+        elif self.rarity == 'legendary': mult =4
+        return int( random.randint(1+self.player.level,1+self.player.level * 2) * mult ) # SCALING
 
-    def buildItemDescriptionString(self):
-        s = self.name + '[' + self.rarity.capitalize() + ']' + '\n'
+
+
+    def equipOrConsumeItem(self, item):
+        if item._type == 'quest':
+            return False
+        elif item._type == 'consumable':
+            pass # TODO
+        elif item._type == 'weapon':
+            self.player.equippedWeapon = item
+
+
+    def buildItemDescriptionString(self, custom=''):
+        if not self.rarity == None: # if has a rarity
+            s = self.name + ' [' + self.rarity.capitalize() + ']' + '\n'
+        else: 
+            s = self.name + '\n'
+        s += '\n'
         if self.damage > 0:
             s += 'Damage: ' + str(self.damage) + '\n'
         if self.block > 0:
             s += 'Block:  ' + str(self.block) + '\n'
         if self.sellValue > 0:
-            s += 'Value:  ' + str(self.sellValue) + '\n'
+            s += 'Value: $' + str(self.sellValue) +  '\n'
+        s += custom
         return s
+        # TODO: flavorize
 
-def generateRandomWeapon(player, rarity = 'common', goodnessBoost=0, extreme=False): 
+def generateRandomWeapon(player, rarity = 'common', goodnessBoost=0, extreme=False, customDescription=''): 
     ''' goodnessBoost makes the weapon a lot better (or worse if neg)
     '''
     prefix = generatePrefix(player, goodnessBoost+3)
@@ -45,11 +68,9 @@ def generateRandomWeapon(player, rarity = 'common', goodnessBoost=0, extreme=Fal
     damage = 3 * (2 ** (player.level)) + prefix.damageMod# SCALING
     block = prefix.blockMod
 
-    i = Item(player, name, description='', rarity=rarity, _type='weapon', damage=damage, block=block)
+    i = Item(player, name, customDescription=customDescription, rarity=rarity, _type='weapon', damage=damage, block=block)
     i.description = i.buildItemDescriptionString()
     return i
-
-
 
 
 class ItemPrefix():

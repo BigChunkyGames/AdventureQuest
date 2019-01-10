@@ -3,6 +3,7 @@ from lists import *
 from utils import *
 from map import *
 from inventoryUI import *
+from item import Item
 
 class Player:
 
@@ -29,9 +30,15 @@ class Player:
         self.strength = 1 # base attack
         self.level = 0
         self.healthRegen = 2
-        self.devmode = False
         
         self.inventory = [] # list of item objects
+        fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
+        self.inventory.append(fists)
+        self.equippedWeapon = fists
+        self.equippedArmourHead = None
+        self.equippedArmourChest = None
+        self.equippedArmourLegs = None
+        self.equippedArmourFeet = None
 
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown

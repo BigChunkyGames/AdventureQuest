@@ -76,9 +76,9 @@ class InventoryUI():
         self.radiosCategories = RadioList2(
             values=self.radiosCategoriesContents,
             app = self)
-        self.radiosCategories.description = self.unicodify(self.player.getAllInventoryItemsAsString(_type='weapon')) # set default before selecting
 
         self.currentRadios = self.radiosCategories
+        self.description = self.radiosCategories.description
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -87,8 +87,7 @@ class InventoryUI():
         self.bindings.add('left')(focus_previous)
         self.bindings.add('c-m')(self.handleEnter)
         self.bindings.add('escape')(self.handleEscape)
-        # self.bindings.add('up')(self.setSelectedIndexTextUp)
-        # TODO: make secret easter egg key bindings # self.bindings.add('a', 'a')(self.test)  
+
         self.style = Style.from_dict({
             'dialog.body':        'bg:#000000 #ffcccc', #background color, text color
         })
@@ -110,12 +109,13 @@ class InventoryUI():
     def handleEscape(self, event):
         if self.currentRadios == self.radiosCategories:
             self.done()
-        else:
+        else: # return to main page
             self.currentRadios = self.radiosCategories
+            self.description = self.radiosCategories.description
             self.refresh()
 
     def handleEnter(self, event):
-        if self.currentRadios == self.radiosCategories:
+        if self.currentRadios == self.radiosCategories: # if on main page
             if self.radiosCategories._selected_index == 0:
                 radiosList = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
             if self.radiosCategories._selected_index == 1:
@@ -125,12 +125,12 @@ class InventoryUI():
             if self.radiosCategories._selected_index == 3:
                 radiosList = self.player.getAllInventoryItemsAsObjectList(_type='quest')
             radiosList = self.tuplify(radiosList)
-            self.radiosSelection = RadioList2(
+            self.selectedRadios = RadioList2(
                 values=radiosList,
                 app = self)       
-            self.currentRadios = self.radiosSelection
-    
-                
+            self.currentRadios = self.selectedRadios  
+        elif self.currentRadios == self.selectedRadios:
+            pass
         self.refresh()
 
     def tuplify(self, listt):
@@ -149,9 +149,11 @@ class InventoryUI():
         get_app().exit(result="")
 
     def refresh(self):
+        self.description = self.currentRadios.description
         self.application.layout=Layout(
             self.getRootContainer(),
             focused_element=self.currentRadios)
+        
         
 
     def makeFormattedText(self, text, color='#ffffff'):
@@ -183,7 +185,7 @@ class InventoryUI():
                 Dialog(
                     title = descriptionText,
                     body=TextArea(
-                        text=self.radiosCategories.description, 
+                        text=self.description, 
                         style='bg:#000000',
                         height=10,
                     ),
