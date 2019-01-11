@@ -4,10 +4,11 @@ import random
 from lists import getRandomWeaponName, getRandomItemPrefix
 
 class Item():
-    def __init__(self, player, name, customDescription='', rarity = None, _type=None, damage=0, block=0, sellValue = None):
+    def __init__(self, player, name, customDescription='', rarity = None, _type=None, damage=0, block=0, sellValue = None, armourSlot = None):
         '''
         Rarities: None, common, rare, epic, legendary
         Types: weapon, armour, consumable, quest
+        ArmourSlots: head, chest, legs, feet
         make customDescription None to have no description at all.
         Items don't know if they are equipped, only player does
         Set sellValue to None to generate a default value
@@ -18,6 +19,9 @@ class Item():
         self.type = _type    
         self.damage = damage
         self.block = block
+
+        if self.type == 'armour': self.armourSlot = armourSlot
+        else: self.armourSlot = None
 
         if sellValue == None: self.sellValue = self.generateSellValue() 
         else: self.sellValue = sellValue
@@ -32,8 +36,6 @@ class Item():
         elif self.rarity == 'epic': mult =3
         elif self.rarity == 'legendary': mult =4
         return int( random.randint(1+self.player.level,1+self.player.level * 2) * mult ) # SCALING
-
-
 
     def equipOrConsumeItem(self, item):
         if item._type == 'quest':
@@ -63,6 +65,22 @@ class Item():
 def generateRandomWeapon(player, rarity = 'common', goodnessBoost=0, extreme=False, customDescription=''): 
     ''' goodnessBoost makes the weapon a lot better (or worse if neg)
     '''
+    prefix = generatePrefix(player, goodnessBoost+3)
+    name = prefix.adjective + " " + getRandomWeaponName(extreme) 
+    damage = 3 * (2 ** (player.level)) + prefix.damageMod# SCALING
+    block = prefix.blockMod
+
+    i = Item(player, name, customDescription=customDescription, rarity=rarity, _type='weapon', damage=damage, block=block)
+    i.description = i.buildItemDescriptionString()
+    return i
+
+def generateRandomArmour(player, rarity = 'common', armourSlot=None, goodnessBoost=0, extreme=False, customDescription=''): 
+    ''' goodnessBoost makes the weapon a lot better (or worse if neg)
+    '''
+    
+    if armourSlot == None: 
+        pass
+
     prefix = generatePrefix(player, goodnessBoost+3)
     name = prefix.adjective + " " + getRandomWeaponName(extreme) 
     damage = 3 * (2 ** (player.level)) + prefix.damageMod# SCALING

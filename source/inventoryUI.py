@@ -124,6 +124,7 @@ class InventoryUI():
                 radiosList = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
             if self.radiosCategories._selected_index == 3:
                 radiosList = self.player.getAllInventoryItemsAsObjectList(_type='quest')
+            # radiosList = self.showEquipped(radiosList)
             radiosList = self.tuplify(radiosList)
             self.selectedRadios = RadioList2(
                 values=radiosList,
@@ -132,6 +133,13 @@ class InventoryUI():
         elif self.currentRadios == self.selectedRadios:
             pass
         self.refresh()
+
+    # def showEquipped(self, l):
+    #     ''' adds *'s to a weapon's name if it is equipped'''
+    #     for i in range(len(l)):
+    #         if l[i] == self.player.equippedWeapon or l[i] == self.player.equippedArmourChest or l[i] == self.player.equippedArmourHead or l[i] == self.player.equippedArmourLegs or l[i] == self.player.equippedArmourFeet:
+    #             l[i].name = '*' + l[i].name + '*'
+    #     return l
 
     def tuplify(self, listt):
         if len(listt) == 0:

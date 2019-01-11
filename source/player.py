@@ -74,6 +74,9 @@ class Player:
         x = InventoryUI(self)
         x.run()
 
+    def addToInventory(self, item):
+        self.inventory.insert(0, item) # add to front of list so most recent items are in front
+
     def levelUp(self):
         while True:
             self.level = self.level + 1
@@ -158,6 +161,7 @@ class Player:
             print("You now have " + str(self.hp) + " HP.")
             print("")
 
+    def die(self): self.death()
     def death(self):
         show("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:")
         show('*I think I left the oven on at home*')
@@ -184,6 +188,15 @@ class Player:
         self.hp = self.maxhp
         print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
         show("@Your HP has been restored to full!@green@")
+
+
+
+
+
+    # INTRO STUFF v #################################################
+
+
+
 
     def charcreation(self):
         while True:
