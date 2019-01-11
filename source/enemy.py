@@ -4,9 +4,10 @@ from lists import *
 
 class Enemy:
 
-    # biome options are plains, firest, desert, mountain
+    # 
     # make sure not to misspell those
     def __init__(self, player, biome):
+        '''biome options are plains, firest, desert, mountain'''
         self.player = player
         # traits
         self.biome = biome

@@ -2,10 +2,9 @@ import random
 from source.utils import * # import all functions from utils
 from source.intro import *
 from source.player import *
-from source.places.maintown import *
 from source.devMode import *
 from source.world import *
-from source.places.dogeTown import *
+from source.places.flowers import flowers
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
@@ -27,6 +26,11 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
+
+
+            flowers(self.player)
+
+            #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
             x = InventoryUI(self.player)
             x.run()
             print x.result
@@ -46,8 +50,8 @@ g.start()
 print "the end"
 
 
+
 ''' tests
-c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
 
 
 

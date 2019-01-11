@@ -118,10 +118,6 @@ class CombatUI():
         return int(100*(float(value)/float(max)))
 
     def handleEnter(self, event):
-        if self.enemy.hp == 0: # check if he dead
-            self.result = "win"
-            get_app().exit(result="win")
-            return
         if not self.playerGoesNext: # check if it's actually your turn
             self.enemyTurn()
             return
@@ -153,6 +149,11 @@ class CombatUI():
             return
         else:
             self.battleLog += "How did you do that!?"
+            
+        if self.enemy.hp == 0: # check if he dead
+            self.result = "win"
+            get_app().exit(result="win")
+            return
         self.refresh()
         self.enemyTurn()
     

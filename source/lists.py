@@ -98,13 +98,16 @@ INVALID_OPTION_TRAVELING = ["You tried to go that way but it didn't make any sen
 ### items ##############################################################################
 WEAPON = ['Great Sword', 'Claymore', 'Dagger', 'Staff', 'Hatchet', 'Nunchucks', 'Ninja Stars', 'Switchblade', 'Butterfly Knife', 'Mace', 'Club', 'Boomerang', 'Trident', 'Spear', 'Sickle', 'Bow and Arrow', 'Sheers', 'Sling',  'Whip', 'Spade', 'Hammer']
 WEAPON_EXTREME = ['Pirate Ship Cannon']
-ARMOUR_HEAD = ['Army Helmet', 'Gas Mask', 'Beanie', 'Top Hat', 'Knight Helmet' ]
-ARMOUR_OFFHAND = ['Shield', 'Gauntlet', 'Japanese Fan', ]
-ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty']
-ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy"]
-ITEM_PREFIX_OK = ["Ok", "Wieldy"]
-ITEM_PREFIX_GOOD = ["Good", "Pretty Good"]
-ITEM_PREFIX_REALLYGOOD = ["Really Good"]
+ARMOUR_HEAD = ['Army Helmet', 'Gas Mask', 'Beanie', 'Top Hat', 'Knight Helmet', "Straw Hat", "Ski Mask", "Conical Party Hat", "Propeller Cap" ]
+ARMOUR_OFFHAND = ['Shield', 'Gauntlet', 'Japanese Fan', "Frying Pan"]
+ARMOUR_CHEST = ["Sleeveless T-shirt", "Chainmail Cuirass", "Sweat Shirt", ]
+ARMOUR_LEGS = ["Ripped Jeans", "Short Shorts", "Skort", "Ballerina Tutu", "Hip Joggers", "Jeggings"]
+ARMOUR_FEET = ["Fresh Kicks", "A Pair of the Newest Air-Jordan's"]
+ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty', "Really Dull", "Damaged", "Fake"]
+ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy", "Unwieldy", "Dull", "Poor", "Stupid", "Corroded", ]
+ITEM_PREFIX_OK = ["Ok", "Wieldy", "Average", "Nice", "Decent", "Cool", "Pokey", "Kinda Sharp", "Real" ]
+ITEM_PREFIX_GOOD = ["Good", "Pretty Good", "Swift", "Near-mint", "Sharp",'Like-new', getRandomDankAdjective(), ]
+ITEM_PREFIX_REALLYGOOD = ["Really Good", "Excellent", "Prestine", "Very Sharp"]
 ### enemies ##############################################################################
 
 # these can have duplicate names for different biomes and even duplicates within biome

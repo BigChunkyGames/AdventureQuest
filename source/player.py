@@ -14,7 +14,8 @@ class Player:
     def __init__(self): 
          # lists
         self.aspect = {'name' : 'no name'}  # Beginning inputs (name, gender, etc) used in storytelling
-        self.visitedareas = {} # a dict of visited areas
+        self.visitedareas = {} # a dict of visited areas 'area name': times visited (int)
+        self.choices = [] # a list of choices (strings) used to keep track of what the player did
         self.teleportableAreas = {}
         self.clantags = []
         # points
@@ -30,12 +31,16 @@ class Player:
         self.strength = 1 # base attack
         self.level = 0
         self.healthRegen = 2
+        self.affinity=0 # keep track of how nice or evil player is
         
         self.inventory = [] # list of item objects
         fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
         self.inventory.append(fists)
+        #shoes = Item(self, 'Old Tennis Shoes', customDescription="Knuckle up!", rarity=None, _type='weapon', sellValue=0 )
+        #self.inventory.append(shoes) # TODO
         self.equippedWeapon = fists
         self.equippedArmourHead = None
+        self.equippedArmourOffhand = None
         self.equippedArmourChest = None
         self.equippedArmourLegs = None
         self.equippedArmourFeet = None
@@ -76,6 +81,7 @@ class Player:
 
     def addToInventory(self, item):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
+        show("The " + item.name + " was added to your inventory!")
 
     def levelUp(self):
         while True:

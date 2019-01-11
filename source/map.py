@@ -4,9 +4,10 @@ from utils import *
 from tile import *
 from combat import * 
 # this is going to need to import all places
-from places.maintown import *
-from places.burntTown import *
-from places.dogeTown import *
+from places.maintown import maintown
+from places.burntTown import burntTown
+from places.dogeTown import dogeTown
+from places.flowers import flowers
 
 class Map:
 
@@ -93,7 +94,8 @@ class Map:
         self.getTile(7,1).placeFunction = lambda player: dogeTown(player) 
         self.getTile(6,5).description = "your home town." # maintown
         self.getTile(6,5).placeFunction = lambda player: maintown(player) 
-        self.getTile(8,5).description = "a beatiful field of flowers." # maintown
+        self.getTile(8,5).description = "a beautiful field of flowers." # maintown
+        self.getTile(8,5).placeFunction = lambda player: flowers(player)
         self.getTile(10,5).description = "smoke billowing from over the hills."
         self.getTile(10,5).placeFunction = lambda player: burntTown(player) 
         

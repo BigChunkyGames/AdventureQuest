@@ -28,6 +28,7 @@ def world(player):
             player.map.goTo(player.currentLocationX -1, player.currentLocationY, player)
             
         elif (x == "back" or x == "b" or x == "cancel" or x == "c"):
+            player.map.goTo(player.currentLocationX, player.currentLocationY , player)
             return
         
         elif (x == "t" or x == "travel"):

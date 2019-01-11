@@ -102,8 +102,14 @@ def checkInput(inp, choice):
         return True
     else: return False
 
-def wait(seconds): # accepts floats
-    time.sleep(seconds)
+def wait(seconds, printOnSecond=False): # accepts floats
+    ''' printOnSecond is a string btw'''
+    if printOnSecond == False:
+        time.sleep(seconds)
+    else:
+        for s in range(seconds):
+            print(printOnSecond).strip(),
+            time.sleep(1)
 
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
@@ -164,7 +170,8 @@ def getInput(player):
             show("Game loaded!")
         else:
             return inp
-    
+
+
 # HOW TO PRINT COLOR
 #print(Fore.RED + 'some red text')
 #print(Back.GREEN + 'and with a green background')

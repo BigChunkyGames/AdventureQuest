@@ -34,6 +34,7 @@ def maintown(player):
                 show("Off to find your grandpa eh? Mom said to head EAST.")
             else:
                 show("You decide to leave your home town for greener pastures.")
+                # TODO wormhole
             break # this break right here is really important. now code continues where maintown was called (hopefully in world)
         else:
             show(getInvalidOptionText())
