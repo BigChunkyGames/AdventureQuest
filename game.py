@@ -28,7 +28,7 @@ class Game: # perhaps this is what should be saved
             devMode(self.player)
 
 
-            flowers(self.player)
+            #flowers(self.player)
 
             #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
             x = InventoryUI(self.player)

@@ -4,14 +4,13 @@ import random
 from lists import getRandomWeaponName, getRandomItemPrefix
 
 class Item():
-    def __init__(self, player, name, customDescription='', rarity = None, _type=None, damage=0, block=0, sellValue = None, armourSlot = None):
+    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None):
         '''
         Rarities: None, common, rare, epic, legendary
         Types: weapon, armour, consumable, quest
-        ArmourSlots: head, chest, legs, feet
-        make customDescription None to have no description at all.
-        Items don't know if they are equipped, only player does
+        ArmourSlots: head, offhand, chest, legs, feet
         Set sellValue to None to generate a default value
+        customActivationFunction gets called when item is activated (equipped)
         '''
         self.player = player
         self.name = name
@@ -19,6 +18,9 @@ class Item():
         self.type = _type    
         self.damage = damage
         self.block = block
+        self.customActivationFunction = customActivationFunction
+        self.customDescription = customDescription
+        self.equipped = False
 
         if self.type == 'armour': self.armourSlot = armourSlot
         else: self.armourSlot = None
@@ -26,8 +28,21 @@ class Item():
         if sellValue == None: self.sellValue = self.generateSellValue() 
         else: self.sellValue = sellValue
 
-        if customDescription == None:  self.description == ''
-        else: self.description = self.buildItemDescriptionString(custom=customDescription)
+        self.description = self.buildItemDescriptionString(custom=customDescription)
+
+    def getName(self):
+        '''changes return value if item is equipped'''
+        if self.equipped:
+            return self.name + ' (equipped)'
+        else:
+            return self.name
+        
+    def toggleEquipped(self):
+        if not self.equipped:
+            self.equipped = True
+        else:
+            self.equipped = False
+        self.description = self.buildItemDescriptionString(custom=self.customDescription)
         
     def generateSellValue(self):
         mult =1
@@ -37,20 +52,13 @@ class Item():
         elif self.rarity == 'legendary': mult =4
         return int( random.randint(1+self.player.level,1+self.player.level * 2) * mult ) # SCALING
 
-    def equipOrConsumeItem(self, item):
-        if item._type == 'quest':
-            return False
-        elif item._type == 'consumable':
-            pass # TODO
-        elif item._type == 'weapon':
-            self.player.equippedWeapon = item
-
-
     def buildItemDescriptionString(self, custom=''):
+        if self.equipped: equip = '(equipped)'
+        else: equip = ''
         if not self.rarity == None: # if has a rarity
-            s = self.name + ' [' + self.rarity.capitalize() + ']' + '\n'
+            s = self.name + ' [' + self.rarity.capitalize() + '] ' + equip + '\n'
         else: 
-            s = self.name + '\n'
+            s = self.name + ' ' + equip + '\n'
         s += '\n'
         if self.damage > 0:
             s += 'Damage: ' + str(self.damage) + '\n'

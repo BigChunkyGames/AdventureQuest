@@ -44,35 +44,10 @@ class InventoryUI():
             ]) 
         self.result = None
 
+        # main categories
+
         self.radiosCategoriesContents = []
-        t = self.getItemText('weapon')
-        if not t == '': 
-            tup = []
-            tup.append(t)
-            tup.append('Weapons')
-            self.radiosCategoriesContents.append( tuple(tup) )
-
-        t = self.getItemText('armour')
-        if not t == '': 
-            tup = []
-            tup.append(t)
-            tup.append('Armour')
-            self.radiosCategoriesContents.append( tuple(tup) )
-
-        t = self.getItemText('consumable')
-        if not t == '': 
-            tup = []
-            tup.append(t)
-            tup.append('Consumable')
-            self.radiosCategoriesContents.append( tuple(tup) )
-            
-        t = self.getItemText('quest')
-        if not t == '': 
-            tup = []
-            tup.append(t)
-            tup.append('Quest')
-            self.radiosCategoriesContents.append( tuple(tup) )
-
+        self.populateMainCategories()
         self.radiosCategories = RadioList2(
             values=self.radiosCategoriesContents,
             app = self)
@@ -103,13 +78,16 @@ class InventoryUI():
             full_screen=True,
             )
 
+
+
     def getItemText(self, _type):
-        return self.unicodify(self.player.getAllInventoryItemsAsString(_type=_type))
+        return 
 
     def handleEscape(self, event):
         if self.currentRadios == self.radiosCategories:
             self.done()
         else: # return to main page
+            self.populateMainCategories()
             self.currentRadios = self.radiosCategories
             self.description = self.radiosCategories.description
             self.refresh()
@@ -117,38 +95,45 @@ class InventoryUI():
     def handleEnter(self, event):
         if self.currentRadios == self.radiosCategories: # if on main page
             if self.radiosCategories._selected_index == 0:
-                radiosList = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
+                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
             if self.radiosCategories._selected_index == 1:
-                radiosList = self.player.getAllInventoryItemsAsObjectList(_type='armour')
+                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='armour')
             if self.radiosCategories._selected_index == 2:
-                radiosList = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
+                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
             if self.radiosCategories._selected_index == 3:
-                radiosList = self.player.getAllInventoryItemsAsObjectList(_type='quest')
-            # radiosList = self.showEquipped(radiosList)
-            radiosList = self.tuplify(radiosList)
-            self.selectedRadios = RadioList2(
-                values=radiosList,
-                app = self)       
-            self.currentRadios = self.selectedRadios  
-        elif self.currentRadios == self.selectedRadios:
-            pass
+                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
+            self.makeListCurrentRadios(self.listOfItems)   
+        elif self.currentRadios == self.selectedRadios: # if not on main page
+            # user selected a category
+            # hitting enter will activate selection
+            self.player.activateItem(self.listOfItems[self.selectedRadios._selected_index])
+            self.makeListCurrentRadios(self.listOfItems, self.selectedRadios._selected_index)   
+
+    def makeListCurrentRadios(self, lisp, selectedIndex=0):
+        self.listOfItemsTupled = self.tuplify(lisp)
+        self.selectedRadios = RadioList2(
+            values=self.listOfItemsTupled,
+            app = self)    
+        self.selectedRadios._selected_index = selectedIndex
+        self.currentRadios = self.selectedRadios 
         self.refresh()
+
 
     # def showEquipped(self, l):
     #     ''' adds *'s to a weapon's name if it is equipped'''
     #     for i in range(len(l)):
     #         if l[i] == self.player.equippedWeapon or l[i] == self.player.equippedArmourChest or l[i] == self.player.equippedArmourHead or l[i] == self.player.equippedArmourLegs or l[i] == self.player.equippedArmourFeet:
-    #             l[i].name = '*' + l[i].name + '*'
+    #             l[i].name = '*' + l[i].name + '* (equipped)'
     #     return l
 
     def tuplify(self, listt):
         if len(listt) == 0:
-            return [('Nothing here!', 'empty')]
+            return [('Nothing here!', 'empty')] # should never see this
         newlist=[]
         for i in range(len(listt)):
             l = []
             l.append(self.unicodify(listt[i].description))
-            l.append(self.unicodify(listt[i].name))
+            l.append(self.unicodify(listt[i].getName()))
             newlist.append( tuple(l) )
         return newlist
 
@@ -157,12 +142,27 @@ class InventoryUI():
         get_app().exit(result="")
 
     def refresh(self):
+        #self.populateMainCategories()
         self.description = self.currentRadios.description
         self.application.layout=Layout(
             self.getRootContainer(),
             focused_element=self.currentRadios)
         
-        
+    def populateMainCategories(self):
+        self.radiosCategoriesContents = []
+        self.populateMainCategoriesHelper('weapon')
+        self.populateMainCategoriesHelper('armour')
+        self.populateMainCategoriesHelper('consumable')
+        self.populateMainCategoriesHelper('quest')
+
+    def populateMainCategoriesHelper(self, category):
+        s = self.unicodify(self.player.getAllInventoryItemsAsString(_type=category))
+        if not s == '': 
+            tup = []
+            tup.append(s)
+            if category == 'weapon': tup.append('Weapons')
+            else: tup.append(category.capitalize())
+            self.radiosCategoriesContents.append( tuple(tup) )
 
     def makeFormattedText(self, text, color='#ffffff'):
         return FormattedText([
@@ -170,7 +170,10 @@ class InventoryUI():
         ])
 
     def unicodify(self, text):
-        return unicode(text,"utf-8")
+        if isinstance(text, str):
+            return unicode(text,"utf-8")
+        else:
+            return text
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
@@ -205,4 +208,7 @@ class InventoryUI():
     def run(self):
         self.application.run()
  
-
+# TODO:
+# fix escaping after changing equip status inst reflected in main menu
+# fists should be equipped but it says they're not
+# make the inventory window smaller to make room for a status menu

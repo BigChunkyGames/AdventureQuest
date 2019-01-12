@@ -31,31 +31,52 @@ class Player:
         self.strength = 1 # base attack
         self.level = 0
         self.healthRegen = 2
-        self.affinity=0 # keep track of how nice or evil player is
+        self.karma=0 # keep track of how nice or evil player is
         
         self.inventory = [] # list of item objects
-        fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
-        self.inventory.append(fists)
-        #shoes = Item(self, 'Old Tennis Shoes', customDescription="Knuckle up!", rarity=None, _type='weapon', sellValue=0 )
-        #self.inventory.append(shoes) # TODO
-        self.equippedWeapon = fists
+    
+        self.equippedWeapon = None
         self.equippedArmourHead = None
         self.equippedArmourOffhand = None
         self.equippedArmourChest = None
         self.equippedArmourLegs = None
         self.equippedArmourFeet = None
 
+        self.getInitialItems()
+
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
 
-    def getAllInventoryItemsAsString(self,_type=None):
+#### inventory #########################################
+
+    def getInitialItems(self): # TODO Flavorize
+
+        fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
+        self.addToInventory(fists, printAboutIt=False, activateNow = True) 
+
+        hat = Item(self, 'Baseball Cap', customDescription="You got this when you joined the little league in 7th grade.\nIt's red and smells like dirt.", rarity=None, _type='armour', armourSlot='head', sellValue=1 )
+        self.addToInventory(hat, printAboutIt=False, activateNow = True) 
+
+        tshirt = Item(self, 'T-Shirt', customDescription="A black T-Shirt with a cool skull on the front.\nYou can't remember the last time this was washed, but it smells fine to you.", rarity=None, _type='armour', armourSlot='chest', sellValue=1 )
+        self.addToInventory(tshirt, printAboutIt=False, activateNow = True) 
+
+        pants = Item(self, 'Sweat Pants', customDescription="They make a nice 'swish' sound when you walk.", rarity=None, _type='armour', armourSlot='legs', sellValue=1 )
+        self.addToInventory(pants, printAboutIt=False, activateNow = True) 
+
+        shoes = Item(self, 'Old Tennis Shoes', customDescription="You can't remember buying these, but you've worn them every day since.", rarity=None, _type='armour', armourSlot='feet', sellValue=2 )
+        self.addToInventory(shoes, printAboutIt=False, activateNow = True) 
+
+    def getAllInventoryItemsAsString(self,_type=None, showEquipped=True):
         '''Can specify all inventory items of type weapon, armour, consumable, or quest'''
         i = 0
         s = ''
         while i < len(self.inventory):
             if self.inventory[i].type == _type or _type==None:
-                s += self.inventory[i].name + '\n'
+                if showEquipped:
+                    s += self.inventory[i].getName() + '\n'
+                else:
+                    s += self.inventory[i].name + '\n'
             i = i + 1
         return s
 
@@ -69,19 +90,98 @@ class Player:
             i = i + 1
         return l
 
-    def getTileAtCurrentLocation(self):
-        return self.map.getTile(self.currentLocationX, self.currentLocationY)
-        
-    def getAspect(self, s):
-        return self.aspect[s]
-
     def openInventory(self):
         x = InventoryUI(self)
         x.run()
+        return x.result
 
-    def addToInventory(self, item):
+    def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
-        show("The " + item.name + " was added to your inventory!")
+        if printAboutIt: show("The " + item.name + " was added to your inventory!")
+        if activateNow: self.activateItem(item)
+
+    '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
+    def activateItem(self, item):
+        if not item.customActivationFunction == None:
+            return item.customActivationFunction()
+
+        if item.equipped == True:
+            item.toggleEquipped()
+            return
+
+        elif item.type == 'weapon':
+            self.unequipAll(_type='weapon')
+            self.equippedWeapon = item
+            item.toggleEquipped()
+        elif item.type == 'armour':
+            if item.armourSlot == 'head':
+                self.unequipAll(_type='armour', armourSlot='head')
+                self.equippedArmourHead == item
+            elif item.armourSlot == 'chest':
+                self.unequipAll(_type='armour', armourSlot='chest')
+                self.equippedArmourChest == item
+            elif item.armourSlot == 'offhand':
+                self.unequipAll(_type='armour', armourSlot='offhand')
+                self.equippedArmourOffhand == item
+            elif item.armourSlot == 'legs':
+                self.unequipAll(_type='armour', armourSlot='legs')
+                self.equippedArmourLegs == item
+            elif item.armourSlot == 'feet':
+                self.unequipAll(_type='armour', armourSlot='feet')
+                self.equippedArmourFeet == item
+            else:
+                return False
+            item.toggleEquipped()
+        elif item.type == 'consumable':
+            pass # TODO consumables
+        elif item.type == 'quest':
+            pass # TODO quest
+        else:
+            return False
+
+    ''' sets item.equipped to false for all items of type'''
+    def unequipAll(self, _type = None, armourSlot = None):
+        for i in self.inventory:
+            if _type == 'weapon' and i.type == 'weapon':
+                i.equipped = False
+            elif _type == 'armour' and i.type == 'armour':
+                if i.armourSlot == armourSlot:
+                    i.equipped = False
+            else:
+                i.equipped = False
+
+
+
+#### map ######################################################
+
+    def getTileAtCurrentLocation(self):
+        return self.map.getTile(self.currentLocationX, self.currentLocationY)
+        
+#### player history ######################################################
+
+    def getAspect(self, s):
+        return self.aspect[s]
+
+    def addToTeleportableAreas(self, placeName, function):
+        if placeName not in self.teleportableAreas:
+            self.teleportableAreas[placeName.lower().strip()] = function
+
+    def addVisit(self, area):
+        if area in self.visitedareas:
+            self.visitedareas[area] += 1
+        else :
+            self.visitedareas[area] = 1
+
+    def getVisits(self, area, add = ""):
+        #  Returns number of times visited
+        if add == "add":
+            self.addVisit(area)
+        if area in self.visitedareas:
+            return self.visitedareas[area] # return amount of times visited including this time if added
+        else:
+            return 0
+
+#### leveling ####################################################
 
     def levelUp(self):
         while True:
@@ -133,24 +233,7 @@ class Player:
             self.levelUp()
         raw_input("... ")
 
-    def addToTeleportableAreas(self, placeName, function):
-        if placeName not in self.teleportableAreas:
-            self.teleportableAreas[placeName.lower().strip()] = function
-
-    def addVisit(self, area):
-        if area in self.visitedareas:
-            self.visitedareas[area] += 1
-        else :
-            self.visitedareas[area] = 1
-
-    def getVisits(self, area, add = ""):
-        #  Returns number of times visited
-        if add == "add":
-            self.addVisit(area)
-        if area in self.visitedareas:
-            return self.visitedareas[area] # return amount of times visited including this time if added
-        else:
-            return 0
+#### Combat ##########################################
 
     def takeDamage(self, d):
         self.hp = self.hp - d
@@ -195,14 +278,7 @@ class Player:
         print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
         show("@Your HP has been restored to full!@green@")
 
-
-
-
-
-    # INTRO STUFF v #################################################
-
-
-
+#### INTRO STUFF #################################################
 
     def charcreation(self):
         while True:

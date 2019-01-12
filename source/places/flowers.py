@@ -13,7 +13,7 @@ def flowers(player):
         show("There is only one way to get through the flowers.")
         print ("Attack the flowers?")
         if yesno(player):
-            player.affinity = player.affinity - 1
+            player.karma = player.karma - 1
             attackFlowers(player) # TODO disable escape and dodge
         else:
             show("You decide to wait.")
@@ -48,7 +48,7 @@ def flowers(player):
             printc("@'Smash'@yellow@ him under your foot or @tell him that you really loved his poem@yellow@?" )
             x = getInput(player)
             if checkInput(x, "smash") or checkInput(x, 'Smash'):
-                player.affinity = player.affinity - 3
+                player.karma = player.karma - 3
                 show('You prepare to stomp the pesky worm.')
 
                 e = Enemy(player, "plains")
@@ -71,7 +71,7 @@ def flowers(player):
                     return
 
             elif 'love' in x or 'like' in x or 'enjoy' in x:
-                player.affinity = player.affinity + 1
+                player.karma = player.karma + 1
                 show("The worm stops and looks at you.")
                 show("A single tear wells in his eye.")
                 show('"No one has ever complimented my poem before..."')
