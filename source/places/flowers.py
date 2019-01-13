@@ -3,11 +3,12 @@ from source.utils import *
 from source.enemy import Enemy
 from source.combat import Combat
 from source.item import Item
+from source.places.wormHome import wormHome
 
 
 def flowers(player):
     if player.getVisits("flowers", "add") == 1 :
-        show("Anemones, daffodils, irises, daisies, larkspurs, dahlias, sunflowers, carnations, and amaryllis sprawl for miles around.")
+        show("Daffodils, irises, daisies, larkspurs, dahlias, sunflowers, carnations, and amaryllis sprawl for miles around.")
         show("They are so densly arranged and neatly packed that they block your path.")
         show("There is no other way across the field.")
         show("There is only one way to get through the flowers.")
@@ -32,12 +33,12 @@ def flowers(player):
         if yesno(player):
             word = "like"
             show("Scrawled on the old tattered paper is a poem written in extremely small handwriting. It is nearly impossible to read. You can just barely make out what it says...")
-            show('Song of a Worm')
-            show('')
-            show('My lonely home is a hole in the soil')
-            show("I've exhausted my thoughts")
-            show('And now gladly recoil.')
-            show('')
+            show('Song of a Worm', dots=False)
+            print('')
+            show('My lonely home is a hole in the soil', dots=False)
+            show("I've exhausted my thoughts", dots=False)
+            show('And now gladly recoil.', dots=False)
+            print('')
         else: 
             word = "read"
         show("You hear a faint, angry squeaking coming from a hole near your shoe.") # TODO say     what shoe armour is
@@ -62,10 +63,40 @@ def flowers(player):
                 description = "Tiny tattered legal document. It says:\nWhomst ever holds this deed has rightful ownshership over 'Worm Home'."
                 i = Item(player, "Deed to 'Worm Home'", customDescription=description,  _type='Quest', )
                 player.addToInventory(i) # FIXME inventory
-                show("Enter Worm Home?")
+                print("Enter Worm Home?")
                 if yesno(player):
                     show("You open the tiny door to the worm's underground abode and walk inside.")
                     show("However small it looked from the outside, Worm Home is surprisingly spacious.")
+                    show("There are pictures hanging on the dirt walls of the entryway.")
+                    show("The pictures is a family photo of Angry Worm Poet and his loving parents.")
+                    show("He was an even smaller wormling then.")
+                    show("A happy wormling with joyfilled cherub cheeks.")
+                    show("A family tree is knitted into a tapestry on the far wall above a quaint table supporting a bouquet of freshly picked flowers.")
+                    show('“Angry Worm Poet” is the last worm on the family tree.')
+                    show("A freshly baked pie lays uneaten on the windowsill.")
+                    show("There is a note next to the pie.")
+                    show('“Here’s your pie for the week, my little Angry Worm Poet.')
+                    show("It’s strawberry rhubarb, your favorite!")
+                    show("I hope you think of me with every scrumptious bite.")
+                    show("I’ll have a new one for you next week.")
+                    print("")
+                    show("So, how are things with Beautiful Worm Girlfriend?")
+                    show("Did you pop the question yet?")
+                    show("She is just going to love Worm Grandmother’s old wedding ring.")
+                    show("You two were made for each other!")
+                    show("I can’t wait to see you and hear all about it.")
+                    show("I’ve just been so lonely after your father died.")
+                    show("If anything were to ever happen to you…")
+                    show("You’re all I have…")
+                    show("We just won’t think about that!")
+                    print("")
+                    show("Your loving mother,")
+                    show('Loving Worm Mom “')
+                    show("You return the note to the windowsill.")
+                    print("Take the pie?")
+                    if yesno(player): takeThePie(player)
+                    return wormHome(player) 
+                     
                 else:
                     show("You've had enough of this.")
                     return
@@ -87,17 +118,38 @@ def flowers(player):
                         if checkInput(x, "chamomile"):
                             show("Andy pours you a cup of chamomile tea")
                             tea = 'Chamomile'
+                            break
                         elif checkInput(x, "lavender"):
                             show("Andy pours you a cup of lavender tea")
                             tea = 'Lavender'
+                            break
                         else:
                             print("Which tea do you want?")
                     receiveTea(player, tea)
+                    show('"You know, this ol\' home is just too big for a small guy like me"')
+                    show('"I wish I lived closer to some kind people that liked my poem."')
+                    show("@Andy is really starting to open up to you@yellow@.")
+                    show('"If only there where a way that I could show my poem to the world…"')
+                    show('"Why don\'t you keep it. You obviously love it even more than I do."')
+                    recievePoem(player)
+                    show('"I was actually going to throw it away."')
+                    show('"That\'s why it was laying discarded like that in the dirt outside my hole."')
+                    show("\"I just can't find it within myself to appreciate my own work.\"")
+                    show("\"It's different when you’ve experienced the countless hours that went into each word of the poem.\"")
+                    show('"What a wonderful conversation we\'ve been having."')
+                    show('"You are a true friend."')
+                    show('"You can come back if you’d like."')
+                    show('"To have some more tea."')
+                    show('"And talk."')
+                    show('')
+                    show('')
+                    show('')
+
                 else:
                     show("I understand...")
                     show("Well...")
                     show("I want you to have this poem.")
-                    receivePoem(player)
+                    recievePoem(player)
 
             else:
                 print("If you liked his poem, just tell him.")
@@ -108,14 +160,22 @@ def flowers(player):
         elif 'waited for flowers' in player.choices:
             show("You come to a field of flowers that part away from you wherever you walk and find Worm Home.")
         else:
-            show("How did you do that?!")
+            show("THIS IS A BUGGED SCENARIO")
 
-            
+def takeThePie(player):
+    i = Item(player, "Angry Worm Poet's Pie", customDescription="It's strawberry rhubarb, his favorite.", _type='consumable', sellValue=8)
+    i.customActivationFunction = lambda:i.consume(heal=3)
+    player.addToInventory(i)            
+    # TODO test that this works, also say something about how bad you feel eating this when it is consumed
+
 def receiveTea(player, tea):
-    i = Item()
+    i = Item(player, tea + ' tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
+    i.customActivationFunction = lambda:i.consume(heal=3)
+    player.addToInventory(i)
 
-
-
+def recievePoem(player):
+    i = Item(player, 'A poem by Andy Worm Poet', customDescription="Song of a Worm\n\nMy lonely home is a hole in the soil\nI've exhausted my thoughts\nAnd now gladly recoil.", _type='quest', sellValue=0 )
+    player.addToInventory(i)
 
 def attackFlowers(player):
     player.choices.append("attacked flowers")

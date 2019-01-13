@@ -14,10 +14,12 @@ import getpass
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
 
-def show(text):
+def show(text, dots=True):
     #  Displays text, waits for 'enter' before continuing.
     printc(text)
-    prompt='... '.encode('ascii','ignore')
+    if dots: text='... '
+    else: text = ''
+    prompt=text.encode('ascii','ignore')
     x=getpass.getpass(prompt) # waits for enter, doesnt show typed input becuase it's treated like a password
 
 
@@ -98,17 +100,18 @@ def formatText(text, format):
 
 # returns true if input = choice or input = first char of choice
 def checkInput(inp, choice):
+    choice = choice.strip()
     if inp == choice or inp == choice[0]:
         return True
     else: return False
 
-def wait(seconds, printOnSecond=False): # accepts floats
+def wait(seconds, printThisStringEachSecond=False): # accepts floats
     ''' printOnSecond is a string btw'''
-    if printOnSecond == False:
+    if printThisStringEachSecond == False:
         time.sleep(seconds)
     else:
         for s in range(seconds):
-            print(printOnSecond).strip(),
+            print(printThisStringEachSecond),
             time.sleep(1)
 
 def yesno(player):

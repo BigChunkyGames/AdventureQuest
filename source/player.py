@@ -12,6 +12,7 @@ class Player:
 # or in another file like this ex. player.clantags[]
 
     def __init__(self): 
+        self.devmode = False
          # lists
         self.aspect = {'name' : 'no name'}  # Beginning inputs (name, gender, etc) used in storytelling
         self.visitedareas = {} # a dict of visited areas 'area name': times visited (int)
@@ -47,6 +48,11 @@ class Player:
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
+
+#### misc ##############################################
+
+    def getInput(self): # redundent
+        return getInput(self)
 
 #### inventory #########################################
 
@@ -97,7 +103,7 @@ class Player:
 
     def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
-        if printAboutIt: show("The " + item.name + " was added to your inventory!")
+        if printAboutIt: show(item.name + " was added to your inventory!")
         if activateNow: self.activateItem(item)
 
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
@@ -260,22 +266,30 @@ class Player:
         print("Anyway, on with the game... ")
         # TODO
     
-    def regenHealth(self, r = None):
-        if r == None:
+    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True):
+        ''' set health to None for regen health like at end of combat'''
+        if health == None:
+            health = self.healthRegen
             self.hp = self.hp + self.healthRegen
-            print "You regained ",
-            printWithColor(str(self.healthRegen) + " HP", "green", after = "!")
         else:
-            self.hp = self.hp + r
-            print "You regained ",
-            printWithColor(str(r) + " HP", "green", after = "!")
+            self.hp = self.hp + health
+        text = "You regained @" + str(health) + " HP@green@!"
         if self.hp > self.maxhp:
             self.hp = self.maxhp
-        show("You now have " + str(self.hp) + "/" + str(self.maxhp) + " HP.")
+        if showCurrentHealth:
+            text += "\nYou now have " + str(self.hp) + "/" + str(self.maxhp) + " HP."
+        if returnString:
+            return text
+        else:
+            show(text)
 
-    def sleep(self):
+    def sleep(self, customText=None):
         self.hp = self.maxhp
-        print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
+        if customText == None: 
+            print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
+        else:
+            print customText
+        # TODO flavorize
         show("@Your HP has been restored to full!@green@")
 
 #### INTRO STUFF #################################################

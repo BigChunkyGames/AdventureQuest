@@ -7,10 +7,10 @@ class Item():
     def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None):
         '''
         Rarities: None, common, rare, epic, legendary
-        Types: weapon, armour, consumable, quest
+        Types: weapon, armour, consumable, quest, 
         ArmourSlots: head, offhand, chest, legs, feet
         Set sellValue to None to generate a default value
-        customActivationFunction gets called when item is activated (equipped)
+        customActivationFunction is a lambda that gets called when item is activated (equipped)
         '''
         self.player = player
         self.name = name
@@ -69,6 +69,19 @@ class Item():
         s += custom
         return s
         # TODO: flavorize
+
+    def consume(self, text=None, heal=None):
+        ''' returns text about what happened after consumption. make sure to printc'''
+        # TODO make lots of effects
+        if self.type == 'consumable':
+            if text == None:
+                text = "You ate the " + self.name + ".\nIt was delicious."
+            if heal:
+                text += self.player.regenHealth(heal, returnAsString=True, showCurrentHealth=False)
+        else:
+            text = "You can't eat that!"
+        return text
+
 
 def generateRandomWeapon(player, rarity = 'common', goodnessBoost=0, extreme=False, customDescription=''): 
     ''' goodnessBoost makes the weapon a lot better (or worse if neg)

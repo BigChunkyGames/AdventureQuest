@@ -7,6 +7,7 @@
 from source.utils import *
 from source.lists import *
 from source.miniGames.RockPaperScissors import RPSGame
+from source.world import *
 
 
 def maintown(player):
@@ -34,10 +35,11 @@ def maintown(player):
                 show("Off to find your grandpa eh? Mom said to head EAST.")
             else:
                 show("You decide to leave your home town for greener pastures.")
-                # TODO wormhole
-            break # this break right here is really important. now code continues where maintown was called (hopefully in world)
+            # TODO wormhole
+            world(player)
+            return
         else:
-            show(getInvalidOptionText())
+            print(getInvalidOptionText() + '\n')
 
 def home(player):
     show("You enter your house through the familiar front door, taking in "

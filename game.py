@@ -14,13 +14,13 @@ print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.devMode = 1 # on
+        self.player.devMode = True 
 
     def getPlayer(self):
         return self.player
 
     def start(self):
-        if not self.devMode: 
+        if not self.player.devMode: 
             self.player.charcreation() 
             introduction(self.player)
             maintown(self.player)
@@ -28,7 +28,7 @@ class Game: # perhaps this is what should be saved
             devMode(self.player)
 
 
-            #flowers(self.player)
+            flowers(self.player)
 
             #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
             x = InventoryUI(self.player)

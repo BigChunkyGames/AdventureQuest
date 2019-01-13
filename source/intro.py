@@ -17,14 +17,14 @@ def introduction(player): #TODO i think we should change the intro to be less de
                                       player.aspect['occ'], player.aspect['viverb'],
                                       player.aspect['hisher'])
     raw_input("... ")
-    show("...but first, %s was thirsty." % player.aspect['heshe'])
+    show("but first, %s was thirsty." % player.aspect['heshe'])
     clear()    
     printc("You recognize your humble town's @'tavern'@yellow@ to the north.")
     print("Type 'tavern' and press enter to enter the tavern. ")
     attempts = 0
     dies = 0
     move = getInput(player)
-    while move != "tavern":
+    while not move == "t" and not move == 'tavern' :
         if move == "'tavern'":
             print "Good job but you don't need to type the 'single quotes'."
             break
@@ -44,7 +44,7 @@ def introduction(player): #TODO i think we should change the intro to be less de
             show("Your eyes are raisins.")
             player.death()
         else:
-            print("If you really don't want to go to the tavern you can always type 'die' to die of dehydration.")
+            printc("If you really don't want to go to the tavern you can always type @'die'@yellow@ to die of dehydration.")
             
         
         move = getInput(player)
@@ -98,7 +98,6 @@ def introduction(player): #TODO i think we should change the intro to be less de
          'do," you say.')
     show("Looking into your eyes with a piercing stare, the bartender "
          "speaks the word that will change your life forever.")
-    print("")
     raw_input(" ")
     print("...")
     raw_input(" ")

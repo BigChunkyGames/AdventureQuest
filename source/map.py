@@ -89,13 +89,18 @@ class Map:
     def initializeTileAttributes(self):
         #TODO: add description for each town ie to the north you see ...
         #TODO: add place functions too
-        # try to keep these organized by y then x
+        # try to keep these organized by y then x (top to bottom)
         self.getTile(7,1).description = "a number of cute doggos prancing about."
         self.getTile(7,1).placeFunction = lambda player: dogeTown(player) 
+
         self.getTile(6,5).description = "your home town." # maintown
         self.getTile(6,5).placeFunction = lambda player: maintown(player) 
+
+        self.getTile(7,5).fightChance = 0 # tile to right of hometown
+
         self.getTile(8,5).description = "a beautiful field of flowers." # maintown
         self.getTile(8,5).placeFunction = lambda player: flowers(player)
+
         self.getTile(10,5).description = "smoke billowing from over the hills."
         self.getTile(10,5).placeFunction = lambda player: burntTown(player) 
         
