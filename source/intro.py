@@ -6,9 +6,9 @@ def introduction(player): #TODO i think we should change the intro to be less de
          "hell, we looked to the legends.")
     show("Only one true hero could save us from our seemingly "
          "inevitable fate. The legends spoke of a time long ago.")
-    print("Past the {0} hills of {1} was a town named {2}. Here "
+    print("In the {0} land of {1} was a town named {2}. Here "
           "resided the adventurer, {3}, a {4} and {5} {6}."
-          ).format(player.aspect['adj1'], player.aspect['hills'], player.aspect['town'],
+          ).format(player.aspect['adj1'], player.aspect['land'], player.aspect['town'],
                    player.aspect['name'], player.aspect['adj2'], player.aspect['adj3'],
                    player.aspect['occ'])
     raw_input("... ")  # TODO: Replace "a" with "an" when needed
@@ -36,7 +36,7 @@ def introduction(player): #TODO i think we should change the intro to be less de
         elif move == "die" and dies == 0:
             dies = dies +1
             show("Though extremely thirsty, you refuse to go to the tavern and drink.")
-            print("If you don't go to the 'tavern' soon, you really might keel over from dehydration.")
+            printc("If you don't go to the @'tavern'@yellow@ soon, you really might keel over from dehydration.")
         elif move == "die" and dies > 0:
             dies = dies +1
             show("Your throat dries and cracks like splintering ice.")

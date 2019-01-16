@@ -82,6 +82,12 @@ def getInvalidOptionText(traveling=False):
 def getRandomDogNoise():
     return getRandomIndex(DOG_NOISES)
 
+def getConversationResponse(responses = 1):
+    response='"'
+    for i in range(responses):
+        response += getRandomIndex(CONVERSATION)+" "
+    return response + '"'
+
 
 # these are constants. thats why they're all caps
 ### misc ##############################################################################
@@ -89,11 +95,17 @@ def getRandomDogNoise():
 DANKADJECTIVES = ["Dank", "Sick", "MLG", "Nice", "Dope", "Swiggity" ]
 DANKNAMES = ["Caillou", "Gabe Newell", "Batman", "Sanic", "Peppa Pig", "Pepe", "Famous Basketball Player Shaquille O'Neal", "Big Man Tyrone", "Voiceover Pete", "Shrek", "Neil deGrasse Tyson", "Bill Nye the Science Guy", "xXx_Sinpars_xXx", "Nicholas Cage", "Sergei Rachmaninoff"]
 DANKCLOTHING = ["dick sock", "red bandana", "blue bandana", "single sock", "ski mask", "Christmas stocking"]
-MOTHERLYPLATITUDES = ["There's no 'I' in 'Team'!", "Everybody makes mistakes. Don't forget to save often!", "Time heals all wounds. If you're injured, find a place to sleep!", "Work smarter, not harder. A lot of times, you can just type the first letter of a choice instead of the whole word."]
 INVALID_OPTION = ["That is not a good choice." ,"Pick something else.", "I'm really going to need you to input a valid option.",
  "Try that again.", "Try that again but this time choose a valid option.", "THROW EXCEPTION: \"User chose an option that wasn't one of the options surrounded by single quotes like they should have\"", "raise AssertionError(\"User can't type.\")", 
  "I'm really sorry but that's just not a valid option", "I like what you're thinking but choose an option that is valid.", "The words with 'single quotes' around them are the ones that can be chosen so make sure to type one of those.", "The yellow words. Pick one of those.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."  ]
 INVALID_OPTION_TRAVELING = ["You tried to go that way but it didn't make any sense.", "You tried to go there but ended up right back where you started.", "That is no place you should be going right now.", "Sorry, that is off-limits.", "You thought about going that way but changed your mind.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."]
+
+### NPC's #############################################################################
+
+#(hints)
+MOTHERLYPLATITUDES = ["There's no 'I' in 'Team'!", "Everybody makes mistakes. Don't forget to save often!", "Time heals all wounds. If you're injured, find a place to sleep!", "Work smarter, not harder. A lot of times, you can just type the first letter of a choice instead of the whole word.", "Sometimes you can choose options that aren't listed, like 'back' to cancel what you're doing."]
+CONVERSATION = ["Oh wow!", "That sounds incredible.", "No way!"," You are so amazing.", "I can't even believe how great that is.", "Of course!", "Tell me more!", "More!", "WHAT.", "You're fearless.", "JEALOUS!", "You didn't."]
+DOG_NOISES = ["bark", "woof", "scrrf","yarrar","boof","birf","huuurg","ruff","rough","yip","yip yip", "bark bark","gruph","bow", "bow wow", "grrrrr"]
 
 ### items ##############################################################################
 WEAPON = ['Great Sword', 'Claymore', 'Dagger', 'Staff', 'Hatchet', 'Nunchucks', 'Ninja Stars', 'Switchblade', 'Butterfly Knife', 'Mace', 'Club', 'Boomerang', 'Trident', 'Spear', 'Sickle', 'Bow and Arrow', 'Sheers', 'Sling',  'Whip', 'Spade', 'Hammer']
@@ -146,8 +158,6 @@ ATTACK_VERBS_EXTREME = ["nuke", "fireblast", "falcon punch", "no-scope", "ult"]
 
 PAIN_NOISES = ["Youch!", "Oof!", "Ouch!", "Owwee!", "That has got to hurt.", "Should have dodged that.", 
     "That looked like it hurt!", "Dang!", "Ooch!", "Ow!", "~ouch~"]
-DOG_NOISES = ["bark", "woof", "scrrf","yarrar","boof","birf","huuurg","ruff","rough","yip","yip yip", "bark bark","gruph","bow", "bow wow", "grrrrr"]
-
 
 # ex.
 #print "look out! here comes a " + getRandomDankAdjective() + " " + getRandomEnemyName("forest")

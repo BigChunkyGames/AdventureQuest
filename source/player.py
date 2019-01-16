@@ -1,7 +1,7 @@
 # the player class holds all of the information about the player. This class also handles input for player information
 from lists import *
 from utils import *
-from map import *
+from map import Map
 from inventoryUI import *
 from item import Item
 
@@ -13,12 +13,14 @@ class Player:
 
     def __init__(self): 
         self.devmode = False
-         # lists
+        # dicts
         self.aspect = {'name' : 'no name'}  # Beginning inputs (name, gender, etc) used in storytelling
+        self.counters = {} # name : int
         self.visitedareas = {} # a dict of visited areas 'area name': times visited (int)
-        self.choices = [] # a list of choices (strings) used to keep track of what the player did
-        self.teleportableAreas = {}
+        self.teleportableAreas = {} # same as visitedareas but these are the places the wormhole can go to 
+        # lists
         self.clantags = []
+        self.choices = [] # a list of choices (strings) used to keep track of what the player did (should probably be called player history)
         # points
         self.dogecoin = 5
         self.dankpoints = 0
@@ -28,23 +30,20 @@ class Player:
         # stats
         self.hp = 10
         self.maxhp = 10
-
         self.strength = 1 # base attack
         self.level = 0
         self.healthRegen = 2
         self.karma=0 # keep track of how nice or evil player is
-        
+        # inventory
         self.inventory = [] # list of item objects
-    
         self.equippedWeapon = None
         self.equippedArmourHead = None
         self.equippedArmourOffhand = None
         self.equippedArmourChest = None
         self.equippedArmourLegs = None
         self.equippedArmourFeet = None
-
         self.getInitialItems()
-
+        # location
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
@@ -156,8 +155,6 @@ class Player:
             else:
                 i.equipped = False
 
-
-
 #### map ######################################################
 
     def getTileAtCurrentLocation(self):
@@ -186,6 +183,16 @@ class Player:
             return self.visitedareas[area] # return amount of times visited including this time if added
         else:
             return 0
+
+    def countOf(self, name, increment=False): self.count(name,increment)
+    def count(self, name, increment=False):
+        # returns number of counts for a given name and adds 1 first if increment. if name not found, adds it to self.counters
+        if not name in self.counters:
+            self.counters[name] = 0
+        if increment==True:
+            self.counters[name] = self.counters[name] + 1
+        return self.counters[name]
+
 
 #### leveling ####################################################
 
@@ -296,26 +303,30 @@ class Player:
 
     def charcreation(self):
         while True:
-            print("Would you like to 'create' your own character or 'roleplay' one created for you?")
-            dec = getInput(self) # TODO handle inventory 
+            printc("Would you like to @'create'@yellow@ your own character or @'roleplay'@yellow@ one created for you?\n(") # TODO have this 
+            dec = getInput(self) 
             if dec == "create" or dec == "c":
                 self.aspect['name'] = self.name()
                 self.aspect['gender'] = self.gender()
                 self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
                 self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = self.impropernouns()
-                self.aspect['town'], self.aspect['hills'] = self.propernouns()
+                self.aspect['town'], self.aspect['land'] = self.propernouns()
                 self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
                 break
             elif dec == "roleplay" or dec == "r":
-                self.aspect['name'] = "Michael"
-                self.aspect['gender'] = "boi"
-                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
-                self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
-                self.aspect['town'], self.aspect['hills'] = "Swagsburgh", "Peak's Summit"
-                self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
+                self.generateAspects()
                 break
             else:
                 pass
+
+    def generateAspects(self):
+        self.aspect['name'] = "Michael"
+        self.aspect['gender'] = "boi"
+        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
+        self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
+        self.aspect['town'], self.aspect['land'] = "your home town", "Flat Earth"
+        self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
+    
         
     def name(self):
         charname = raw_input("Enter your hero's name: ").lower().strip().title()
@@ -362,11 +373,11 @@ class Player:
         while town == "":
             print("The name of the town can not be blank.")
             town = raw_input("Enter the name of the town: ").lower().title().strip()
-        hills = raw_input("Enter the name of the hills: ").lower().title().strip()
-        while hills == "":
-            print("The name of the hills can not be blank.")
-            hills = raw_input("Enter the name of the hills: ").lower().title().strip()
-        return town, hills
+        land = raw_input("Enter the name of the land: ").lower().title().strip()
+        while land == "":
+            print("The name of the land can not be blank.")
+            land = raw_input("Enter the name of the land: ").lower().title().strip()
+        return town, land
 
     def adjectives(self):
         while True:

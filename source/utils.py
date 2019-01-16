@@ -98,9 +98,9 @@ def formatText(text, format):
 # formatText("underline", "underline") 
 # formatText("hidden", "hidden") # still visible
 
-# returns true if input = choice or input = first char of choice
+# returns true if lowercase of input == choice or first char of choice
 def checkInput(inp, choice):
-    choice = choice.strip()
+    choice = choice.strip().lower()
     if inp == choice or inp == choice[0]:
         return True
     else: return False
@@ -147,6 +147,10 @@ def checklevel(xp):
 def getRandomIndex(arr):
     return arr[random.randint(0, len(arr)-1)]
 
+def getRandInt(min = 1, max= 10): # return random int between 1 and max
+    return random.randint(1, max)
+
+
 def getInput(player):
     while True:
         inp = raw_input("> ").lower().strip()
@@ -174,6 +178,24 @@ def getInput(player):
         else:
             return inp
 
+def bug(player):
+    if player.devmode:
+        show("@Well you hit a bug... You should probably fix that@red@")
+    else:
+        show("Oh my god. No. Not now.")
+        show("A bug like this!? At a time like this!?")
+        show("This can't be happening!")
+        show("Quick! Save your game before it's too late!")
+        show("Hurry!")
+        show("What is happening?! WHAT IS HAPPENING!?")
+        show("NOOOOOOOOOOOOO!!!!!!!!!!!")
+        assert False
+
+def checkForCancel(input):
+    if checkInput(input, 'back') or checkInput(input, 'cancel') or checkInput(input, 'return'):
+        return True
+    else:
+        return False
 
 # HOW TO PRINT COLOR
 #print(Fore.RED + 'some red text')

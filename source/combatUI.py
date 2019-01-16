@@ -189,7 +189,7 @@ class CombatUI():
         if self.enemy.missChancePercent + dodgeModifier > random.randint(0,100):
             # missed
             if not attack[-1] == "*": s += " but missed!\n"
-            else: s += " It missed!\n"
+            else: s += " But missed!\n"
         else:
             # hit
             damage = self.enemy.attack
