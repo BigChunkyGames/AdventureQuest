@@ -71,13 +71,14 @@ class Item():
         # TODO: flavorize
 
     def consume(self, text=None, heal=None):
-        ''' returns text about what happened after consumption. make sure to printc'''
+        ''' returns string about what happened after consumption (because consumption is only possible form inventory menu). '''
         # TODO make lots of effects
         if self.type == 'consumable':
             if text == None:
                 text = "You ate the " + self.name + ".\nIt was delicious."
             if heal:
-                text += self.player.regenHealth(heal, returnAsString=True, showCurrentHealth=False)
+                text += self.player.regenHealth(health = heal, returnString=True, showCurrentHealth=False)
+            self.player.inventory.remove(self)
         else:
             text = "You can't eat that!"
         return text

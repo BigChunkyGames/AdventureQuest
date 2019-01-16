@@ -48,9 +48,6 @@ class InventoryUI():
 
         self.radiosCategoriesContents = []
         self.populateMainCategories()
-        self.radiosCategories = RadioList2(
-            values=self.radiosCategoriesContents,
-            app = self)
 
         self.currentRadios = self.radiosCategories
         self.description = self.radiosCategories.description
@@ -94,20 +91,34 @@ class InventoryUI():
 
     def handleEnter(self, event):
         if self.currentRadios == self.radiosCategories: # if on main page
-            if self.radiosCategories._selected_index == 0:
-                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
-            if self.radiosCategories._selected_index == 1:
-                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='armour')
-            if self.radiosCategories._selected_index == 2:
-                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
-            if self.radiosCategories._selected_index == 3:
-                self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
-            self.makeListCurrentRadios(self.listOfItems)   
+            self.updateListOfItems()
+            self.makeListCurrentRadios(self.listOfItems) 
         elif self.currentRadios == self.selectedRadios: # if not on main page
             # user selected a category
             # hitting enter will activate selection
-            self.player.activateItem(self.listOfItems[self.selectedRadios._selected_index])
-            self.makeListCurrentRadios(self.listOfItems, self.selectedRadios._selected_index)   
+            self.player.activateItem(self.listOfItems[self.currentRadios._selected_index]) # can delete items
+            if self.updateListOfItems() == "empty":
+                return
+            else:
+                self.makeListCurrentRadios(self.listOfItems, self.listOfItems[self.selectedRadios._selected_index])  
+
+    def updateListOfItems(self):
+        if   self.radiosCategories._selected_index == 0:
+            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
+        elif self.radiosCategories._selected_index == 1:
+            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='armour')
+        elif self.radiosCategories._selected_index == 2:
+            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
+        elif self.radiosCategories._selected_index == 3:
+            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
+        if len(self.listOfItems) == 0:
+            # if consumed last item (most frequent case) do same thing as hitting escape
+            self.populateMainCategories()
+            self.currentRadios = self.radiosCategories
+            self.description = self.radiosCategories.description
+            self.refresh()
+            return "empty"
+
 
     def makeListCurrentRadios(self, lisp, selectedIndex=0):
         self.listOfItemsTupled = self.tuplify(lisp)
@@ -128,7 +139,7 @@ class InventoryUI():
 
     def tuplify(self, listt):
         if len(listt) == 0:
-            return [('Nothing here!', 'empty')] # should never see this
+            return [] # should never see this
         newlist=[]
         for i in range(len(listt)):
             l = []
@@ -154,9 +165,12 @@ class InventoryUI():
         self.populateMainCategoriesHelper('armour')
         self.populateMainCategoriesHelper('consumable')
         self.populateMainCategoriesHelper('quest')
+        self.radiosCategories = RadioList2(
+            values=self.radiosCategoriesContents,
+            app = self)
 
     def populateMainCategoriesHelper(self, category):
-        s = self.unicodify(self.player.getAllInventoryItemsAsString(_type=category))
+        s = self.unicodify(self.player.getAllInventoryItemsAsString(_type=category, showEquipped=True))
         if not s == '': 
             tup = []
             tup.append(s)

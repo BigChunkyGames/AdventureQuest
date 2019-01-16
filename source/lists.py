@@ -102,7 +102,7 @@ INVALID_OPTION = ["That is not a good choice." ,"Pick something else.", "I'm rea
  "Try that again.", "Try that again but this time choose a valid option.", "THROW EXCEPTION: \"User chose an option that wasn't one of the options surrounded by single quotes like they should have\"", "raise AssertionError(\"User can't type.\")", 
  "I'm really sorry but that's just not a valid option", "I like what you're thinking but choose an option that is valid.", "The words with 'single quotes' around them are the ones that can be chosen so make sure to type one of those.", "The yellow words. Pick one of those.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."  ]
 INVALID_OPTION_TRAVELING = ["You tried to go that way but it didn't make any sense.", "You tried to go there but ended up right back where you started.", "That is no place you should be going right now.", "Sorry, that is off-limits.", "You thought about going that way but changed your mind.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."]
-TV_SHOWS = ["Commercials", 'Soap', 'Opera', 'The News', 'Jeopardy', 'Wheel of Fortune', 'Spongebob', 'Emotionally Intense Drama', 'Cops', 'Reruns of your least favorite show', 'Oprah', 'Ellen', 'Static']
+TV_SHOWS = ["Commercials", 'Soap Opera', 'The News', 'Jeopardy', 'Wheel of Fortune', 'Spongebob', 'Emotionally Intense Drama', 'Cops', 'Reruns of your least favorite show', 'Oprah', 'Ellen', 'Static']
 
 ### NPC's #############################################################################
 

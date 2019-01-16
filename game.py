@@ -30,7 +30,9 @@ class Game: # perhaps this is what should be saved
             devMode(self.player)
 
             #flowers(self.player)
-            wormHome(self.player)
+            #self.player.choices.append('owns worm home')
+            #wormHome(self.player)
+            tea(self.player)
 
             #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
             x = InventoryUI(self.player)

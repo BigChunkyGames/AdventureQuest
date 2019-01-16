@@ -17,20 +17,27 @@ def wormHome(player):
             x = player.getInput()
             if checkInput(x, "Worm TV"):
                 show("You put Tubeworms in your eyes, sit back, and watch some T.V.")
-                for i in range(20):
+                for i in range(23):
                     wait(1, ". ")
-                    if i == 10:
+                    if i % 6 == 0 and i != 0:
                         print getRandomTVShow()
                 show("Your entire day is wasted.")
                 show("After a few too many hours, you stand up, lethargic and groggy, and try to regain your wasted time.")
                 show("But it is lost forever.")
             elif checkInput(x, 'bed'):
                 show("You continue into the next room.")
-                show("It used to be Angry Worm Poet's bedroom.")
+                if "killed angry worm poet" in player.choices:
+                    show("It used to be Angry Worm Poet's bedroom.")
+                else:
+                    show("It used to be Andy Worm Poet's bedroom.")
                 show("A worm and cozy bed is pushed to one corner.")
                 show("It is now yours. You may sleep in it whenever you wish.")
-                player.sleep(customText="You lay down in the worm and cozy bed. The wormth pushes you immediately into  a deep sleep.")
-                show("After that delightful nap you are again faced with a choice.")
+                print "Sleep now?"
+                if yesno(player):
+                    player.sleep(customText="You lay down in the worm and cozy bed. The wormth pushes you immediately into a deep sleep.")
+                    show("After that delightful nap you are again faced with a choice.")
+                else:
+                    show("You're not that tired anyway.")
             elif checkInput(x, 'Tape-Worm') or checkInput(x, "tape worm"):
                 show("You place the Tape-Worms in your ears.")
                 # TODO music sound

@@ -109,11 +109,9 @@ class Player:
     def activateItem(self, item):
         if not item.customActivationFunction == None:
             return item.customActivationFunction()
-
         if item.equipped == True:
             item.toggleEquipped()
             return
-
         elif item.type == 'weapon':
             self.unequipAll(_type='weapon')
             self.equippedWeapon = item
