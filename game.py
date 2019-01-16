@@ -6,7 +6,7 @@ from source.player import *
 from source.devMode import *
 from source.world import *
 from source.places.flowers import flowers
-from source.places.wormHome import tea
+from source.places.wormHome import tea, wormHome
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
@@ -29,7 +29,8 @@ class Game: # perhaps this is what should be saved
         else: # dev mode
             devMode(self.player)
 
-            flowers(self.player)
+            #flowers(self.player)
+            wormHome(self.player)
 
             #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
             x = InventoryUI(self.player)
