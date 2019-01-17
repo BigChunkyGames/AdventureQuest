@@ -44,13 +44,11 @@ class InventoryUI():
             ]) 
         self.result = None
 
-        # main categories
+        self.mainRadiosRows = []
+        self.populateMainRadios() # declares self.mainRadios
 
-        self.radiosCategoriesContents = []
-        self.populateMainCategories()
-
-        self.currentRadios = self.radiosCategories
-        self.description = self.radiosCategories.description
+        self.currentRadios = self.mainRadios
+        self.description = self.mainRadios.description
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -67,7 +65,7 @@ class InventoryUI():
         self.application = Application(
             layout=Layout(
                 self.getRootContainer(),
-                focused_element=self.radiosCategories,
+                focused_element=self.mainRadios,
             ),
             key_bindings=self.bindings,
             style=self.style,
@@ -75,22 +73,17 @@ class InventoryUI():
             full_screen=True,
             )
 
-
-
-    def getItemText(self, _type):
-        return 
-
     def handleEscape(self, event):
-        if self.currentRadios == self.radiosCategories:
+        if self.currentRadios == self.mainRadios:
             self.done()
         else: # return to main page
-            self.populateMainCategories()
-            self.currentRadios = self.radiosCategories
-            self.description = self.radiosCategories.description
+            self.populateMainRadios()
+            self.currentRadios = self.mainRadios
+            self.description = self.mainRadios.description
             self.refresh()
 
     def handleEnter(self, event):
-        if self.currentRadios == self.radiosCategories: # if on main page
+        if self.currentRadios == self.mainRadios: # if on main page
             self.updateListOfItems()
             self.makeListCurrentRadios(self.listOfItems) 
         elif self.currentRadios == self.selectedRadios: # if not on main page
@@ -103,19 +96,19 @@ class InventoryUI():
                 self.makeListCurrentRadios(self.listOfItems, self.listOfItems[self.selectedRadios._selected_index])  
 
     def updateListOfItems(self):
-        if   self.radiosCategories._selected_index == 0:
+        if   self.mainRadios._selected_index == 0:
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
-        elif self.radiosCategories._selected_index == 1:
+        elif self.mainRadios._selected_index == 1:
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='armour')
-        elif self.radiosCategories._selected_index == 2:
+        elif self.mainRadios._selected_index == 2:
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
-        elif self.radiosCategories._selected_index == 3:
+        elif self.mainRadios._selected_index == 3:
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
         if len(self.listOfItems) == 0:
             # if consumed last item (most frequent case) do same thing as hitting escape
-            self.populateMainCategories()
-            self.currentRadios = self.radiosCategories
-            self.description = self.radiosCategories.description
+            self.populateMainRadios()
+            self.currentRadios = self.mainRadios
+            self.description = self.mainRadios.description
             self.refresh()
             return "empty"
 
@@ -159,24 +152,24 @@ class InventoryUI():
             self.getRootContainer(),
             focused_element=self.currentRadios)
         
-    def populateMainCategories(self):
-        self.radiosCategoriesContents = []
-        self.populateMainCategoriesHelper('weapon')
-        self.populateMainCategoriesHelper('armour')
-        self.populateMainCategoriesHelper('consumable')
-        self.populateMainCategoriesHelper('quest')
-        self.radiosCategories = RadioList2(
-            values=self.radiosCategoriesContents,
+    def populateMainRadios(self):
+        self.mainRadiosRows = []
+        self.populateMainRadiosHelper('weapon')
+        self.populateMainRadiosHelper('armour')
+        self.populateMainRadiosHelper('consumable')
+        self.populateMainRadiosHelper('quest')
+        self.mainRadios = RadioList2(
+            values=self.mainRadiosRows,
             app = self)
 
-    def populateMainCategoriesHelper(self, category):
+    def populateMainRadiosHelper(self, category):
         s = self.unicodify(self.player.getAllInventoryItemsAsString(_type=category, showEquipped=True))
         if not s == '': 
             tup = []
             tup.append(s)
             if category == 'weapon': tup.append('Weapons')
             else: tup.append(category.capitalize())
-            self.radiosCategoriesContents.append( tuple(tup) )
+            self.mainRadiosRows.append( tuple(tup) )
 
     def makeFormattedText(self, text, color='#ffffff'):
         return FormattedText([
@@ -191,7 +184,7 @@ class InventoryUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        descriptionText = FormattedText([
+        descriptionTitle = FormattedText([
             ('#ffffff', "Description") # this shit is shit
         ])
         actionsTitle = FormattedText([
@@ -205,17 +198,17 @@ class InventoryUI():
                         self.currentRadios,
                     ], height= 10)
                 ),
-            ], padding=0, width = 100 ),
+            ], padding=0, width = 50 ),
             HSplit([
                 Dialog(
-                    title = descriptionText,
+                    title = descriptionTitle,
                     body=TextArea(
                         text=self.description, 
                         style='bg:#000000',
                         height=10,
                     ),
                 ),
-            ], padding=0, width = 100 ),
+            ], padding=0, width = 50 ),
         ])
         return root_container 
 

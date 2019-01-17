@@ -4,10 +4,10 @@ from utils import *
 from tile import *
 from combat import * 
 # this is going to need to import all places
-from places.maintown import maintown
-from places.burntTown import burntTown
-from places.dogeTown import dogeTown
-from places.flowers import flowers
+from places_maintown import maintown
+from places_burntTown import burntTown
+from places_dogeTown import dogeTown
+from places_flowers import flowers
 
 class Map:
 

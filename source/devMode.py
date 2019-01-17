@@ -24,10 +24,6 @@ def devMode(player):
 
     
 
-    # teleport player - make sure to import that place
-    # from places.maintown import *
-    # maintown(player)
-    # teleporting disabled - instead just modify game.py and change what debug mode skips
 
 
     return

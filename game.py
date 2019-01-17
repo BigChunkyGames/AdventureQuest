@@ -1,12 +1,12 @@
 import random
 from source.utils import * # import all functions from utils
 from source.intro import *
-from source.places.maintown import maintown
+from source.places_maintown import maintown
 from source.player import *
 from source.devMode import *
 from source.world import *
-from source.places.flowers import flowers
-from source.places.wormHome import tea, wormHome
+from source.places_flowers import flowers
+from source.places_wormHome import tea, wormHome
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.")
@@ -32,12 +32,12 @@ class Game: # perhaps this is what should be saved
             #flowers(self.player)
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
-            tea(self.player)
+            #tea(self.player)
 
             #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
             x = InventoryUI(self.player)
             x.run()
-            print x.result
+            print(x.result)
             #maintown(self.player)
 
             #world(self.play
@@ -51,7 +51,7 @@ g.start()
 
 
 
-print "the end"
+print ("the end")
 
 
 
