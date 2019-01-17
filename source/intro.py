@@ -1,4 +1,4 @@
-from utils import *
+from source.utils import *
 
 def introduction(player): #TODO i think we should change the intro to be less demanding of the player first thing. maybe we can add an option to have the lore given to the player or if they player can write the lore themselves
     clear()
@@ -12,8 +12,8 @@ def introduction(player): #TODO i think we should change the intro to be less de
                    player.aspect['name'], player.aspect['adj2'], player.aspect['adj3'],
                    player.aspect['occ'])
     raw_input("... ")  # TODO: Replace "a" with "an" when needed
-    print "{0} was a {1} {2}, ready to {3} any evil that would dare " \
-          "to cross {4} path.".format(player.aspect['HeShe'], player.aspect['adj4'],
+    print ("{0} was a {1} {2}, ready to {3} any evil that would dare " \
+          "to cross {4} path.").format(player.aspect['HeShe'], player.aspect['adj4'],
                                       player.aspect['occ'], player.aspect['viverb'],
                                       player.aspect['hisher'])
     raw_input("... ")
@@ -26,11 +26,11 @@ def introduction(player): #TODO i think we should change the intro to be less de
     move = getInput(player)
     while not move == "t" and not move == 'tavern' :
         if move == "'tavern'":
-            print "Good job but you don't need to type the 'single quotes'."
+            print ("Good job but you don't need to type the 'single quotes'.")
             break
         attempts = attempts +1
         if move == "house":
-            print "Calm down there m8, we'll get there later."
+            print ("Calm down there m8, we'll get there later.")
         elif attempts ==1:
             print("Come on now, it's spelled t-a-v-e-r-n.")
         elif move == "die" and dies == 0:

@@ -43,7 +43,8 @@ class Game: # perhaps this is what should be saved
             #world(self.play
             # er)
         
-#TODO: assuming new game each time. Should ask to load saved game data or start 
+#TODO: assuming ne
+# w game each time. Should ask to load saved game data or start 
 # new game. Below line creates a new game object but should
 # \ load if loading saved game
 g = Game()

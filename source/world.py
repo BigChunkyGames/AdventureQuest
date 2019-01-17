@@ -1,7 +1,7 @@
  # player comes here when they are not inside of a place or experiancing an event
 
-from utils import getInput, clear, show, printc, bug, yesno, checkForCancel
-from lists import getInvalidOptionText
+from source.utils import getInput, clear, show, printc, bug, yesno, checkForCancel
+from source.lists import getInvalidOptionText
 
 def world(player):
     player.addVisit("world")

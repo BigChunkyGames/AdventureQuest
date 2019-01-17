@@ -9,4 +9,6 @@
 
 *.json
 
-vscode.*
+.vscode/*
+
+env/*

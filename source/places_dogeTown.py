@@ -57,9 +57,9 @@ def dogeTown(player):
             show("That was fun, but now it's time to leave.")
         elif (x == "king" or x == "k" or x == "king's"):
             show("You approach an impractically large marble door at the top of another set of white marble steps.")
-            print "Open?"
+            print( "Open?")
             if yesno(player):
-                print "It's locked. Knock?"
+                print( "It's locked. Knock?")
                 if yesno(player):
                     show("You give the door a few knocks and it opens.")
                     show("King Dogedog III, ruffled and majestic, peers from behind the gigantic door.")
@@ -74,7 +74,7 @@ def dogeTown(player):
                             else:
                                 s += str(", " + getRandomDogNoise())
                         s += "."
-                        print s
+                        print( s)
                         if count == 4 or count > 10:
                             printc ("(if you ever get tired of talking you can always type @'leave'@yellow@)")
                         x = getInput(player)
@@ -105,7 +105,7 @@ def dogeTown(player):
                 show("There was something oddly familiar about that dog.")
             elif 1: # TODO if you have the costume equipped
                 show("Fitting right in, you crawl to the nearest pew and take a seat.")
-                print "Sing along?"
+                print( "Sing along?")
                 if yesno(player):
                     show("You try to sing along to the hymns but they are completely unpredictable.")
                 show("The song finishes and all of the soulful diggums look towards the front of the chapel.")
@@ -118,10 +118,10 @@ def dogeTown(player):
                 show('"Now please turn to page bork-hundred and 3."')
                 show("You pick up a book from under the seat in front of you.")
                 show("You have acquired 'The Sacred Texts of Buddhogism'.") # TODO inventory
-                print "Read it?"
+                print( "Read it?")
                 if yesno(player):
                     show("The entire book is written using dog words that you cannot understand.")
-                    print "Continue reading?"
+                    print( "Continue reading?")
                     if yesno(player):
                         show("You pretend to continue reading the book.")
                 show('The doggos begin chanting.')
@@ -280,7 +280,7 @@ def bathroom(player):
         #TODO inventory
         show("You put on the costume.")
     show("Having finished your business, you prepare to leave.")
-    print "Wash your hands first?"
+    print( "Wash your hands first?")
     if yesno(player):
         show("You wipe your hands on the grassy countertop and check yourself out in the mirror.")
         show("At the sight of yourself, you are fullfilled with confidence.")

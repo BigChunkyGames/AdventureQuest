@@ -5,7 +5,7 @@
 # TODO im prety sure all of these lists would be better (faster) as tuples but i dont really care enough to change it right now
 
 import random
-from utils import *
+from source.utils import *
 # from colorama import Fore
 # from colorama import Style
 

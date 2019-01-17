@@ -16,14 +16,14 @@ from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.layout.menus import CompletionsMenu
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea, Label, Frame, Box, Checkbox, Dialog, Button, MenuContainer, MenuItem
-from utilities.customBase import RadioList, ProgressBar # had to make some changes
+from source.customBase import RadioList, ProgressBar # had to make some changes
 #from pygments.lexers.html import HtmlLexer
 from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
 from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
-from lists import getRandomAttackVerb
-from utils import wait
+from source.lists import getRandomAttackVerb
+from source.utils import wait
 import re
 import random
 

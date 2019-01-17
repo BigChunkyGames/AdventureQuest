@@ -1,13 +1,13 @@
 import random
-from lists import FOREST_SYNONYMS,PLAINS_SYNONYMS,DESERT_SYNONYMS,MOUNTAINS_SYNONYMS,TRANSIT_SYNONYMS
-from utils import *
-from tile import *
-from combat import * 
+from source.lists import FOREST_SYNONYMS,PLAINS_SYNONYMS,DESERT_SYNONYMS,MOUNTAINS_SYNONYMS,TRANSIT_SYNONYMS
+from source.utils import *
+from source.tile import *
+from source.combat import * 
 # this is going to need to import all places
-from places_maintown import maintown
-from places_burntTown import burntTown
-from places_dogeTown import dogeTown
-from places_flowers import flowers
+from source.places_maintown import maintown
+from source.places_burntTown import burntTown
+from source.places_dogeTown import dogeTown
+from source.places_flowers import flowers
 
 class Map:
 
@@ -108,7 +108,7 @@ class Map:
     def goTo(self,x,y, player):
         clear()
         if self.getTile(x,y).type == "impassible":
-            print "you can't go that way." #TODO add flavor text
+            print( "you can't go that way.") #TODO add flavor text
             return
         player.currentLocationX = x
         player.currentLocationY = y

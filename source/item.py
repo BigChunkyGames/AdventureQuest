@@ -1,7 +1,7 @@
 
 # generates items
 import random
-from lists import getRandomWeaponName, getRandomItemPrefix
+from source.lists import getRandomWeaponName, getRandomItemPrefix
 
 class Item():
     def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None):

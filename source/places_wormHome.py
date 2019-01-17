@@ -20,7 +20,7 @@ def wormHome(player):
                 for i in range(23):
                     wait(1, ". ")
                     if i % 6 == 0 and i != 0:
-                        print getRandomTVShow()
+                        print( getRandomTVShow())
                 show("Your entire day is wasted.")
                 show("After a few too many hours, you stand up, lethargic and groggy, and try to regain your wasted time.")
                 show("But it is lost forever.")
@@ -32,7 +32,7 @@ def wormHome(player):
                     show("It used to be Andy Worm Poet's bedroom.")
                 show("A worm and cozy bed is pushed to one corner.")
                 show("It is now yours. You may sleep in it whenever you wish.")
-                print "Sleep now?"
+                print( "Sleep now?")
                 if yesno(player):
                     player.sleep(customText="You lay down in the worm and cozy bed. The wormth pushes you immediately into a deep sleep.")
                     show("After that delightful nap you are again faced with a choice.")

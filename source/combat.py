@@ -1,9 +1,9 @@
 import random
-from utils import show, clear
-from lists import getRandomEnemyName, getRandomAttackVerb
-from enemy import *
-from combatUI import *
-from item import tryForDrop
+from source.utils import show, clear
+from source.lists import getRandomEnemyName, getRandomAttackVerb
+from source.enemy import *
+from source.combatUI import *
+from source.item import tryForDrop
 #  TODO: consult other adventure games to see what a good attack:HP ratio is
 
 class Combat:
@@ -22,15 +22,15 @@ class Combat:
 
     def alert(self):
         # map.getTileDescription prints something about where you are.
-        print "From over your shoulder you notice",
-        print self.enemy.name,
-        print "attempting to", # TODO flavor text about realizing your're being attacked
+        print("From over your shoulder you notice"),
+        print( self.enemy.name),
+        print("attempting to"), # TODO flavor text about realizing your're being attacked
         attack = getRandomAttackVerb() 
         if attack[-1] == "*": # if attack finishes the sentence
-            print attack[:-1] # remove *
+            print( attack[:-1]) # remove *
         else :
-            print attack,
-            print "you!"
+            print( attack),
+            print( "you!")
         show("@You're being attacked!@red@") 
 
     def startCombat(self):

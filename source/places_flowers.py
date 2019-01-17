@@ -1,9 +1,9 @@
 
-from utils import *
-from enemy import Enemy
-from combat import Combat
-from item import Item
-from places_wormHome import wormHome, tea
+from source.utils import *
+from source.enemy import Enemy
+from source.combat import Combat
+from source.item import Item
+from source.places_wormHome import wormHome, tea
 
 # this file and wormhome sort of go together
 

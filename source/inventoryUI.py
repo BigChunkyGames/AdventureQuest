@@ -16,14 +16,14 @@ from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.layout.menus import CompletionsMenu
 from prompt_toolkit.styles import Style
 from prompt_toolkit.widgets import TextArea, Label, Frame, Box, Checkbox, Dialog, Button, MenuContainer, MenuItem
-from utilities.customBase import RadioList2 
+from source.customBase import RadioList2 
 #from pygments.lexers.html import HtmlLexer
 from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
 from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
-from lists import getRandomAttackVerb
-from utils import wait
+from source.lists import getRandomAttackVerb
+from source.utils import wait
 import re
 import random
 
@@ -34,13 +34,13 @@ class InventoryUI():
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
             self.playerName = FormattedText([
-                ('#ffffff', unicode(player.aspect['name'], "utf-8")),
+                ('#ffffff', player.aspect['name']),
                 ('', ' '),
                 ('#cc00cc', self.playerClans, "utf-8"),
             ]) 
         else: 
             self.playerClans =  self.playerName = FormattedText([
-                ('#ffffff', unicode(player.aspect['name'], "utf-8")),
+                ('#ffffff', player.aspect['name']),
             ]) 
         self.result = None
 
@@ -173,12 +173,12 @@ class InventoryUI():
 
     def makeFormattedText(self, text, color='#ffffff'):
         return FormattedText([
-            (color, unicode(text, "utf-8")) # this shit is shit
+            (color, str(text) )# this shit is shit
         ])
 
     def unicodify(self, text):
         if isinstance(text, str):
-            return unicode(text,"utf-8")
+            return str(text)
         else:
             return text
 

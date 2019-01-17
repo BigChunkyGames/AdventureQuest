@@ -1,9 +1,9 @@
 # the player class holds all of the information about the player. This class also handles input for player information
-from lists import *
-from utils import *
-from map import Map
-from inventoryUI import *
-from item import Item
+from source.lists import *
+from source.utils import *
+from source.map import Map
+from source.inventoryUI import *
+from source.item import Item
 
 class Player:
 
@@ -198,7 +198,7 @@ class Player:
         while True:
             self.level = self.level + 1
             print("")
-            print "You are now level ", 
+            print ("You are now level "), 
             printWithColor(str(self.level), "magenta", after= "!")
             self.experiencepoints = self.experiencepoints - self.levelupxp
             if self.experiencepoints < 0:
@@ -293,7 +293,7 @@ class Player:
         if customText == None: 
             print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
         else:
-            print customText
+            print (customText)
         # TODO flavorize
         show("@Your HP has been restored to full!@green@")
 

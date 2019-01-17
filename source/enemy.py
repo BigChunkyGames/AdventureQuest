@@ -1,6 +1,6 @@
 # this class makes enemies! obviously!!!!!!!
 import random
-from lists import *
+from source.lists import *
 
 class Enemy:
 

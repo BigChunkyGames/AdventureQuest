@@ -1,4 +1,4 @@
-from item import generateRandomWeapon
+from source.item import generateRandomWeapon
 
 
 def devMode(player):
