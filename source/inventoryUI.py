@@ -44,6 +44,7 @@ class InventoryUI():
         self.result = None
 
         self.mainRadiosRows = []
+        self.listOfItems = []
         self.populateMainRadios() # declares self.mainRadios
         self.currentRadios = self.mainRadios
         self.description = self.mainRadios.description # description is whataver is in the description box on the right
@@ -115,9 +116,8 @@ class InventoryUI():
             self.currentRadios = self.mainRadios
             self.refresh()
 
-
-
     def makeListCurrentRadios(self, lisp, selectedIndex=0):
+        lisp = self.refreshItemDescriptions(lisp)
         self.listOfItemsTupled = self.tuplify(lisp)
         self.selectedRadios = RadioList2(
             values=self.listOfItemsTupled,
@@ -126,6 +126,13 @@ class InventoryUI():
         self.currentRadios = self.selectedRadios 
         # self.description = self.currentRadios.values[selectedIndex]
         self.refresh()
+
+    def refreshItemDescriptions(self, lis):
+        for i in lis:
+            i.description = i.buildItemDescriptionString()
+        return lis
+
+
 
     def tuplify(self, listt):
         if len(listt) == 0:
@@ -139,11 +146,10 @@ class InventoryUI():
         return newlist
 
     def refresh(self, setDescription=False):
-        #self.populateMainCategories()
+        index = self.currentRadios._selected_index
         if setDescription:
             self.description = setDescription
         else:
-            index = self.currentRadios._selected_index
             self.description = self.currentRadios.values[index][0]
         
         self.application.layout=Layout(
@@ -233,4 +239,4 @@ class InventoryUI():
         get_app().exit(result="hit escape")
  
 # TODO:
-# fix escaping after changing equip status inst reflected in main menu
+# colors

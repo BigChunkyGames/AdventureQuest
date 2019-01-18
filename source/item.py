@@ -28,7 +28,7 @@ class Item():
         if sellValue == None: self.sellValue = self.generateSellValue() 
         else: self.sellValue = sellValue
 
-        self.description = self.buildItemDescriptionString(custom=customDescription)
+        self.description = self.buildItemDescriptionString()
 
     def getName(self):
         '''changes return value if item is equipped'''
@@ -42,7 +42,7 @@ class Item():
             self.equipped = True
         else:
             self.equipped = False
-        self.description = self.buildItemDescriptionString(custom=self.customDescription)
+        self.description = self.buildItemDescriptionString()
         
     def generateSellValue(self):
         mult =1
@@ -52,7 +52,7 @@ class Item():
         elif self.rarity == 'legendary': mult =4
         return int( random.randint(1+self.player.level,1+self.player.level * 2) * mult ) # SCALING
 
-    def buildItemDescriptionString(self, custom=''):
+    def buildItemDescriptionString(self):
         if self.equipped: equip = '(equipped)'
         else: equip = ''
         if not self.rarity == None: # if has a rarity
@@ -66,7 +66,7 @@ class Item():
             s += 'Block:  ' + str(self.block) + '\n'
         if self.sellValue > 0:
             s += 'Value: $' + str(self.sellValue) +  '\n'
-        s += custom
+        s += self.customDescription
         return s
         # TODO: flavorize
 

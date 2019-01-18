@@ -178,6 +178,9 @@ def wrap(text, limit=40, padding=True):
     out = ''
     l = text.split("\n")
     for s in l: # for each line
+        if s == "":
+            out += "\n"
+            continue
         out += pad
         w=0 
         for d in s.split(): # for each word
