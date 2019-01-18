@@ -48,6 +48,7 @@ def dogeTown(player):
             print("Look at his wares?")
             if yesno(player):
                 # TODO shop
+                # dogecoin
                 # treat, healing item
                 # frizbee, weapon
                 # bone, chew to gain 3 xp
@@ -149,7 +150,7 @@ def dogeTown(player):
                     show("Tears roll down your face as you realize that you are now reunited with your childhood dog, Bud.")
                     show('"It has been so long, ' + player.aspect["name"] + '".')
                     printc("@Bud has joined the party!@cyan@") # TODO party members, also do if bud in party then entering church is different
-                    raw_input("... ")
+                    input("... ")
                     show("Bud will aid you in your quest. With your efforts combined, you are one step closer to defeating your greatest enemy.")
             else:
                 show("Though the sound of the doggos singing sounds amazing from outside, you don't want to go back in there.")
@@ -223,7 +224,7 @@ def party(player):
          @@@                        
 """
             print(s)
-            raw_input("... ")
+            input("... ")
             show("The door on the @'right'@yellow@ has a symbol that looks like this:")
             s = """                                      
                          ,.. 
@@ -241,7 +242,7 @@ def party(player):
   ####%&,                                       
   """
             print(s)
-            raw_input("... ")
+            input("... ")
             while True:
                 print("Which door will you choose?")
                 x = getInput(player)

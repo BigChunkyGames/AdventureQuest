@@ -11,12 +11,12 @@ def introduction(player): #TODO i think we should change the intro to be less de
           ).format(player.aspect['adj1'], player.aspect['land'], player.aspect['town'],
                    player.aspect['name'], player.aspect['adj2'], player.aspect['adj3'],
                    player.aspect['occ'])
-    raw_input("... ")  # TODO: Replace "a" with "an" when needed
+    input("... ")  # TODO: Replace "a" with "an" when needed
     print ("{0} was a {1} {2}, ready to {3} any evil that would dare " \
           "to cross {4} path.").format(player.aspect['HeShe'], player.aspect['adj4'],
                                       player.aspect['occ'], player.aspect['viverb'],
                                       player.aspect['hisher'])
-    raw_input("... ")
+    input("... ")
     show("but first, %s was thirsty." % player.aspect['heshe'])
     clear()    
     printc("You recognize your humble town's @'tavern'@yellow@ to the north.")
@@ -55,13 +55,13 @@ def introduction(player): #TODO i think we should change the intro to be less de
           'says.')
     print("On the shelf is a bottle of 'rum' and a can of Mountain 'Dew'. "
           "Which do you choose? ('rum', 'dew') ")
-    drink = raw_input("> ").lower()
+    drink = input("> ").lower()
     while drink != "rum" and drink != "dew":
         if drink == 'neither':
             print("You've got to drink something. What'll it be? ")
         else:
             print("Come on, 'rum' or 'dew'. ")
-        drink = raw_input("> ").lower()
+        drink = input("> ").lower()
     if drink == "rum":
         show("You start to reach for the rum, and then realize that "
              "you're way too MLG for that weak shit.")
@@ -98,13 +98,13 @@ def introduction(player): #TODO i think we should change the intro to be less de
          'do," you say.')
     show("Looking into your eyes with a piercing stare, the bartender "
          "speaks the word that will change your life forever.")
-    raw_input(" ")
+    input(" ")
     print("...")
-    raw_input(" ")
+    input(" ")
     print(". . .")
-    raw_input(" ")
+    input(" ")
     print(".    .    .")
-    raw_input(" ")
+    input(" ")
     show('"k."')
     show("You sprint to your house to grab your shit.")
     show('You enter your house, hoping mum will get the camera. "Mom! I\'m '

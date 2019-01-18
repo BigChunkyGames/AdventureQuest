@@ -22,10 +22,10 @@ class Player:
         self.clantags = []
         self.choices = [] # a list of choices (strings) used to keep track of what the player did (should probably be called player history)
         # points
-        self.dogecoin = 5
-        self.dankpoints = 0
-        self.perkpoints = 0
-        self.experiencepoints = 0
+        self.money = 5
+        self.dankpoints = 0 # TODO
+        self.perkpoints = 0 # TODO
+        self.xp = 0
         self.levelupxp = 10
         # stats
         self.hp = 10
@@ -142,16 +142,16 @@ class Player:
         else:
             return False
 
-    ''' sets item.equipped to false for all items of type'''
+    ''' sets item.equipped to false for all items of type. if type=None, unequip all items'''
     def unequipAll(self, _type = None, armourSlot = None):
         for i in self.inventory:
             if _type == 'weapon' and i.type == 'weapon':
                 i.equipped = False
-            elif _type == 'armour' and i.type == 'armour':
-                if i.armourSlot == armourSlot:
-                    i.equipped = False
-            else:
+            elif _type == 'armour' and i.type == 'armour' and i.armourSlot == armourSlot:
                 i.equipped = False
+            elif _type == None:
+                i.equipped = False
+
 
 #### map ######################################################
 
@@ -200,9 +200,9 @@ class Player:
             print("")
             print ("You are now level "), 
             printWithColor(str(self.level), "magenta", after= "!")
-            self.experiencepoints = self.experiencepoints - self.levelupxp
-            if self.experiencepoints < 0:
-                self.experiencepoints = 0
+            self.xp = self.xp - self.levelupxp
+            if self.xp < 0:
+                self.xp = 0
             
             # strength
             self.strength = self.strength + 1
@@ -223,7 +223,7 @@ class Player:
 
             # next level xp
             self.levelupxp = 10 * (2 ** (self.level)) # SCALING
-            if self.experiencepoints >= self.levelupxp:
+            if self.xp >= self.levelupxp:
                 print("You have enough XP to level up again!")
             else:
                 print("You'll need " + str(self.levelupxp) + " XP to level up again.")
@@ -234,15 +234,15 @@ class Player:
     def addExperience(self, xp, scale = True):
         if scale:
             xp = xp * (2 ** (self.level)) # gain xp based on base xp * 2^level
-        self.experiencepoints = self.experiencepoints + xp
-        if self.experiencepoints < self.levelupxp:
+        self.xp = self.xp + xp
+        if self.xp < self.levelupxp:
             printc("You have gained @" + str(xp) + " XP!@yellow@")
-            printc("You now have " + str(self.experiencepoints) + "/" + str(self.levelupxp) + " needed to level up.")
+            printc("You now have " + str(self.xp) + "/" + str(self.levelupxp) + " needed to level up.")
         else:
             printc("You have gained " + str(xp) + " experience! That's enough to level up!")
-            raw_input("... ")
+            input("... ")
             self.levelUp()
-        raw_input("... ")
+        input("... ")
 
 #### Combat ##########################################
 
@@ -252,7 +252,7 @@ class Player:
             hp = 0
             print("You take "),
             printWithColor(str(d) + " damage", "red", after=", leaving you unable to stand any longer.")
-            raw_input("... ")
+            input("... ")
             self.death()
         else:
             print("You took "),
@@ -327,60 +327,60 @@ class Player:
     
         
     def name(self):
-        charname = raw_input("Enter your hero's name: ").lower().strip().title()
+        charname = input("Enter your hero's name: ").lower().strip().title()
         while charname == "":
-            charname = raw_input("Your hero may not be nameless: ")\
+            charname = input("Your hero may not be nameless: ")\
                 .lower().strip().title()
         return charname
 
     def gender(self):
-        chargender = raw_input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
+        chargender = input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
             .lower()
         return chargender
 
     def pronouns(self):
-        charpronouns = raw_input("Enter your three pronouns (e.g. 'he him his'): ")
+        charpronouns = input("Enter your three pronouns (e.g. 'he him his'): ")
         while 1:
             charpronouns = charpronouns.split(" ")
             if len(charpronouns) != 3:
-                charpronouns = raw_input("Make sure to enter 3 pronouns separated by a single space each: ")
+                charpronouns = input("Make sure to enter 3 pronouns separated by a single space each: ")
             else:
                 return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
 
     def impropernouns(self):
-        occ = raw_input("Enter the name of your hero's occupation (e.g. 'firefighter'): ").lower().strip()
+        occ = input("Enter the name of your hero's occupation (e.g. 'firefighter'): ").lower().strip()
         while occ == "":
             print("Your occupation can not be blank. ")
-            occ = raw_input("Enter the name of your hero's occupation: ").lower().strip()
-        viverb = raw_input("Enter the name of a violent verb: ").lower().strip()
+            occ = input("Enter the name of your hero's occupation: ").lower().strip()
+        viverb = input("Enter the name of a violent verb: ").lower().strip()
         while viverb == "":
             print("The verb can not be blank. ")
-            viverb = raw_input("Enter the name of a violent verb: ").lower().strip()
-        skill1 = raw_input("Enter the name of a special skill: ").lower().strip()
+            viverb = input("Enter the name of a violent verb: ").lower().strip()
+        skill1 = input("Enter the name of a special skill: ").lower().strip()
         while skill1 == "":
             print("The special skill can not be blank. ")
-            skill1 = raw_input("Enter the name of a special skill: ").lower().strip()
-        skill2 = raw_input("Enter the name of a second special skill: ").lower().strip()
+            skill1 = input("Enter the name of a special skill: ").lower().strip()
+        skill2 = input("Enter the name of a second special skill: ").lower().strip()
         while skill2 == "":
             print("The special skill can not be blank. ")
-            skill2 = raw_input("Enter the name of a second special skill: ").lower().strip()
+            skill2 = input("Enter the name of a second special skill: ").lower().strip()
         return occ, viverb, skill1, skill2
 
     def propernouns(self):
-        town = raw_input("Enter the name of the town: ").lower().title().strip()
+        town = input("Enter the name of the town: ").lower().title().strip()
         while town == "":
             print("The name of the town can not be blank.")
-            town = raw_input("Enter the name of the town: ").lower().title().strip()
-        land = raw_input("Enter the name of the land: ").lower().title().strip()
+            town = input("Enter the name of the town: ").lower().title().strip()
+        land = input("Enter the name of the land: ").lower().title().strip()
         while land == "":
             print("The name of the land can not be blank.")
-            land = raw_input("Enter the name of the land: ").lower().title().strip()
+            land = input("Enter the name of the land: ").lower().title().strip()
         return town, land
 
     def adjectives(self):
         while True:
             try:
-                adjinput = raw_input("Enter five adjectives separated by commas: ").lower()
+                adjinput = input("Enter five adjectives separated by commas: ").lower()
                 adjinputlist = adjinput.split(',')
                 # creates list from input split by commas
                 adjlist = [x.strip() for x in adjinputlist]

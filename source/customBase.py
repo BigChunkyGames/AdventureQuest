@@ -683,7 +683,7 @@ class RadioList2(object): # inventory
 
         self.values = values
         self.current_value = values[0][0]
-        self._selected_index = 0
+        self._selected_index = 0 # int
         self.description = self.values[0][0]
         self.app = app
 
@@ -724,13 +724,13 @@ class RadioList2(object): # inventory
             self.app.refresh()
 
 
-        @kb.add(Keys.Any)
-        def _(event):
-            # We first check values after the selected value, then all values.
-            for value in self.values[self._selected_index + 1:] + self.values:
-                if value[1].startswith(event.data):
-                    self._selected_index = self.values.index(value)
-                    return
+        # @kb.add(Keys.Any)
+        # def _(event):
+        #     # We first check values after the selected value, then all values.
+        #     for value in self.values[self._selected_index + 1:] + self.values:
+        #         if value[1].startswith(event.data):
+        #             self._selected_index = self.values.index(value)
+        #             return
 
         # Control and window.
         self.control = FormattedTextControl(

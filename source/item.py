@@ -18,9 +18,9 @@ class Item():
         self.type = _type    
         self.damage = damage
         self.block = block
+        self.equipped = False
         self.customActivationFunction = customActivationFunction
         self.customDescription = customDescription
-        self.equipped = False
 
         if self.type == 'armour': self.armourSlot = armourSlot
         else: self.armourSlot = None

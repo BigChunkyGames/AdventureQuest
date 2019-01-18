@@ -82,7 +82,7 @@ def home(player):
         elif action == "leave" or action == "l":
             show("You look around your house for a bit, before deciding to leave.")
             print("Your mother looks up from the " + getRandomDankClothing()  + " she's knitting.")
-            raw_input("... ")
+            input("... ")
             show('"Bye sweetie, good luck on your adventures! Don\'t forget to remember: ' + getMotherlyPlattitude() )
             break
         else:
@@ -128,7 +128,7 @@ def tavern(player):
         if action == "slot" or action == "s":
             # Slots(player).slot_machine() TODO: fix this
             # until that gets fixed, run this line instead:
-            show("You try your best at the slot machine, but it conveniently results in no net change of dogecoin for you.")
+            show("You try your best at the slot machine, but it conveniently results in no net change of money for you.")
         elif action == "ask" or action == "a":
             show("You walk up to the bartender and ask for some rumors.")
             show("He lets you know that he hasn't heard anything since the last "
@@ -184,13 +184,13 @@ def tavernGame(player):
                print("The pirate opens his hand a split second before slamming "
                     "his fist into his open palm, revealing his true choice: "
                     "%s!" % opchoice)
-               raw_input("... ")
+               input("... ")
           show("The bar erupts in cheers when they see the outcome of your "
                "match.")
           if outcome == 'win':
                print("You look down into your own hand. {0} beats {1}! You "
                     "actually won!").format(yourchoice, opchoice)
-               raw_input("... ")
+               input("... ")
                show("The pirate looks up at you, clearly impressed.")
                if player.getVisits('maintown_tavern_rps_win', add='add') == 1:
                     show('"Not many can beat me at this game. I think you deserve '
@@ -205,13 +205,13 @@ def tavernGame(player):
           elif outcome == 'tie':
                print("You look down into your own hand. Both of you played {0}! "
                     "It's a tie!").format(yourchoice)
-               raw_input("... ")
+               input("... ")
                show('"What a match! It looks like we\'re fairly even in skill," the pirate says.')
                show('"Let\'s play again to settle who really is the better player!"')
           else:
                print("You look down into your own hand. {0} beats {1}! He beat "
                     "you!").format(opchoice.title(), yourchoice)
-               raw_input("... ")
+               input("... ")
                show('"Heh heh, well that\'s alright. Not everybody has what '
                     'it takes to play with the best of them. Better luck next time!"')
                show("After your rousing game, you head back to the front of the tavern.")

@@ -10,6 +10,9 @@ import pickle
 # init(autoreset=True) # init colors and reset to white each time
 from prompt_toolkit import print_formatted_text, HTML
 import getpass
+import logging
+
+#### console / user input #############################################
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
@@ -19,9 +22,7 @@ def show(text, dots=True):
     printc(text)
     if dots: text='... '
     else: text = ''
-    prompt=text.encode('ascii','ignore')
-    x=getpass.getpass(prompt) # waits for enter, doesnt show typed input becuase it's treated like a password
-
+    x=getpass.getpass(text) # waits for enter, doesnt show typed input becuase it's treated like a password
 
 # more ansi colors: https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/examples/print-text/ansi-colors.py
 # prints colored text. if more=true, will return s
@@ -129,7 +130,7 @@ def dichotomy(option1, option2):
     # Returns True if user input is option1, returns False if option2.
     # Make sure the options are in stripped lowercase form
     while True:
-        userinput = raw_input("> ").lower().strip()
+        userinput = input("> ").lower().strip()
         if userinput == option1:
             return True
         elif userinput == option2:
@@ -137,29 +138,15 @@ def dichotomy(option1, option2):
         else:
             print("You must choose 'yes' or 'no'.")
 
-# Might be useful later in the game
-def checklevel(xp):
-    for x in range(1,10001):
-        if xp < (x**1.68)*100:
-            return x - 1
-
-# takes an array returns a random index
-def getRandomIndex(arr):
-    return arr[random.randint(0, len(arr)-1)]
-
-def getRandInt(min = 1, max= 10): # return random int between 1 and max
-    return random.randint(1, max)
-
-
 def getInput(player):
     while True:
-        inp = raw_input("> ").lower().strip()
+        inp = input("> ").lower().strip()
         if player.devmode and inp == "debug damage":
-            player.takeDamage(int(raw_input("How much damage? : ")))
+            player.takeDamage(int(input("How much damage? : ")))
         elif player.devmode and inp == "debug level up":
             player.levelUp()
         elif player.devmode and inp == "debug add xp":
-            player.addExperience(int(raw_input("How much XP?: ")), raw_input("Scale? (True or False): "))
+            player.addExperience(int(input("How much XP?: ")), input("Scale? (True or False): "))
         elif inp == "hp":
             print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
             print("("),
@@ -168,7 +155,7 @@ def getInput(player):
         elif inp == "i" or inp == "inventory":
             player.openInventory()
         elif inp == "me":
-            print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.dogecoin) + " dogecoin to your name.")
+            print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         elif inp == "save":
             pickle.dump(player, open("AdventureQuestSave.meme", "w"))
             show("Game saved!")
@@ -177,6 +164,34 @@ def getInput(player):
             show("Game loaded!")
         else:
             return inp
+
+def checkForCancel(input):
+    if checkInput(input, 'back') or checkInput(input, 'cancel') or checkInput(input, 'return'):
+        return True
+    else:
+        return False
+
+# the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
+def wrap(text, limit=40, padding=True):
+    if padding: pad = " "
+    else: pad = ""
+    out = ''
+    l = text.split("\n")
+    for s in l: # for each line
+        out += pad
+        w=0 
+        for d in s.split(): # for each word
+            if w + len(d) + 2 < limit: # if fits in limit
+                out += d + " "
+                w += len(d) + 1 
+            else: # if goes over limit
+                out += "\n "
+                out += d + " "
+                w = len(d)
+        if l[len(l)-1] != s: out += "\n" # only add newline if not on last line
+    return out
+
+#### dev #############################################
 
 def bug(player):
     if player.devmode:
@@ -191,13 +206,17 @@ def bug(player):
         show("NOOOOOOOOOOOOO!!!!!!!!!!!")
         assert False
 
-def checkForCancel(input):
-    if checkInput(input, 'back') or checkInput(input, 'cancel') or checkInput(input, 'return'):
-        return True
+def log(text = "log!", warning=False):
+    if warning:
+        logging.warning(text)
     else:
-        return False
+        logging.info(text)
 
-# HOW TO PRINT COLOR
-#print(Fore.RED + 'some red text')
-#print(Back.GREEN + 'and with a green background')
-#print(Style.DIM + 'and in dim text') # doesnt work?
+#### misc #############################################
+
+# takes an array returns a random index
+def getRandomIndex(arr):
+    return arr[random.randint(0, len(arr)-1)]
+
+def getRandInt(min = 1, max= 10): # return random int between 1 and max
+    return random.randint(1, max)

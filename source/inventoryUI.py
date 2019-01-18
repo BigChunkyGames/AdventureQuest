@@ -23,8 +23,7 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait
-import re
+from source.utils import wait, wrap
 import random
 
 class InventoryUI():
@@ -46,9 +45,9 @@ class InventoryUI():
 
         self.mainRadiosRows = []
         self.populateMainRadios() # declares self.mainRadios
-
         self.currentRadios = self.mainRadios
-        self.description = self.mainRadios.description
+        self.description = self.mainRadios.description # description is whataver is in the description box on the right
+        self.requestingConfirmation = False
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -74,26 +73,33 @@ class InventoryUI():
             )
 
     def handleEscape(self, event):
+        self.requestingConfirmation = False
         if self.currentRadios == self.mainRadios:
             self.done()
         else: # return to main page
             self.populateMainRadios()
             self.currentRadios = self.mainRadios
-            self.description = self.mainRadios.description
+            # self.description = self.mainRadios.description
             self.refresh()
 
     def handleEnter(self, event):
+        if self.requestingConfirmation:
+            self.requestingConfirmation = False
+            self.player.activateItem(self.listOfItems[self.currentRadios._selected_index])
+            self.updateListOfItems()
+            # TODO sound music, sound effect of eating a consumable
+            return
+
         if self.currentRadios == self.mainRadios: # if on main page
             self.updateListOfItems()
             self.makeListCurrentRadios(self.listOfItems) 
         elif self.currentRadios == self.selectedRadios: # if not on main page
-            # user selected a category
-            # hitting enter will activate selection
-            self.player.activateItem(self.listOfItems[self.currentRadios._selected_index]) # can delete items
-            if self.updateListOfItems() == "empty":
+            if self.listOfItems[self.currentRadios._selected_index].type == "consumable":
+                self.requestingConfirmation = True
+                self.refresh(setDescription="Eat it?")
                 return
-            else:
-                self.makeListCurrentRadios(self.listOfItems, self.listOfItems[self.selectedRadios._selected_index])  
+            self.player.activateItem(self.listOfItems[self.currentRadios._selected_index]) # can delete items
+            self.makeListCurrentRadios(self.listOfItems,self.selectedRadios._selected_index) 
 
     def updateListOfItems(self):
         if   self.mainRadios._selected_index == 0:
@@ -105,12 +111,10 @@ class InventoryUI():
         elif self.mainRadios._selected_index == 3:
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
         if len(self.listOfItems) == 0:
-            # if consumed last item (most frequent case) do same thing as hitting escape
             self.populateMainRadios()
             self.currentRadios = self.mainRadios
-            self.description = self.mainRadios.description
             self.refresh()
-            return "empty"
+
 
 
     def makeListCurrentRadios(self, lisp, selectedIndex=0):
@@ -120,15 +124,8 @@ class InventoryUI():
             app = self)    
         self.selectedRadios._selected_index = selectedIndex
         self.currentRadios = self.selectedRadios 
+        # self.description = self.currentRadios.values[selectedIndex]
         self.refresh()
-
-
-    # def showEquipped(self, l):
-    #     ''' adds *'s to a weapon's name if it is equipped'''
-    #     for i in range(len(l)):
-    #         if l[i] == self.player.equippedWeapon or l[i] == self.player.equippedArmourChest or l[i] == self.player.equippedArmourHead or l[i] == self.player.equippedArmourLegs or l[i] == self.player.equippedArmourFeet:
-    #             l[i].name = '*' + l[i].name + '* (equipped)'
-    #     return l
 
     def tuplify(self, listt):
         if len(listt) == 0:
@@ -141,16 +138,18 @@ class InventoryUI():
             newlist.append( tuple(l) )
         return newlist
 
-    def done(self):
-        self.result = "hit escape"
-        get_app().exit(result="")
-
-    def refresh(self):
+    def refresh(self, setDescription=False):
         #self.populateMainCategories()
-        self.description = self.currentRadios.description
+        if setDescription:
+            self.description = setDescription
+        else:
+            index = self.currentRadios._selected_index
+            self.description = self.currentRadios.values[index][0]
+        
         self.application.layout=Layout(
             self.getRootContainer(),
             focused_element=self.currentRadios)
+            
         
     def populateMainRadios(self):
         self.mainRadiosRows = []
@@ -182,40 +181,56 @@ class InventoryUI():
         else:
             return text
 
+    def getStats(self):
+        s = ''
+        s += "Health:   " + str(self.player.hp) + " / " + str(self.player.maxhp) + "\n"
+        s += "Level:    " + str(self.player.level) + "\n"
+        s += "XP:       " + str(self.player.xp) + "\n"
+        s += "Money:    $" + str(self.player.money) + "\n"
+        s += "Strength: " + str(self.player.strength) 
+
+        return s
+        
+
+
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        descriptionTitle = FormattedText([
-            ('#ffffff', "Description") # this shit is shit
-        ])
-        actionsTitle = FormattedText([
-            ('#ffffff', "Inventory") # this shit is shit
-        ])
+        width = 60
+        smallerWidth = 40
+        height = 10
+        descriptionTitle = FormattedText([('#ffffff', "Description")])# makes it white
+        actionsTitle = FormattedText([('#ffffff', "Inventory")])
+        desc = wrap(self.description, width-2)
         root_container = VSplit([
             HSplit([
                 Dialog(
                     title=actionsTitle,
                     body=HSplit([
                         self.currentRadios,
-                    ], height= 10)
+                    ], )
                 ),
-            ], padding=0, width = 50 ),
+            ], padding=0, width = smallerWidth, ),
             HSplit([
                 Dialog(
                     title = descriptionTitle,
-                    body=TextArea(
-                        text=self.description, 
-                        style='bg:#000000',
-                        height=10,
-                    ),
+                    body=Label(desc),
                 ),
-            ], padding=0, width = 50 ),
+            ], padding=0, width = width, height= height,),
+            HSplit([
+                Dialog(
+                    title = self.playerName,
+                    body=Label(self.getStats()),
+                ),
+            ], padding=0, width = smallerWidth, height= height,),
         ])
         return root_container 
 
     def run(self):
         self.application.run()
+
+    def done(self):
+        self.result = "hit escape"
+        get_app().exit(result="hit escape")
  
 # TODO:
 # fix escaping after changing equip status inst reflected in main menu
-# fists should be equipped but it says they're not
-# make the inventory window smaller to make room for a status menu

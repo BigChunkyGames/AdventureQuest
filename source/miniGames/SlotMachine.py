@@ -6,7 +6,7 @@ class Slots:
         self.player = player
 
     def playcheck(self): #return bool
-        return not (player.dogecoin - 10) < 0
+        return not (player.money - 10) < 0
 
 
     def slot_machine(self):
@@ -15,18 +15,18 @@ class Slots:
                   "realize you don't have enough money.")
             return
         print("You take a seat at this dank slot machine. ")
-        play = raw_input("Give it a go? Press P to play (Pay 10 Dogecoin), "
+        play = input("Give it a go? Press P to play (Pay 10 money), "
                          "or anything else to leave. \n").lower().strip()
         if play == "p":
-            beginningdogecoin = player.dogecoin
+            beginningmoney = player.money
             self.slot_machine_play()
-            netdoge = (player.dogecoin - beginningdogecoin)
+            netdoge = (player.money - beginningmoney)
             if netdoge > 0:
-                print("You got lucky today, managing to walk away with %s more dogecoin than you came in with.") % netdoge
+                print("You got lucky today, managing to walk away with %s more money than you came in with.") % netdoge
             elif netdoge < 0:
-                print("Looks like today wasn't your lucky day, your pockets are %s dogecoin lighter than they were when you walked in.") % abs(netdoge)
+                print("Looks like today wasn't your lucky day, your pockets are %s money lighter than they were when you walked in.") % abs(netdoge)
             elif netdoge == 0:
-                print("You leave the machine, not having gained or lost any dogecoin. You're still luckier than most who try their hand at gambling!")
+                print("You leave the machine, not having gained or lost any money. You're still luckier than most who try their hand at gambling!")
         else:
             print("You decide that you're too %s for this shit and peace "
                   "right out of there.") % dankadjective().lower()
@@ -53,10 +53,10 @@ class Slots:
                 if freerun:
                     freerun = False
                 else:
-                    player.dogecoin -= 10
+                    player.money -= 10
             except NameError:
                 freerun = False
-                player.dogecoin -= 10
+                player.money -= 10
             # 13.8% win chance
             tiles = ["(weed)", "(weed)", "(weed)", "(weed)",
                      "(hitmarker)", "(hitmarker)", "(hitmarker)",
@@ -71,27 +71,27 @@ class Slots:
                 c = b = a
             # cheater
             # a=b=c= 0
-            print ("(-10 Dogecoin) The rollers spin and land on \n")
+            print ("(-10 money) The rollers spin and land on \n")
             print (tiles[a] + " " + tiles[b] + " " + tiles[c] + "\n")
             # winnings
             if tiles[a] == tiles[b] == tiles[c] == "(weed)":
                 # 1/24 chance
                 mult = random.randrange(1, 11)
                 win = 40 + mult*2
-                player.dogecoin += win
-                print(dankadjective() + ", you won %s Dogecoin.") % win
+                player.money += win
+                print(dankadjective() + ", you won %s money.") % win
             elif tiles[a] == tiles[b] == tiles[c] == "(hitmarker)":
                 # 1/24 chance
                 mult = random.randrange(1, 31)
                 win = 20 + mult*3
-                player.dogecoin += win
-                print(dankadjective() + ", you won %s Dogecoin.") % win
+                player.money += win
+                print(dankadjective() + ", you won %s money.") % win
             elif tiles[a] == tiles[b] == tiles[c] == "(Sample Text)":
                 # 1/72 chance
                 mult = random.randrange(1, 11)
                 win = 1 + (mult**2) * 3
-                player.dogecoin += win
-                print(dankadjective() + ", you won %s Dogecoin. That's fuckin sick!") % win
+                player.money += win
+                print(dankadjective() + ", you won %s money. That's fuckin sick!") % win
             elif tiles[a] == tiles[b] == tiles[c] == "(Mountain Dew)":
                 # 1/72 chance
                 print("A small buzzer goes off. The lights flash and the "
@@ -124,28 +124,28 @@ class Slots:
                 freerun = True
             elif tiles[a] != "(weed)" and tiles[b] != "(weed)" and tiles[a] != tiles[b] and tiles[b] != tiles[c] and tiles[a] != tiles[c] and tiles[c] == "(Sniper Rifle)":
                 print("The intervention in the third slot can only mean one thing...")
-                print("You're a fuckin sick quickscoper m8. (+5 dogecoin)")
-                player.dogecoin += 5
+                print("You're a fuckin sick quickscoper m8. (+5 money)")
+                player.money += 5
             elif tiles[a] != "(weed)" and tiles[b] != "(weed)" and tiles[a] != tiles[b] and tiles[b] != tiles[c] and tiles[a] != tiles[c] and tiles[c] == "(Doritos)":
                 print("The single dorito in the third slot can only mean one thing...")
-                print("You're gonna need some gamer fuel. (+15 dogecoin)")
-                player.dogecoin += 5
+                print("You're gonna need some gamer fuel. (+15 money)")
+                player.money += 5
             elif tiles[a] != "(weed)" and tiles[b] != "(weed)" and tiles[a] != tiles[b] and tiles[b] != tiles[c] and tiles[a] != tiles[c] and tiles[c] == "(Sample Text)":
                 print("The Sample Text in the third slot can only mean one thing...")
                 print("Sample Text")
                 print("Sample Text")
-                print("Sample Text (+20 dogecoin)")
-                player.dogecoin += 20
+                print("Sample Text (+20 money)")
+                player.money += 20
             else:
                 print("You didn't win anything this time.")
-            if player.dogecoin == 420:
-                print("You have 420 dogecoin. That's really fuckin "
+            if player.money == 420:
+                print("You have 420 money. That's really fuckin "
                       "dank, m8.")
                 print("You have earned 1 dank point.")
                 player.dankpoints += 1
             print("Hit enter to play again, type anything to quit. (You "
-                  "have %s Dogecoin.)") % player.dogecoin
-            again = raw_input("").lower().strip()
+                  "have %s money.)") % player.money
+            again = input("").lower().strip()
             if again == "":
                 pass
             else:
@@ -153,7 +153,7 @@ class Slots:
                     print("Your next spin is free, are you sure you want to "
                           "leave and waste this opportunity? (y/n)")
                     while True:
-                        usercontinue = raw_input("> ").lower().strip()
+                        usercontinue = input("> ").lower().strip()
                         if usercontinue == "n":
                             playagain = True
                             break
@@ -165,7 +165,7 @@ class Slots:
                 else:
                     print("Are you sure you want to leave the slot machine? (y/n)")
                     while True:
-                        usercontinue = raw_input("> ").lower().strip()
+                        usercontinue = input("> ").lower().strip()
                         if usercontinue == "n":
                             playagain = True
                             break

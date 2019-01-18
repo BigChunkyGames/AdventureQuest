@@ -11,9 +11,13 @@ def devMode(player):
 
     #change some more values
     player.maxhp = 9999999
-    player.hp = 9999999
-    player.dogecoin = 8000
+    player.hp = 10
+    player.money = 8000
     player.devmode = True
+    player.clantags.append('[test]')
+    player.clantags.append('[test]')
+    player.clantags.append('[test]')
+    player.clantags.append('[test]')
     player.clantags.append('[test]')
     player.clantags.append('[test]')
     player.clantags.append('[test]')
