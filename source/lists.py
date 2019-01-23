@@ -112,18 +112,22 @@ CONVERSATION = ["Oh wow!", "That sounds incredible.", "No way!"," You are so ama
 DOG_NOISES = ["bark", "woof", "scrrf","yarrar","boof","birf","huuurg","ruff","rough","yip","yip yip", "bark bark","gruph","bow", "bow wow", "grrrrr"]
 
 ### items ##############################################################################
-WEAPON = ['Great Sword', 'Claymore', 'Dagger', 'Staff', 'Hatchet', 'Nunchucks', 'Ninja Stars', 'Switchblade', 'Butterfly Knife', 'Mace', 'Club', 'Boomerang', 'Trident', 'Spear', 'Sickle', 'Bow and Arrow', 'Sheers', 'Sling',  'Whip', 'Spade', 'Hammer']
-WEAPON_EXTREME = ['Pirate Ship Cannon']
-ARMOUR_HEAD = ['Army Helmet', 'Gas Mask', 'Beanie', 'Top Hat', 'Knight Helmet', "Straw Hat", "Ski Mask", "Conical Party Hat", "Propeller Cap" ]
-ARMOUR_OFFHAND = ['Shield', 'Gauntlet', 'Japanese Fan', "Frying Pan"]
-ARMOUR_CHEST = ["Sleeveless T-shirt", "Chainmail Cuirass", "Sweat Shirt", ]
-ARMOUR_LEGS = ["Ripped Jeans", "Short Shorts", "Skort", "Ballerina Tutu", "Hip Joggers", "Jeggings"]
-ARMOUR_FEET = ["Fresh Kicks", "A Pair of the Newest Air-Jordan's"]
-ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty', "Really Dull", "Damaged", "Fake"]
-ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy", "Unwieldy", "Dull", "Poor", "Stupid", "Corroded", ]
-ITEM_PREFIX_OK = ["Ok", "Wieldy", "Average", "Nice", "Decent", "Cool", "Pokey", "Kinda Sharp", "Real" ]
-ITEM_PREFIX_GOOD = ["Good", "Pretty Good", "Swift", "Near-mint", "Sharp",'Like-new', getRandomDankAdjective(), ]
-ITEM_PREFIX_REALLYGOOD = ["Really Good", "Excellent", "Prestine", "Very Sharp"]
+WEAPON = ['Great Sword', 'Claymore', 'Dagger', 'Staff', 'Hatchet', 'Nunchucks', 'Ninja Stars', 'Switchblade', 'Butterfly Knife', 'Mace', 'Club', 'Boomerang', 'Trident', 'Spear', 'Sickle', 'Bow and Arrow', 'Sheers', 'Sling',  'Whip', 'Spade', 'Hammer', "Boxing Gloves", "Gardening Gloves", "Shovel", "Pick Axe", "Blender", "Paper Airplane", "Banjo", "Drum Stick", "Throwing Knife", "Battle Toaster", "Chef Knife", 'Cheese Knife', 'Piece of Bark', 'Crab', 'Scissors', 'Envelope Opener', 'Cat Food Can Lid', 'Staple Gun', 'Nail Gun', 'Boomerang', 'Halberd', 'Finger Nail Clipper', 'Bubble Gun', 'Lawn Flamingo', 'Syringe', 'Sickle', 'Khopesh', 'Spork', 'Darts', 'Knitting Needle', 'Trident' ]
+WEAPON_EXTREME = ['Pirate Ship Cannon', 'Trebuchet', 'Flame Thrower', 'Bazooka', 'Javelin Missile Launcher', 'Harpoon'] # TODO
+WEAPON_SPECIAL = ["Vampire Teeth", 'Light Sabor', 'Broken Light Sabor'] # TODO (dont have prefix)
+ARMOUR_HEAD = ['Army Helmet', 'Gas Mask', 'Beanie', 'Top Hat', 'Knight Helmet', "Straw Hat", "Ski Mask", "Conical Party Hat", "Propeller Cap", 'Shower Cap', 'Hair Net', '10 Gallon Hat', 'Toupee', 'Head Crab', 'Tiara', "Jack O'Lantern", "Wig", 'Hijab', "Smitty Werbenjegermanjensen's Hat", 'Bonnet', 'Turban', 'Umbrella Hat', ]
+ARMOUR_OFFHAND = ['Shield', 'Gauntlet', 'Japanese Fan', "Frying Pan", 'Pizza Box', 'Amulet', 'Ring', 'Umbrella', 'Dictionary', 'Trashcan Lid', 'Musical Triangle',  'Ball of Yarn', 'Loose Change', 'Flip Phone', 'Prescription Medication', ]
+ARMOUR_CHEST = ["Sleeveless T-Shirt", "Chainmail Cuirass", "Sweat Shirt", "Bikini Top", 'Sweatshirt', 'Saran Wrap', 'T-Shirt', 'Blouse', 'Tuxedo', 'Bra', 'Life Vest', 'Parka', 'Plaid Button-Up', 'Bullet-Proof Vest', 'Tie', 'Blazer', 'Corset', 'Oxygen Tank',  ]
+ARMOUR_LEGS = ["Ripped Jeans", "Short Shorts", "Skort", "Ballerina Tutu", "Hip Joggers", "Jeggings", 'Dress Pants', 'Joggers', 'Cargo Shorts', 'Swim Trunks', 'Bikini Bottoms', 'Spanks', 'Capris', 'Overalls', 'Yoga Pants', 'Highwasted Jeans', 'Speedo', 'Bike Shorts', 'Gym Shorts', 'Slacks', 'Kilt', 'School Uniform Skrit', 'Bell Bottoms', 'Fig Leaf', 'Mermaid Tail', ]
+ARMOUR_FEET = ["Fresh Kicks", "A Pair of the Newest Air-Jordan's", 'Sandles', 'Crocks', 'Knee Socks', 'Socks', 'Converse', 'Dress Shoes', 'Water Shoes', 'Flippers', 'Ballet Point Shoes', 'Linen Wraps', 'Tap Shoes', 'Moon Boots', 'Heelys', 'Clown Shoes', 'Hiking Boots', 'Baseball Cleats', 'Ice Climbing Boots', 'Loafers', 'Boat Shoes', 'Stilettos', 'Compression Socks', 'Light-up Sketchers', ]
+
+ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty', "Really Dull", "Damaged", "Fake", "Cardboard" ,"Holographic", "Awkward", "Uncomfortable", "Disgusting", "Wobbly", "Hairy", "Wet", ]
+ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy", "Unwieldy", "Dull", "Poor", "Stupid", "Corroded","Sticky", "Wooden",  "Plastic", "Uniquely Shaped", "Vintage", "Jiggly",]
+ITEM_PREFIX_OK = ["Ok", "Wieldy", "Average", "Nice", "Decent", "Cool", "Pokey", "Kinda Sharp", "Real", "Freaky", "Metal", "Croche", "Hand Knitted", "Dwarven", "Ancient", "Squishy", "Firm", "Solid", "Golden", "Bronze", "Silver", "Black", "White", "Transparent",  "Neat", ]
+ITEM_PREFIX_GOOD = ["Good", "Pretty Good", "Swift", "Near-mint", "Sharp",'Like-new', "Elven", "Holy", "Blessed", getRandomDankAdjective(), "Glass", "Comfortable", "Stylish", "Grass", "Electromagnetic", "Sacred", "Chrome", "Spring Loaded", "Sexy", "Sneaky", "Flamboyant", "Romantic", "Swanky", ]
+ITEM_PREFIX_REALLYGOOD = ["Really Good", "Excellent", "Prestine", "Very Sharp", "Executive", "Diamond","Beautiful", "Pristine", ]
+ITEM_PREFIX_SPECIAL = ["Fire", "Ice", "Electrified", ] # TODO
+ITEM_PREFIX_ADVERBS = ["Uncomfortably", "Straight-Up", "Ridiculously", "Really", "Very", "Intensely"] # TODO
 ### enemies ##############################################################################
 
 # these can have duplicate names for different biomes and even duplicates within biome

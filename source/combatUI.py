@@ -34,13 +34,13 @@ class CombatUI():
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
             self.playerName = FormattedText([
-                ('#ffffff', unicode(player.aspect['name'], "utf-8")),
+                ('#ffffff', str(player.aspect['name'])),
                 ('', ' '),
-                ('#cc00cc', self.playerClans, "utf-8"),
+                ('#cc00cc', str(self.playerClans)),
             ]) 
         else: 
             self.playerClans =  self.playerName = FormattedText([
-                ('#ffffff', unicode(player.aspect['name'], "utf-8")),
+                ('#ffffff', str(player.aspect['name'])),
             ]) 
 
         self.enemy = enemy
@@ -219,17 +219,17 @@ class CombatUI():
 
     def makeFormattedText(self, text, color='#ffffff'):
         return FormattedText([
-            (color, unicode(text, "utf-8")) # this shit is shit
+            (color, str(text)) 
         ])
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
         enemyName = self.makeFormattedText(self.enemy.name) 
         battleLogTitle = FormattedText([
-            ('#ffffff', "Battle Log") # this shit is shit
+            ('#ffffff', "Battle Log") 
         ])
         actionsTitle = FormattedText([
-            ('#ffffff', "Actions") # this shit is shit
+            ('#ffffff', "Actions") 
         ])
         t = TextArea(
             scrollbar=False,

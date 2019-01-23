@@ -2,9 +2,9 @@ from source.utils import show, getInput, checkInput, yesno, printc
 from source.lists import getInvalidOptionText
 from source.enemy import *
 from source.combat import *
+from source.item import Item
 
 #TODO QUEST get information from dogetown (but its funny because they only say bark)
-# TODO the rest of this
 def dogeTown(player):
     if player.getVisits("dogeTown", "add") == 1 :
         show("You approach what seems to be a town completely inhabited by polite and playful doggos.")
@@ -31,12 +31,12 @@ def dogeTown(player):
         print("Around you are a few buildings with doors large enough for you to enter.")
         printc("There is one called @'party'@yellow@ puppo's puppy palace.")
         printc("Another is @'Bony'@yellow@s Convenience Store.")
-        printc("On your left rests a towering structure that looks like a @'church'@yellow@. You hear howling from inside. ")
+        printc("On your left rests a towering structure that looks like a Place of @'Warship'@yellow@. You hear music from inside. ")
         printc("There is also a path to what looks to be the @'king'@yellow@s quarters.")
         printc("Or you can @'leave'@yellow@.")
         x = getInput(player)
         if (x == "party" or x == "p"):
-            show("Party puppo's puppy palace prick's your fancy so you prop open the door and walk inside.")
+            show("Party puppo's puppy palace prick's your fancy so you prop open the door and pop inside.")
             show("The club music blasts and the dance floor is crowded with floofers and doges getting down to the hip hop beat.")
             party(player)    
         elif (x == "bony" or x == "b" or x == "bony's"):
@@ -89,10 +89,10 @@ def dogeTown(player):
                         
 
             show("You head back down the stairs to the courtyard.")
-        elif (x == "church" or x == "c"):
+        elif (x == "Warship" or x == "c"):
             if player.getVisits("dogetownChurch", "add") == 1 : # TODO inventory has to not have costume equuiped
                 show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
-                show("The church has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
+                show("The Place of Warship has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
                 show("Though threatened by the colossal artistry, you slowly creek open the mighty door and enter.")
                 show("As you open the door the entire doggo quire stops singing and looks directly at you.")
                 show("It is completely silent.")
@@ -104,7 +104,8 @@ def dogeTown(player):
                 show("The entire quire of doogles starts growling and barking at the sight of you.")
                 show("You exit the building.")
                 show("There was something oddly familiar about that dog.")
-            elif 1: # TODO if you have the costume equipped
+
+            elif player.equippedWeapon.name == "Doggy-Style Costume":
                 show("Fitting right in, you crawl to the nearest pew and take a seat.")
                 print( "Sing along?")
                 if yesno(player):
@@ -149,11 +150,24 @@ def dogeTown(player):
                     show("You both embrace in a hug that lasts a lifetime.")
                     show("Tears roll down your face as you realize that you are now reunited with your childhood dog, Bud.")
                     show('"It has been so long, ' + player.aspect["name"] + '".')
-                    printc("@Bud has joined the party!@cyan@") # TODO party members, also do if bud in party then entering church is different
+                    printc("@Bud has joined the party!@cyan@") # TODO party members, 
+                    player.choices.append("Bud joined the party")
                     input("... ")
                     show("Bud will aid you in your quest. With your efforts combined, you are one step closer to defeating your greatest enemy.")
+
+            elif "Bud joined the party" in player.choices and not "Prayed at alter in dogetown" in player.choices:
+                show("There is nothing left to do inside the Place of Warship except pray at the alter.")
+                print("Pray?")
+                if yesno(player):
+                    show("You kneel down next to the huge alter of DOG and wisper some words of repentance:")
+                    getInput(player)
+                    show("@Your sins are forgiven.@magenta@")
+                    player.choices.append("Prayed at alter in dogetown")
+                    if player.karma < 0:
+                        player.karma += 1
             else:
                 show("Though the sound of the doggos singing sounds amazing from outside, you don't want to go back in there.")
+
         elif (x == "leave" or x == "l"):
             show("Because you are insane, you decide to leave Dogetown. After all, the rest of the world can't be that much worse.")
             show("Can it?")
@@ -162,9 +176,9 @@ def dogeTown(player):
             print(getInvalidOptionText())
 
 def party(player):
-    show("On your left you see the @'bar'@yellow@ where doggers are getting crank. ")
-    show("Straight ahead is the @'dance'@yellow@ floor.")
-    show("Towards the right you notice a picture of a fire hydrant and an arrow pointing towards the end of a @'hallway'@yellow@.")
+    print("On your left you see the @'bar'@yellow@ where doggers are getting crank. ")
+    print("Straight ahead is the @'dance'@yellow@ floor.")
+    print("Towards the right you notice a picture of a fire hydrant and an arrow pointing towards the end of a @'hallway'@yellow@.")
     while (True):
         print("Where will you go now?")
         x = getInput(player)
@@ -276,9 +290,11 @@ def bathroom(player):
     show("You take a seat.")
     show("You notice, hanging on the back of the door, a kinky doggy-style costume.")
     show("You acquired the doggy-style costume.") #TODO inventory
+    i = getTheCostume(player)
+    player.addToInventory(i)
     print("Put it on?")
     if yesno(player):
-        #TODO inventory
+        player.activateItem(i)
         show("You put on the costume.")
     show("Having finished your business, you prepare to leave.")
     print( "Wash your hands first?")
@@ -290,5 +306,8 @@ def bathroom(player):
         # TODO different reaction depending on if constume was equipped
     show("You walk back into the club.")
 
+def getTheCostume(player):
+    return Item(player, "Doggy-Style Costume", customDescription="You found this in a bathroom at a club in Dogetown. The scruffy tail and bushy ears make you look just like cutie floofie.", _type='armour', block=3, armourSlot="chest", sellValue=0)
     
+
     

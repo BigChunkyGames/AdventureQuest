@@ -7,6 +7,7 @@ from source.devMode import *
 from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
+from source.places_dogeTown import dogeTown
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
@@ -28,6 +29,7 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            dogeTown(self.player)
 
             #flowers(self.player)
             #self.player.choices.append('owns worm home')
