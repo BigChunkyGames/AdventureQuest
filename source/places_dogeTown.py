@@ -76,7 +76,7 @@ def dogeTown(player):
                                 s += str(", " + getRandomDogNoise())
                         s += "."
                         print( s)
-                        if count == 4 or count > 10:
+                        if count == 7 or count > 15:
                             printc ("(if you ever get tired of talking you can always type @'leave'@yellow@)")
                         x = getInput(player)
                         if checkInput(x,"leave"):
@@ -89,8 +89,8 @@ def dogeTown(player):
                         
 
             show("You head back down the stairs to the courtyard.")
-        elif (x == "Warship" or x == "c"):
-            if player.getVisits("dogetownChurch", "add") == 1 : # TODO inventory has to not have costume equuiped
+        elif checkInput(x, "warship"):
+            if player.getVisits("dogetownChurch", "add") == 1 and not player.equippedArmourChest.name == "Doggy-Style Costume": # TODO inventory has to not have costume equuiped
                 show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
                 show("The Place of Warship has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
                 show("Though threatened by the colossal artistry, you slowly creek open the mighty door and enter.")
@@ -105,7 +105,7 @@ def dogeTown(player):
                 show("You exit the building.")
                 show("There was something oddly familiar about that dog.")
 
-            elif player.equippedWeapon.name == "Doggy-Style Costume":
+            elif player.equippedArmourChest.name == "Doggy-Style Costume":
                 show("Fitting right in, you crawl to the nearest pew and take a seat.")
                 print( "Sing along?")
                 if yesno(player):
@@ -176,9 +176,9 @@ def dogeTown(player):
             print(getInvalidOptionText())
 
 def party(player):
-    print("On your left you see the @'bar'@yellow@ where doggers are getting crank. ")
-    print("Straight ahead is the @'dance'@yellow@ floor.")
-    print("Towards the right you notice a picture of a fire hydrant and an arrow pointing towards the end of a @'hallway'@yellow@.")
+    printc("On your left you see the @'bar'@yellow@ where doggers are getting crank. ")
+    printc("Straight ahead is the @'dance'@yellow@ floor.")
+    printc("Towards the right you notice a picture of a fire hydrant and an arrow pointing towards the end of a @'hallway'@yellow@.")
     while (True):
         print("Where will you go now?")
         x = getInput(player)
@@ -289,7 +289,7 @@ def bathroom(player):
     show("In front of you is a very dirty fire hydrant.")
     show("You take a seat.")
     show("You notice, hanging on the back of the door, a kinky doggy-style costume.")
-    show("You acquired the doggy-style costume.") #TODO inventory
+    show("@You acquired the doggy-style costume.@yellow@") #TODO inventory
     i = getTheCostume(player)
     player.addToInventory(i)
     print("Put it on?")

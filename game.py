@@ -8,6 +8,7 @@ from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
 from source.places_dogeTown import dogeTown
+from source.shopUI import ShopUI
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
@@ -29,19 +30,27 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            dogeTown(self.player)
+            #dogeTown(self.player)
 
             #flowers(self.player)
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
-            i = Item(self.player, ' tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
-            i.customActivationFunction = lambda:i.consume(heal=3)
-            self.player.addToInventory(i)
 
-            #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
-            x = InventoryUI(self.player)
+            lisht = []
+            i = Item(self.player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
+            lisht.append(i)
+            i = Item(self.player, 'big knife', customDescription="test", _type='weapon', sellValue=5)
+            lisht.append(i)
+
+            # i.customActivationFunction = lambda:i.consume(heal=3)
+            # self.player.addToInventory(i)
+            x = ShopUI(self.player, "name of shop", lisht, )
             x.run()
             print(x.result)
+            #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
+            # x = InventoryUI(self.player)
+            # x.run()
+            # print(x.result)
             #maintown(self.player)
 
             #world(self.play
