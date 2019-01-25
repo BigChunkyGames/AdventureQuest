@@ -52,23 +52,38 @@ class Item():
         elif self.rarity == 'legendary': mult =4
         return int( random.randint(1+self.player.level,1+self.player.level * 2) * mult ) # SCALING
 
-    def buildItemDescriptionString(self):
-        if self.equipped: equip = '(equipped)'
-        else: equip = ''
+    def buildItemDescriptionString(self): # used in UIs
+        s = ''
+        
         if not self.rarity == None: # if has a rarity
-            s = self.name + ' [' + self.rarity.capitalize() + '] ' + equip + '\n'
-        else: 
-            s = self.name + ' ' + equip + '\n'
-        s += '\n'
+            s += ' [' + self.rarity.capitalize() + '] ' + '\n'
+        if self.sellValue > 0:
+            s += 'Value: $' + str(self.sellValue) +  '\n'
         if self.damage > 0:
             s += 'Damage: ' + str(self.damage) + '\n'
         if self.block > 0:
             s += 'Block:  ' + str(self.block) + '\n'
-        if self.sellValue > 0:
-            s += 'Value: $' + str(self.sellValue) +  '\n'
-        s += self.customDescription
-        return s
+        if not self.customDescription == "" and not self.customDescription == None:
+            s += "\n" + self.customDescription + '\n'
+        if self.equipped: s += "You're " + self.whereIsIt()
+        return s.strip()
         # TODO: flavorize
+
+    def whereIsIt(self):
+        hand = self.player.aspect["hand"]
+        if hand == 'right': otherhand='left'
+        else: otherhand='lerightft'
+        if self.type ==  "weapon":
+            return "holding this in your " + hand + " hand."
+        elif self.armourSlot == "head":
+            return "wearing this on your head."
+        elif self.armourSlot == "chest":
+            return "wearing this."
+        elif self.armourSlot == "feet" or self.armourSlot == "legs":
+            return "wearing these."
+        elif self.armourSlot == "offhand":
+            return "holding this in your " + otherhand + " hand."
+
 
     def consume(self, text=None, heal=None):
         ''' returns string about what happened after consumption (because consumption is only possible form inventory menu). '''

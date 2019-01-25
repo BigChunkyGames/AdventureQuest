@@ -136,7 +136,7 @@ def dichotomy(option1, option2):
         elif userinput == option2:
             return False
         else:
-            print("You must choose 'yes' or 'no'.")
+            print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
 def getInput(player):
     while True:
@@ -223,3 +223,14 @@ def getRandomIndex(arr):
 
 def getRandInt(min = 1, max= 10): # return random int between 1 and max
     return random.randint(1, max)
+
+#### UI stuff ############################################
+
+def getStats(player):
+    s = ''
+    s += "Health:   " + str(player.hp) + " / " + str(player.maxhp) + "\n"
+    s += "Level:    " + str(player.level) + "\n"
+    s += "XP:       " + str(player.xp) + "\n"
+    s += "Money:    $ " + str(player.money) + "\n"
+    s += "Strength: " + str(player.strength) 
+    return s

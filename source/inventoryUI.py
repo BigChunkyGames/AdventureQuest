@@ -23,7 +23,7 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait, wrap
+from source.utils import wait, wrap, getStats
 import random
 
 class InventoryUI():
@@ -187,24 +187,16 @@ class InventoryUI():
         else:
             return text
 
-    def getStats(self):
-        s = ''
-        s += "Health:   " + str(self.player.hp) + " / " + str(self.player.maxhp) + "\n"
-        s += "Level:    " + str(self.player.level) + "\n"
-        s += "XP:       " + str(self.player.xp) + "\n"
-        s += "Money:    $" + str(self.player.money) + "\n"
-        s += "Strength: " + str(self.player.strength) 
-
-        return s
-        
-
+    def getCurrentlySelectedItem(self):
+        return self.listOfItems[self.currentRadios._selected_index]
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
         width = 60
         smallerWidth = 40
         height = 10
-        descriptionTitle = FormattedText([('#ffffff', "Description")])# makes it white
+        if self.currentRadios != self.mainRadios: descriptionTitle = self.getCurrentlySelectedItem().name
+        else: descriptionTitle = "Description"
         actionsTitle = FormattedText([('#ffffff', "Inventory")])
         desc = wrap(self.description, width-2)
         root_container = VSplit([
@@ -225,7 +217,7 @@ class InventoryUI():
             HSplit([
                 Dialog(
                     title = self.playerName,
-                    body=Label(self.getStats()),
+                    body=Label(getStats(self.player)),
                 ),
             ], padding=0, width = smallerWidth, height= height,),
         ])

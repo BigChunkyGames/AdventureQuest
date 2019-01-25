@@ -42,7 +42,6 @@ class Player:
         self.equippedArmourChest = None
         self.equippedArmourLegs = None
         self.equippedArmourFeet = None
-        self.getInitialItems()
         # location
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown
@@ -56,19 +55,14 @@ class Player:
 #### inventory #########################################
 
     def getInitialItems(self): # TODO Flavorize
-
         fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
         self.addToInventory(fists, printAboutIt=False, activateNow = True) 
-
         hat = Item(self, 'Baseball Cap', customDescription="You got this when you joined the little league in 7th grade.\nIt's red and smells like dirt.", rarity=None, _type='armour', armourSlot='head', sellValue=1 )
         self.addToInventory(hat, printAboutIt=False, activateNow = True) 
-
         tshirt = Item(self, 'T-Shirt', customDescription="A black T-Shirt with a cool skull on the front.\nYou can't remember the last time this was washed, but it smells fine to you.", rarity=None, _type='armour', armourSlot='chest', sellValue=1 )
         self.addToInventory(tshirt, printAboutIt=False, activateNow = True) 
-
         pants = Item(self, 'Sweat Pants', customDescription="They make a nice 'swish' sound when you walk.", rarity=None, _type='armour', armourSlot='legs', sellValue=1 )
         self.addToInventory(pants, printAboutIt=False, activateNow = True) 
-
         shoes = Item(self, 'Old Tennis Shoes', customDescription="You can't remember buying these, but you've worn them every day since.", rarity=None, _type='armour', armourSlot='feet', sellValue=2 )
         self.addToInventory(shoes, printAboutIt=False, activateNow = True) 
 
@@ -76,12 +70,15 @@ class Player:
         '''Can specify all inventory items of type weapon, armour, consumable, or quest'''
         i = 0
         s = ''
+        atLeastOne = False
         while i < len(self.inventory):
             if self.inventory[i].type == _type or _type==None:
+                if atLeastOne: s += '\n'
                 if showEquipped:
-                    s += self.inventory[i].getName() + '\n'
+                    s += self.inventory[i].getName()
                 else:
-                    s += self.inventory[i].name + '\n'
+                    s += self.inventory[i].name 
+                atLeastOne = True
             i = i + 1
         return s
 
@@ -113,24 +110,24 @@ class Player:
             item.toggleEquipped()
             return
         elif item.type == 'weapon':
-            self.unequipAll(_type='weapon')
+            self.unequip(_type='weapon')
             self.equippedWeapon = item
             item.toggleEquipped()
         elif item.type == 'armour':
             if item.armourSlot == 'head':
-                self.unequipAll(_type='armour', armourSlot='head')
+                self.unequip(_type='armour', armourSlot='head')
                 self.equippedArmourHead == item
             elif item.armourSlot == 'chest':
-                self.unequipAll(_type='armour', armourSlot='chest')
+                self.unequip(_type='armour', armourSlot='chest')
                 self.equippedArmourChest == item
             elif item.armourSlot == 'offhand':
-                self.unequipAll(_type='armour', armourSlot='offhand')
+                self.unequip(_type='armour', armourSlot='offhand')
                 self.equippedArmourOffhand == item
             elif item.armourSlot == 'legs':
-                self.unequipAll(_type='armour', armourSlot='legs')
+                self.unequip(_type='armour', armourSlot='legs')
                 self.equippedArmourLegs == item
             elif item.armourSlot == 'feet':
-                self.unequipAll(_type='armour', armourSlot='feet')
+                self.unequip(_type='armour', armourSlot='feet')
                 self.equippedArmourFeet == item
             else:
                 return False
@@ -142,13 +139,31 @@ class Player:
         else:
             return False
 
-    ''' sets item.equipped to false for all items of type. if type=None, unequip all items'''
-    def unequipAll(self, _type = None, armourSlot = None):
+    ''' sets item.equipped to false for all items of type. if type=None, unequip all items. pass an item to unequip all items of its type'''
+    def unequip(self, _type = None, armourSlot = None, item=None):
+        if not item == None: # if unequipping 1 item
+            _type = item.type
+            armourSlot = item.armourSlot
         for i in self.inventory:
-            if _type == 'weapon' and i.type == 'weapon':
+            if _type == 'weapon' and i.type == 'weapon': # unequip all weapons
                 i.equipped = False
-            elif _type == 'armour' and i.type == 'armour' and i.armourSlot == armourSlot:
-                i.equipped = False
+                self.equippedWeapon == None
+            elif _type == 'armour' and i.type == 'armour' and armourSlot == i.armourSlot:
+                if i.armourSlot == "head":
+                    self.equippedArmourHead = None
+                    i.equipped = False
+                elif i.armourSlot == "chest":
+                    self.equippedArmourChest = None
+                    i.equipped = False
+                elif i.armourSlot == "offhand":
+                    self.equippedArmourOffhand = None
+                    i.equipped = False
+                elif i.armourSlot == "legs":
+                    self.equippedArmourLegs = None
+                    i.equipped = False
+                elif i.armourSlot == "feet":
+                    self.equippedArmourFeet = None
+                    i.equipped = False
             elif _type == None:
                 i.equipped = False
 
@@ -307,6 +322,7 @@ class Player:
                 self.aspect['name'] = self.name()
                 self.aspect['gender'] = self.gender()
                 self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
+                self.aspect['hand'] = self.hand()
                 self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = self.impropernouns()
                 self.aspect['town'], self.aspect['land'] = self.propernouns()
                 self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
@@ -316,27 +332,36 @@ class Player:
                 break
             else:
                 pass
+        self.getInitialItems()
 
     def generateAspects(self):
         self.aspect['name'] = "Michael"
         self.aspect['gender'] = "boi"
         self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
+        self.aspect['hand'] = "right"
         self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
         self.aspect['town'], self.aspect['land'] = "your home town", "Flat Earth"
         self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
     
         
     def name(self):
-        charname = input("Enter your hero's name: ").lower().strip().title()
+        charname = input("What is your name?").lower().strip().title()
         while charname == "":
-            charname = input("Your hero may not be nameless: ")\
+            charname = input("Your hero may not be nameless.")\
                 .lower().strip().title()
         return charname
 
     def gender(self):
-        chargender = input("Enter your hero's gender (e.g. 'boi' or 'gril'): ")\
+        chargender = input("What is your gender?")\
             .lower()
         return chargender
+    
+    def hand(self):
+        printc("Which is your dominant hand, @right@yellow@ or @left@yellow@?")
+        x = input()
+        if checkInput(x, "right"): return "right"
+        elif checkInput(x, "left"): return "left"
+        else: return self.hand()
 
     def pronouns(self):
         charpronouns = input("Enter your three pronouns (e.g. 'he him his'): ")

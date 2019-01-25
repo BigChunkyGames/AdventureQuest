@@ -23,22 +23,27 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait, wrap
+from source.utils import wait, wrap, log
 import random
 
 class ShopUI():
 
-    def __init__(self, player, nameOfShop, shopInventory, shopKeeperAsciiArt=None):
+    def __init__(self, player, nameOfShop, shopInventory, shopKeeperAsciiArt=None, customCurrency=None):
         '''shopInventory is a list of items'''
         self.player = player
         self.name = nameOfShop
         self.shopInventory = shopInventory
-        if shopKeeperAsciiArt == None:
-            shopKeeperAsciiArt ='''
- o
--I-
- ^            
+        self.shopKeeperAsciiArt = shopKeeperAsciiArt
+        if self.shopKeeperAsciiArt == None:
+            self.shopKeeperAsciiArt ='''
+     _\|/^
+      (_oo     what can i get for ya
+       |     
+      /|\\
+       |
+       LL
             '''
+          
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
             self.playerName = FormattedText([
@@ -50,14 +55,17 @@ class ShopUI():
             self.playerClans =  self.playerName = FormattedText([
                 ('#ffffff', player.aspect['name']),
             ]) 
+        if customCurrency == None: self.currency = "dollars"
+        else: self.currency = customCurrency
         self.result = None
 
         self.buySellRadiosRows = []
         self.listOfItems = []
         self.populateBuySellRadios() # declares self.buySellRadios
         self.currentRadios = self.buySellRadios
-        self.description = self.buySellRadios.description # description is whataver is in the description box on the right
+        self.rightWindowDescription = self.buySellRadios.description # description is whataver is in the description box on the right
         self.requestingConfirmation = False
+        self.playerIs = "at buy/sell menu"
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -73,7 +81,7 @@ class ShopUI():
 
         self.application = Application(
             layout=Layout(
-                self.getBuySellContainer(),
+                self.getShopContainer(),
                 focused_element=self.buySellRadios,
             ),
             key_bindings=self.bindings,
@@ -87,6 +95,7 @@ class ShopUI():
         if self.currentRadios == self.buySellRadios:
             self.done()
         else: # return to main page
+            self.playerIs = "at buy/sell menu"
             self.populateBuySellRadios()
             self.currentRadios = self.buySellRadios
             # self.description = self.buySellRadios.description
@@ -95,35 +104,69 @@ class ShopUI():
     def handleEnter(self, event):
         if self.requestingConfirmation:
             self.requestingConfirmation = False
-            self.player.activateItem(self.listOfItems[self.currentRadios._selected_index])
-            self.updateListOfItems()
+            if self.playerIs == "buying":
+                self.buy()
+                self.listOfItems = self.shopInventory
+            elif self.playerIs == "selling":
+                self.sell()
+                self.listOfItems = self.player.getAllInventoryItemsAsObjectList()
+            if self.handleEmptiness(self.listOfItems): return
+            self.makeListCurrentRadios(self.listOfItems) 
             # TODO sound music, sound effect of eating a consumable
             return
 
-        if self.currentRadios == self.buySellRadios: # if on main page
-            self.updateListOfItems()
+        elif self.currentRadios == self.buySellRadios: # if on main page
+            if self.currentRadios._selected_index == 0: # BUY, show shops inventory
+                self.playerIs = "buying"
+                self.listOfItems = self.shopInventory
+            elif self.currentRadios._selected_index == 1: # SELL, show player inventory
+                self.playerIs = "selling"
+                self.listOfItems = self.player.getAllInventoryItemsAsObjectList()
+            else:log("what the fuck")
+            if self.handleEmptiness(self.listOfItems): return
             self.makeListCurrentRadios(self.listOfItems) 
         elif self.currentRadios == self.selectedRadios: # if not on main page
-            if self.listOfItems[self.currentRadios._selected_index].type == "consumable":
-                self.requestingConfirmation = True
-                self.refresh(setDescription="Eat it?")
-                return
-            self.player.activateItem(self.listOfItems[self.currentRadios._selected_index]) # can delete items
-            self.makeListCurrentRadios(self.listOfItems,self.selectedRadios._selected_index) 
+            self.requestingConfirmation = True
+            price = self.getCurrentlySelectedItem().sellValue
+            if price == 1 and self.currency.endswith('s'): currency = 'dollar'
+            else: currency = self.currency
+            nameOfItem = self.getCurrentlySelectedItem().name
+            if self.playerIs == "buying":
+                self.refresh(setDescription="Purchase " + str(nameOfItem) +" for " + str(price) + " " + currency + "?")
+            elif self.playerIs == "selling":
+                self.refresh(setDescription="Sell " + str(nameOfItem) +" for " + str(price) + " " + currency + "?")
 
-    def updateListOfItems(self):
-        if   self.buySellRadios._selected_index == 0:
-            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
-        elif self.buySellRadios._selected_index == 1:
-            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='armour')
-        elif self.buySellRadios._selected_index == 2:
-            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
-        elif self.buySellRadios._selected_index == 3:
-            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
+    def buy(self):
+        item = self.getCurrentlySelectedItem()
+        if item.sellValue > self.player.money:
+            self.refresh(setDescription="You can't afford that.")
+        else:
+            self.player.money = self.player.money - item.sellValue # subtract funds
+            self.player.money = str(round(self.player.money, 2)) # round to cents
+            item.sellValue = item.sellValue /2 # half the worth of the item after buying
+            self.shopInventory.remove(item)
+            self.player.addToInventory(item, printAboutIt=False)
+
+    def sell(self):
+        item = self.getCurrentlySelectedItem()
+        if item.equipped == True: self.player.unequip(item=item)
+        self.player.inventory.remove(item) # remove item from player inventory
+        self.player.money = self.player.money + item.sellValue # get paid
+        self.shopInventory.append(item) # give item to shop owner
+
+    def getCurrentlySelectedItem(self):
+        return self.listOfItems[self.currentRadios._selected_index]
+
+    def handleEmptiness(self, lis):
         if len(self.listOfItems) == 0:
-            self.populateBuySellRadios()
             self.currentRadios = self.buySellRadios
-            self.refresh()
+            if self.playerIs == "buying":
+                self.playerIs = "at buy/sell menu"
+                self.refresh(setDescription="Sold out!")
+            elif self.playerIs == "selling":
+                self.playerIs = "at buy/sell menu"
+                self.refresh(setDescription="You've got nothing left!")
+            return True
 
     def makeListCurrentRadios(self, lisp, selectedIndex=0):
         lisp = self.refreshItemDescriptions(lisp)
@@ -155,12 +198,12 @@ class ShopUI():
     def refresh(self, setDescription=False):
         index = self.currentRadios._selected_index
         if setDescription:
-            self.description = setDescription
+            self.rightWindowDescription = setDescription
         else:
-            self.description = self.currentRadios.values[index][0]
+            self.rightWindowDescription = self.currentRadios.values[index][0]
         
         self.application.layout=Layout(
-            self.getDisplayItemsContainer(),
+            self.getShopContainer(),
             focused_element=self.currentRadios)
             
         
@@ -173,9 +216,9 @@ class ShopUI():
             app = self)
 
     def populateBuySellRadiosHelper(self, category):
-        s = self.shopKeeperAsciiArt
+        desc = self.shopKeeperAsciiArt
         tup = []
-        tup.append(s)
+        tup.append(desc)
         tup.append(category.capitalize())
         self.buySellRadiosRows.append( tuple(tup) )
 
@@ -197,21 +240,29 @@ class ShopUI():
         s += "XP:       " + str(self.player.xp) + "\n"
         s += "Money:    $" + str(self.player.money) + "\n"
         s += "Strength: " + str(self.player.strength) 
-
         return s
-        
 
 
-    # returns new root container (updates text and stuff)
-    def getDisplayItemsContainer(self):
+    def getShopContainer(self):
         width = 60
         smallerWidth = 40
         height = 10
-        desc = wrap(self.description, width-2)
+        if self.playerIs == "at buy/sell menu":
+            leftWindowTitle = ""
+            rightWindowTitle = self.name
+            desc = self.rightWindowDescription
+        elif self.playerIs == "buying":
+            leftWindowTitle = self.name
+            rightWindowTitle = self.getCurrentlySelectedItem().name
+            desc = wrap(self.rightWindowDescription, width-2)
+        elif self.playerIs == "selling":
+            leftWindowTitle = self.player.aspect["name"]
+            rightWindowTitle = self.getCurrentlySelectedItem().name
+            desc = wrap(self.rightWindowDescription, width-2)
         root_container = VSplit([
             HSplit([
                 Dialog(
-                    title=self.player.aspect["name"],
+                    title=leftWindowTitle,
                     body=HSplit([
                         self.currentRadios,
                     ], )
@@ -219,33 +270,10 @@ class ShopUI():
             ], padding=0, width = smallerWidth, ),
             HSplit([
                 Dialog(
-                    title = "name of the guy",
+                    title = rightWindowTitle,
                     body=Label(desc),
                 ),
-            ], padding=0, width = width, height= height,),
-        ])
-        return root_container 
-
-    def getBuySellContainer(self):
-        width = 60
-        smallerWidth = 40
-        height = 10
-        desc = wrap(self.description, width-2)
-        root_container = VSplit([
-            HSplit([
-                Dialog(
-                    title=self.player.aspect["name"],
-                    body=HSplit([
-                        self.currentRadios,
-                    ], )
-                ),
-            ], padding=0, width = smallerWidth, ),
-            HSplit([
-                Dialog(
-                    title = self.name,
-                    body=Label(desc),
-                ),
-            ], padding=0, width = width, height= height,),
+            ], padding=0, width = width,),
         ])
         return root_container 
 
