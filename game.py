@@ -7,7 +7,7 @@ from source.devMode import *
 from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
-from source.places_dogeTown import dogeTown
+from source.places_dogeTown import dogeTown, bonysShop
 from source.shopUI import ShopUI
 
 clear() 
@@ -30,33 +30,35 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            bonysShop(self.player)
             #dogeTown(self.player)
 
             #flowers(self.player)
+
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
 
-            # lisht = []
-            # i = Item(self.player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
-            # lisht.append(i)
-            # i = Item(self.player, 'big knife', customDescription="test", _type='weapon', sellValue=5)
-            # lisht.append(i)
+            i = Item(self.player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
+            i.customActivationFunction = lambda:i.consume(heal=3)
+            self.player.addToInventory(i)
 
-            # # i.customActivationFunction = lambda:i.consume(heal=3)
-            # # self.player.addToInventory(i)
+            # lisht = []
+            # lisht.append(i)
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
-            # print(x.result)
+
             #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
+
             x = InventoryUI(self.player)
             x.run()
+
             #maintown(self.player)
 
-            #world(self.play
-            # er)
+            #world(self.player)
         
 #TODO: assuming ne
-# w game each time. Should ask to load saved game data or start 
+# w game each time. Should
+#  ask to load saved game data or start 
 # new game. Below line creates a new game object but should
 # \ load if loading saved game
 g = Game()
@@ -66,10 +68,3 @@ g.start()
 
 print ("the end")
 
-
-
-''' tests
-
-
-
-'''

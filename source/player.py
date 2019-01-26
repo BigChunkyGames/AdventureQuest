@@ -49,12 +49,16 @@ class Player:
 
 #### misc ##############################################
 
-    def getInput(self): # redundent
+    def getInput(self): # redundency for easier coding
         return getInput(self)
 
 #### inventory #########################################
 
-    def getInitialItems(self): # TODO Flavorize
+    def scale(self, number):
+        return number * (2 ** (self.level)) 
+
+
+    def getInitialItems(self):
         fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
         self.addToInventory(fists, printAboutIt=False, activateNow = True) 
         hat = Item(self, 'Baseball Cap', customDescription="You got this when you joined the little league in 7th grade.\nIt's red and smells like dirt.", rarity=None, _type='armour', armourSlot='head', sellValue=1 )
@@ -104,7 +108,7 @@ class Player:
 
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
     def activateItem(self, item):
-        if not item.customActivationFunction == None:
+        if not item.customActivationFunction == None: # if has custom function
             return item.customActivationFunction()
         if item.equipped == True:
             item.toggleEquipped()
@@ -224,7 +228,7 @@ class Player:
             print("You now have " + str(self.strength) + " strength!")
 
             # max hp
-            self.maxhp = 10 * (2 ** (self.level)) # SCALING
+            self.maxhp = self.scale(10) # SCALING
             print("You now have " + str(self.maxhp) + " maximum HP!")
 
             # regain all health
@@ -233,11 +237,11 @@ class Player:
             self.hp = self.maxhp # SCALING
 
             # health regen
-            self.healthRegen = (2 ** (self.level)) # SCALING
+            self.healthRegen = self.scale(1) # SCALING
             print("You now regain " + str(self.healthRegen) + " after each battle!")
 
             # next level xp
-            self.levelupxp = 10 * (2 ** (self.level)) # SCALING
+            self.levelupxp = self.scale(10) # SCALING
             if self.xp >= self.levelupxp:
                 print("You have enough XP to level up again!")
             else:
@@ -246,18 +250,24 @@ class Player:
         print("")
         #TODO italisize
 
-    def addExperience(self, xp, scale = True):
+    def gainXp(self, xp, scale = True, returnString=False):
         if scale:
-            xp = xp * (2 ** (self.level)) # gain xp based on base xp * 2^level
+            xp = self.scale(xp) # gain xp based on base xp * 2^level
         self.xp = self.xp + xp
-        if self.xp < self.levelupxp:
-            printc("You have gained @" + str(xp) + " XP!@yellow@")
-            printc("You now have " + str(self.xp) + "/" + str(self.levelupxp) + " needed to level up.")
-        else:
-            printc("You have gained " + str(xp) + " experience! That's enough to level up!")
-            input("... ")
-            self.levelUp()
-        input("... ")
+        if not returnString:
+            if self.xp < self.levelupxp:
+                show("You have gained @" + str(xp) + " XP@yellow@!")
+            else:
+                show("You have gained @" + str(xp) + " XP@yellow@! That's enough to level up!")
+                self.levelUp()
+        else: 
+            s = ''
+            if self.xp < self.levelupxp:
+                s += "You have gained " + str(xp) + " XP!"
+            else:
+                s += "You have gained " + str(xp) + " XP! That's enough to level up!"
+                self.levelUp()
+            return s
 
 #### Combat ##########################################
 

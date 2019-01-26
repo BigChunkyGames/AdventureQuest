@@ -2,7 +2,8 @@ from source.utils import show, getInput, checkInput, yesno, printc
 from source.lists import getInvalidOptionText
 from source.enemy import *
 from source.combat import *
-from source.item import Item
+from source.item import Item, generateRandomArmourOrWeapon
+from source.shopUI import ShopUI
 
 #TODO QUEST get information from dogetown (but its funny because they only say bark)
 def dogeTown(player):
@@ -31,7 +32,7 @@ def dogeTown(player):
         print("Around you are a few buildings with doors large enough for you to enter.")
         printc("There is one called @'party'@yellow@ puppo's puppy palace.")
         printc("Another is @'Bony'@yellow@s Convenience Store.")
-        printc("On your left rests a towering structure that looks like a Place of @'Warship'@yellow@. You hear music from inside. ")
+        printc("On your left rests a towering @'Synadogue'@yellow@. You hear music from inside. ")
         printc("There is also a path to what looks to be the @'king'@yellow@s quarters.")
         printc("Or you can @'leave'@yellow@.")
         x = getInput(player)
@@ -47,14 +48,7 @@ def dogeTown(player):
             print('"Gruph."')
             print("Look at his wares?")
             if yesno(player):
-                # TODO shop
-                # dogecoin
-                # treat, healing item
-                # frizbee, weapon
-                # bone, chew to gain 3 xp
-                # doge collar, 2 defense
-                # rolled up piece of paper, unroll to find missing dog poster for your dog that you lost a long time ago
-                pass
+                bonysShop(player)
             show("That was fun, but now it's time to leave.")
         elif (x == "king" or x == "k" or x == "king's"):
             show("You approach an impractically large marble door at the top of another set of white marble steps.")
@@ -89,23 +83,24 @@ def dogeTown(player):
                         
 
             show("You head back down the stairs to the courtyard.")
-        elif checkInput(x, "warship"):
-            if player.getVisits("dogetownChurch", "add") == 1 and not player.equippedArmourChest.name == "Doggy-Style Costume": # TODO inventory has to not have costume equuiped
-                show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
-                show("The Place of Warship has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
-                show("Though threatened by the colossal artistry, you slowly creek open the mighty door and enter.")
-                show("As you open the door the entire doggo quire stops singing and looks directly at you.")
-                show("It is completely silent.")
-                show("At the end of the chancel and behind the alter stands a duggo holding his paws to the sky as if to cast his radiance around the room.  ")
-                show("It is no ordinary duggo.")
-                show("It is...")
-                show("It must be...")
-                show("Buddhog")
-                show("The entire quire of doogles starts growling and barking at the sight of you.")
-                show("You exit the building.")
-                show("There was something oddly familiar about that dog.")
+        elif checkInput(x, "Synadogue"):
+            if player.getVisits("dogetownChurch", "add") == 1: # if first time here
+                if not player.equippedArmourChest and not player.equippedArmourChest.name == "Doggy-Style Costume": # if not naked and chest doggy style constume not equipped
+                    show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
+                    show("The Synadogue has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
+                    show("Though threatened by the colossal artistry, you slowly creek open the mighty door and enter.")
+                    show("As you open the door the entire doggo quire stops singing and looks directly at you.")
+                    show("It is completely silent.")
+                    show("At the end of the chancel and behind the alter stands a duggo holding his paws to the sky as if to cast his radiance around the room.  ")
+                    show("It is no ordinary duggo.")
+                    show("It is...")
+                    show("It must be...")
+                    show("Buddhog")
+                    show("The entire quire of doogles starts growling and barking at the sight of you.")
+                    show("You exit the building.")
+                    show("There was something oddly familiar about that dog.")
 
-            elif player.equippedArmourChest.name == "Doggy-Style Costume":
+            elif player.equippedArmourChest and player.equippedArmourChest.name == "Doggy-Style Costume": # if not naked and wearing costume
                 show("Fitting right in, you crawl to the nearest pew and take a seat.")
                 print( "Sing along?")
                 if yesno(player):
@@ -152,11 +147,14 @@ def dogeTown(player):
                     show('"It has been so long, ' + player.aspect["name"] + '".')
                     printc("@Bud has joined the party!@cyan@") # TODO party members, 
                     player.choices.append("Bud joined the party")
+                    for i in player.inventory: # change description of crumpled paper
+                        if i.name == 'Crumped Paper':
+                            i.customDescription = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!" 
                     input("... ")
                     show("Bud will aid you in your quest. With your efforts combined, you are one step closer to defeating your greatest enemy.")
 
             elif "Bud joined the party" in player.choices and not "Prayed at alter in dogetown" in player.choices:
-                show("There is nothing left to do inside the Place of Warship except pray at the alter.")
+                show("There is nothing left to do inside the Synadogue except pray at the alter.")
                 print("Pray?")
                 if yesno(player):
                     show("You kneel down next to the huge alter of DOG and wisper some words of repentance:")
@@ -176,10 +174,10 @@ def dogeTown(player):
             print(getInvalidOptionText())
 
 def party(player):
-    printc("On your left you see the @'bar'@yellow@ where doggers are getting crank. ")
-    printc("Straight ahead is the @'dance'@yellow@ floor.")
-    printc("Towards the right you notice a picture of a fire hydrant and an arrow pointing towards the end of a @'hallway'@yellow@.")
     while (True):
+        printc("On your left you see the @'bar'@yellow@ where doggers are getting crank. ")
+        printc("Straight ahead is the @'dance'@yellow@ floor.")
+        printc("Towards the right you notice a picture of a fire hydrant and an arrow pointing towards the end of a @'hallway'@yellow@.")
         print("Where will you go now?")
         x = getInput(player)
         if x == 'bar' or x == 'b':
@@ -310,4 +308,43 @@ def getTheCostume(player):
     return Item(player, "Doggy-Style Costume", customDescription="You found this in a bathroom at a club in Dogetown. The scruffy tail and bushy ears make you look just like cutie floofie.", _type='armour', block=3, armourSlot="chest", sellValue=0)
     
 
-    
+def bonysShop(player):
+    asciiArt ="""
+       /^-^\\
+      / o o \\
+     /   Y   \\      woof
+     V \ v / V
+       / - \\
+      /    |
+(    /     |
+ ===/___) ||"""
+    inv = []
+
+    i = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3)
+    i.customActivationFunction = lambda:i.consume(heal=int(player.maxhp/6))
+    inv.append(i)
+
+    i = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12)
+    i.customActivationFunction = lambda:self.consume(xpgain=3) fuck this shit
+    inv.append(i)
+
+    i = Item(player, 'Frizbee', damage=4, customDescription="It's red and as chew marks in it.", _type='weapon', sellValue=6)
+    inv.append(i)
+
+    i = generateRandomArmourOrWeapon(player, _type='armour', rarity='rare')
+    i.scale()
+    inv.append(i)
+
+    i = Item(player, 'Doge Collar', block=2, customDescription="This furry red collar comes equipped with a stylish silver doge tag.", _type='weapon', sellValue=6)
+    i.scale()
+    inv.append(i)
+
+    if "Bud joined the party" in player.choices: desc = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!"
+    else: desc = "You unravel the paper to find that it is an extremely old missing dog poster. You remember making these years ago when you lost Bud. The hand drawn image of a Bud brings back nostalgic memories but you try to shove them out of your mind."
+
+    i = Item(player, 'Crumped Paper', customDescription= desc, _type='quest', sellValue=1)
+    inv.append(i)
+
+                # rare armour
+    x = ShopUI(player, "Bony's Convenience Store", inv, shopKeeperAsciiArt=asciiArt, customCurrency='dogecoins' )
+    x.run()

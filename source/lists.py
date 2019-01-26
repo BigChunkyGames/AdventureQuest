@@ -46,6 +46,19 @@ def getRandomWeaponName(extreme=False):
     if extreme: return getRandomIndex(WEAPON_EXTREME)
     else: return getRandomIndex(WEAPON)
 
+def getRandomArmourName(slot=None):
+    if slot == None: slot = getRandomArmourSlot()
+    if slot == "head":
+        return getRandomIndex(ARMOUR_HEAD)
+    if slot == "chest":
+        return getRandomIndex(ARMOUR_CHEST)
+    if slot == "offhand":
+        return getRandomIndex(ARMOUR_OFFHAND)
+    if slot == "legs":
+        return getRandomIndex(ARMOUR_LEGS)
+    if slot == "feet":
+        return getRandomIndex(ARMOUR_FEET)
+
 def getRandomItemPrefix(goodness = 3):
     ''' 1=shitty, 2=bad, 3=ok, 4=good, 5=really good '''
     if goodness <= 1:
@@ -91,6 +104,9 @@ def getConversationResponse(responses = 1):
 def getRandomTVShow():
     return getRandomIndex(TV_SHOWS)
 
+def getRandomArmourSlot():
+    return getRandomIndex(ARMOUR_SLOTS)
+
 
 # these are constants. thats why they're all caps
 ### misc ##############################################################################
@@ -115,11 +131,12 @@ DOG_NOISES = ["bark", "woof", "scrrf","yarrar","boof","birf","huuurg","ruff","ro
 WEAPON = ['Great Sword', 'Claymore', 'Dagger', 'Staff', 'Hatchet', 'Nunchucks', 'Ninja Stars', 'Switchblade', 'Butterfly Knife', 'Mace', 'Club', 'Boomerang', 'Trident', 'Spear', 'Sickle', 'Bow and Arrow', 'Sheers', 'Sling',  'Whip', 'Spade', 'Hammer', "Boxing Gloves", "Gardening Gloves", "Shovel", "Pick Axe", "Blender", "Paper Airplane", "Banjo", "Drum Stick", "Throwing Knife", "Battle Toaster", "Chef Knife", 'Cheese Knife', 'Piece of Bark', 'Crab', 'Scissors', 'Envelope Opener', 'Cat Food Can Lid', 'Staple Gun', 'Nail Gun', 'Boomerang', 'Halberd', 'Finger Nail Clipper', 'Bubble Gun', 'Lawn Flamingo', 'Syringe', 'Sickle', 'Khopesh', 'Spork', 'Darts', 'Knitting Needle', 'Trident' ]
 WEAPON_EXTREME = ['Pirate Ship Cannon', 'Trebuchet', 'Flame Thrower', 'Bazooka', 'Javelin Missile Launcher', 'Harpoon'] # TODO
 WEAPON_SPECIAL = ["Vampire Teeth", 'Light Sabor', 'Broken Light Sabor'] # TODO (dont have prefix)
+ARMOUR_SLOTS=['head', 'offhand', 'chest', 'legs', 'feet'] 
 ARMOUR_HEAD = ['Army Helmet', 'Gas Mask', 'Beanie', 'Top Hat', 'Knight Helmet', "Straw Hat", "Ski Mask", "Conical Party Hat", "Propeller Cap", 'Shower Cap', 'Hair Net', '10 Gallon Hat', 'Toupee', 'Head Crab', 'Tiara', "Jack O'Lantern", "Wig", 'Hijab', "Smitty Werbenjegermanjensen's Hat", 'Bonnet', 'Turban', 'Umbrella Hat', ]
 ARMOUR_OFFHAND = ['Shield', 'Gauntlet', 'Japanese Fan', "Frying Pan", 'Pizza Box', 'Amulet', 'Ring', 'Umbrella', 'Dictionary', 'Trashcan Lid', 'Musical Triangle',  'Ball of Yarn', 'Loose Change', 'Flip Phone', 'Prescription Medication', ]
 ARMOUR_CHEST = ["Sleeveless T-Shirt", "Chainmail Cuirass", "Sweat Shirt", "Bikini Top", 'Sweatshirt', 'Saran Wrap', 'T-Shirt', 'Blouse', 'Tuxedo', 'Bra', 'Life Vest', 'Parka', 'Plaid Button-Up', 'Bullet-Proof Vest', 'Tie', 'Blazer', 'Corset', 'Oxygen Tank',  ]
-ARMOUR_LEGS = ["Ripped Jeans", "Short Shorts", "Skort", "Ballerina Tutu", "Hip Joggers", "Jeggings", 'Dress Pants', 'Joggers', 'Cargo Shorts', 'Swim Trunks', 'Bikini Bottoms', 'Spanks', 'Capris', 'Overalls', 'Yoga Pants', 'Highwasted Jeans', 'Speedo', 'Bike Shorts', 'Gym Shorts', 'Slacks', 'Kilt', 'School Uniform Skrit', 'Bell Bottoms', 'Fig Leaf', 'Mermaid Tail', ]
-ARMOUR_FEET = ["Fresh Kicks", "A Pair of the Newest Air-Jordan's", 'Sandles', 'Crocks', 'Knee Socks', 'Socks', 'Converse', 'Dress Shoes', 'Water Shoes', 'Flippers', 'Ballet Point Shoes', 'Linen Wraps', 'Tap Shoes', 'Moon Boots', 'Heelys', 'Clown Shoes', 'Hiking Boots', 'Baseball Cleats', 'Ice Climbing Boots', 'Loafers', 'Boat Shoes', 'Stilettos', 'Compression Socks', 'Light-up Sketchers', ]
+ARMOUR_LEGS = ["Ripped Jeans", "Short Shorts", "Skort", "Ballerina Tutu", "Hip Joggers", "Jeggings", 'Dress Pants', 'Joggers', 'Cargo Shorts', 'Swim Trunks', 'Bikini Bottoms', 'Spanks', 'Capris', 'Overalls', 'Yoga Pants', 'Highwasted Jeans', 'Speedo', 'Bike Shorts', 'Gym Shorts', 'Slacks', 'Kilt', 'School Uniform Skirt', 'Bell Bottoms', 'Fig Leaf', 'Mermaid Tail', ]
+ARMOUR_FEET = ["Fresh Kicks", "Pair of the Newest Air-Jordan's", 'Sandles', 'Crocks', 'Knee Socks', 'Socks', 'Converse', 'Dress Shoes', 'Water Shoes', 'Flippers', 'Ballet Point Shoes', 'Linen Wraps', 'Tap Shoes', 'Moon Boots', 'Heelys', 'Clown Shoes', 'Hiking Boots', 'Baseball Cleats', 'Ice Climbing Boots', 'Loafers', 'Boat Shoes', 'Stilettos', 'Compression Socks', 'Light-up Sketchers', ]
 
 ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty', "Really Dull", "Damaged", "Fake", "Cardboard" ,"Holographic", "Awkward", "Uncomfortable", "Disgusting", "Wobbly", "Hairy", "Wet", ]
 ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy", "Unwieldy", "Dull", "Poor", "Stupid", "Corroded","Sticky", "Wooden",  "Plastic", "Uniquely Shaped", "Vintage", "Jiggly",]

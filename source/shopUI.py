@@ -142,7 +142,7 @@ class ShopUI():
             self.refresh(setDescription="You can't afford that.")
         else:
             self.player.money = self.player.money - item.sellValue # subtract funds
-            self.player.money = str(round(self.player.money, 2)) # round to cents
+            self.player.money = round(self.player.money, 2) # round to cents
             item.sellValue = item.sellValue /2 # half the worth of the item after buying
             self.shopInventory.remove(item)
             self.player.addToInventory(item, printAboutIt=False)
@@ -152,6 +152,7 @@ class ShopUI():
         if item.equipped == True: self.player.unequip(item=item)
         self.player.inventory.remove(item) # remove item from player inventory
         self.player.money = self.player.money + item.sellValue # get paid
+        self.player.money = round(self.player.money, 2) # round just in case
         self.shopInventory.append(item) # give item to shop owner
 
     def getCurrentlySelectedItem(self):
@@ -191,9 +192,29 @@ class ShopUI():
         for i in range(len(listt)):
             l = []
             l.append(self.unicodify(listt[i].description))
-            l.append(self.unicodify(listt[i].getName()))
+            l.append(self.unicodify(self.colorBasedOnRarity(listt[i], useGetName=True))) # colors
             newlist.append( tuple(l) )
         return newlist
+
+    def makeFormattedText(self, text, color='#ffffff'):
+        return FormattedText([
+            (color, str(text) )# this shit is shit
+        ])
+        
+    def colorBasedOnRarity(self, item, useGetName=False): # also colors consumables, returns name
+        if useGetName: name = item.getName()
+        else: name = item.name
+        if item.type == 'consumable':
+            color = '#99ff66'
+        elif item.rarity == "None" or item.rarity == None or item.rarity == "common":
+            color = '#ffffff'
+        elif item.rarity == "rare":
+            color = '#0066ff' # blue
+        elif item.rarity == 'epic':
+            color = '#cc3300' # orange
+        elif item.rarity == 'legendary':
+            color = '#9900cc'
+        return self.makeFormattedText(name, color=color)
 
     def refresh(self, setDescription=False):
         index = self.currentRadios._selected_index
@@ -222,26 +243,11 @@ class ShopUI():
         tup.append(category.capitalize())
         self.buySellRadiosRows.append( tuple(tup) )
 
-    def makeFormattedText(self, text, color='#ffffff'):
-        return FormattedText([
-            (color, str(text) )# this shit is shit
-        ])
-
     def unicodify(self, text):
         if isinstance(text, str):
             return str(text)
         else:
             return text
-
-    def getStats(self):
-        s = ''
-        s += "Health:   " + str(self.player.hp) + " / " + str(self.player.maxhp) + "\n"
-        s += "Level:    " + str(self.player.level) + "\n"
-        s += "XP:       " + str(self.player.xp) + "\n"
-        s += "Money:    $" + str(self.player.money) + "\n"
-        s += "Strength: " + str(self.player.strength) 
-        return s
-
 
     def getShopContainer(self):
         width = 60
@@ -249,15 +255,15 @@ class ShopUI():
         height = 10
         if self.playerIs == "at buy/sell menu":
             leftWindowTitle = ""
-            rightWindowTitle = self.name
+            rightWindowTitle = self.makeFormattedText(self.name)
             desc = self.rightWindowDescription
         elif self.playerIs == "buying":
-            leftWindowTitle = self.name
-            rightWindowTitle = self.getCurrentlySelectedItem().name
+            leftWindowTitle = self.makeFormattedText(self.name)
+            rightWindowTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
             desc = wrap(self.rightWindowDescription, width-2)
         elif self.playerIs == "selling":
-            leftWindowTitle = self.player.aspect["name"]
-            rightWindowTitle = self.getCurrentlySelectedItem().name
+            leftWindowTitle = self.makeFormattedText(self.player.aspect["name"])
+            rightWindowTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
             desc = wrap(self.rightWindowDescription, width-2)
         root_container = VSplit([
             HSplit([

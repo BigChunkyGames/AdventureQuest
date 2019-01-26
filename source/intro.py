@@ -112,6 +112,7 @@ def introduction(player): #TODO i think we should change the intro to be less de
     show('She looks up from the dick sock she\'s knitting. "Alright '
          'sweetie, be safe! Here, take this."')
     show('You have acquired the camera.')
-    show("At any time, press 'i' to open your inventory.")
+    printc("Enter '@i@yellow@' to open your inventory.")
+    player.getInput()
     show('After taking the camera, you leave your house and walk into town, '
          'ready to head into whatever building you choose.')

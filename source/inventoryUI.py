@@ -22,7 +22,6 @@ from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
 from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
-from source.lists import getRandomAttackVerb
 from source.utils import wait, wrap, getStats
 import random
 
@@ -86,8 +85,10 @@ class InventoryUI():
     def handleEnter(self, event):
         if self.requestingConfirmation:
             self.requestingConfirmation = False
-            self.player.activateItem(self.listOfItems[self.currentRadios._selected_index])
+            result = self.player.activateItem(self.getCurrentlySelectedItem())
             self.updateListOfItems()
+            self.makeListCurrentRadios(self.listOfItems) 
+            self.refresh(setDescription=result)
             # TODO sound music, sound effect of eating a consumable
             return
 
@@ -132,8 +133,6 @@ class InventoryUI():
             i.description = i.buildItemDescriptionString()
         return lis
 
-
-
     def tuplify(self, listt):
         if len(listt) == 0:
             return [] # should never see this
@@ -141,7 +140,7 @@ class InventoryUI():
         for i in range(len(listt)):
             l = []
             l.append(self.unicodify(listt[i].description))
-            l.append(self.unicodify(listt[i].getName()))
+            l.append(self.unicodify(self.colorBasedOnRarity(listt[i], useGetName=True))) # colors
             newlist.append( tuple(l) )
         return newlist
 
@@ -176,10 +175,25 @@ class InventoryUI():
             else: tup.append(category.capitalize())
             self.mainRadiosRows.append( tuple(tup) )
 
-    def makeFormattedText(self, text, color='#ffffff'):
+    def makeFormattedText(self, text, color='#ffffff'): 
         return FormattedText([
-            (color, str(text) )# this shit is shit
+            (color, str(text))
         ])
+
+    def colorBasedOnRarity(self, item, useGetName=False): # also colors consumables 
+        if useGetName: name = item.getName()
+        else: name = item.name
+        if item.type == 'consumable':
+            color = '#99ff66'
+        elif item.rarity == "None" or item.rarity == None or item.rarity == "common":
+            color = '#ffffff'
+        elif item.rarity == "rare":
+            color = '#0066ff' # blue
+        elif item.rarity == 'epic':
+            color = '#cc3300' # orange
+        elif item.rarity == 'legendary':
+            color = '#9900cc'
+        return self.makeFormattedText(name, color=color)
 
     def unicodify(self, text):
         if isinstance(text, str):
@@ -195,7 +209,7 @@ class InventoryUI():
         width = 60
         smallerWidth = 40
         height = 10
-        if self.currentRadios != self.mainRadios: descriptionTitle = self.getCurrentlySelectedItem().name
+        if self.currentRadios != self.mainRadios: descriptionTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
         else: descriptionTitle = "Description"
         actionsTitle = FormattedText([('#ffffff', "Inventory")])
         desc = wrap(self.description, width-2)

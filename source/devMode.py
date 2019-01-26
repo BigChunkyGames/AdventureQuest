@@ -1,4 +1,4 @@
-from source.item import generateRandomWeapon
+from source.item import generateRandomArmourOrWeapon
 
 
 def devMode(player):
@@ -15,7 +15,7 @@ def devMode(player):
     player.hp = 10
     player.money = 8000
     player.devmode = True
-    
+
     player.clantags.append('[test]')
     player.clantags.append('[test]')
     player.clantags.append('[test]')
@@ -24,10 +24,22 @@ def devMode(player):
     player.clantags.append('[test]')
     player.clantags.append('[test]')
 
+    i = generateRandomArmourOrWeapon(player)
+    i.rarity = None
+    player.inventory.append(i)
+    i = generateRandomArmourOrWeapon(player)
+    i.rarity = 'common'
+    player.inventory.append(i)
+    i = generateRandomArmourOrWeapon(player)
+    i.rarity = 'rare'
+    player.inventory.append(i)
+    i = generateRandomArmourOrWeapon(player)
+    i.rarity = 'epic'
+    player.inventory.append(i)
+    i = generateRandomArmourOrWeapon(player)
+    i.rarity = 'legendary'
+    player.inventory.append(i)
     player.getInitialItems()
-    player.inventory.append(generateRandomWeapon(player))
-    player.inventory.append(generateRandomWeapon(player))
-    player.inventory.append(generateRandomWeapon(player))
     #print player.getAllInventoryItems()
 
     

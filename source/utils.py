@@ -12,6 +12,7 @@ from prompt_toolkit import print_formatted_text, HTML
 import getpass
 import logging
 
+
 #### console / user input #############################################
 
 def clear():
@@ -158,10 +159,10 @@ def getInput(player):
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         elif inp == "save":
             pickle.dump(player, open("AdventureQuestSave.meme", "w"))
-            show("Game saved!")
+            show("@Game saved!@green@")
         elif inp == "load":
             player = pickle.load(open("AdventureQuestSave.meme", "r"))
-            show("Game loaded!")
+            show("@Game loaded!@green@")
         else:
             return inp
 
@@ -234,3 +235,4 @@ def getStats(player):
     s += "Money:    $ " + str(player.money) + "\n"
     s += "Strength: " + str(player.strength) 
     return s
+

@@ -694,6 +694,7 @@ class RadioList2(object): # inventory
         def _(event):
             self._selected_index = max(0, self._selected_index - 1)
             self.setDescription()
+            self.stopRequesting()
             self.app.refresh()
 
         @kb.add('down')
@@ -701,6 +702,7 @@ class RadioList2(object): # inventory
             self._selected_index = min(
                 len(self.values) - 1, self._selected_index + 1)
             self.setDescription()
+            self.stopRequesting()
             self.app.refresh()
 
         @kb.add('pageup')
@@ -711,6 +713,7 @@ class RadioList2(object): # inventory
                 self._selected_index - len(w.render_info.displayed_lines)
             )
             self.setDescription()
+            self.stopRequesting()
             self.app.refresh()
 
         @kb.add('pagedown')
@@ -721,6 +724,7 @@ class RadioList2(object): # inventory
                 self._selected_index + len(w.render_info.displayed_lines)
             )
             self.setDescription()
+            self.stopRequesting()
             self.app.refresh()
 
 
@@ -748,6 +752,10 @@ class RadioList2(object): # inventory
 
     def setDescription(self):
         self.description = self.values[self._selected_index][0]
+        
+    def stopRequesting(self):
+        if self.app.requestingConfirmation != None: 
+            self.app.requestingConfirmation = False
 
     def _get_text_fragments(self):
         result = []
