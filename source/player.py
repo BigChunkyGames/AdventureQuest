@@ -42,10 +42,12 @@ class Player:
         self.equippedArmourChest = None
         self.equippedArmourLegs = None
         self.equippedArmourFeet = None
+        self.shops=[] # list of shop objects
         # location
         self.currentLocationX = 6
         self.currentLocationY = 5 # maintown
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
+        self.day = 1
 
 #### misc ##############################################
 
@@ -54,9 +56,10 @@ class Player:
 
 #### inventory #########################################
 
-    def scale(self, number):
-        return number * (2 ** (self.level)) 
-
+    def scale(self, number, returnInt=True):
+        factor = 1.2
+        if returnInt: return int(number * (factor ** (self.level)))
+        else: return number * (factor ** (self.level))
 
     def getInitialItems(self):
         fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
@@ -171,6 +174,11 @@ class Player:
             elif _type == None:
                 i.equipped = False
 
+    def restockShops(self):
+        for s in self.shops:
+            if s.visitedOnDay % 3 == 0:
+                s.restock()
+
 
 #### map ######################################################
 
@@ -213,41 +221,41 @@ class Player:
 
 #### leveling ####################################################
 
-    def levelUp(self):
+    def levelUp(self, printAboutIt=True):
         while True:
             self.level = self.level + 1
-            print("")
-            print ("You are now level "), 
-            printWithColor(str(self.level), "magenta", after= "!")
+            if printAboutIt:print("")
+            if printAboutIt:print ("You are now level "), 
+            if printAboutIt:printWithColor(str(self.level), "magenta", after= "!")
             self.xp = self.xp - self.levelupxp
             if self.xp < 0:
                 self.xp = 0
             
             # strength
             self.strength = self.strength + 1
-            print("You now have " + str(self.strength) + " strength!")
+            if printAboutIt: print("You now have " + str(self.strength) + " strength!")
 
             # max hp
-            self.maxhp = self.scale(10) # SCALING
-            print("You now have " + str(self.maxhp) + " maximum HP!")
+            self.maxhp = self.scale(5) # SCALING
+            if printAboutIt:print("You now have " + str(self.maxhp) + " maximum HP!")
 
             # regain all health
             gain = self.maxhp - self.hp
-            printc("You have regained @" + str(gain) + " HP!@green@")
+            if printAboutIt:printc("You have regained @" + str(gain) + " HP!@green@")
             self.hp = self.maxhp # SCALING
 
             # health regen
             self.healthRegen = self.scale(1) # SCALING
-            print("You now regain " + str(self.healthRegen) + " after each battle!")
+            if printAboutIt:print("You now regain " + str(self.healthRegen) + " after each battle!")
 
             # next level xp
             self.levelupxp = self.scale(10) # SCALING
             if self.xp >= self.levelupxp:
-                print("You have enough XP to level up again!")
+                if printAboutIt:print("You have enough XP to level up again!")
             else:
-                print("You'll need " + str(self.levelupxp) + " XP to level up again.")
+                if printAboutIt:print("You'll need " + str(self.levelupxp) + " XP to level up again.")
                 break
-        print("")
+        if printAboutIt:print("")
         #TODO italisize
 
     def gainXp(self, xp, scale = True, returnString=False):
@@ -265,8 +273,8 @@ class Player:
             if self.xp < self.levelupxp:
                 s += "You have gained " + str(xp) + " XP!"
             else:
-                s += "You have gained " + str(xp) + " XP! That's enough to level up!"
-                self.levelUp()
+                self.levelUp(printAboutIt=False)
+                s += "You have gained " + str(xp) + " XP! That's enough to level up!\nYou are now level " + str(self.level) +"!"
             return s
 
 #### Combat ##########################################
@@ -320,6 +328,8 @@ class Player:
         else:
             print (customText)
         # TODO flavorize
+        self.day += 1
+        self.restockShops()
         show("@Your HP has been restored to full!@green@")
 
 #### INTRO STUFF #################################################

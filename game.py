@@ -1,7 +1,7 @@
 import random
 from source.utils import * # import all functions from utils
 from source.intro import *
-from source.places_maintown import maintown
+from source.places_maintown import *
 from source.player import *
 from source.devMode import *
 from source.world import *
@@ -30,7 +30,8 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            bonysShop(self.player)
+            #bonysShop(self.player)
+            maintownShop(self.player)
             #dogeTown(self.player)
 
             #flowers(self.player)
@@ -38,9 +39,7 @@ class Game: # perhaps this is what should be saved
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
 
-            i = Item(self.player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
-            i.customActivationFunction = lambda:i.consume(heal=3)
-            self.player.addToInventory(i)
+            
 
             # lisht = []
             # lisht.append(i)

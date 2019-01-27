@@ -8,6 +8,9 @@ from source.utils import *
 from source.lists import *
 from source.miniGames.RockPaperScissors import RPSGame
 from source.world import *
+from source.item import Item, generateRandomArmourOrWeapon
+from source.shopUI import ShopUI
+from source.shops import *
 
 
 def maintown(player):
@@ -18,7 +21,7 @@ def maintown(player):
         printc("You could go @'home'@yellow@ and check that out.")
         printc("The @'tavern'@yellow@ is always a cool place to hang out.")
         printc("The @'store'@yellow@ is probably open at this time of day.")
-        printc("The @'blacksmith'@yellow@ might appreciate you buying something.")
+        printc("The @'blacksmith'@yellow@ might be fun.")
         printc("Or you could always @'leave'@yellow@ your humble town to explore the world.")
         print("Where do you want to go?")
         place = getInput(player)
@@ -101,9 +104,7 @@ def blacksmith(player):
     else:
         show("You head over to the blacksmith's place to take a look at some "
              "quality goods.")
-    show("You look at the blacksmith's wares, but she doesn't have anything "
-         "you need at the moment. You decide to head back into the town.")
-    # TODO: blacksmith
+        # TODO crafting
 
 def tavern(player):
     if player.getVisits("Main Town Tavern", "add") == 1:
@@ -230,8 +231,50 @@ def store(player):
     show("You approach the shopkeeper, an old and wary gentleman with age on "
          "his face and experience in his eyes.")
     show('"What\'ll it be for ya today?"')
-    show("You make a point of considering the shopkeeper's wares, but you're "
-         "not in the market for anything he's selling at the moment.")
-    show("He looks a little irritated that you didn't buy anything as you "
-         "head back to the town center, having accomplished nothing at all.")
-    # TODO: add the shop
+    maintownShop(player)
+    # show("You make a point of considering the shopkeeper's wares, but you're "
+    #      "not in the market for anything he's selling at the moment.")
+    # show("He looks a little irritated that you didn't buy anything as you "
+    #      "head back to the town center, having accomplished nothing at all.")
+    show("Satisfied with your transaction, you exit the shop.")
+
+def maintownShop(player):
+    if openIfExists(player, player.aspect['town'] + " Sales Supplies Limited"): return
+
+    s = Shop(player, player.aspect['town'] + " Sales Supplies Limited")
+    s.shopAsciiArt ="""
+               ......               
+            .:||||||||:.   how are ya      
+           /            \           
+          (   o      o   )          
+--@@@@----------:  :----------@@@@--
+"""
+
+    inv = []
+
+    i1 = Item(player, 'Lesser Health Potion', customDescription="A small glass vial filled with sparkly red liquid.", _type='consumable', sellValue=3)
+    i1.customActivationFunction = lambda:i1.consume(heal=4)
+    inv.append(i1) # CONSUMABLES MUST HAVE UNIQUE VAR NAME
+
+    i2 = Item(player, 'Big Cheeseburger', customDescription="Oh man this big juicy cheeseburger just look's so delicious that you know it has to be worth the price.", _type='consumable', sellValue=8)
+    i2.customActivationFunction = lambda:i2.consume(xpgain=int(player.levelupxp / 3))
+    inv.append(i2)
+
+    inv.append(Item(player, 'Salad Fork', damage=1, customDescription="It's plastic. Good for poking.", _type='weapon', sellValue=3))
+    inv.append(Item(player, 'Fancy Butter Knife', damage=2, customDescription="It's made of clear accurately molded plastic.", _type='weapon', sellValue=5))
+
+    inv.append(generateRandomArmourOrWeapon(player, _type='armour', rarity='common'))
+    inv.append(generateRandomArmourOrWeapon(player, _type='armour', rarity='common'))
+    inv.append(generateRandomArmourOrWeapon(player, _type='armour', rarity='common'))
+    
+    i = generateRandomArmourOrWeapon(player, _type='weapon', rarity='rare')
+    inv.append(i)
+
+    i = Item(player, 'Bent Piece of Metal', block=1, customDescription="I guess you could just hold this in your " + getOtherHand(player) + " hand.", _type='armour', sellValue=3, armourSlot='offhand')
+    inv.append(i)
+
+    s.originalInventory = inv
+    s.restock()
+    s.openUI()
+
+

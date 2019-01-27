@@ -139,8 +139,8 @@ ARMOUR_LEGS = ["Ripped Jeans", "Short Shorts", "Skort", "Ballerina Tutu", "Hip J
 ARMOUR_FEET = ["Fresh Kicks", "Pair of the Newest Air-Jordan's", 'Sandles', 'Crocks', 'Knee Socks', 'Socks', 'Converse', 'Dress Shoes', 'Water Shoes', 'Flippers', 'Ballet Point Shoes', 'Linen Wraps', 'Tap Shoes', 'Moon Boots', 'Heelys', 'Clown Shoes', 'Hiking Boots', 'Baseball Cleats', 'Ice Climbing Boots', 'Loafers', 'Boat Shoes', 'Stilettos', 'Compression Socks', 'Light-up Sketchers', ]
 
 ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty', "Really Dull", "Damaged", "Fake", "Cardboard" ,"Holographic", "Awkward", "Uncomfortable", "Disgusting", "Wobbly", "Hairy", "Wet", ]
-ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy", "Unwieldy", "Dull", "Poor", "Stupid", "Corroded","Sticky", "Wooden",  "Plastic", "Uniquely Shaped", "Vintage", "Jiggly",]
-ITEM_PREFIX_OK = ["Ok", "Wieldy", "Average", "Nice", "Decent", "Cool", "Pokey", "Kinda Sharp", "Real", "Freaky", "Metal", "Croche", "Hand Knitted", "Dwarven", "Ancient", "Squishy", "Firm", "Solid", "Golden", "Bronze", "Silver", "Black", "White", "Transparent",  "Neat", ]
+ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy", "Unwieldy", "Dull", "Poor", "Stupid", "Corroded","Sticky", "Wooden",  "Plastic", "Uniquely Shaped", "Vintage", "Jiggly", "Average"]
+ITEM_PREFIX_OK = ["Wieldy", "Nice", "Decent", "Cool", "Pokey", "Kinda Sharp", "Real", "Freaky", "Metal", "Croche", "Hand Knitted", "Dwarven", "Ancient", "Squishy", "Firm", "Solid", "Golden", "Bronze", "Silver", "Black", "White", "Transparent",  "Neat", ]
 ITEM_PREFIX_GOOD = ["Good", "Pretty Good", "Swift", "Near-mint", "Sharp",'Like-new', "Elven", "Holy", "Blessed", getRandomDankAdjective(), "Glass", "Comfortable", "Stylish", "Grass", "Electromagnetic", "Sacred", "Chrome", "Spring Loaded", "Sexy", "Sneaky", "Flamboyant", "Romantic", "Swanky", ]
 ITEM_PREFIX_REALLYGOOD = ["Really Good", "Excellent", "Prestine", "Very Sharp", "Executive", "Diamond","Beautiful", "Pristine", ]
 ITEM_PREFIX_SPECIAL = ["Fire", "Ice", "Electrified", ] # TODO

@@ -174,6 +174,7 @@ def checkForCancel(input):
 
 # the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
 def wrap(text, limit=40, padding=True):
+    text = str(text)
     if padding: pad = " "
     else: pad = ""
     out = ''
@@ -225,13 +226,19 @@ def getRandomIndex(arr):
 def getRandInt(min = 1, max= 10): # return random int between 1 and max
     return random.randint(1, max)
 
+def getOtherHand(player):
+    if player.aspect['hand']=='right':
+        return 'left'
+    else:
+        return 'right'
+
 #### UI stuff ############################################
 
 def getStats(player):
     s = ''
     s += "Health:   " + str(player.hp) + " / " + str(player.maxhp) + "\n"
     s += "Level:    " + str(player.level) + "\n"
-    s += "XP:       " + str(player.xp) + "\n"
+    s += "XP:       " + str(player.xp) + " / " + str(player.levelupxp) +"\n"
     s += "Money:    $ " + str(player.money) + "\n"
     s += "Strength: " + str(player.strength) 
     return s

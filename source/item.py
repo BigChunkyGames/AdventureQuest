@@ -4,13 +4,14 @@ import random
 from source.lists import getRandomWeaponName, getRandomItemPrefix, getRandomArmourSlot, getRandomArmourName
 
 class Item():
-    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None):
+    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None, scale=True):
         '''
         Rarities: None, common, rare, epic, legendary
         Types: weapon, armour, consumable, quest, 
         ArmourSlots: head, offhand, chest, legs, feet
         Set sellValue to None to generate a default value
         customActivationFunction is a lambda that gets called when item is activated (equipped)
+        if scale as true, stats will be scaled to fit player level
         '''
         self.player = player
         self.name = name
@@ -27,6 +28,8 @@ class Item():
 
         if sellValue == None: self.sellValue = self.generateSellValue() 
         else: self.sellValue = sellValue
+
+        if scale: self.scale()
 
         self.description = self.buildItemDescriptionString()
 
@@ -90,7 +93,7 @@ class Item():
         hand = self.player.aspect["hand"]
         if hand == 'right': otherhand='left'
         else: otherhand='right'
-        if self.type ==  "weapon":
+        if self.type ==  "This goes in your " + hand:
             return "Weapon"
         elif self.armourSlot == "head":
             return "This goes on your head head."
@@ -109,12 +112,12 @@ class Item():
         # TODO make lots of effects
         if self.type == 'consumable':
             if text == None:
-                text = "You ate the " + self.name + ".\n It was delicious.\n"
+                text = "You ate the " + str(self.name) + ".\n It was delicious.\n"
             if heal:
-                self.player.regenHealth(health = heal, returnString=False, showCurrentHealth=False)
-                text += "\nYou regained " + heal + " HP!"
+                self.player.regenHealth(health = heal, returnString=True, showCurrentHealth=False)
+                text += "\nYou regained " + str(heal) + " HP!"
             if xpgain:
-                text += '\n' + self.player.gainXp(xpgain, returnString=True)
+                text += '\n' + str(self.player.gainXp(xpgain, returnString=True))
             self.player.inventory.remove(self)
         else:
             text = "You can't eat that!"
@@ -140,9 +143,10 @@ def generateRandomArmourOrWeapon(player, _type='armour',rarity = 'common', armou
         damage = prefix.damageMod
         block = 0
         name = prefix.adjective + " " + getRandomWeaponName(extreme) 
-    i = Item(player, name, customDescription=customDescription, rarity=rarity, _type=_type, armourSlot = armourSlot, damage=damage, block=block)
+    i = Item(player, name, customDescription=customDescription, rarity=rarity, _type=_type, armourSlot = armourSlot, damage=damage, block=block, scale=scale)
+    i.damage = int(i.damage) # round
+    i.block = int(i.block)
     i.description = i.buildItemDescriptionString()
-    if scale: i.scale()
     return i
 
 def getNumberBasedOnRarity(rarity):
@@ -165,11 +169,11 @@ class ItemPrefix():
 def generatePrefix(player, _type='weapon', prefixLevelOutOf5 = 3):
     '''prefix level: 1 is shitty, 5 is really good'''
     i = ItemPrefix(getRandomItemPrefix(prefixLevelOutOf5))
+    luckOfTheDraw = random.uniform(0,1)
     if _type == 'weapon':
-        i.damageMod = prefixLevelOutOf5
+        i.damageMod = prefixLevelOutOf5 + luckOfTheDraw
     elif _type == 'armour':
-        i.blockMod = prefixLevelOutOf5
-
+        i.blockMod = prefixLevelOutOf5 + luckOfTheDraw
     if i.damageMod<0: i.damageMod==0
     if i.blockMod<0: i.blockMod==0
     # TODO make more special

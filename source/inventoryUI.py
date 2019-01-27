@@ -118,14 +118,18 @@ class InventoryUI():
             self.refresh()
 
     def makeListCurrentRadios(self, lisp, selectedIndex=0):
-        lisp = self.refreshItemDescriptions(lisp)
-        self.listOfItemsTupled = self.tuplify(lisp)
-        self.selectedRadios = RadioList2(
-            values=self.listOfItemsTupled,
-            app = self)    
-        self.selectedRadios._selected_index = selectedIndex
-        self.currentRadios = self.selectedRadios 
-        # self.description = self.currentRadios.values[selectedIndex]
+        if len(lisp) == 0:
+            self.populateMainRadios()
+            self.currentRadios = self.mainRadios
+        else: 
+            lisp = self.refreshItemDescriptions(lisp)
+            self.listOfItemsTupled = self.tuplify(lisp)
+            self.selectedRadios = RadioList2(
+                values=self.listOfItemsTupled,
+                app = self)    
+            self.selectedRadios._selected_index = selectedIndex
+            self.currentRadios = self.selectedRadios 
+            # self.description = self.currentRadios.values[selectedIndex]
         self.refresh()
 
     def refreshItemDescriptions(self, lis):
@@ -206,11 +210,11 @@ class InventoryUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        width = 60
+        width = 40
         smallerWidth = 40
         height = 10
         if self.currentRadios != self.mainRadios: descriptionTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
-        else: descriptionTitle = "Description"
+        else: descriptionTitle = FormattedText([('#ffffff', "Description")])
         actionsTitle = FormattedText([('#ffffff', "Inventory")])
         desc = wrap(self.description, width-2)
         root_container = VSplit([

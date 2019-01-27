@@ -3,7 +3,7 @@ from source.lists import getInvalidOptionText
 from source.enemy import *
 from source.combat import *
 from source.item import Item, generateRandomArmourOrWeapon
-from source.shopUI import ShopUI
+from source.shops import *
 
 #TODO QUEST get information from dogetown (but its funny because they only say bark)
 def dogeTown(player):
@@ -309,7 +309,10 @@ def getTheCostume(player):
     
 
 def bonysShop(player):
-    asciiArt ="""
+    if openIfExists(player, "Bony's Convenience Store"): return
+
+    s = Shop(player, "Bony's Convenience Store")
+    s.shopAsciiArt ="""
        /^-^\\
       / o o \\
      /   Y   \\      woof
@@ -318,25 +321,24 @@ def bonysShop(player):
       /    |
 (    /     |
  ===/___) ||"""
+
     inv = []
 
-    i = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3)
-    i.customActivationFunction = lambda:i.consume(heal=int(player.maxhp/6))
-    inv.append(i)
+    i1 = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3)
+    i1.customActivationFunction = lambda:i1.consume(heal=int(player.maxhp/6))
+    inv.append(i1) # CONSUMABLES MUST HAVE UNIQUE VAR NAME
 
-    i = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12)
-    i.customActivationFunction = lambda:self.consume(xpgain=3) fuck this shit
-    inv.append(i)
+    i2 = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12)
+    i2.customActivationFunction = lambda:i2.consume(xpgain=3)
+    inv.append(i2)
 
     i = Item(player, 'Frizbee', damage=4, customDescription="It's red and as chew marks in it.", _type='weapon', sellValue=6)
     inv.append(i)
 
     i = generateRandomArmourOrWeapon(player, _type='armour', rarity='rare')
-    i.scale()
     inv.append(i)
 
     i = Item(player, 'Doge Collar', block=2, customDescription="This furry red collar comes equipped with a stylish silver doge tag.", _type='weapon', sellValue=6)
-    i.scale()
     inv.append(i)
 
     if "Bud joined the party" in player.choices: desc = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!"
@@ -345,6 +347,6 @@ def bonysShop(player):
     i = Item(player, 'Crumped Paper', customDescription= desc, _type='quest', sellValue=1)
     inv.append(i)
 
-                # rare armour
-    x = ShopUI(player, "Bony's Convenience Store", inv, shopKeeperAsciiArt=asciiArt, customCurrency='dogecoins' )
-    x.run()
+    s.originalInventory = inv
+    s.restock()
+    s.openUI()
