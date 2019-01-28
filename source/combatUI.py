@@ -23,7 +23,8 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait
+from source.utils import wait, openInventoryFromCombat
+from source.inventoryUI import InventoryUI
 import re
 import random
 
@@ -142,7 +143,8 @@ class CombatUI():
             # dodging increases chance for enemy to miss by 30%
             self.playerJustDodged = True
         elif choice == "Item":
-            self.battleLog += "" #TODO item selection
+            inv = InventoryUI(self.player)
+            openInventoryFromCombat(self, inv)
         elif choice == "Run":
             self.tryToEscape()
             self.refresh()
@@ -151,8 +153,7 @@ class CombatUI():
             self.battleLog += "How did you do that!?"
             
         if self.enemy.hp == 0: # check if he dead
-            self.result = "win"
-            get_app().exit(result="win")
+            self.done('win')
             return
         self.refresh()
         self.enemyTurn()
@@ -161,8 +162,7 @@ class CombatUI():
         self.battleLog += "You tried to run..." 
         if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
             self.battleLog += " and escaped the combat!"
-            self.result = "escaped"
-            get_app().exit(result="escaped")
+            self.done('escaped')
             return
         else:
             self.battleLog += " but failed to escape!\n"
@@ -201,9 +201,7 @@ class CombatUI():
                 self.player.hp = 0
             self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp))
             if self.player.hp == 0: #dead
-                self.result = "lose"
-                get_app().exit(result="lose")
-                return
+                self.done('lose')
         self.battleLog += s
         self.refresh()
 
@@ -272,6 +270,10 @@ class CombatUI():
 
     def run(self):
         self.application.run()
+
+    def done(self, result='?'):
+        self.result = result
+        get_app().exit(result=result)
  
 # STILL TODO
 # fix scrolling issue in battelog

@@ -12,7 +12,6 @@ from prompt_toolkit import print_formatted_text, HTML
 import getpass
 import logging
 
-
 #### console / user input #############################################
 
 def clear():
@@ -216,7 +215,7 @@ def log(text = "log!", warning=False):
     else:
         logging.info(text)
 
-#### misc #############################################
+#### random #############################################
 
 # takes an array returns a random index
 def getRandomIndex(arr):
@@ -235,4 +234,57 @@ def getStats(player):
     s += "Money:    $ " + str(player.money) + "\n"
     s += "Strength: " + str(player.strength) 
     return s
+
+def openInventoryFromCombat(combatUI, inventoryUI):
+    save = combatUI
+    combatUI.done('inventory')
+    inventoryUI.run()
+    combatUI.run()
+
+#### animations #########################################
+
+def printIntroAnimationHelper(rows, width, place = 1,):
+    s=''
+    for rowIndex in range(0, len(rows)):
+        for char in range(0,place):
+            s += rows[rowIndex][char]
+        s += '\n'
+
+    print(s)
+    wait(.05)
+    if width == place: return
+    clear()
+    printIntroAnimationHelper(rows, width, place = place + 1)
+
+def printIntroAnimation():
+    clear()
+    rows = ASCII_LOGO.splitlines()
+    width = len(rows[0])
+    printIntroAnimationHelper(rows, width, )
+
+# print first row up to place
+# clear
+# place += 1
+# recursion
+
+ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗██╗   ██╗██████╗ ███████╗
+██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝██║   ██║██╔══██╗██╔════╝
+███████║██║  ██║██║   ██║█████╗  ██╔██╗ ██║   ██║   ██║   ██║██████╔╝█████╗  
+██╔══██║██║  ██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██╔══██╗██╔══╝  
+██║  ██║██████╔╝ ╚████╔╝ ███████╗██║ ╚████║   ██║   ╚██████╔╝██║  ██║███████╗
+╚═╝  ╚═╝╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
+                                                                             
+         ██████╗ ██╗   ██╗███████╗███████╗████████╗                          
+        ██╔═══██╗██║   ██║██╔════╝██╔════╝╚══██╔══╝                          
+        ██║   ██║██║   ██║█████╗  ███████╗   ██║                             
+        ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║                             
+        ╚██████╔╝╚██████╔╝███████╗███████║   ██║                             
+         ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝                             """
+
+# print left
+# clear
+# print 2 left
+
+#printIntroAnimation()
+
 

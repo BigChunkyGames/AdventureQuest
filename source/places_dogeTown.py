@@ -325,7 +325,7 @@ def bonysShop(player):
     inv.append(i)
 
     i = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12)
-    i.customActivationFunction = lambda:self.consume(xpgain=3) fuck this shit
+    i.customActivationFunction = lambda:self.consume(xpgain=3) 
     inv.append(i)
 
     i = Item(player, 'Frizbee', damage=4, customDescription="It's red and as chew marks in it.", _type='weapon', sellValue=6)

@@ -120,6 +120,7 @@ INVALID_OPTION = ["That is not a good choice." ,"Pick something else.", "I'm rea
 INVALID_OPTION_TRAVELING = ["You tried to go that way but it didn't make any sense.", "You tried to go there but ended up right back where you started.", "That is no place you should be going right now.", "Sorry, that is off-limits.", "You thought about going that way but changed your mind.", "There is no need to do that right now.", "After considering that option, you decide to pick something else."]
 TV_SHOWS = ["Commercials", 'Soap Opera', 'The News', 'Jeopardy', 'Wheel of Fortune', 'Spongebob', 'Emotionally Intense Drama', 'Cops', 'Reruns of your least favorite show', 'Oprah', 'Ellen', 'Static']
 
+
 ### NPC's #############################################################################
 
 #(hints)
@@ -141,7 +142,7 @@ ARMOUR_FEET = ["Fresh Kicks", "Pair of the Newest Air-Jordan's", 'Sandles', 'Cro
 ITEM_PREFIX_SHITTY = ["Ugly", 'Shitty', 'Dirty', "Really Dull", "Damaged", "Fake", "Cardboard" ,"Holographic", "Awkward", "Uncomfortable", "Disgusting", "Wobbly", "Hairy", "Wet", ]
 ITEM_PREFIX_BAD = ["Bad", "Rusty", "Hardy", "Unwieldy", "Dull", "Poor", "Stupid", "Corroded","Sticky", "Wooden",  "Plastic", "Uniquely Shaped", "Vintage", "Jiggly",]
 ITEM_PREFIX_OK = ["Ok", "Wieldy", "Average", "Nice", "Decent", "Cool", "Pokey", "Kinda Sharp", "Real", "Freaky", "Metal", "Croche", "Hand Knitted", "Dwarven", "Ancient", "Squishy", "Firm", "Solid", "Golden", "Bronze", "Silver", "Black", "White", "Transparent",  "Neat", ]
-ITEM_PREFIX_GOOD = ["Good", "Pretty Good", "Swift", "Near-mint", "Sharp",'Like-new', "Elven", "Holy", "Blessed", getRandomDankAdjective(), "Glass", "Comfortable", "Stylish", "Grass", "Electromagnetic", "Sacred", "Chrome", "Spring Loaded", "Sexy", "Sneaky", "Flamboyant", "Romantic", "Swanky", ]
+ITEM_PREFIX_GOOD = ["Good", "Pretty Good", "Swift", "Near-mint", "Sharp",'Like-new', "Elven", "Holy", "Blessed",  "Glass", "Comfortable", "Stylish", "Grass", "Electromagnetic", "Sacred", "Chrome", "Spring Loaded", "Sexy", "Sneaky", "Flamboyant", "Romantic", "Swanky", ]
 ITEM_PREFIX_REALLYGOOD = ["Really Good", "Excellent", "Prestine", "Very Sharp", "Executive", "Diamond","Beautiful", "Pristine", ]
 ITEM_PREFIX_SPECIAL = ["Fire", "Ice", "Electrified", ] # TODO
 ITEM_PREFIX_ADVERBS = ["Uncomfortably", "Straight-Up", "Ridiculously", "Really", "Very", "Intensely"] # TODO
