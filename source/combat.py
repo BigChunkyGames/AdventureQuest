@@ -10,7 +10,7 @@ class Combat:
     def __init__(self, player, biome=None, alert=True, enemy=None, startCombatNow=True):
         self.player = player
         self.biome = biome
-        if not enemy == None: 
+        if not enemy == None: # if giving enemy
             self.enemy = enemy
         else: 
             self.enemy = Enemy(player,biome) # make random enemy with given biome
@@ -22,15 +22,17 @@ class Combat:
 
     def alert(self):
         # map.getTileDescription prints something about where you are.
-        print("From over your shoulder you notice"),
-        print( self.enemy.name),
-        print("attempting to"), # TODO flavor text about realizing your're being attacked
+        s = ''
+        s += "From over your shoulder you notice "
+        s += self.enemy.name
+        s += " attempting to " # TODO flavor text about realizing your're being attacked
         attack = getRandomAttackVerb() 
         if attack[-1] == "*": # if attack finishes the sentence
-            print( attack[:-1]) # remove *
+            s += attack[:-1] # remove *
         else :
-            print( attack),
-            print( "you!")
+            s += attack
+            s += " you!"
+        printc(s)
         show("@You're being attacked!@red@") 
 
     def startCombat(self):

@@ -9,6 +9,8 @@ from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
 from source.places_dogeTown import dogeTown, bonysShop
 from source.shopUI import ShopUI
+from source.combat import Combat
+from source.enemy import Enemy
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
@@ -31,7 +33,7 @@ class Game: # perhaps this is what should be saved
         else: # dev mode
             devMode(self.player)
             #bonysShop(self.player)
-            maintownShop(self.player)
+            #maintownShop(self.player)
             #dogeTown(self.player)
 
             #flowers(self.player)
@@ -46,7 +48,7 @@ class Game: # perhaps this is what should be saved
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
+            c = Combat(self.player,enemy=Enemy(self.player, "forest")) # jump to combat
 
             x = InventoryUI(self.player)
             x.run()

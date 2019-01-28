@@ -23,7 +23,7 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait
+from source.utils import wait, wrap
 import re
 import random
 
@@ -45,9 +45,10 @@ class CombatUI():
 
         self.enemy = enemy
 
-        self.playerGoesNext = False # by default, enemy always gets first strike
+        self.playerGoesNext = True # by default, enemy always gets first strike
         self.playerJustDodged = False
-        self.battleLog = ''
+        self.battleLog = '\n\n\n\n\n\n\n'
+        self.maxHeightOfBattleLogWindow = 8
         self.selectedIndexText = ''
         self.result = None
         self.escapeChancePercent = 20
@@ -69,8 +70,6 @@ class CombatUI():
                 # inventory - opens the inventory manager (instead of item)
             ]
         )
-
-        self.maxHeightOfBattleLogWindow = 11 # FIXME find a way to fit text inside battle log
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -97,7 +96,7 @@ class CombatUI():
 
             )
 
-        self.enemyTurn() # enemy goes first
+        #self.enemyTurn() # enemy goes first
 
     # call this function to change the value a progress bar (prog) to a percent
     def setHealthProgressBar(self,progbar, percent):
@@ -139,10 +138,11 @@ class CombatUI():
             self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
         elif choice == "Dodge":
             self.battleLog += "You tried to dodge...\n"
-            # dodging increases chance for enemy to miss by 30%
+            # dodging increases chance for enemy to miss by 30% SCALING
             self.playerJustDodged = True
         elif choice == "Item":
-            self.battleLog += "" #TODO item selection
+            self.player.openInventory() USE THE WEB TO FIGURE OUT WHY THIS BROKEN
+            return
         elif choice == "Run":
             self.tryToEscape()
             self.refresh()
@@ -201,6 +201,7 @@ class CombatUI():
                 self.player.hp = 0
             self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp))
             if self.player.hp == 0: #dead
+                # TODO make death less awkwawrd
                 self.result = "lose"
                 get_app().exit(result="lose")
                 return
@@ -208,8 +209,6 @@ class CombatUI():
         self.refresh()
 
     def refresh(self):
-        #self.application.style=self.style
-        #self.battleLog += "changing color to " + str(self.currentStyle)
         slicedBattleLog = self.battleLog.split('\n')
         if len(slicedBattleLog) >= self.maxHeightOfBattleLogWindow: # dont let battlelog get too long
             self.battleLog = self.battleLog[self.battleLog.index('\n')+1:]
@@ -224,6 +223,8 @@ class CombatUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
+        width = 60
+        height = self.maxHeightOfBattleLogWindow
         enemyName = self.makeFormattedText(self.enemy.name) 
         battleLogTitle = FormattedText([
             ('#ffffff', "Battle Log") 
@@ -250,23 +251,23 @@ class CombatUI():
                     title=actionsTitle,
                     body=HSplit([
                         self.radios,
-                    ], height= 10)
+                    ], height= height)
                 ),
                 Frame(
                     body=self.playerHPBar,
                     title=self.playerName,
                 ),
-            ], padding=0, width = 100 ),
+            ], padding=0, width = width, height=height ),
             HSplit([
                 Dialog(
                     title = battleLogTitle,
-                    body=t,
+                    body=Label(wrap(self.battleLog, limit=width)),
                 ),
                 Frame(
                     body=self.enemyHPBar,
                     title=enemyName
                 ), 
-            ], padding=0, width = 100)
+            ], padding=0, width = width, height=height)
         ])
         return root_container
 

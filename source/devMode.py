@@ -15,7 +15,17 @@ def devMode(player):
     player.hp = 10
     player.money = 8000
     player.devmode = True
-    player.level = 10
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False)
 
     player.clantags.append('[test]')
     player.clantags.append('[test]')
