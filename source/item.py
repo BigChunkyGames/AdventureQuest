@@ -7,7 +7,7 @@ class Item():
     def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None, scale=True):
         '''
         Rarities: None, common, rare, epic, legendary
-        Types: weapon, armour, consumable, quest, 
+        Types: weapon, armour, consumable, quest, misc
         ArmourSlots: head, offhand, chest, legs, feet
         Set sellValue to None to generate a default value
         customActivationFunction is a lambda that gets called when item is activated (equipped)
@@ -59,7 +59,7 @@ class Item():
         s = ''
         if not self.rarity == None: # if has a rarity
             s += ' [' + self.rarity.capitalize() + '] ' + '\n'
-        elif self.type == 'weapon' or self.type == 'armour':
+        elif self.type == 'weapon' or self.type == 'armour': # if doesnt have rarity and is a weapon or armour
             s += ' [Common] ' + '\n'
         if self.sellValue > 0:
             s += 'Value: $' + str(self.sellValue) +  '\n'

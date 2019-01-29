@@ -104,14 +104,17 @@ class InventoryUI():
             self.makeListCurrentRadios(self.listOfItems,self.selectedRadios._selected_index) 
 
     def updateListOfItems(self):
-        if   self.mainRadios._selected_index == 0:
+        category = self.mainRadios.values[self.mainRadios._selected_index][1]
+        if category == 'Weapons':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
-        elif self.mainRadios._selected_index == 1:
+        elif category == 'Armour':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='armour')
-        elif self.mainRadios._selected_index == 2:
+        elif category == 'Consumable':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
-        elif self.mainRadios._selected_index == 3:
+        elif category == 'Quest':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
+        elif category == 'Misc':
+            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='misc')
         if len(self.listOfItems) == 0:
             self.populateMainRadios()
             self.currentRadios = self.mainRadios
@@ -166,6 +169,7 @@ class InventoryUI():
         self.populateMainRadiosHelper('armour')
         self.populateMainRadiosHelper('consumable')
         self.populateMainRadiosHelper('quest')
+        self.populateMainRadiosHelper('misc')
         self.mainRadios = RadioList2(
             values=self.mainRadiosRows,
             app = self)

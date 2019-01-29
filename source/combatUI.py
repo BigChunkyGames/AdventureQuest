@@ -54,6 +54,7 @@ class CombatUI():
         self.battleLog = '\n\n\n\n\n\n\n'
         self.maxHeightOfBattleLogWindow = 8
         self.width = 90
+        self.smallWidth = 30
 
         self.selectedIndexText = ''
         self.result = None
@@ -128,7 +129,7 @@ class CombatUI():
         choice = self.radios.current_value
         s = ''
         if choice == "Attack":
-            s +=  "\nYou tried to attack... "
+            s +=  "You tried to attack... "
             damage = self.player.getTotalAttackPower()
             s += " and did " 
             s += str(damage)
@@ -138,7 +139,7 @@ class CombatUI():
                 self.enemy.hp = 0
             self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
         elif choice == "Dodge": # dodging increases chance for enemy to miss by 30% SCALING
-            s += "\nYou tried to dodge... "
+            s += "You tried to dodge... "
             self.playerJustDodged = True 
         elif choice == "Item": # doesnt take your turn
             self.playerGoesNext = True
@@ -153,13 +154,11 @@ class CombatUI():
             self.result = "win"
             get_app().exit(result="win")
             return
-
-        self.battleLog = s + self.battleLog
-        self.enemyTurn()
+        self.enemyTurn(s)
     
     def tryToEscape(self, event=None):
         s = ''
-        s += "\nYou tried to run..." 
+        s += "You tried to run..." 
         if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
             s += " and escaped the combat!" # isnt ever visible
             self.result = "escaped"
@@ -169,11 +168,11 @@ class CombatUI():
             s += " but failed to escape!"
         self.battleLog = s + self.battleLog
 
-    def enemyTurn(self):
-        # for now, always try to attack TODO
+    def enemyTurn(self, textOfPlayerTurn=False):
+        # for now, always try to attack TODO advanced combat
         self.playerGoesNext = True
         s=''
-        s += '\n' + self.enemy.name + " tried to " 
+        s += self.enemy.name + " tried to " 
         attack = self.enemy.getRandomAttack() 
         if attack[-1] == "*": # if attack finishes the sentence
             s += attack[:-1] # remove *
@@ -182,7 +181,7 @@ class CombatUI():
             s += " you... "
             
         # calculate hit chance and handle
-        dodgeModifier = 0
+        dodgeModifier = 0 # TODO advanced combat dodge modifier
         if self.playerJustDodged == True:
             dodgeModifier = 30
             self.playerJustDodged = False
@@ -205,25 +204,33 @@ class CombatUI():
                 self.result = "lose"
                 get_app().exit(result="lose")
                 return
-        self.battleLog = s + self.battleLog
+        if textOfPlayerTurn: 
+            self.battleLog = textOfPlayerTurn + '\n\n' + s 
+        else:
+            self.battleLog = s 
         self.refresh()
 
     def refresh(self):
-        self.truncateBattlelog()
+        self.fillBattleLogWithNewlines()
         self.application.layout=Layout(
             self.getRootContainer(),
             focused_element=self.radios)
 
-    def truncateBattlelog(self):
-        self.battleLog = wrap(self.battleLog, limit=self.width)
+    def fillBattleLogWithNewlines(self):
+        self.battleLog = wrap(self.battleLog, limit=self.width-self.smallWidth)
         slicedBattleLog = self.battleLog.split('\n') # list of rows of the battlelog
-        #if slicedBattleLog[0] == '': del slicedBattleLog[0] # dirty fix
         while True:
-            if len(slicedBattleLog) > self.maxHeightOfBattleLogWindow: 
-                del slicedBattleLog[-1] # remove last row
+            if len(slicedBattleLog) < self.maxHeightOfBattleLogWindow: 
+                slicedBattleLog.append('\n') 
             else:
                 break
         self.battleLog = '\n'.join(slicedBattleLog)
+
+    # def suspense(self): # doesnt work because ui updates on run method, not during other methods
+    #     for i in range(3):
+    #         wait(.5)
+    #         self.battleLog += '.'
+    #         self.refresh()
 
     def makeFormattedText(self, text, color='#ffffff'):
         return FormattedText([
@@ -232,7 +239,6 @@ class CombatUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        smallWidth = 30
         height = self.maxHeightOfBattleLogWindow
         enemyName = self.makeFormattedText(self.enemy.name) 
         battleLogTitle = FormattedText([
@@ -254,27 +260,31 @@ class CombatUI():
             style='bg:#000000',
             height=10,
             )
-        root_container = VSplit([
-            HSplit([
+        root_container = HSplit([
+            VSplit([
                 Dialog(
                     title=actionsTitle,
                     body=HSplit([
                         self.radios,
-                    ], height= height)
+                    ], height= height),
+                    width=self.smallWidth
                 ),
-                Frame(
-                    body=self.playerHPBar,
-                    title=self.playerName,
-                ),
-            ], padding=0, width = smallWidth, height=height ),
-            HSplit([
                 Dialog(
                     title = battleLogTitle,
                     body=Label(self.battleLog),
+                    width=self.width-self.smallWidth
+                ),
+            ], padding=0, width = self.smallWidth, height=height+2 ),
+            VSplit([
+                Frame(
+                    body=self.playerHPBar,
+                    title=self.playerName,
+                    width=int(self.width/2)
                 ),
                 Frame(
                     body=self.enemyHPBar,
-                    title=enemyName
+                    title=enemyName,
+                    width=int(self.width/2)
                 ), 
             ], padding=0, width = self.width, height=height)
         ])

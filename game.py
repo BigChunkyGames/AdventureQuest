@@ -7,7 +7,7 @@ from source.devMode import *
 from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
-from source.places_dogeTown import dogeTown, bonysShop
+from source.places_dogeTown import dogeTown, bonysShop, getBook
 from source.shopUI import ShopUI
 from source.combat import Combat
 from source.enemy import Enemy
@@ -32,6 +32,7 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            getBook(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)
@@ -47,10 +48,10 @@ class Game: # perhaps this is what should be saved
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            c = Combat(self.player) # jump to combat
+            #c = Combat(self.player) # jump to combat
 
-            # x = InventoryUI(self.player)
-            # x.run()
+            self.player.openInventory()
+            
 
             #maintown(self.player)
 
@@ -60,7 +61,7 @@ class Game: # perhaps this is what should be saved
 # w game each time. Should
 #  ask to load saved game data or start 
 # new game. Below line creates a new game object but should
-# \ load if loading saved game
+# \ load if loading saved" game
 g = Game()
 g.start()
 

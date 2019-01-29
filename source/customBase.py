@@ -630,7 +630,7 @@ class RadioList(object):
     def setDescription(self):
         index = self._selected_index
         if index == 0:
-            self.description = "Attack with your " + self.weaponName # TODO inventory. text changes with weapon 
+            self.description = "Attack with your " + self.weaponName 
         elif index == 1:
             self.description = "Attempt to avoid attack"
         elif index == 2:

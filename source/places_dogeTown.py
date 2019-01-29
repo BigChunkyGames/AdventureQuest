@@ -114,7 +114,8 @@ def dogeTown(player):
                 show('"We praise you, almighty DOG. We lift our paws to you."')
                 show('"Now please turn to page bork-hundred and 3."')
                 show("You pick up a book from under the seat in front of you.")
-                show("You have acquired 'The Sacred Texts of Buddhogism'.") # TODO inventory
+                show("You have acquired 'The Sacred Texts of Buddhogism'.") 
+                getBook(player)
                 print( "Read it?")
                 if yesno(player):
                     show("The entire book is written using dog words that you cannot understand.")
@@ -287,7 +288,7 @@ def bathroom(player):
     show("In front of you is a very dirty fire hydrant.")
     show("You take a seat.")
     show("You notice, hanging on the back of the door, a kinky doggy-style costume.")
-    show("@You acquired the doggy-style costume.@yellow@") #TODO inventory
+    show("@You acquired the doggy-style costume.@yellow@")
     i = getTheCostume(player)
     player.addToInventory(i)
     print("Put it on?")
@@ -344,9 +345,22 @@ def bonysShop(player):
     if "Bud joined the party" in player.choices: desc = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!"
     else: desc = "You unravel the paper to find that it is an extremely old missing dog poster. You remember making these years ago when you lost Bud. The hand drawn image of a Bud brings back nostalgic memories but you try to shove them out of your mind."
 
-    i = Item(player, 'Crumped Paper', customDescription= desc, _type='quest', sellValue=1)
+    i = Item(player, 'Crumped Paper', customDescription= desc, _type='misc', sellValue=1)
     inv.append(i)
 
     s.originalInventory = inv
     s.restock()
     s.openUI()
+
+def getBook(player):
+    desc = ''
+    for sentences in range(3):
+        words = random.randint(5, 12)
+        for i in range(words):
+            if i == 0:
+                desc += getRandomDogNoise().capitalize() + " "
+            elif i == words-1:
+                desc += '. '
+            else:
+                desc += " " + getRandomDogNoise()
+    player.addToInventory(Item(player, 'The Sacred Texts of Buddhogism', customDescription = desc, rarity='rare', _type='misc', sellValue=8, ))
