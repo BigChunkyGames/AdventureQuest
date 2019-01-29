@@ -55,7 +55,7 @@ class Game: # perhaps this is what should be saved
 
             #maintown(self.player)
 
-            #world(self.player)
+            world(self.player)
         
 #TODO: assuming ne
 # w game each time. Should
