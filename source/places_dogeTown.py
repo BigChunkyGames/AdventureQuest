@@ -300,7 +300,7 @@ def bathroom(player):
         show("You wipe your hands on the grassy countertop and check yourself out in the mirror.")
         show("At the sight of yourself, you are fullfilled with confidence.")
         show("Damn, you look fine.") 
-        player.addExperience(1)
+        player.gainXp(1)
         # TODO different reaction depending on if constume was equipped
     show("You walk back into the club.")
 

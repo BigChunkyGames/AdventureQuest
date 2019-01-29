@@ -24,6 +24,8 @@ from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
 from source.utils import wait, wrap
+from source.inventoryUI import InventoryUI
+
 import re
 import random
 
@@ -42,6 +44,8 @@ class CombatUI():
             self.playerClans =  self.playerName = FormattedText([
                 ('#ffffff', str(player.aspect['name'])),
             ]) 
+        if self.player.equippedWeapon.name != None: self.weaponName = self.player.equippedWeapon.name
+        else: self.weaponName = "Bare Hands"
 
         self.enemy = enemy
 
@@ -49,6 +53,8 @@ class CombatUI():
         self.playerJustDodged = False
         self.battleLog = '\n\n\n\n\n\n\n'
         self.maxHeightOfBattleLogWindow = 8
+        self.width = 90
+
         self.selectedIndexText = ''
         self.result = None
         self.escapeChancePercent = 20
@@ -64,12 +70,10 @@ class CombatUI():
                 ('Dodge', 'Dodge'), # icrease miss chance for enemy
                 ('Item', 'Item'),
                 ('Run', 'Run') # try to escape
-
                 # more options could be:
                 # check - returns text about enemy potentially indicating weaknessess
-                # inventory - opens the inventory manager (instead of item)
-            ]
-        )
+            ],
+            weaponName = self.weaponName)
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -93,10 +97,7 @@ class CombatUI():
             style=self.style,
             mouse_support=True,
             full_screen=True,
-
             )
-
-        #self.enemyTurn() # enemy goes first
 
     # call this function to change the value a progress bar (prog) to a percent
     def setHealthProgressBar(self,progbar, percent):
@@ -125,55 +126,54 @@ class CombatUI():
         # handle choice
         self.radios.current_value = self.radios.values[self.radios._selected_index][0] # show change to selection with *
         choice = self.radios.current_value
-        #TODO do something depending on current value
+        s = ''
         if choice == "Attack":
-            self.battleLog += "You tried to attack..."
-            damage = 2 #TODO
-            self.battleLog += " and did " 
-            self.battleLog += str(damage)
-            self.battleLog += " damage!\n" # TODO color
+            s +=  "\nYou tried to attack... "
+            damage = self.player.getTotalAttackPower()
+            s += " and did " 
+            s += str(damage)
+            s += " damage!" # TODO color
             self.enemy.hp = self.enemy.hp - damage
             if self.enemy.hp < 0:
                 self.enemy.hp = 0
             self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
-        elif choice == "Dodge":
-            self.battleLog += "You tried to dodge...\n"
-            # dodging increases chance for enemy to miss by 30% SCALING
-            self.playerJustDodged = True
-        elif choice == "Item":
-            self.player.openInventory() USE THE WEB TO FIGURE OUT WHY THIS BROKEN
+        elif choice == "Dodge": # dodging increases chance for enemy to miss by 30% SCALING
+            s += "\nYou tried to dodge... "
+            self.playerJustDodged = True 
+        elif choice == "Item": # doesnt take your turn
+            self.playerGoesNext = True
+            self.done(result='inventory')
             return
         elif choice == "Run":
             self.tryToEscape()
-            self.refresh()
-            return
         else:
-            self.battleLog += "How did you do that!?"
+            s += "How did you do that!?"
             
         if self.enemy.hp == 0: # check if he dead
             self.result = "win"
             get_app().exit(result="win")
             return
-        self.refresh()
+
+        self.battleLog = s + self.battleLog
         self.enemyTurn()
     
     def tryToEscape(self, event=None):
-        self.battleLog += "You tried to run..." 
+        s = ''
+        s += "\nYou tried to run..." 
         if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
-            self.battleLog += " and escaped the combat!"
+            s += " and escaped the combat!" # isnt ever visible
             self.result = "escaped"
             get_app().exit(result="escaped")
             return
         else:
-            self.battleLog += " but failed to escape!\n"
-            self.refresh()
-            self.enemyTurn()
+            s += " but failed to escape!"
+        self.battleLog = s + self.battleLog
 
     def enemyTurn(self):
         # for now, always try to attack TODO
         self.playerGoesNext = True
         s=''
-        s += self.enemy.name + " tried to " 
+        s += '\n' + self.enemy.name + " tried to " 
         attack = self.enemy.getRandomAttack() 
         if attack[-1] == "*": # if attack finishes the sentence
             s += attack[:-1] # remove *
@@ -188,14 +188,14 @@ class CombatUI():
             self.playerJustDodged = False
         if self.enemy.missChancePercent + dodgeModifier > random.randint(0,100):
             # missed
-            if not attack[-1] == "*": s += " but missed!\n"
-            else: s += " But missed!\n"
+            if not attack[-1] == "*": s += " but missed!"
+            else: s += " But missed!"
         else:
             # hit
             damage = self.enemy.attack
-            if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!\n"
+            if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!"
             else: 
-                s += " It dealt " + str(damage) + " damage!\n"
+                s += " It dealt " + str(damage) + " damage!"
             self.player.hp = self.player.hp - damage
             if self.player.hp < 0:
                 self.player.hp = 0
@@ -205,16 +205,25 @@ class CombatUI():
                 self.result = "lose"
                 get_app().exit(result="lose")
                 return
-        self.battleLog += s
+        self.battleLog = s + self.battleLog
         self.refresh()
 
     def refresh(self):
-        slicedBattleLog = self.battleLog.split('\n')
-        if len(slicedBattleLog) >= self.maxHeightOfBattleLogWindow: # dont let battlelog get too long
-            self.battleLog = self.battleLog[self.battleLog.index('\n')+1:]
+        self.truncateBattlelog()
         self.application.layout=Layout(
             self.getRootContainer(),
             focused_element=self.radios)
+
+    def truncateBattlelog(self):
+        self.battleLog = wrap(self.battleLog, limit=self.width)
+        slicedBattleLog = self.battleLog.split('\n') # list of rows of the battlelog
+        #if slicedBattleLog[0] == '': del slicedBattleLog[0] # dirty fix
+        while True:
+            if len(slicedBattleLog) > self.maxHeightOfBattleLogWindow: 
+                del slicedBattleLog[-1] # remove last row
+            else:
+                break
+        self.battleLog = '\n'.join(slicedBattleLog)
 
     def makeFormattedText(self, text, color='#ffffff'):
         return FormattedText([
@@ -223,7 +232,7 @@ class CombatUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        width = 60
+        smallWidth = 30
         height = self.maxHeightOfBattleLogWindow
         enemyName = self.makeFormattedText(self.enemy.name) 
         battleLogTitle = FormattedText([
@@ -257,22 +266,26 @@ class CombatUI():
                     body=self.playerHPBar,
                     title=self.playerName,
                 ),
-            ], padding=0, width = width, height=height ),
+            ], padding=0, width = smallWidth, height=height ),
             HSplit([
                 Dialog(
                     title = battleLogTitle,
-                    body=Label(wrap(self.battleLog, limit=width)),
+                    body=Label(self.battleLog),
                 ),
                 Frame(
                     body=self.enemyHPBar,
                     title=enemyName
                 ), 
-            ], padding=0, width = width, height=height)
+            ], padding=0, width = self.width, height=height)
         ])
         return root_container
 
     def run(self):
         self.application.run()
+
+    def done(self, result='?'):
+        self.result = result
+        get_app().exit(result=result)
  
 # STILL TODO
 # fix scrolling issue in battelog

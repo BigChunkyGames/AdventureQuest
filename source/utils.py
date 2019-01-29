@@ -147,7 +147,7 @@ def getInput(player):
         elif player.devmode and inp == "debug level up":
             player.levelUp()
         elif player.devmode and inp == "debug add xp":
-            player.addExperience(int(input("How much XP?: ")), input("Scale? (True or False): "))
+            player.gainXp(int(input("How much XP?: ")), input("Scale? (True or False): "))
         elif inp == "hp":
             print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
             print("("),
@@ -242,4 +242,3 @@ def getStats(player):
     s += "Money:    $ " + str(player.money) + "\n"
     s += "Strength: " + str(player.strength) 
     return s
-

@@ -22,7 +22,7 @@ class Enemy:
         self.listOfAttacks = None
 
     def setHP(self): 
-        return self.player.scale(2+self.toughness) # SCALING
+        return self.player.scale(10+self.toughness) # SCALING
 
     def setAttack(self):
         return self.player.scale(1+self.toughness) # SCALING

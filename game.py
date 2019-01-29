@@ -40,7 +40,6 @@ class Game: # perhaps this is what should be saved
 
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
-
             
 
             # lisht = []
@@ -48,10 +47,10 @@ class Game: # perhaps this is what should be saved
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            c = Combat(self.player,enemy=Enemy(self.player, "forest")) # jump to combat
+            c = Combat(self.player) # jump to combat
 
-            x = InventoryUI(self.player)
-            x.run()
+            # x = InventoryUI(self.player)
+            # x.run()
 
             #maintown(self.player)
 
@@ -64,6 +63,7 @@ class Game: # perhaps this is what should be saved
 # \ load if loading saved game
 g = Game()
 g.start()
+
 
 
 

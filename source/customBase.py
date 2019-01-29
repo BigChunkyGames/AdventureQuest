@@ -554,7 +554,7 @@ class RadioList(object):
 
     :param values: List of (value, label) tuples.
     """
-    def __init__(self, values):
+    def __init__(self, values, weaponName):
         assert isinstance(values, list)
         assert len(values) > 0
         assert all(isinstance(i, tuple) and len(i) == 2
@@ -563,7 +563,9 @@ class RadioList(object):
         self.values = values
         self.current_value = values[0][0]
         self._selected_index = 0
-        self.description = '' # TODO set default to whatever weapon text is
+        self.weaponName = weaponName
+        self.description = ''
+        self.setDescription()
 
         # Key bindings.
         kb = KeyBindings()
@@ -628,13 +630,13 @@ class RadioList(object):
     def setDescription(self):
         index = self._selected_index
         if index == 0:
-            self.description = "Use your fists?" # TODO inventory. text changes with weapon 
+            self.description = "Attack with your " + self.weaponName # TODO inventory. text changes with weapon 
         elif index == 1:
-            self.description = "Attempt to avoid attack?"
+            self.description = "Attempt to avoid attack"
         elif index == 2:
-            self.description = "Open your inventory?"
+            self.description = "Open your inventory"
         elif index == 3:
-            self.description = ""
+            self.description = "Get out of here"
 
     def _get_text_fragments(self):
         result = []

@@ -35,13 +35,14 @@ class Combat:
         printc(s)
         show("@You're being attacked!@red@") 
 
-    def startCombat(self):
-        c = CombatUI(self.player, self.enemy)
+    def startCombat(self, GivenCombatUI=None):
+        if GivenCombatUI==None: c = CombatUI(self.player, self.enemy)
+        else: c = GivenCombatUI
         c.run()
         clear()
         if c.result == "win":
             show("You defeated " + self.enemy.name + "!")
-            self.player.addExperience(self.enemy.xpworth) # gain xp
+            self.player.gainXp(self.enemy.xpworth, scale=False) # xp already scales when creating enemy
             self.player.regenHealth()# gain health
             if tryForDrop(10): # TODO after inventory
                 show("You got some loot!")
@@ -49,6 +50,9 @@ class Combat:
             self.player.death()
         elif c.result == "escaped":
             show("You escaped from " + self.enemy.name + "! That was a close one!")
+        elif c.result == 'inventory':
+            self.player.openInventory()
+            self.startCombat(c)
         return
         
         

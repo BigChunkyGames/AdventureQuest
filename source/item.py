@@ -75,7 +75,8 @@ class Item():
         # TODO: flavorize
 
     def whereIsIt(self):
-        hand = self.player.aspect["hand"]
+        if not 'hand' in self.player.aspect: hand = 'right'
+        else: hand = self.player.aspect["hand"]
         if hand == 'right': otherhand='left'
         else: otherhand='right'
         if self.type ==  "weapon":
@@ -90,7 +91,8 @@ class Item():
             return "holding this in your " + otherhand + " hand."
 
     def whereDoesItGo(self):
-        hand = self.player.aspect["hand"]
+        if not 'hand' in self.player.aspect: hand = 'right'
+        else: hand = self.player.aspect["hand"]
         if hand == 'right': otherhand='left'
         else: otherhand='right'
         if self.type ==  "This goes in your " + hand:

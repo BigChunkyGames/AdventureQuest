@@ -11,8 +11,6 @@ def devMode(player):
     player.aspect['adj1'], player.aspect['adj2'], player.aspect['adj3'], player.aspect['adj4'], player.aspect['adj5'] = "cool", "neato", "sick nasty", "wiggity wiggity whack", "excellent"
 
     #change some more values
-    player.maxhp = 9999999
-    player.hp = 10
     player.money = 8000
     player.devmode = True
     player.levelUp(printAboutIt=False)
@@ -27,7 +25,7 @@ def devMode(player):
     player.levelUp(printAboutIt=False)
     player.levelUp(printAboutIt=False)
 
-    player.clantags.append('[test]')
+    player.clantags.append('[test1]')
     player.clantags.append('[test]')
     player.clantags.append('[test]')
     player.clantags.append('[test]')
@@ -52,7 +50,6 @@ def devMode(player):
     player.inventory.append(i)
     i = generateRandomArmourOrWeapon(player, _type='weapon', rarity='legendary')
     player.inventory.append(i)
-    player.getInitialItems()
     
     i1 = Item(player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
     i1.customActivationFunction = lambda:i1.consume(heal=3)

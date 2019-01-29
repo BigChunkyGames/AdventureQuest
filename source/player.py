@@ -4,6 +4,7 @@ from source.utils import *
 from source.map import Map
 from source.inventoryUI import *
 from source.item import Item
+from source.combat import Combat
 
 class Player:
 
@@ -42,6 +43,7 @@ class Player:
         self.equippedArmourChest = None
         self.equippedArmourLegs = None
         self.equippedArmourFeet = None
+        self.getInitialItems() # also equipps them
         self.shops=[] # list of shop objects
         # location
         self.currentLocationX = 6
@@ -64,14 +66,19 @@ class Player:
     def getInitialItems(self):
         fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
         self.addToInventory(fists, printAboutIt=False, activateNow = True) 
+        self.equippedWeapon = fists
         hat = Item(self, 'Baseball Cap', customDescription="You got this when you joined the little league in 7th grade.\nIt's red and smells like dirt.", rarity=None, _type='armour', armourSlot='head', sellValue=1 )
         self.addToInventory(hat, printAboutIt=False, activateNow = True) 
+        self.equippedArmourHead = hat
         tshirt = Item(self, 'T-Shirt', customDescription="A black T-Shirt with a cool skull on the front.\nYou can't remember the last time this was washed, but it smells fine to you.", rarity=None, _type='armour', armourSlot='chest', sellValue=1 )
         self.addToInventory(tshirt, printAboutIt=False, activateNow = True) 
+        self.equippedArmourChest = tshirt
         pants = Item(self, 'Sweat Pants', customDescription="They make a nice 'swish' sound when you walk.", rarity=None, _type='armour', armourSlot='legs', sellValue=1 )
         self.addToInventory(pants, printAboutIt=False, activateNow = True) 
+        self.equippedArmourLegs = pants
         shoes = Item(self, 'Old Tennis Shoes', customDescription="You can't remember buying these, but you've worn them every day since.", rarity=None, _type='armour', armourSlot='feet', sellValue=2 )
         self.addToInventory(shoes, printAboutIt=False, activateNow = True) 
+        self.equippedArmourFeet =shoes
 
     def getAllInventoryItemsAsString(self,_type=None, showEquipped=True):
         '''Can specify all inventory items of type weapon, armour, consumable, or quest'''
@@ -224,9 +231,7 @@ class Player:
     def levelUp(self, printAboutIt=True):
         while True:
             self.level = self.level + 1
-            if printAboutIt:print("")
-            if printAboutIt:print ("You are now level "), 
-            if printAboutIt:printWithColor(str(self.level), "magenta", after= "!")
+            if printAboutIt:printWithColor(str(self.level), before='\nYou are now level ', color="magenta", after= "!")
             self.xp = self.xp - self.levelupxp
             if self.xp < 0:
                 self.xp = 0
@@ -278,6 +283,16 @@ class Player:
             return s
 
 #### Combat ##########################################
+
+    def getTotalAttackPower(self):
+        damage = self.strength
+        if self.equippedWeapon: damage += self.equippedWeapon.damage
+        if self.equippedArmourChest: damage += self.equippedArmourChest.damage
+        if self.equippedArmourFeet: damage += self.equippedArmourFeet.damage
+        if self.equippedArmourHead: damage += self.equippedArmourHead.damage
+        if self.equippedArmourLegs: damage += self.equippedArmourLegs.damage
+        if self.equippedArmourOffhand: damage += self.equippedArmourOffhand.damage
+        return damage
 
     def takeDamage(self, d):
         self.hp = self.hp - d
@@ -352,7 +367,7 @@ class Player:
                 break
             else:
                 pass
-        self.getInitialItems()
+        
 
     def generateAspects(self):
         self.aspect['name'] = "Michael"
