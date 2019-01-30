@@ -11,6 +11,7 @@ from source.places_dogeTown import dogeTown, bonysShop, getBook
 from source.shopUI import ShopUI
 from source.combat import Combat
 from source.enemy import Enemy
+from source.SlotMachine import *
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
@@ -32,7 +33,10 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            getBook(self.player)
+            s = Slots(self.player)
+            s.slot_machine()
+            #introduction(self.player)
+            maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)
@@ -50,7 +54,7 @@ class Game: # perhaps this is what should be saved
 
             #c = Combat(self.player) # jump to combat
 
-            self.player.openInventory()
+            #self.player.openInventory()
             
 
             #maintown(self.player)

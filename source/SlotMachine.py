@@ -1,62 +1,61 @@
-from lists import *
+from source.lists import *
+from source.item import generateRandomArmourOrWeapon
 
-class Slots:
+class Slots():
 
-    def __init__(self, player)
+    def __init__(self, player):
         self.player = player
+        self.freerun = False
+        self.beginningmoney = self.player.money
+
 
     def playcheck(self): #return bool
-        return not (player.money - 10) < 0
+        return not (self.player.money - 10) < 0
 
 
     def slot_machine(self):
         if not self.playcheck():
-            print("You think about taking a spin on the slot machine, but "
+            show("You think about taking a spin on the slot machine, but "
                   "realize you don't have enough money.")
             return
-        print("You take a seat at this dank slot machine. ")
-        play = input("Give it a go? Press P to play (Pay 10 money), "
+        show("You take a seat at this dank slot machine. ")
+        play = input("Give it a go? Press Enter to play (Pay 10 money), "
                          "or anything else to leave. \n").lower().strip()
-        if play == "p":
-            beginningmoney = player.money
+        if play == "":
             self.slot_machine_play()
-            netdoge = (player.money - beginningmoney)
+            netdoge = (self.player.money - self.beginningmoney)
             if netdoge > 0:
-                print("You got lucky today, managing to walk away with %s more money than you came in with.") % netdoge
+                show("You got lucky today, managing to walk away with "+str(netdoge)+" more money than you came in with.")
             elif netdoge < 0:
-                print("Looks like today wasn't your lucky day, your pockets are %s money lighter than they were when you walked in.") % abs(netdoge)
+                show("Looks like today wasn't your lucky day, your pockets are "+str(netdoge)+" money lighter than they were when you walked in.") 
             elif netdoge == 0:
-                print("You leave the machine, not having gained or lost any money. You're still luckier than most who try their hand at gambling!")
+                show("You leave the machine, not having gained or lost any money. You're still luckier than most who try their hand at gambling!")
         else:
-            print("You decide that you're too %s for this shit and peace "
-                  "right out of there.") % dankadjective().lower()
+            show("You decide that you're too "+getRandomDankAdjective().lower()+" for this shit and peace right out of there.")
 
 
     def slot_machine_play(self):
         while True: 
+            clear()
             if not self.playcheck():
                 chance = random.randint(1, 3)
                 if chance == 1:
-                    print("You don't have enough money for another round on "
+                    show("You don't have enough money for another round on "
                           "the slot machine. You gently tip your fedora "
                           "before leaving.")
                 elif chance == 2:
-                    print("You don't have enough money for another round "
+                    show("You don't have enough money for another round "
                           "on the slot machine, but you didn't even want "
                           "to play another round anyway. Psh.")
                 elif chance == 3:
-                    print("You don't have enough money for another round "
+                    show("You don't have enough money for another round "
                           "on the slot machine. You don your shades and "
                           "peace right out of there.")
                 return
-            try:
-                if freerun:
-                    freerun = False
-                else:
-                    player.money -= 10
-            except NameError:
-                freerun = False
-                player.money -= 10
+            if self.freerun:
+                self.freerun = False
+            else:
+                self.player.money -= 10
             # 13.8% win chance
             tiles = ["(weed)", "(weed)", "(weed)", "(weed)",
                      "(hitmarker)", "(hitmarker)", "(hitmarker)",
@@ -78,20 +77,20 @@ class Slots:
                 # 1/24 chance
                 mult = random.randrange(1, 11)
                 win = 40 + mult*2
-                player.money += win
-                print(dankadjective() + ", you won %s money.") % win
+                self.player.money += win
+                printc(getRandomDankAdjective() + ", you won @"+str(win)+" money@green@.")
             elif tiles[a] == tiles[b] == tiles[c] == "(hitmarker)":
                 # 1/24 chance
                 mult = random.randrange(1, 31)
                 win = 20 + mult*3
-                player.money += win
-                print(dankadjective() + ", you won %s money.") % win
+                self.player.money += win
+                printc(getRandomDankAdjective() + ", you won @"+str(win)+" money@green@.")
             elif tiles[a] == tiles[b] == tiles[c] == "(Sample Text)":
                 # 1/72 chance
                 mult = random.randrange(1, 11)
                 win = 1 + (mult**2) * 3
-                player.money += win
-                print(dankadjective() + ", you won %s money. That's fuckin sick!") % win
+                self.player.money += win
+                printc(getRandomDankAdjective() + ", you won @"+str(win)+" money@green@. That's fuckin sick!") 
             elif tiles[a] == tiles[b] == tiles[c] == "(Mountain Dew)":
                 # 1/72 chance
                 print("A small buzzer goes off. The lights flash and the "
@@ -100,14 +99,16 @@ class Slots:
                       "Mountain Dew falls out.")
                 print("In your state of euphoria you quickly chug the "
                       "entire can.")
-                print("You have gained 420 dank points.")
+                printc("@You have gained 420 dank points.@green@")
                 print(" ")
-                player.dankpoints += 420
+                self.player.dankpoints += 420
             elif tiles[a] == tiles[b] == tiles[c] == "(Sniper Rifle)":
                 # 1/72 chance
+                i = generateRandomArmourOrWeapon(self.player, _type='weapon', rarity='epic')
                 print("The machine explodes and in the crater you find "
                       "what you've needed all long. Its a"),
-                print(self.randomweapon() + "!")
+                print(i.name() + "!")
+                self.player.addToInventory(i)
             elif tiles[a] == tiles[b] == tiles[c] == "(Doritos)":
                 # 1/72 chance
                 print("The machine rumbles and out comes a single Dorito "
@@ -116,65 +117,44 @@ class Slots:
                       "storing the rest in your pocket for later.")
                 print("You have gained one Perk Point.")
                 print("")
-                perkpoints += 1
-                # TODO: Add perkpoint(self)
+                self.player.perkpoints += 1
             elif tiles[a] != "(weed)" and tiles[b] != "(weed)" and tiles[a] != tiles[b] and tiles[b] != tiles[c] and tiles[a] != tiles[c] and tiles[c] == "(Mountain Dew)":
                 print("The single mountain dew in the third slot can only mean one thing...")
                 print("This game is even danker than you thought. (Your next spin is free!)")
-                freerun = True
+                self.freerun = True
             elif tiles[a] != "(weed)" and tiles[b] != "(weed)" and tiles[a] != tiles[b] and tiles[b] != tiles[c] and tiles[a] != tiles[c] and tiles[c] == "(Sniper Rifle)":
                 print("The intervention in the third slot can only mean one thing...")
                 print("You're a fuckin sick quickscoper m8. (+5 money)")
-                player.money += 5
+                self.player.money += 5
             elif tiles[a] != "(weed)" and tiles[b] != "(weed)" and tiles[a] != tiles[b] and tiles[b] != tiles[c] and tiles[a] != tiles[c] and tiles[c] == "(Doritos)":
                 print("The single dorito in the third slot can only mean one thing...")
                 print("You're gonna need some gamer fuel. (+15 money)")
-                player.money += 5
+                self.player.money += 5
             elif tiles[a] != "(weed)" and tiles[b] != "(weed)" and tiles[a] != tiles[b] and tiles[b] != tiles[c] and tiles[a] != tiles[c] and tiles[c] == "(Sample Text)":
                 print("The Sample Text in the third slot can only mean one thing...")
                 print("Sample Text")
                 print("Sample Text")
                 print("Sample Text (+20 money)")
-                player.money += 20
+                self.player.money += 20
             else:
                 print("You didn't win anything this time.")
-            if player.money == 420:
+            if self.player.money == 420:
                 print("You have 420 money. That's really fuckin "
                       "dank, m8.")
                 print("You have earned 1 dank point.")
-                player.dankpoints += 1
+                self.player.dankpoints += 1
             print("Hit enter to play again, type anything to quit. (You "
-                  "have %s money.)") % player.money
-            again = input("").lower().strip()
-            if again == "":
-                pass
-            else:
-                if freerun == True:
+                  "have "+str(self.player.money)+" money.)")
+            again = input("")
+            if again != "":
+                if self.freerun == True:
                     print("Your next spin is free, are you sure you want to "
-                          "leave and waste this opportunity? (y/n)")
-                    while True:
-                        usercontinue = input("> ").lower().strip()
-                        if usercontinue == "n":
-                            playagain = True
-                            break
-                        elif usercontinue == "y":
-                            playagain = False
-                            break
-                        else:
-                            print("Please enter 'y' or 'n'")
+                          "leave and waste this opportunity?")
                 else:
-                    print("Are you sure you want to leave the slot machine? (y/n)")
-                    while True:
-                        usercontinue = input("> ").lower().strip()
-                        if usercontinue == "n":
-                            playagain = True
-                            break
-                        elif usercontinue == "y":
-                            playagain = False
-                            break
-                        else:
-                            print("Please enter 'y' or 'n'")
-                if not playagain:
+                    print("Are you sure you want to leave the slot machine?")
+                if yesno(self.player):
+                    return
+                else:
                     chance = random.randint(1, 4)
                     if chance == 1:
                         print("After a while, you decide that you're too MLG "

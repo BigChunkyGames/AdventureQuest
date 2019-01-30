@@ -11,13 +11,15 @@ from source.world import *
 from source.item import Item, generateRandomArmourOrWeapon
 from source.shopUI import ShopUI
 from source.shops import *
+from source.SlotMachine import *
 
 
 def maintown(player):
     player.addVisit(player.aspect['town']) # places inside of this here while loop return to the while loop when they are finished
     player.addToTeleportableAreas(player.aspect['town'], maintown)
     while True:
-        print("You stand in the homey town of {0}, just passed the hills of {1}, a lovely place.").format(player.aspect['town'] , player.aspect['hills'])
+        clear()
+        print("You stand in the homey town of "+player.aspect['town']+", a lovely place.")
         printc("You could go @'home'@yellow@ and check that out.")
         printc("The @'tavern'@yellow@ is always a cool place to hang out.")
         printc("The @'store'@yellow@ is probably open at this time of day.")
@@ -57,7 +59,9 @@ def home(player):
                      "You realize that you left your can of Mtn Dew laying on top "
                      "of your dresser.")
                 show("You grab the can just in case you need it later.")
-                # TODO: add the can to your inventory
+                i = Item(player, 'Mtn Dew', customDescription='Consume for a healthy, energetic boost.', _type='consumable')
+                i.customActivationFunction=lambda:i.consume(heal=4)
+                player.addToInventory(i)
                 show("You take a look at the framed picture of your childhood dog on your bedside table.")
                 show("Bud must be in a better place now.")
             else:
@@ -65,7 +69,7 @@ def home(player):
         elif action == "sleep" or action == "s":
             show("After a long day's work adventuring, you're tired. You decide to climb into your old childhood bed to get some rest.")
             show("Your mother tucks you in and kisses you on the forehead.")
-            show("Good night sweetie, don't let the bed bugs bite!")
+            show('"Good night sweetie, don\'t let the bed bugs bite!"')
             player.sleep()
             show("You turn to leave. \"Bye sweetie, be home for dinner!\" your mother says.")
             show("You shoot her with the double finger guns and head out as she collapses to the floor.")
@@ -74,9 +78,20 @@ def home(player):
             player.addVisit("House Console Game")
             if player.getVisits("House Console Game") == 1:
                 show("You decide to kill some time by playing some Call of Duty: Black Ops 4: Pro Edition: Platinum Hits Version")
-                show("After popping the disc into your GameSphere 420, you realize that it needs to install.")
+                show("After popping the disc into your GameSphere 420, you realize that it needs to install and update.")
                 show("You watch the loading bar move at an astoundingly slow pace. This could take a while.")
                 show("Standing up, you decide to do something fun in the mean time.")
+            elif player.day > 14:
+                show("Finally! The game is finished installing!")
+                show("You start the game and prepare to jump right into the beautiful world of Call of Duty: Black Ops 4: Pro Edition: Platinum Hits Version.")
+                show("The game says that you need to log in.")
+                print("Enter you password:")
+                x = player.getInput()
+                if x == "super secret password 10 million": # TODO
+                    pass
+                else:
+                    show("Huh... You can't seem to remember it.")
+                    show("Oh well. I'm sure you'll remember eventually.")
             else:
                 show("You walk over to your GameSphere 420 to see if your game is done installing.")
                 show("Oh, look at that!")
@@ -127,14 +142,15 @@ def tavern(player):
         printc("Or you could just @'leave'@yellow@.")
         action = getInput(player)
         if action == "slot" or action == "s":
-            # Slots(player).slot_machine() TODO: fix this
+            s = Slots(player)
+            s.slot_machine()
             # until that gets fixed, run this line instead:
             show("You try your best at the slot machine, but it conveniently results in no net change of money for you.")
         elif action == "ask" or action == "a":
             show("You walk up to the bartender and ask for some rumors.")
             show("He lets you know that he hasn't heard anything since the last "
                  "time you asked.")
-            # TODO: Rumors (random maybe?)
+            # TODO quest Rumors (random maybe?)
         elif action == "game" or action == "g":
                 tavernGame(player)
         elif action == "rest" or action =="r":

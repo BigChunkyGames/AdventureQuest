@@ -139,7 +139,7 @@ def dichotomy(option1, option2):
         else:
             print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
-def getInput(player):
+def getInput(player, oneTry=False):
     while True:
         inp = input("> ").lower().strip()
         if player.devmode and inp == "debug damage":
@@ -153,7 +153,7 @@ def getInput(player):
             print("("),
             print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
             print("% )")
-        elif inp == "i" or inp == "inventory":
+        elif inp == "inv" or inp == "inventory":
             player.openInventory()
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
@@ -163,7 +163,11 @@ def getInput(player):
         elif inp == "load":
             player = pickle.load(open("AdventureQuestSave.meme", "r"))
             show("@Game loaded!@green@")
+        elif inp == '':
+            continue
         else:
+            return inp
+        if oneTry:
             return inp
 
 def checkForCancel(input):
