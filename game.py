@@ -8,6 +8,7 @@ from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
 from source.places_dogeTown import dogeTown, bonysShop, getBook
+from source.places_burntTown import burntTown
 from source.shopUI import ShopUI
 from source.combat import Combat
 from source.enemy import Enemy
@@ -33,10 +34,10 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            s = Slots(self.player)
-            s.slot_machine()
+            burntTown(self.player)
+            
             #introduction(self.player)
-            maintown(self.player)
+            #maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)
@@ -56,8 +57,8 @@ class Game: # perhaps this is what should be saved
 
             #self.player.openInventory()
             
-
-            #maintown(self.player)
+            #s = Slots(self.player)
+            #s.slot_machine()
 
             world(self.player)
         

@@ -1,3 +1,3 @@
+from source.utils import printSlowly
 
-
-print "teest".index('e')
+printSlowly("test test test")

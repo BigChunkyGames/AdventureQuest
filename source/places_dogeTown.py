@@ -7,7 +7,7 @@ from source.shops import *
 
 #TODO QUEST get information from dogetown (but its funny because they only say bark)
 def dogeTown(player):
-    if player.getVisits("dogeTown", "add") == 1 :
+    if player.registerVisit("dogeTown") == 1 :
         show("You approach what seems to be a town completely inhabited by polite and playful doggos.")
         show("It's magnificent. You have never seen anything like it. There are puggos and long boys and shoobos and wrinklers... All types of doge boys run about playing fetch and chase through the streets and in the open fields around the town.")
         show("Yappers are yipping from rooftops and floofers woof from below.")
@@ -84,7 +84,7 @@ def dogeTown(player):
 
             show("You head back down the stairs to the courtyard.")
         elif checkInput(x, "Synadogue"):
-            if player.getVisits("dogetownChurch", "add") == 1: # if first time here
+            if player.registerVisit("dogetownChurch") == 1: # if first time here
                 if not player.equippedArmourChest and not player.equippedArmourChest.name == "Doggy-Style Costume": # if not naked and chest doggy style constume not equipped
                     show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
                     show("The Synadogue has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
@@ -194,7 +194,7 @@ def party(player):
                 show('"Bork bark. Roof bork riffity bork ruff.')
                 show("A quest has been added to your quest log.") #TODO quests
         elif x == 'dance' or x == 'd':
-            if player.getVisits("dogetown dance", "add") == 1:
+            if player.registerVisit("dogetown dance") == 1:
                 show("The dance floor is packed with sweating grinding bitches, so you dive in.")
                 show("Just when you think you've got your boogy on, you find yourself in the middle of the mosh pit.")
                 show("You realize a bit too late what you've gotten yourself into. There's no way out!")
@@ -216,7 +216,7 @@ def party(player):
         elif x == 'leave' or x == 'l':
             return
         elif x == 'hallway' or x == 'h':
-            if player.getVisits("dogetown hallway", "add") >1 :
+            if player.registerVisit("dogetown hallway") >1 :
                 show("You don't have to go to the bathroom anymore.")
                 continue
             show("You make your way down the hallway and come to a set of two doors each with their own sign.")
@@ -260,20 +260,20 @@ def party(player):
                 print("Which door will you choose?")
                 x = getInput(player)
                 if checkInput(x, "left"):
-                    if player.getVisits("dogeTown boy's bathroom"):
+                    if player.getVisits("dogeTown boy's bathroom")>0:
                         show("You probably want to choose the other door.")
                     if player.aspect["gender"] == "girl" or player.aspect["gender"] == "gril":
                         show("The doogs inside the bathroom bork angrily at you and you are forced to leave.")
-                        player.getVisits("dogeTown boy's bathroom", "add")
+                        player.registerVisit("dogeTown boy's bathroom")
                         continue
                     bathroom(player)
                     break
                 elif checkInput(x, "right"):
-                    if player.getVisits("dogeTown girls's bathroom"):
+                    if player.getVisits("dogeTown girls's bathroom")>0:
                         show("You probably want to choose the other door.")
                     if player.aspect["gender"] == "boy" or player.aspect["gender"] == "boi":
                         show("The doogettes inside the bathroom birk angrily at you and you are forced to leave.")
-                        player.getVisits("dogeTown girls's bathroom", "add")
+                        player.registerVisit("dogeTown girls's bathroom")
                         continue
                     bathroom(player)
                     break

@@ -10,6 +10,7 @@ class Combat:
     def __init__(self, player, biome=None, alert=True, enemy=None, startCombatNow=True):
         self.player = player
         self.biome = biome
+        self.result = None # win, escaped, lose
         if not enemy == None: # if giving enemy
             self.enemy = enemy
         else: 
@@ -39,6 +40,7 @@ class Combat:
         if GivenCombatUI==None: c = CombatUI(self.player, self.enemy)
         else: c = GivenCombatUI
         c.run()
+        self.result = c.result
         clear()
         if c.result == "win":
             show("You defeated " + self.enemy.name + "!")

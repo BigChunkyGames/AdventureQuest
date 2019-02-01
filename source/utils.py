@@ -11,7 +11,8 @@ import pickle
 from prompt_toolkit import print_formatted_text, HTML
 import getpass
 import logging
-
+import sys
+import msvcrt
 
 #### console / user input #############################################
 
@@ -107,14 +108,34 @@ def checkInput(inp, choice):
         return True
     else: return False
 
-def wait(seconds, printThisStringEachSecond=False): # accepts floats
+def wait(seconds): # accepts floats
     ''' printOnSecond is a string btw'''
-    if printThisStringEachSecond == False:
-        time.sleep(seconds)
-    else:
-        for s in range(seconds):
-            print(printThisStringEachSecond),
-            time.sleep(1)
+    sys.stdout.flush()
+    time.sleep(seconds)
+    sys.stdout.flush()
+    
+def printSlowly(text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True):
+    # .03 is a pretty good talking speed
+    pausePoints = ['.', ',', '!', '?', ':', '\n']
+    skipThese = ['"', "'"]
+    waitOnNextChar=False
+    if initialWait: wait(pause)
+    for i in range(len(text)):
+        print(str(text[i]), end='')
+        if waitOnNextChar: 
+            wait(pause)
+            waitOnNextChar=False
+        if str(text[i]) in pausePoints: # wait longer conditionally
+            waitOnNextChar=True
+        if str(text[i]) not in skipThese: # dont wait if printing quotes
+            wait(secondsBetweenChars)
+    if newline:print('')
+    while msvcrt.kbhit(): # try not to let user type while printing
+        preventUserInput()
+
+def preventUserInput():
+    x=getpass.getpass('') # FIXME: still makes newlines but text is invisible
+
 
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
@@ -139,9 +160,10 @@ def dichotomy(option1, option2):
         else:
             print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
-def getInput(player, oneTry=False):
+def getInput(player, oneTry=False, prompt='> '):
     while True:
-        inp = input("> ").lower().strip()
+        inp = input(prompt).lower().strip()
+
         if player.devmode and inp == "debug damage":
             player.takeDamage(int(input("How much damage? : ")))
         elif player.devmode and inp == "debug level up":

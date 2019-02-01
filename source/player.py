@@ -113,7 +113,7 @@ class Player:
 
     def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
-        if printAboutIt: show("You have acquired the " + item.name + ".")
+        if printAboutIt: show("@You have acquired the " + item.name + "@green@.")
         if activateNow: self.activateItem(item)
 
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
@@ -201,18 +201,19 @@ class Player:
         if placeName not in self.teleportableAreas:
             self.teleportableAreas[placeName.lower().strip()] = function
 
-    def addVisit(self, area):
+    def registerVisit(self, area):
+        # increments visits here or creates it if it doesn't already exist
+        # returns visits + this one
         if area in self.visitedareas:
             self.visitedareas[area] += 1
         else :
             self.visitedareas[area] = 1
+        return self.visitedareas[area]
 
-    def getVisits(self, area, add = ""):
+    def getVisits(self, area):
         #  Returns number of times visited
-        if add == "add":
-            self.addVisit(area)
         if area in self.visitedareas:
-            return self.visitedareas[area] # return amount of times visited including this time if added
+            return self.visitedareas[area]
         else:
             return 0
 

@@ -8,6 +8,7 @@ from source.places_maintown import maintown
 from source.places_burntTown import burntTown
 from source.places_dogeTown import dogeTown
 from source.places_flowers import flowers
+from source.places_grandpasTrailer import grandpasTrailer
 
 class Map:
 
@@ -25,21 +26,20 @@ class Map:
         self.INITIAL_MAP = [  # 16 x 17
         # 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 X
         [ x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x ], # 0 
-        [ x, x, x, x, m, f, f, t, o, o, o, o, o, o, o, o, x ], # 1 
-        [ x, x, x, m, f, f, f, f, o, o, o, o, o, o, o, o, x ], # 2
-        [ x, m, m, m, f, t, f, f, o, o, o, o, o, o, o, o, x ], # 3
-        [ x, m, x, m, p, p, p, p, o, o, t, o, o, o, o, o, x ], # 4
-        # default village --v 
-        [ x, m, x, d, p, p, t, p, t, p, t, o, o, o, o, o, x ], # 5 
-        [ x, m, x, d, p, p, p, p, o, o, o, o, o, o, o, o, x ], # 6
-        [ x, x, d, d, p, p, p, p, o, o, o, o, o, o, o, o, x ], # 7
-        [ x, t, d, d, d, t, p, p, o, o, o, o, o, o, o, o, x ], # 8
-        [ x, d, d, d, d, p, p, t, o, o, o, o, o, o, o, o, x ], # 9
-        [ x, x, d, d, d, f, f, f, o, o, o, o, o, o, o, o, x ], # 10
-        [ x, x, x, x, d, f, f, f, o, o, o, o, o, o, o, o, x ], # 11
-        [ x, x, x, x, x, f, f, f, o, o, o, o, o, o, o, o, x ], # 12
-        [ x, x, x, x, x, x, x, x, o, o, o, o, o, o, o, o, x ], # 13
-        [ x, x, x, x, x, x, x, x, o, o, o, o, o, o, o, o, x ], # 14
+        [ x, x, x, x, m, f, f, t, m, x, t, m, x, x, x, x, x ], # 1 
+        [ x, x, x, m, f, f, f, f, f, f, f, f, m, x, x, x, x ], # 2
+        [ x, m, m, m, f, t, f, f, p, p, f, f, f, t, x, x, x ], # 3
+        [ x, m, x, m, p, p, p, p, p, p, t, f, f, m, m, x, x ], # 4
+        # default village --v           v-- burnt town
+        [ x, m, x, d, p, p, t, p, t, p, t, f, f, m, m, m, x ], # 5 
+        [ x, m, x, d, p, p, p, p, p, p, f, f, f, m, m, m, x ], # 6
+        [ x, x, d, d, p, p, p, p, p, p, f, f, f, m, m, t, x ], # 7
+        [ x, t, d, d, d, t, p, p, p, t, p, f, t, m, m, m, x ], # 8
+        [ x, d, d, d, d, p, p, t, f, f, p, f, f, m, m, m, x ], # 9
+        [ x, x, d, d, d, f, f, f, f, f, f, t, f, m, m, m, x ], # 10
+        [ x, x, x, x, d, f, f, f, t, f, f, f, f, m, m, x, x ], # 11
+        [ x, x, x, x, x, f, f, f, f, f, f, f, x, x, x, x, x ], # 12
+        [ x, x, x, x, x, x, x, x, f, f, t, x, x, x, x, x, x ], # 13
         [ x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x ]  # 15 Y
         ] 
         self.initializeMap() # sets self.map to be a new INITIAL_MAP
@@ -73,25 +73,31 @@ class Map:
             return "nothing at all don't even worry about it." # if you see this it means a place was not given a description
 
     def makeWildernessEvent(self, x,y):
-
-        print(getRandomIndex(TRANSIT_SYNONYMS) + " "),
+        s = ''
+        s+=getRandomIndex(TRANSIT_SYNONYMS) + " "
         if self.getTile(x,y).getBiome() == "forest":
-            show( getRandomIndex(FOREST_SYNONYMS) + "." )
+            s+=getRandomIndex(FOREST_SYNONYMS) + "." 
         elif self.getTile(x,y).getBiome() == "plains":
-            show( getRandomIndex(PLAINS_SYNONYMS) + ".")
+            s+= getRandomIndex(PLAINS_SYNONYMS) + "."
         elif self.getTile(x,y).getBiome() == "desert":
-            show( getRandomIndex(DESERT_SYNONYMS) + ".")
+            s+= getRandomIndex(DESERT_SYNONYMS) + "."
         elif self.getTile(x,y).getBiome() == "mountains":
-            show( getRandomIndex(MOUNTAINS_SYNONYMS) + ".")
+            s+= getRandomIndex(MOUNTAINS_SYNONYMS) + "."
         else:
-            show("nothing don't even worry about it")
+            s+="nothing don't even worry about it"
+        show(s)
 
     def initializeTileAttributes(self):
         #TODO: add description for each town ie to the north you see ...
         #TODO: add place functions too
         # try to keep these organized by y then x (top to bottom)
+
+        #            x,y
         self.getTile(7,1).description = "a number of cute doggos prancing about."
         self.getTile(7,1).placeFunction = lambda player: dogeTown(player) 
+
+        self.getTile(10,4).description = "Grandpa's trailer."
+        self.getTile(10,4).placeFunction = lambda player: grandpasTrailer(player)
 
         self.getTile(6,5).description = "your home town." # maintown
         self.getTile(6,5).placeFunction = lambda player: maintown(player) 
@@ -108,7 +114,7 @@ class Map:
     def goTo(self,x,y, player):
         clear()
         if self.getTile(x,y).type == "impassible":
-            print( "you can't go that way.") #TODO add flavor text
+            print( "you can't go that way.") #TODO flavor add flavor text
             return
         player.currentLocationX = x
         player.currentLocationY = y

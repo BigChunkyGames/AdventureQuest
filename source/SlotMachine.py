@@ -56,6 +56,7 @@ class Slots():
                 self.freerun = False
             else:
                 self.player.money -= 10
+                print("(-10 money) ")
             # 13.8% win chance
             tiles = ["(weed)", "(weed)", "(weed)", "(weed)",
                      "(hitmarker)", "(hitmarker)", "(hitmarker)",
@@ -70,7 +71,7 @@ class Slots():
                 c = b = a
             # cheater
             # a=b=c= 0
-            print ("(-10 money) The rollers spin and land on \n")
+            print ("The rollers spin and land on \n")
             print (tiles[a] + " " + tiles[b] + " " + tiles[c] + "\n")
             # winnings
             if tiles[a] == tiles[b] == tiles[c] == "(weed)":
