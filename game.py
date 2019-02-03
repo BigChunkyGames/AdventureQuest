@@ -35,7 +35,7 @@ class Game: # perhaps this is what should be saved
             # bonysShop(self.player)
             #dogeTown(self.player)
 
-            flowers(self.player)
+            #flowers(self.player)
 
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
