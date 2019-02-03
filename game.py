@@ -34,7 +34,7 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            burntTown(self.player)
+            #burntTown(self.player)
             
             #introduction(self.player)
             #maintown(self.player)
@@ -42,7 +42,7 @@ class Game: # perhaps this is what should be saved
             #maintownShop(self.player)
             #dogeTown(self.player)
 
-            #flowers(self.player)
+            flowers(self.player)
 
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)

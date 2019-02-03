@@ -25,7 +25,7 @@ def flowers(player):
                 s = ''
                 for i in range(30):
                     s +=". "
-                printSlowly(s, secondsBetweenChars=.5)
+                printSlowly(s, secondsBetweenChars=.5, pause=0)
                 print("Are you sure you don't want to attack the flowers?")
                 if not yesno(player):
                     if not attackFlowers(player): #if escaped
@@ -33,7 +33,7 @@ def flowers(player):
                     else: break
                 else:
                     show("You continue waiting.")
-                    printSlowly(s, secondsBetweenChars=.5)
+                    printSlowly(s, secondsBetweenChars=.5, pause=0)
                     player.choices.append("waited for flowers")
                     show("The flowers, appreciating your patience, slowly part, revealing a path.")
                     show("You continue to the end of the field.")
@@ -54,7 +54,8 @@ def flowers(player):
             word = "read"
         shoe = player.equippedArmourFeet
         if shoe == None: shoe = "shoe"
-        else: shoe == shoe.name
+        else: 
+            shoe = shoe.name
         show("You hear a faint, angry squeaking coming from a hole near your "+shoe+".") 
         show("You bend down and investigate the noise...")
         show('Angry Worm Poet is angry that you didn\'t ' + word + ' his poem.')

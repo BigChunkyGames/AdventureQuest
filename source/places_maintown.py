@@ -19,7 +19,6 @@ def maintown(player):
     player.registerVisit(townName) # places inside of this here while loop return to the while loop when they are finished
     player.addToTeleportableAreas(townName, maintown)
     while True:
-        clear()
         print("You stand in the homey town of "+townName+", a lovely place.")
         printc("You could go @'home'@yellow@ and check that out.")
         printc("The @'tavern'@yellow@ is always a cool place to hang out.")
@@ -87,7 +86,7 @@ def home(player):
             password1 = "super secret password 10 million"# TODO password
             password2 = "super secret password 20 million" # TODO password 2
             player.registerVisit("House Console Game")
-            if player.registerVisit("House Console Game") == 1:
+            if player.getVisits("House Console Game") == 1:
                 show("You decide to kill some time by playing some Call of Duty: Black Ops 4: Pro Edition: Platinum Hits Version")
                 show("After popping the disc into your GameSphere 420, you realize that it needs to install and update.")
                 show("You watch the loading bar move at an astoundingly slow pace. This could take a while.")
@@ -152,6 +151,7 @@ def blacksmith(player):
         show('She reaches out to shake your hand and ends up hurting it '
              'slightly.')
         player.takeDamage(1)
+        show("You leave.") # TODO @ Erik
     else:
         show("You head over to the blacksmith's place to take a look at some "
              "quality goods.")
@@ -264,7 +264,7 @@ def tavernGame(player):
                show(' the pirate says.')
                printSlowly('"Let\'s play again to settle who really is the better player!"')
           else:
-               print("You look down into your own hand. "+opchoice.title()+"beats "+yourchoice+"! He beat "
+               print("You look down into your own hand. "+opchoice.title()+" beats "+yourchoice+"! He beat "
                     "you!")
                input("... ")
                printSlowly('"Heh heh, well that\'s alright. Not everybody has what '

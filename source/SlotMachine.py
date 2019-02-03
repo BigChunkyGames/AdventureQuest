@@ -107,8 +107,8 @@ class Slots():
                 # 1/72 chance
                 i = generateRandomArmourOrWeapon(self.player, _type='weapon', rarity='epic')
                 print("The machine explodes and in the crater you find "
-                      "what you've needed all long. Its a"),
-                print(i.name() + "!")
+                      "what you've needed all long. Its a")
+                print("" + str(i.name()) + "!")
                 self.player.addToInventory(i)
             elif tiles[a] == tiles[b] == tiles[c] == "(Doritos)":
                 # 1/72 chance

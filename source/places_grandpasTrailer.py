@@ -8,12 +8,12 @@ def grandpasTrailer(player):
     print("Enter the trailer?")
     if yesno(player):
         show("Before you can reach the door a tiny robot opens it and looks at you.")
-        printSlowly('"What the heck do you want?"', secondsBetweenChars=.2)
+        printSlowly('"What the heck do you want?"',)
         x = player.getInput()
         if 'grandpa' in x:
-            printSlowly('"Grandpa? I don\'t know any grandpas."', secondsBetweenChars=.2)
+            printSlowly('"Grandpa? I don\'t know any grandpas."', )
             # TODO robot bragging
-            printSlowly('"You must have the wrong address. Bye bye."', secondsBetweenChars=.2)
+            printSlowly('"You must have the wrong address. Bye bye."', )
             show("The robot slams the door.")
     else:
         show("Yeah, not right now.")

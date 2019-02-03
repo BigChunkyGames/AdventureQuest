@@ -95,10 +95,10 @@ class Item():
         else: hand = self.player.aspect["hand"]
         if hand == 'right': otherhand='left'
         else: otherhand='right'
-        if self.type ==  "This goes in your " + hand:
-            return "Weapon"
+        if self.type ==   "weapon":
+            return "This goes in your " + hand
         elif self.armourSlot == "head":
-            return "This goes on your head head."
+            return "This goes on your head."
         elif self.armourSlot == "chest":
             return "This goes on your chest."
         elif self.armourSlot == "legs":
