@@ -301,6 +301,16 @@ class Player:
         if self.equippedArmourOffhand: damage += self.equippedArmourOffhand.damage
         return damage
 
+    def getTotalBlock(self):
+        block = 0
+        if self.equippedWeapon: block += self.equippedWeapon.block
+        if self.equippedArmourChest: block += self.equippedArmourChest.block
+        if self.equippedArmourFeet: block += self.equippedArmourFeet.block
+        if self.equippedArmourHead: block += self.equippedArmourHead.block
+        if self.equippedArmourLegs: block += self.equippedArmourLegs.block
+        if self.equippedArmourOffhand: block += self.equippedArmourOffhand.block
+        return block
+
     def takeDamage(self, d):
         self.hp = self.hp - d
         if self.hp <= 0:

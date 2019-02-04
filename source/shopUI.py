@@ -23,7 +23,7 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait, wrap, log
+from source.utils import wait, wrap, log, getStats
 import random
 
 class ShopUI():
@@ -280,6 +280,12 @@ class ShopUI():
                     body=Label(desc),
                 ),
             ], padding=0, width = width,),
+            HSplit([
+                Dialog(
+                    title = self.playerName,
+                    body=Label(getStats(self.player)),
+                ),
+            ], padding=0, width = smallerWidth, height= height,),
         ])
         return root_container 
 

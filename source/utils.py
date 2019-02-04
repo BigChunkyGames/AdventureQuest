@@ -13,6 +13,7 @@ import getpass
 import logging
 import sys
 import msvcrt
+import threading
 
 #### console / user input #############################################
 
@@ -115,6 +116,14 @@ def wait(seconds): # accepts floats
     sys.stdout.flush()
     
 def printSlowly(text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True):
+    t1 = threading.Thread(target=printSlowlyHelper, args=(text, secondsBetweenChars, newline, pause, initialWait,))
+    t2 = threading.Thread(target=preventUserInput, args=())
+    t2.start()  
+    t1.start() 
+    t1.join()  # waits here until thread is finished
+    
+    
+def printSlowlyHelper(text, secondsBetweenChars, newline, pause, initialWait):
     # .03 is a pretty good talking speed
     pausePoints = ['.', ',', '!', '?', ':', '\n']
     skipThese = ['"', "'"]
@@ -130,12 +139,20 @@ def printSlowly(text, secondsBetweenChars=.03, newline=True, pause=.7, initialWa
         if str(text[i]) not in skipThese: # dont wait if printing quotes
             wait(secondsBetweenChars)
     if newline:print('')
-    while msvcrt.kbhit(): # try not to let user type while printing
-        preventUserInput()
+    
 
 def preventUserInput():
-    x=getpass.getpass('') # FIXME: still makes newlines but text is invisible
+    while msvcrt.kbhit(): # try not to let user type while printing
+        x = getpass.getpass('')
+        if x == '':
+            print("test")
 
+def thread(targetFunction, numberOfThreads=1,): # not used
+    threads = []
+    for i in range(numberOfThreads):
+        t = threading.Thread(target=targetFunction, args=(i,))
+        threads.append(t)
+        t.start()
 
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
@@ -266,5 +283,7 @@ def getStats(player):
     s += "Level:    " + str(player.level) + "\n"
     s += "XP:       " + str(player.xp) + " / " + str(player.levelupxp) +"\n"
     s += "Money:    $ " + str(player.money) + "\n"
-    s += "Strength: " + str(player.strength) 
+    s += "Strength: " + str(player.strength) + "\n"
+    s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
+    s += "Block:    " + str(player.getTotalBlock())
     return s

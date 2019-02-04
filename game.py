@@ -72,8 +72,5 @@ class Game: # perhaps this is what should be saved
 g = Game()
 g.start()
 
-
-#TODO: make it so combat actually gives loot
-
 print ("the end")
 

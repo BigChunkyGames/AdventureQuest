@@ -137,10 +137,11 @@ class Item():
         self.block = self.player.scale(self.block)
         self.sellValue = self.sellValue + self.player.level # TODO not sure about this
 
-def generateRandomArmourOrWeapon(player, _type='armour',rarity = 'common', armourSlot=None, goodnessBoost=0, extreme=False, customDescription='', prefix=True, scale=True): 
-    ''' goodnessBoost makes the weapon a lot better (or worse if neg)'''
-    goodnessBoost += getNumberBasedOnRarity(rarity)
-    if prefix == True: prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=goodnessBoost+2)
+def generateRandomArmourOrWeapon(player, _type='armour',rarity = None, armourSlot=None, bonus=0, extreme=False, customDescription='', prefix=True, scale=True): 
+    ''' bonus makes the weapon a lot better (or worse if neg)'''
+    if rarity == None:
+        rarity = getRarityBasedOnNumber(bonus)
+    if prefix == True: prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=bonus+2)
     if _type == 'armour':
         if armourSlot == None: armourSlot = getRandomArmourSlot()
         damage = 0
@@ -167,6 +168,17 @@ def getNumberBasedOnRarity(rarity):
     if rarity == 'legendary':
         return 3
 
+def getRarityBasedOnNumber(number):
+    number = int(number)
+    if number == None or number <= 0 :
+        return 'common'
+    if number == 1 :
+        return 'rare'
+    if number == 2 :
+        return 'epic'
+    if number >= 3 :
+        return 'legendary'
+
 
 class ItemPrefix():
     def __init__(self, adjective, damageMod = 0, blockMod=0):
@@ -184,10 +196,10 @@ def generatePrefix(player, _type='weapon', prefixLevelOutOf5 = 3):
         i.blockMod = prefixLevelOutOf5 + luckOfTheDraw
     if i.damageMod<0: i.damageMod==0
     if i.blockMod<0: i.blockMod==0
-    # TODO make more special
+    # TODO advanced combat make more special
     return i
 
-def tryForDrop(percent): # TODO drops
+def tryForDrop(percent): 
     dropchance = random.randint(1, 100)
     if dropchance <= percent:
         return True

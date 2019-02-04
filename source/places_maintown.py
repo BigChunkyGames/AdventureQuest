@@ -38,7 +38,7 @@ def maintown(player):
         elif place == "leave" or place == "l":
             if player.getVisits(townName) == 1:
                 show("Just before you set foot outside of "+townName+", mom catches up with you.")
-                printSlowly('"Sweety I almost forgot!"', secondsBetweenChars=.05)
+                printSlowly('"Sweety I almost forgot!"', secondsBetweenChars=.05, initialWait=False)
                 printSlowly('"While you\'re out would you mind taking this lasagna to Grandpa?"', secondsBetweenChars=.03) 
                 i = Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='consumable')
                 i.customActivationFunction = lambda: i.consume(karma=-3) # TODO fix conumables lambdas are stupid
