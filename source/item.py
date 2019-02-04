@@ -96,7 +96,7 @@ class Item():
         if hand == 'right': otherhand='left'
         else: otherhand='right'
         if self.type ==   "weapon":
-            return "This goes in your " + hand
+            return "This goes in your " + hand + " hand"
         elif self.armourSlot == "head":
             return "This goes on your head."
         elif self.armourSlot == "chest":
@@ -109,7 +109,7 @@ class Item():
             return "This goes in your " + otherhand + " hand."
         return "You can't hold this."
 
-    def consume(self, text=None, heal=None, xpgain=None):
+    def consume(self, text=None, heal=None, xpgain=None, karma=None):
         ''' returns string about what happened after consumption (because consumption is only possible form inventory menu). '''
         # TODO make lots of effects
         if self.type == 'consumable':
@@ -120,6 +120,12 @@ class Item():
                 text += "\nYou regained " + str(heal) + " HP!"
             if xpgain:
                 text += '\n' + str(self.player.gainXp(xpgain, returnString=True))
+            if karma:
+                self.player.karma = self.player.karma + karma
+                if karma <0:
+                    text += '\n' + 'You didn\'t feel too great about doing that.'
+                elif karma >0:
+                    text += '\n' + "You're proud of yourself for doing that."
             self.player.inventory.remove(self)
         else:
             text = "You can't eat that!"

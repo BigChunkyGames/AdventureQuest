@@ -13,6 +13,7 @@ from source.shopUI import ShopUI
 from source.combat import Combat
 from source.enemy import Enemy
 from source.SlotMachine import *
+from source.places_grandpasTrailer import grandpasTrailer
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
@@ -34,15 +35,16 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            #grandpasTrailer(self.player)
             #burntTown(self.player)
             
             #introduction(self.player)
-            #maintown(self.player)
+            maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)
 
-            flowers(self.player)
+            #flowers(self.player)
 
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
@@ -71,7 +73,7 @@ g = Game()
 g.start()
 
 
-
+#TODO: make it so combat actually gives loot
 
 print ("the end")
 

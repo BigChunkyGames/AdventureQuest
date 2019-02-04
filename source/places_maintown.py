@@ -40,7 +40,9 @@ def maintown(player):
                 show("Just before you set foot outside of "+townName+", mom catches up with you.")
                 printSlowly('"Sweety I almost forgot!"', secondsBetweenChars=.05)
                 printSlowly('"While you\'re out would you mind taking this lasagna to Grandpa?"', secondsBetweenChars=.03) 
-                player.addToInventory(Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='quest'))
+                i = Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='consumable')
+                i.customActivationFunction = lambda: i.consume(karma=-3) # TODO fix conumables lambdas are stupid
+                player.addToInventory(i)
                 printSlowly('"He lives to the East."', secondsBetweenChars=.03) 
                 printSlowly('"You know the way."', secondsBetweenChars=.03) 
                 printSlowly('"Come back soon sweety!"', secondsBetweenChars=.03) 
@@ -284,8 +286,7 @@ def store(player):
          "are sold. ")
     show("You approach the shopkeeper, an old and wary gentleman with age on "
          "his face and experience in his eyes.")
-    printSlowly('"What\'ll it be for ya today?"')
-    show('')
+    printSlowly('"What\'ll it be for ya today?"', pause=1.2)
     maintownShop(player)
     # show("You make a point of considering the shopkeeper's wares, but you're "
     #      "not in the market for anything he's selling at the moment.")

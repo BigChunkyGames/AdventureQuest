@@ -1,7 +1,7 @@
+
 from source.utils import show, getInput, printc, printSlowly, wait
 
 def burntTown(player):
-    NAME = "Famous basketball player Labron James" # dying person # TODO
     if player.registerVisit("burntTown") ==1 :
         show("As you continue walking down the dusty road, you notice smoke rising in the distance.")
         show("You start to run.")
@@ -28,7 +28,7 @@ def burntTown(player):
                 show("The rest of the flyer is destroyed, except for the list of participating libraries, which is more libraries than you have ever been to.")
                 break
         show("From somewhere behind you you can hear faint wimpering.")
-        show(NAME + " is sitting with his back to the wall of a burnt building.")
+        show("A man in a burnt and shredded suit is sitting with his back to the wall of a burnt building.")
         show("He lets out a cough, his body badly burned.")
         printSlowly("\"You... I've seen you before...\"", secondsBetweenChars=.1, pause=.3)
         printSlowly("\"Your grandpa... \"", secondsBetweenChars=.1, pause=.3)
@@ -45,7 +45,7 @@ def burntTown(player):
         show("You really should go see him.")
         
 
-    show("You look around at the burnt buildings and "+NAME +"'s corpse.")
+    show("You look around at the burnt buildings and the singed man's corpse.")
     show("There is not much else to do here.")
     show("You decide to head out back into the world.")
     return

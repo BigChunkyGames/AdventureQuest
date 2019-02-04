@@ -116,6 +116,12 @@ class Player:
         if printAboutIt: show("@You have acquired the " + item.name + "@green@.")
         if activateNow: self.activateItem(item)
 
+    def removeFromInventory(self, nameOfItem, printAboutIt=True):
+        for x in self.inventory:
+            if x.name == nameOfItem:
+                self.inventory.remove(x)
+                show(str(x.name) + " was removed from your inventory.")
+
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
     def activateItem(self, item):
         if not item.customActivationFunction == None: # if has custom function
