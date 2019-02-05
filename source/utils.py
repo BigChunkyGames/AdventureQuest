@@ -156,11 +156,10 @@ class printSlowly():
         while True:
             if self.finished==True:
                 return
-            else:              
+            else:              # FIXME this isnt perfect
                 while msvcrt.kbhit(): # try not to let user type while printing
                     x = getpass.getpass('')
-                    print('\033[{}C\033[1A'.format(len(x)+ self.i+1) , end ='') 
-                    # print("{0}".format(input("").strip()))
+                    print('\033[{}C\033[1A'.format(self.i+1) , end ='') # go back to where current printing char is and don't insert a newline
                     if x == '':
                         self.finishNow=True
                 
