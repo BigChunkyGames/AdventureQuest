@@ -115,30 +115,56 @@ def wait(seconds): # accepts floats
     time.sleep(seconds)
     sys.stdout.flush()
     
-def printSlowly(text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True):
-    t1 = threading.Thread(target=printSlowlyHelper, args=(text, secondsBetweenChars, newline, pause, initialWait,))
-    t2 = threading.Thread(target=preventUserInput, args=())
-    t2.start()  
-    t1.start() 
-    t1.join()  # waits here until thread is finished
+class printSlowly():
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True):
+        # .03 is a pretty good talking speed
+        self.text = text
+        self.secondsBetweenChars=secondsBetweenChars
+        self.newline=newline
+        self.pause=pause
+        self.initialWait=initialWait    
+        self.finished=False    
+        self.finishNow=False
+        self.i = 0
+        t1 = threading.Thread(target=self.go, args=())
+        t2 = threading.Thread(target=self.handleUserInput, args=())
+        t2.start()  
+        t1.start() 
+        t1.join()  # waits here until thread is finished
     
-    
-def printSlowlyHelper(text, secondsBetweenChars, newline, pause, initialWait):
-    # .03 is a pretty good talking speed
-    pausePoints = ['.', ',', '!', '?', ':', '\n']
-    skipThese = ['"', "'"]
-    waitOnNextChar=False
-    if initialWait: wait(pause)
-    for i in range(len(text)):
-        print(str(text[i]), end='')
-        if waitOnNextChar: 
-            wait(pause)
-            waitOnNextChar=False
-        if str(text[i]) in pausePoints: # wait longer conditionally
-            waitOnNextChar=True
-        if str(text[i]) not in skipThese: # dont wait if printing quotes
-            wait(secondsBetweenChars)
-    if newline:print('')
+    def go(self):
+        pausePoints = ['.', ',', '!', '?', ':', '\n']
+        skipThese = ['"', "'"]
+        waitOnNextChar=False
+        if self.initialWait: wait(self.pause)
+        for self.i in range(len(self.text)):
+            if self.finishNow:
+                self.secondsBetweenChars = 0
+                self.pause = 0
+            print(str(self.text[self.i]), end='')
+            if waitOnNextChar: 
+                wait(self.pause)
+                waitOnNextChar=False
+            if str(self.text[self.i]) in pausePoints: # wait longer conditionally
+                waitOnNextChar=True
+            if str(self.text[self.i]) not in skipThese: # dont wait if printing quotes
+                wait(self.secondsBetweenChars)
+        if self.newline:print('')
+        self.finished=True
+
+    def handleUserInput(self):
+        while True:
+            if self.finished==True:
+                return
+            else:              
+                while msvcrt.kbhit(): # try not to let user type while printing
+                    x = getpass.getpass('')
+                    print('\033[{}C\033[1A'.format(len(x)+ self.i+1) , end ='') 
+                    # print("{0}".format(input("").strip()))
+                    if x == '':
+                        self.finishNow=True
+                
+
     
 
 def preventUserInput():
