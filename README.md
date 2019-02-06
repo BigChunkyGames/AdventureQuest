@@ -1,7 +1,7 @@
 # Adventure Quest
 A quest for adventure! Created by the Dream Team Xtreme.
 
-~Get the alpha-demo out now for only a limited time~
+\~Get the alpha-demo out now for only a limited time~
 
 
 Requirements: 
