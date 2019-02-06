@@ -326,15 +326,20 @@ class Player:
             print("You now have " + str(self.hp) + " HP.")
             print("")
 
-    def die(self): self.death()
-    def death(self):
-        show("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:")
-        show('*I think I left the oven on at home*')
-        show("With that, everything goes dark.")
-        print(""); print(""); print("")
-        show("You're dead. You should feel pretty lucky that death doesn't have an effect yet.")
-        print("Anyway, on with the game... ")
-        # TODO
+    def die(self, customText=None): self.death(customText)
+    def death(self, customText=None):
+        if customText:
+            printSlowly(str(customText), skipable=False)
+        else:
+            printSlowly("Suddenly the clouds crack and rain begins to pour.", skipable=False)
+            printSlowly("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:", skipable=False)
+            printSlowly(getRandomFinalThought(), skipable=False) # TODO flavor
+        printSlowly("With that, everything goes dark.", skipable=False)
+        printSlowly('...')
+        show("@YOU ARE DEAD@red@")
+        show("The End", dots=False)
+        sys.exit()
+
     
     def regenHealth(self, health = None, returnString=False, showCurrentHealth=True):
         ''' set health to None for regen health like at end of combat'''
@@ -368,10 +373,11 @@ class Player:
 
     def charcreation(self):
         while True:
-            printc("Would you like to @'create'@yellow@ your own character or @'roleplay'@yellow@ one created for you?") # TODO have this 
+            printc("Would you like to @'create'@yellow@ your own character or @'roleplay'@yellow@ one created for you?") 
             dec = getInput(self) 
             if dec == "create" or dec == "c":
                 self.aspect['name'] = self.name()
+                self.aspect['difficulty'] = self.difficulty()
                 self.aspect['gender'] = self.gender()
                 self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
                 self.aspect['hand'] = self.hand()
@@ -388,6 +394,7 @@ class Player:
 
     def generateAspects(self):
         self.aspect['name'] = "Michael"
+        self.aspect['difficulty'] = 'Normal'
         self.aspect['gender'] = "boi"
         self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
         self.aspect['hand'] = "right"
@@ -403,6 +410,17 @@ class Player:
             if charname == "":
                 print("Your hero may not be nameless.")
             else: return charname
+
+    def difficulty(self):
+        i = 0
+        while True:
+            dif = getDifficulty(i)
+            if dif == 'Lose':
+                self.death()
+            print("Would you like the difficulty, " + dif + "?")
+            if yesno(self):
+                return dif 
+            i += 1
 
     def gender(self):
         print("What is your gender?")

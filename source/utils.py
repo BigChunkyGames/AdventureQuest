@@ -116,13 +116,14 @@ def wait(seconds): # accepts floats
     sys.stdout.flush()
     
 class printSlowly():
-    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True):
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True, skipable=True):
         # .03 is a pretty good talking speed
         self.text = text
         self.secondsBetweenChars=secondsBetweenChars
         self.newline=newline
         self.pause=pause
-        self.initialWait=initialWait    
+        self.initialWait=initialWait
+        self.skipable=skipable    
         self.finished=False    
         self.finishNow=False
         self.i = 0
@@ -160,7 +161,7 @@ class printSlowly():
                 while msvcrt.kbhit(): # try not to let user type while printing
                     x = getpass.getpass('')
                     print('\033[{}C\033[1A'.format(self.i+1) , end ='') # go back to where current printing char is and don't insert a newline
-                    if x == '':
+                    if x == '' and self.skipable:
                         self.finishNow=True
                 
 
