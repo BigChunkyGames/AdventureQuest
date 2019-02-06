@@ -39,6 +39,8 @@ def getRandomEnemyName(biome):
         return getRandomIndex(ENEMYNAMES_DESERT)
     if biome == "mountain":
         return getRandomIndex(ENEMYNAMES_MOUNTAIN)
+    if biome == "spooky":
+        return getRandomIndex(ENEMYNAMES_SPOOKY)
     else:
         return "Void Creature" # couldnt find a biome 
 
@@ -126,6 +128,7 @@ TV_SHOWS = ["Commercials", 'Soap Opera', 'The News', 'Jeopardy', 'Wheel of Fortu
 MOTHERLYPLATITUDES = ["There's no 'I' in 'Team'!", "Everybody makes mistakes. Don't forget to save often!", "Time heals all wounds. If you're injured, find a place to sleep!", "Work smarter, not harder. A lot of times, you can just type the first letter of a choice instead of the whole word.", "Sometimes you can choose options that aren't listed, like 'back' to cancel what you're doing."]
 CONVERSATION = ["Oh wow!", "That sounds incredible.", "No way!"," You are so amazing.", "I can't even believe how great that is.", "Of course!", "Tell me more!", "More!", "WHAT.", "You're fearless.", "JEALOUS!", "You didn't."]
 DOG_NOISES = ["bark", "woof", "scrrf","yarrar","boof","birf","huuurg","ruff","rough","yip","yip yip", "bark bark","gruph","bow", "bow wow", "grrrrr"]
+CURSES = ['fuck', 'shit', 'bitch', 'hoe', 'ho', 'cunt', 'wretch', 'whore', 'ass', 'dick', 'prick', 'cock', 'peener', 'vag', 'pussy', 'asshole', 'bastard', 'damn', 'bollocks', 'christ', 'hell', 'motherfucker', 'mother fucker', 'shitass', 'twat', 'jesus', 'song of a bitch', 'omg']
 
 ### items ##############################################################################
 WEAPON = ['Great Sword', 'Claymore', 'Dagger', 'Staff', 'Hatchet', 'Nunchucks', 'Ninja Stars', 'Switchblade', 'Butterfly Knife', 'Mace', 'Club', 'Boomerang', 'Trident', 'Spear', 'Sickle', 'Bow and Arrow', 'Sheers', 'Sling',  'Whip', 'Spade', 'Hammer', "Boxing Gloves", "Gardening Gloves", "Shovel", "Pick Axe", "Blender", "Paper Airplane", "Banjo", "Drum Stick", "Throwing Knife", "Battle Toaster", "Chef Knife", 'Cheese Knife', 'Piece of Bark', 'Crab', 'Scissors', 'Envelope Opener', 'Cat Food Can Lid', 'Staple Gun', 'Nail Gun', 'Boomerang', 'Halberd', 'Finger Nail Clipper', 'Bubble Gun', 'Lawn Flamingo', 'Syringe', 'Sickle', 'Khopesh', 'Spork', 'Darts', 'Knitting Needle', 'Trident' ]
@@ -166,7 +169,7 @@ PLAINS_SYNONYMS = ["some plains" , "a vast expanse of grass ;)", "a flowing gree
 DESERT_SYNONYMS = ["an expanse of dunes", "a desert", "naked golden fields of sand", ]
 MOUNTAINS_SYNONYMS = ["a specious assortment of unbridled peaks", "some mountains", "shimmering peaks of aestitic rapture", "huge rocks", "just a fucking ton of huge gigantic fucking rocks"]
 TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way toward", "You thought there was nothing but when you turned around you saw", "On your left you see",
-         "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say,\"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
+         "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say, \"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
 
 ### verbs ##############################################################################
 

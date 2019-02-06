@@ -8,9 +8,12 @@ from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
 from source.places_dogeTown import dogeTown, bonysShop, getBook
+from source.places_burntTown import burntTown
 from source.shopUI import ShopUI
 from source.combat import Combat
 from source.enemy import Enemy
+from source.SlotMachine import *
+from source.places_grandpasTrailer import grandpasTrailer
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
@@ -20,7 +23,7 @@ print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = True 
+        self.player.devMode = False 
 
     def getPlayer(self):
         return self.player
@@ -32,7 +35,11 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            getBook(self.player)
+            grandpasTrailer(self.player)
+            #burntTown(self.player)
+            
+            #introduction(self.player)
+            maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)
@@ -50,10 +57,10 @@ class Game: # perhaps this is what should be saved
 
             #c = Combat(self.player) # jump to combat
 
-            self.player.openInventory()
+            #self.player.openInventory()
             
-
-            #maintown(self.player)
+            #s = Slots(self.player)
+            #s.slot_machine()
 
             world(self.player)
         
@@ -64,9 +71,6 @@ class Game: # perhaps this is what should be saved
 # \ load if loading saved" game
 g = Game()
 g.start()
-
-
-
 
 print ("the end")
 

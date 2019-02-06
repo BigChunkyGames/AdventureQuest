@@ -4,7 +4,7 @@ from source.item import Item
 
 
 class Shop():
-    def __init__(self, player, nameOfShop, preset=True, openNow=False):
+    def __init__(self, player, nameOfShop, preset=True, openNow=False, currency='Money'):
         '''
         preset will create a shop from a list of premade shops
         '''
@@ -12,6 +12,7 @@ class Shop():
         self.shopName = nameOfShop
         self.shopAsciiArt = None
         self.visitedOnDay = player.day
+        self.currency = currency
         self.originalInventory = []
         self.currentInventory = []
         self.player.shops.append(self) # add to list of shops
@@ -19,7 +20,7 @@ class Shop():
         if openNow: self.UI.run()
 
     def setUI(self):
-        return ShopUI(self.player, self.shopName, self.currentInventory, shopKeeperAsciiArt=self.shopAsciiArt, customCurrency='dogecoins' )
+        return ShopUI(self.player, self.shopName, self.currentInventory, shopKeeperAsciiArt=self.shopAsciiArt, customCurrency=self.currency )
 
     def openUI(self):
         self.UI = self.setUI() # keep updated

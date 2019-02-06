@@ -53,8 +53,8 @@ class Player:
 
 #### misc ##############################################
 
-    def getInput(self): # redundency for easier coding
-        return getInput(self)
+    def getInput(self, oneTry=False): # redundency for easier coding
+        return getInput(self, oneTry)
 
 #### inventory #########################################
 
@@ -113,8 +113,14 @@ class Player:
 
     def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
-        if printAboutIt: show(item.name + " was added to your inventory!")
+        if printAboutIt: show("@You have acquired the " + item.name + "@green@.")
         if activateNow: self.activateItem(item)
+
+    def removeFromInventory(self, nameOfItem, printAboutIt=True):
+        for x in self.inventory:
+            if x.name == nameOfItem:
+                self.inventory.remove(x)
+                show(str(x.name) + " was removed from your inventory.")
 
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
     def activateItem(self, item):
@@ -201,18 +207,19 @@ class Player:
         if placeName not in self.teleportableAreas:
             self.teleportableAreas[placeName.lower().strip()] = function
 
-    def addVisit(self, area):
+    def registerVisit(self, area):
+        # increments visits here or creates it if it doesn't already exist
+        # returns visits + this one
         if area in self.visitedareas:
             self.visitedareas[area] += 1
         else :
             self.visitedareas[area] = 1
+        return self.visitedareas[area]
 
-    def getVisits(self, area, add = ""):
+    def getVisits(self, area):
         #  Returns number of times visited
-        if add == "add":
-            self.addVisit(area)
         if area in self.visitedareas:
-            return self.visitedareas[area] # return amount of times visited including this time if added
+            return self.visitedareas[area]
         else:
             return 0
 
@@ -294,6 +301,16 @@ class Player:
         if self.equippedArmourOffhand: damage += self.equippedArmourOffhand.damage
         return damage
 
+    def getTotalBlock(self):
+        block = 0
+        if self.equippedWeapon: block += self.equippedWeapon.block
+        if self.equippedArmourChest: block += self.equippedArmourChest.block
+        if self.equippedArmourFeet: block += self.equippedArmourFeet.block
+        if self.equippedArmourHead: block += self.equippedArmourHead.block
+        if self.equippedArmourLegs: block += self.equippedArmourLegs.block
+        if self.equippedArmourOffhand: block += self.equippedArmourOffhand.block
+        return block
+
     def takeDamage(self, d):
         self.hp = self.hp - d
         if self.hp <= 0:
@@ -339,7 +356,7 @@ class Player:
     def sleep(self, customText=None):
         self.hp = self.maxhp
         if customText == None: 
-            print("After a long night's rest, you feel reinvigorated and ready to start a new day.")
+            print("After a long night's rest, you are rejuvenated.")
         else:
             print (customText)
         # TODO flavorize
@@ -351,7 +368,7 @@ class Player:
 
     def charcreation(self):
         while True:
-            printc("Would you like to @'create'@yellow@ your own character or @'roleplay'@yellow@ one created for you?\n(") # TODO have this 
+            printc("Would you like to @'create'@yellow@ your own character or @'roleplay'@yellow@ one created for you?") # TODO have this 
             dec = getInput(self) 
             if dec == "create" or dec == "c":
                 self.aspect['name'] = self.name()
@@ -380,35 +397,37 @@ class Player:
     
         
     def name(self):
-        charname = input("What is your name?").lower().strip().title()
-        while charname == "":
-            charname = input("Your hero may not be nameless.")\
-                .lower().strip().title()
-        return charname
+        print("What is your name?")
+        while True:
+            charname = input("> ").strip().title()
+            if charname == "":
+                print("Your hero may not be nameless.")
+            else: return charname
 
     def gender(self):
-        chargender = input("What is your gender?")\
-            .lower()
+        print("What is your gender?")
+        chargender = input("> ").strip()
         return chargender
     
     def hand(self):
-        printc("Which is your dominant hand, @right@yellow@ or @left@yellow@?")
-        x = input()
+        printc("Which is your dominant hand, @'right'@yellow@ or @'left'@yellow@?")
+        x = input('> ')
         if checkInput(x, "right"): return "right"
         elif checkInput(x, "left"): return "left"
         else: return self.hand()
 
     def pronouns(self):
-        charpronouns = input("Enter your three pronouns (e.g. 'he him his'): ")
+        print("Enter your three pronouns (e.g. 'he him his'): ")
         while 1:
+            charpronouns = input("> ").strip().lower()
             charpronouns = charpronouns.split(" ")
             if len(charpronouns) != 3:
-                charpronouns = input("Make sure to enter 3 pronouns separated by a single space each: ")
+                print("Make sure to enter 3 pronouns separated by a single space each: ")
             else:
                 return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
 
     def impropernouns(self):
-        occ = input("Enter the name of your hero's occupation (e.g. 'firefighter'): ").lower().strip()
+        occ = input("What is your occupation?").lower().strip()
         while occ == "":
             print("Your occupation can not be blank. ")
             occ = input("Enter the name of your hero's occupation: ").lower().strip()

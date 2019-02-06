@@ -11,7 +11,9 @@ import pickle
 from prompt_toolkit import print_formatted_text, HTML
 import getpass
 import logging
-
+import sys
+import msvcrt
+import threading
 
 #### console / user input #############################################
 
@@ -107,14 +109,75 @@ def checkInput(inp, choice):
         return True
     else: return False
 
-def wait(seconds, printThisStringEachSecond=False): # accepts floats
+def wait(seconds): # accepts floats
     ''' printOnSecond is a string btw'''
-    if printThisStringEachSecond == False:
-        time.sleep(seconds)
-    else:
-        for s in range(seconds):
-            print(printThisStringEachSecond),
-            time.sleep(1)
+    sys.stdout.flush()
+    time.sleep(seconds)
+    sys.stdout.flush()
+    
+class printSlowly():
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True):
+        # .03 is a pretty good talking speed
+        self.text = text
+        self.secondsBetweenChars=secondsBetweenChars
+        self.newline=newline
+        self.pause=pause
+        self.initialWait=initialWait    
+        self.finished=False    
+        self.finishNow=False
+        self.i = 0
+        t1 = threading.Thread(target=self.go, args=())
+        t2 = threading.Thread(target=self.handleUserInput, args=())
+        t2.start()  
+        t1.start() 
+        t1.join()  # waits here until thread is finished
+    
+    def go(self):
+        pausePoints = ['.', ',', '!', '?', ':', '\n']
+        skipThese = ['"', "'"]
+        waitOnNextChar=False
+        if self.initialWait: wait(self.pause)
+        for self.i in range(len(self.text)):
+            if self.finishNow:
+                self.secondsBetweenChars = 0
+                self.pause = 0
+            print(str(self.text[self.i]), end='')
+            if waitOnNextChar: 
+                wait(self.pause)
+                waitOnNextChar=False
+            if str(self.text[self.i]) in pausePoints: # wait longer conditionally
+                waitOnNextChar=True
+            if str(self.text[self.i]) not in skipThese: # dont wait if printing quotes
+                wait(self.secondsBetweenChars)
+        if self.newline:print('')
+        self.finished=True
+
+    def handleUserInput(self):
+        while True:
+            if self.finished==True:
+                return
+            else:              # FIXME this isnt perfect
+                while msvcrt.kbhit(): # try not to let user type while printing
+                    x = getpass.getpass('')
+                    print('\033[{}C\033[1A'.format(self.i+1) , end ='') # go back to where current printing char is and don't insert a newline
+                    if x == '':
+                        self.finishNow=True
+                
+
+    
+
+def preventUserInput():
+    while msvcrt.kbhit(): # try not to let user type while printing
+        x = getpass.getpass('')
+        if x == '':
+            print("test")
+
+def thread(targetFunction, numberOfThreads=1,): # not used
+    threads = []
+    for i in range(numberOfThreads):
+        t = threading.Thread(target=targetFunction, args=(i,))
+        threads.append(t)
+        t.start()
 
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
@@ -139,9 +202,10 @@ def dichotomy(option1, option2):
         else:
             print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
-def getInput(player):
+def getInput(player, oneTry=False, prompt='> '):
     while True:
-        inp = input("> ").lower().strip()
+        inp = input(prompt).lower().strip()
+
         if player.devmode and inp == "debug damage":
             player.takeDamage(int(input("How much damage? : ")))
         elif player.devmode and inp == "debug level up":
@@ -153,7 +217,7 @@ def getInput(player):
             print("("),
             print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
             print("% )")
-        elif inp == "i" or inp == "inventory":
+        elif inp == "inv" or inp == "inventory":
             player.openInventory()
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
@@ -163,7 +227,11 @@ def getInput(player):
         elif inp == "load":
             player = pickle.load(open("AdventureQuestSave.meme", "r"))
             show("@Game loaded!@green@")
+        elif inp == '':
+            continue
         else:
+            return inp
+        if oneTry:
             return inp
 
 def checkForCancel(input):
@@ -240,5 +308,7 @@ def getStats(player):
     s += "Level:    " + str(player.level) + "\n"
     s += "XP:       " + str(player.xp) + " / " + str(player.levelupxp) +"\n"
     s += "Money:    $ " + str(player.money) + "\n"
-    s += "Strength: " + str(player.strength) 
+    s += "Strength: " + str(player.strength) + "\n"
+    s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
+    s += "Block:    " + str(player.getTotalBlock())
     return s

@@ -146,7 +146,7 @@ class CombatUI():
             self.done(result='inventory')
             return
         elif choice == "Run":
-            self.tryToEscape()
+            s += self.tryToEscape()
         else:
             s += "How did you do that!?"
             
@@ -160,13 +160,12 @@ class CombatUI():
         s = ''
         s += "You tried to run..." 
         if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
-            s += " and escaped the combat!" # isnt ever visible
+            s += " and escaped the combat!" # #TODO advanced combat: isnt ever visible
             self.result = "escaped"
             get_app().exit(result="escaped")
-            return
         else:
             s += " but failed to escape!"
-        self.battleLog = s + self.battleLog
+        return s
 
     def enemyTurn(self, textOfPlayerTurn=False):
         # for now, always try to attack TODO advanced combat

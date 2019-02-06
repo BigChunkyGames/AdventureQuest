@@ -1,12 +1,13 @@
-from source.utils import show, getInput
+
+from source.utils import show, getInput, printc, printSlowly, wait
 
 def burntTown(player):
-    if player.getVisits("burntTown", "add") ==1 :
+    if player.registerVisit("burntTown") ==1 :
         show("As you continue walking down the dusty road, you notice smoke rising in the distance.")
         show("You start to run.")
         show("The town has been burnt to the ground. Embers on ruined buildings are still burning. The fire was recent.")
         show("You walk to where the town square used to be. There is no one else in sight.")
-        print("You can try to find your 'grandpa's house, or 'search' around for survivers.")
+        printc("You can try to find your @'grandpa'@yellow@s house, or @'search'@yellow@ around for survivers.")
         while True:
             x = getInput(player)
             if (x == "grandpa" or x == "g"):
@@ -19,44 +20,33 @@ def burntTown(player):
             elif (x == "search" or x == "s"):
                 show("It's eerily quiet.")
                 show("There is nothing around but charred wooden buildings that use to house the inhabitants of this place. The ground is still hot.")
+                show("A half burned flyer is pinned to the door of what used to be a library.")
+                show('It says,')
+                show("Poetry Contest!", dots=False)
+                show("Compete with your best poems!", dots=False)
+                show("Win awesome prizes!", dots=False) # no one will notice that this is a haiku
+                show("The rest of the flyer is destroyed, except for the list of participating libraries, which is more libraries than you have ever been to.")
                 break
-            else:
-                print("'grandpa' or 'search' ")
         show("From somewhere behind you you can hear faint wimpering.")
-        show("Famous basketball player Labron James is sitting with his back to the wall of a burnt building.")
+        show("A man in a burnt and shredded suit is sitting with his back to the wall of a burnt building.")
         show("He lets out a cough, his body badly burned.")
-        show("\"You... I've seen you before...\"")
-        show("\"Your grandpa... They took him...\"")
-        print("He waits for your response.")
-        print("> ")
-        #TODO add wait for 1 sec 
-        show("It was... ")
-        show("It was... ")
-        show("The Shanghai Dragons")
+        printSlowly("\"You... I've seen you before...\"", secondsBetweenChars=.1, pause=.3)
+        printSlowly("\"Your grandpa... \"", secondsBetweenChars=.1, pause=.3)
+        printSlowly("\"That... \"", secondsBetweenChars=.09, pause=.3)
+        printSlowly("\"That... \"", secondsBetweenChars=.1, pause=.3)
+        wait(1.4)
+        printSlowly("\"MANIAC\"", secondsBetweenChars=.2)
+        printSlowly("\"I bet he caused this whole fire!\"", secondsBetweenChars=.03, pause=.1)
+        printSlowly("\"Come to think of it, that explosion came from right around his house!\"", secondsBetweenChars=.03, pause=.1)
+        printSlowly("\"He probably had this whole thing planned out and then fled to his trailer North of town.\"", secondsBetweenChars=.03)
+        printSlowly("\"That bastard.\"", secondsBetweenChars=.1)
         show("He slumps over and dies.")
-        show("You recoil in fear.")
-        show("The Shanghai Dragons...")
-        show("After losing 40 consecutive tournament overwatch matches, the team must have lost their minds and burnt down the town.")
-        show("But what do they want with your grandpa?")
-        show("You take a moment to reminisce about all the great times you had with your grandpa as a child...")
-        show("The time he taught you to no-scope...")
-        show("The time he got a 360 tamahawk from accross the map...")
-        show("The time he taught you to kickflip...")
-        show("The time he showed you his emblem collection...")
-        show("The time he taught you to dunk...")
-        show("The time he let you be the getaway driver for that bank heist...")
-        show("You look down at your hands.")
-        show("They are wet from tears.")
-        show('"No," you say.')
-        show('"This is not the time for tears."')
-        show('"This is the time for action."')
-        show('"I am an adult now."')
-        player.levelUp()
+        show("You grandpa's reputation around here has never been great, but you doubt he is capable of destroying an entire city.")
+        show("You really should go see him.")
+        
 
-
-    while True:
-        show("You look around at the burnt buildings and famous basketball player Labron James' corpse.")
-        show("There is not much else to do here.")
-        show("You decide to head out back into the world.")
-        break
+    show("You look around at the burnt buildings and the singed man's corpse.")
+    show("There is not much else to do here.")
+    show("You decide to head out back into the world.")
+    return
 

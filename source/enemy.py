@@ -11,7 +11,7 @@ class Enemy:
         self.player = player
         # traits
         self.biome = biome
-        self.toughness = toughness
+        self.toughness = toughness # can be a float, casted to int during scaling, between -inf and 3
         self.name = getRandomEnemyName(biome)
         # stats
         self.maxhp = self.setHP()
