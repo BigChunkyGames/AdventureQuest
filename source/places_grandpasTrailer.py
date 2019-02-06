@@ -3,6 +3,8 @@ from source.lists import CURSES
 from source.enemy import *
 from source.combat import *
 import random
+from source.places_maintown import *
+
 
 def grandpasTrailer(player):
     gspeed = .07 # speed of grandpas text
@@ -48,11 +50,23 @@ def grandpasTrailer(player):
         if yesno(player):
             player.removeFromInventory('Lasagna')
             printSlowly('"Your mother\'s lasagna always fills my belly right to the brim. "', secondsBetweenChars=gspeed)
-            printSlowly('"Well come inside then."', secondsBetweenChars=gspeed)
-            
         else:
             printSlowly('"Well that\'s too bad."', secondsBetweenChars=gspeed)
             printSlowly('"Must be your breath I\'m smelling then."', secondsBetweenChars=gspeed)
+        printSlowly('"Well come inside then."', secondsBetweenChars=gspeed)
+        show("You step up into the trailer which is revealed to be much larger than it seemed from the outside.")
+
+        show("Suddenly you don't feel right.")
+        show("There's something wrong here.")
+        show("Wait a minute, is that...")
+        printSlowly('The end of the demo?', secondsBetweenChars=.1)
+        show("Yes.")
+        show("It is.")
+        show("You jolt upright in bed.")
+        show("Huh, what a strange dream.")
+        show("You walk down stairs and eat a piece of toast.")
+        show("Deciding you better start your day, you make your way outside.")
+        return maintown(player)
 
 
         
