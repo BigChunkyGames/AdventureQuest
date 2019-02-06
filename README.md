@@ -14,4 +14,4 @@ How to play:
 4.  pip install prompt_toolkit (I haven't figured out how to have it automatically do this yet)
 5.  Run game.py
 6.  Finish playing the game
-7.  Tell me what your thoughts!
+7.  Share your thoughts!
