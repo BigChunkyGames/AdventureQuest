@@ -1,6 +1,8 @@
 # Adventure Quest
 A quest for adventure! Created by the Dream Team Xtreme.
 
+\~Get the alpha-demo out now for only a limited time~
+
 
 Requirements: 
 *  Python 3
@@ -14,4 +16,4 @@ How to play:
 4.  pip install prompt_toolkit (I haven't figured out how to have it automatically do this yet)
 5.  Run game.py
 6.  Finish playing the game
-7.  Share your thoughts!
+7.  Share your thoughts! If it crashes please let us know what the crash report says.
