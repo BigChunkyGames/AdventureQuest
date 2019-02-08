@@ -1,17 +1,27 @@
-from Tkinter import *
+# import os
+# from source.utils import wait
+# os.system("start G:/Code/AdventureQuest/source/audio/paper.wav")
+# wait(2)
+# os.system("start G:/Code/AdventureQuest/source/audio/paper.wav")
 
-root = Tk()
+# from playsound import playsound
+# playsound('G:/Code/AdventureQuest/source/audio/paper.wav', bl)
 
-def key(event):
-    print ("pressed", repr(event.char))
+# import pygame
+# pygame.mixer.pre_init(44100, -16,2,2048)
+# pygame.init()
 
-def callback(event):
-    frame.focus_set()
-    print ("clicked at", event.x, event.y)
+# pygame.mixer.music.load('paper.wav')
+# pygame.mixer.music.play()
 
-frame = Frame(root, width=100, height=100)
-frame.bind("<Key>", key)
-frame.bind("<Button-1>", callback)
-frame.pack()
-
-root.mainloop()
+import contextlib
+with contextlib.redirect_stdout(None): # prevents console ouput during import
+    import pygame
+import pygame.mixer
+pygame.mixer.init()
+sound1 = pygame.mixer.Sound('source/audio/low piano G sharp.wav')
+sound2 = pygame.mixer.Sound('source/audio/splash.wav')
+chan1 = pygame.mixer.find_channel()
+chan1.queue(sound1)
+chan2 = pygame.mixer.find_channel()
+chan2.queue(sound2)

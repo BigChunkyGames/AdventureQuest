@@ -14,6 +14,12 @@ import logging
 import sys
 import msvcrt
 import threading
+### sounds
+import contextlib
+with contextlib.redirect_stdout(None): # prevents console ouput during import
+    import pygame
+import pygame.mixer
+###
 
 #### console / user input #############################################
 
@@ -313,3 +319,37 @@ def getStats(player):
     s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
     s += "Block:    " + str(player.getTotalBlock())
     return s
+
+#### sounds #####################################################
+
+class Sound(): # FIXME only plays 1 file at a time
+    def __init__(self, fileName, playNow=True, waitUntilFinished=False):
+        pygame.mixer.init()
+
+        self.fileName = "source/audio/" + fileName
+        #self.length = self.getLength()
+    
+        if playNow:
+            t1 = threading.Thread(target=self.playSound, args=())
+            t1.start() 
+            if waitUntilFinished:
+                t1.join()  # waits here until thread is finished
+                
+
+    def playSound(self):
+        pygame.mixer.music.load(open(self.fileName,"rb"))
+        pygame.mixer.music.play()
+        while pygame.mixer.music.get_busy(): #idk why this is needed but it is
+            wait(2) # idk what value to put here tbh
+
+    def getLength(self): # returns duration of wav file in seconds
+        import wave
+        import contextlib
+        with contextlib.closing(wave.open(self.fileName,'r')) as f:
+            frames = f.getnframes()
+            rate = f.getframerate()
+            return frames / float(rate)
+
+Sound('low piano G sharp.wav', waitUntilFinished=False)
+Sound('splash.wav')
+print('test')
