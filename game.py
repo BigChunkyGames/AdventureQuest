@@ -1,14 +1,19 @@
 import random
 from source.utils import * # import all functions from utils
 from source.intro import *
-from source.places_maintown import maintown
+from source.places_maintown import *
 from source.player import *
 from source.devMode import *
 from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
-from source.places_dogeTown import dogeTown, bonysShop
+from source.places_dogeTown import dogeTown, bonysShop, getBook
+from source.places_burntTown import burntTown
 from source.shopUI import ShopUI
+from source.combat import Combat
+from source.enemy import Enemy
+from source.SlotMachine import *
+from source.places_grandpasTrailer import grandpasTrailer
 
 clear() 
 print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
@@ -18,7 +23,7 @@ print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = True 
+        self.player.devMode = False 
 
     def getPlayer(self):
         return self.player
@@ -30,43 +35,42 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            #printIntroAnimation()
-
-            # bonysShop(self.player)
+            grandpasTrailer(self.player)
+            #burntTown(self.player)
+            
+            #introduction(self.player)
+            maintown(self.player)
+            #bonysShop(self.player)
+            #maintownShop(self.player)
             #dogeTown(self.player)
 
             #flowers(self.player)
 
             #self.player.choices.append('owns worm home')
             #wormHome(self.player)
-
-            # i = Item(self.player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
-            # i.customActivationFunction = lambda:i.consume(heal=3)
-            # self.player.addToInventory(i)
+            
 
             # lisht = []
             # lisht.append(i)
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            #c = Combat(self.player,Enemy(self.player, "forest")) # jump to combat
+            #c = Combat(self.player) # jump to combat
 
-            # x = InventoryUI(self.player)
-            # x.run()
+            #self.player.openInventory()
+            
+            #s = Slots(self.player)
+            #s.slot_machine()
 
-            #maintown(self.player)
-
-            #world(self.player)
+            world(self.player)
         
 #TODO: assuming ne
 # w game each time. Should
 #  ask to load saved game data or start 
 # new game. Below line creates a new game object but should
-# \ load if loading saved game
+# \ load if loading saved" game
 g = Game()
 g.start()
-
-
 
 print ("the end")
 
