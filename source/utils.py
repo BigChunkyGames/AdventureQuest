@@ -226,6 +226,7 @@ def getInput(player, oneTry=False, prompt='> '):
             print("% )")
         elif inp == "inv" or inp == "inventory":
             player.openInventory()
+            return inp
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         elif inp == "save":
@@ -302,6 +303,8 @@ def getRandInt(min = 1, max= 10): # return random int between 1 and max
     return random.randint(1, max)
 
 def getOtherHand(player):
+    if 'hand' not in player.aspect:
+        return 'right' # just guess instead of crashing
     if player.aspect['hand']=='right':
         return 'left'
     else:
@@ -322,12 +325,21 @@ def getStats(player):
 
 #### sounds #####################################################
 
-class Sound(): # FIXME only plays 1 file at a time
-    def __init__(self, fileName, playNow=True, waitUntilFinished=False):
+class Sound(): 
+    # to play a sample: Sound('low piano G sharp.wav')
+    # FIXME: this probably has a lot of bugs yet to be discovered
+    # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
+    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True):
         pygame.mixer.init()
 
         self.fileName = "source/audio/" + fileName
+        self.load = pygame.mixer.music.load(open(self.fileName,"rb"))
+        self.sound = pygame.mixer.Sound(self.fileName)
+        self.channel = pygame.mixer.find_channel() # gets one of 8 empty channels
         #self.length = self.getLength()
+
+        if queue:
+            self.channel.queue(self.sound) # add to queue on new channel
     
         if playNow:
             t1 = threading.Thread(target=self.playSound, args=())
@@ -337,8 +349,7 @@ class Sound(): # FIXME only plays 1 file at a time
                 
 
     def playSound(self):
-        pygame.mixer.music.load(open(self.fileName,"rb"))
-        pygame.mixer.music.play()
+        pygame.mixer.music.play() 
         while pygame.mixer.music.get_busy(): #idk why this is needed but it is
             wait(2) # idk what value to put here tbh
 
@@ -350,6 +361,13 @@ class Sound(): # FIXME only plays 1 file at a time
             rate = f.getframerate()
             return frames / float(rate)
 
-Sound('low piano G sharp.wav', waitUntilFinished=False)
-Sound('splash.wav')
+    def stopSounds(self): # stops all sounds
+        pygame.mixer.music.stop()
+        log("stopped playing" + self.fileName)
+
+# Sound('etheral unlock 1.mp3')
+Sound('low piano G sharp.wav')
+s = Sound('splash.wav')
+wait(1)
+s.stopSounds()
 print('test')

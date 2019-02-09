@@ -35,10 +35,10 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            grandpasTrailer(self.player)
+            #grandpasTrailer(self.player)
             #burntTown(self.player)
             
-            #introduction(self.player)
+            introduction(self.player)
             maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
