@@ -12,7 +12,12 @@ def devMode(player):
 
     #change some more values
     player.money = 8000
+    player.maxhp = 3000
+    player.hp = 3000
     player.devmode = True
+
+
+
     player.levelUp(printAboutIt=False)
     player.levelUp(printAboutIt=False)
     player.levelUp(printAboutIt=False)

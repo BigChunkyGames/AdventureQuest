@@ -16,7 +16,7 @@ class Player:
         self.devmode = False
         # dicts
         self.aspect = {'name' : 'no name'}  # Beginning inputs (name, gender, etc) used in storytelling
-        self.counters = {} # name : int
+        self.stats = {} # name : int
         self.visitedareas = {} # a dict of visited areas 'area name': times visited (int)
         self.teleportableAreas = {} # same as visitedareas but these are the places the wormhole can go to 
         # lists
@@ -121,6 +121,8 @@ class Player:
             if x.name == nameOfItem:
                 self.inventory.remove(x)
                 show(str(x.name) + " was removed from your inventory.")
+                return True
+        return False
 
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
     def activateItem(self, item):
@@ -225,12 +227,12 @@ class Player:
 
     def countOf(self, name, increment=False): self.count(name,increment)
     def count(self, name, increment=False):
-        # returns number of counts for a given name and adds 1 first if increment. if name not found, adds it to self.counters
-        if not name in self.counters:
-            self.counters[name] = 0
+        # returns number of counts for a given name and adds 1 first if increment. if name not found, adds it to self.stats
+        if not name in self.stats:
+            self.stats[name] = 0
         if increment==True:
-            self.counters[name] = self.counters[name] + 1
-        return self.counters[name]
+            self.stats[name] = self.stats[name] + 1
+        return self.stats[name]
 
 
 #### leveling ####################################################
@@ -313,18 +315,18 @@ class Player:
 
     def takeDamage(self, d):
         self.hp = self.hp - d
+        s = ''
         if self.hp <= 0:
             hp = 0
-            print("You take "),
-            printWithColor(str(d) + " damage", "red", after=", leaving you unable to stand any longer.")
+            printWithColor(str(d) + " damage",  "red", before="You take ",after=", leaving you unable to stand any longer.")
             input("... ")
             self.death()
         else:
-            print("You took "),
-            printWithColor(str(d) + " damage", "red", after="!")
-            print(getRandomPainNoise())
-            print("You now have " + str(self.hp) + " HP.")
-            print("")
+            s += "You took @"
+            s +=str(d) + " damage@red@! "
+            s += getRandomPainNoise()
+            s +="\nYou now have " + str(self.hp) + " HP."
+            printc(s)
 
     def die(self, customText=None): self.death(customText)
     def death(self, customText=None):
@@ -356,7 +358,7 @@ class Player:
         if returnString:
             return text
         else:
-            show(text)
+            printc(text)
 
     def sleep(self, customText=None):
         self.hp = self.maxhp
@@ -379,7 +381,7 @@ class Player:
                 self.aspect['name'] = self.name()
                 self.aspect['difficulty'] = self.difficulty()
                 self.aspect['gender'] = self.gender()
-                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns()
+                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns() 
                 self.aspect['hand'] = self.hand()
                 self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = self.impropernouns()
                 self.aspect['town'], self.aspect['land'] = self.propernouns()

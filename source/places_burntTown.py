@@ -25,7 +25,7 @@ def burntTown(player):
                 show("Poetry Contest!", dots=False)
                 show("Compete with your best poems!", dots=False)
                 show("Win awesome prizes!", dots=False) # no one will notice that this is a haiku
-                show("The rest of the flyer is destroyed, except for the list of participating libraries, which is more libraries than you have ever been to.")
+                show("The rest of the flyer is destroyed, except for a large list of participating libraries, none of which you have ever heard of.")
                 break
         show("From somewhere behind you you can hear faint wimpering.")
         show("A man in a burnt and shredded suit is sitting with his back to the wall of a burnt building.")

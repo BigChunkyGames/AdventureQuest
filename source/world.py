@@ -8,8 +8,7 @@ def world(player):
     
     while True:
         clear()
-        # print player.currentLocationX
-        # print player.currentLocationY 
+        # TODO: make seperate biome synomyms for this part
         printc("To the @'North'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY - 1)), 
         printc("To the @'East'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX +1 , player.currentLocationY )), 
         printc("To the @'South'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),

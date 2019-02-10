@@ -23,7 +23,7 @@ print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = False 
+        self.player.devMode = True 
 
     def getPlayer(self):
         return self.player

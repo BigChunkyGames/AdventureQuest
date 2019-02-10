@@ -116,8 +116,9 @@ def wait(seconds): # accepts floats
     sys.stdout.flush()
     
 class printSlowly():
-    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True, skipable=True):
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True, skipable=True, addParenthesis=True):
         # .03 is a pretty good talking speed
+        # you no longer need to have parenthesis around dialogue when addparanthesis=true
         self.text = text
         self.secondsBetweenChars=secondsBetweenChars
         self.newline=newline
@@ -127,6 +128,12 @@ class printSlowly():
         self.finished=False    
         self.finishNow=False
         self.i = 0
+        if addParenthesis and len(self.text)>0:
+            firstChar = self.text[0]
+            #check if first char is ' or "
+            if firstChar != "'" and firstChar != '"':
+                self.text = '"' + self.text + '"'
+
         t1 = threading.Thread(target=self.go, args=())
         t2 = threading.Thread(target=self.handleUserInput, args=())
         t2.start()  
@@ -313,3 +320,17 @@ def getStats(player):
     s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
     s += "Block:    " + str(player.getTotalBlock())
     return s
+
+def endDemo(player):
+    show("Suddenly you don't feel right.")
+    show("There's something wrong here.")
+    show("Wait a minute, is that...")
+    printSlowly('The end of the demo?', secondsBetweenChars=.1)
+    show("Yes.")
+    show("It is.")
+    show("You jolt upright in bed.")
+    show("Huh, what a strange dream.")
+    show("You walk down stairs and eat a piece of toast.")
+    # TODO peieo fo toasta
+    show("Deciding you better start your day, you make your way outside.")
+    return maintown(player)

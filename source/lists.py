@@ -175,11 +175,11 @@ ALL_POKEYMON = ["Bulbasaur","Ivysaur","Venusaur","Charmander","Charmeleon","Char
 
 ### biome descriptors used in map.py ##############################################################################
 
-FOREST_SYNONYMS = ["a forest", "some trees", "a woods" ,"an aesthetic arberetum of luscious shrubbery"]
+FOREST_SYNONYMS = ["a forest", "some trees", "a woods" ,"an aesthetic arberetum of luscious shrubbery", 'a winding path through moss covered trees']
 PLAINS_SYNONYMS = ["some plains" , "a vast expanse of grass ;)", "a flowing green field", "the open expanse of nature", "an open prairie", "wide lowlands"]
 DESERT_SYNONYMS = ["an expanse of dunes", "a desert", "naked golden fields of sand", ]
 MOUNTAINS_SYNONYMS = ["a specious assortment of unbridled peaks", "some mountains", "shimmering peaks of aestitic rapture", "huge rocks", "just a fucking ton of huge gigantic fucking rocks"]
-TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way toward", "You thought there was nothing but when you turned around you saw", "On your left you see",    "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say, \"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
+TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way towards", "You thought there was nothing but when you turned around you saw", "On your left you see", "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say, \"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
 
 ### verbs ##############################################################################
 
