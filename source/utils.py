@@ -330,38 +330,25 @@ class Sound():
     # FIXME: this probably has a lot of bugs yet to be discovered
     # TODO: add channels for better handling of sounds (might not be necessary)
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
-    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=False):
+    # NOTE: make loop -1 to loop forever
+    # NOTE: volume adjustments (fade in out) only work with wav files
+    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=1):
         self.fileName = "source/audio/" + fileName
         self.loop = loop
         # initialize
         self.mixer = pygame.mixer
         self.mixer.init()
-        self.sound = self.mixer.Sound(self.fileName)
-        self.sound.set_volume(volume)
-        if playNow:
-            self.playSound()
-            
-        # self.channel = pygame.mixer.find_channel() # gets one of 8 empty channels
-        # #self.length = self.getLength()
-
-        # if queue:
-        #     self.channel.queue(self.sound) # add to queue on new channel
-    
-        # if playNow:
-        #     songThread = threading.Thread(target=self.playSound, args=())
-        #     songThread.start() 
-        #     if waitUntilFinished:
-        #         songThread.join()  # waits here until thread is finished
-        # #t1.join()
-
-    def playSound(self):
-        if self.loop:
-            self.sound.play(-1)
-        else:
-            self.sound.play()
-        # pygame.mixer.music.play() 
-        # while pygame.mixer.music.get_busy(): #idk why this is needed but it is
-        #     pygame.time.Clock().tick(10) # idk what value to put here tbh
+        if '.wav' in self.fileName:
+            self.format = 'wav'
+            self.sound = self.mixer.Sound(self.fileName) # sound method only supports wav files
+            self.sound.set_volume(volume)
+            if playNow:
+                self.sound.play(self.loop)
+        elif '.mp3' in self.fileName:
+            self.format = 'mp3'
+            self.sound = self.mixer.music.load(self.fileName)
+            if playNow:
+                self.mixer.music.play(self.loop)
 
     def getLength(self): # returns duration of wav file in seconds
         import wave
@@ -371,7 +358,11 @@ class Sound():
             rate = f.getframerate()
             return frames / float(rate)
 
-    def stopSounds(self): # stops all sounds
-        self.sound.stop()
+    def stopSound(self): # stops all sounds
+        if self.format == 'wav':
+            self.sound.stop()
+        elif self.format == 'mp3':
+            self.mixer.music.stop()
+
         #log("stopped playing " + self.fileName)
 
