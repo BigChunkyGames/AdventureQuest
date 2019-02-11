@@ -244,32 +244,27 @@ def openInventoryFromCombat(combatUI, inventoryUI):
 #### animations #########################################
 
 def printIntroAnimationHelper(rows, width, place = 1,):
-    widthToPrint = place
     subtraction = 0
     spaces = 7
-    if widthToPrint > width:
-        widthToPrint = width
     rowsToPrint = len(rows) % place
     done=False
     s=''
     for rowIndex in range(0, rowsToPrint):
         for char in range(0,place):
-            if char < widthToPrint + subtraction:
+            if char < place + subtraction and char < width:
                 s += rows[rowIndex][char] # print char in this row
             elif char < width -1:
                 s += ' '
                 
-            if rowIndex == len(rows) and char==widthToPrint:
+            if rowIndex == len(rows)-1 and char+subtraction==width:
                 done = True
         s += '\n'
-        #if width != place:
         subtraction -= spaces
 
     clear()
     print(s)
     wait(.05)
     if done: return
-    
     printIntroAnimationHelper(rows, width, place = place + 1)
 
 def printIntroAnimation():
@@ -297,10 +292,5 @@ ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗�
             ╚██████╔╝╚██████╔╝███████╗███████║   ██║                             
              ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝                             """
 
-# print left
-# clear
-# print 2 left
-
-printIntroAnimation()
 
 
