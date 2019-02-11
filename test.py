@@ -28,17 +28,12 @@
 
 
 from source.utils import *
+s = Sound('low piano G sharp.wav', loop=2)
+# s2 = Sound('paper.wav')
+wait(1)
+s.stopSound()
 s = Sound('etheral_unlock_1.mp3', loop=2)
 # s2 = Sound('paper.wav')
+wait(1)
+s.stopSound()
 print("t")
-printSlowly("testesttestestestas./ldirkng")
-
-#s.stopSound()
-print("t")
-printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")
-printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")
-printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")
-printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")
-printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")
-printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")
-printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")

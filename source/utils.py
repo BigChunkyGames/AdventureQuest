@@ -336,7 +336,7 @@ class Sound():
         self.fileName = "source/audio/" + fileName
         self.loop = loop
         # initialize
-        self.mixer = pygame.mixer
+        self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
         self.mixer.init()
         if '.wav' in self.fileName:
             self.format = 'wav'
@@ -363,6 +363,7 @@ class Sound():
             self.sound.stop()
         elif self.format == 'mp3':
             self.mixer.music.stop()
+        self.mixer.quit()
 
         #log("stopped playing " + self.fileName)
 
