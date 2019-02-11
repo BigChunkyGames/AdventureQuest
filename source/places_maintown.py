@@ -57,6 +57,7 @@ def maintown(player):
             print(getInvalidOptionText() + '\n')
 
 def home(player):
+    s = Sound('piano 1.wav')
     show("You enter your house through the familiar front door, taking in "
          "the sights of your childhood abode, reminiscing about all the "
          "dank shit you did as a kid.")
@@ -141,6 +142,7 @@ def home(player):
             break
         else:
             print("Please input a valid action.")
+    s.stopSounds()
     # TODO: add more stuff to do in your house
 
 

@@ -14,14 +14,23 @@
 # pygame.mixer.music.load('paper.wav')
 # pygame.mixer.music.play()
 
-import contextlib
-with contextlib.redirect_stdout(None): # prevents console ouput during import
-    import pygame
-import pygame.mixer
-pygame.mixer.init()
-sound1 = pygame.mixer.Sound('source/audio/low piano G sharp.wav')
-sound2 = pygame.mixer.Sound('source/audio/splash.wav')
-chan1 = pygame.mixer.find_channel()
-chan1.queue(sound1)
-chan2 = pygame.mixer.find_channel()
-chan2.queue(sound2)
+# import contextlib
+# with contextlib.redirect_stdout(None): # prevents console ouput during import
+#     import pygame
+# import pygame.mixer
+# pygame.mixer.init()
+# sound1 = pygame.mixer.Sound('source/audio/low piano G sharp.wav')
+# sound2 = pygame.mixer.Sound('source/audio/splash.wav')
+# chan1 = pygame.mixer.find_channel()
+# chan1.queue(sound1)
+# chan2 = pygame.mixer.find_channel()
+# chan2.queue(sound2)
+
+
+from source.utils import *
+s = Sound('piano 1.wav')
+printSlowly("testesttestestestas./ldirkng")
+
+s.stopSounds()
+print("t")
+printSlowly("testesttestestestasetasdgfkjhsd;krtijgns./ldirkng")

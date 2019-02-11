@@ -329,29 +329,38 @@ class Sound():
     # to play a sample: Sound('low piano G sharp.wav')
     # FIXME: this probably has a lot of bugs yet to be discovered
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
-    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True):
-        pygame.mixer.init()
-
+    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=False):
         self.fileName = "source/audio/" + fileName
-        self.load = pygame.mixer.music.load(open(self.fileName,"rb"))
-        self.sound = pygame.mixer.Sound(self.fileName)
-        self.channel = pygame.mixer.find_channel() # gets one of 8 empty channels
-        #self.length = self.getLength()
-
-        if queue:
-            self.channel.queue(self.sound) # add to queue on new channel
-    
+        self.loop = loop
+        # initialize
+        self.mixer = pygame.mixer
+        self.mixer.init()
+        self.sound = self.mixer.Sound(self.fileName)
+        self.sound.set_volume(volume)
         if playNow:
-            t1 = threading.Thread(target=self.playSound, args=())
-            t1.start() 
-            if waitUntilFinished:
-                t1.join()  # waits here until thread is finished
-                
+            self.playSound()
+            
+        # self.channel = pygame.mixer.find_channel() # gets one of 8 empty channels
+        # #self.length = self.getLength()
+
+        # if queue:
+        #     self.channel.queue(self.sound) # add to queue on new channel
+    
+        # if playNow:
+        #     songThread = threading.Thread(target=self.playSound, args=())
+        #     songThread.start() 
+        #     if waitUntilFinished:
+        #         songThread.join()  # waits here until thread is finished
+        # #t1.join()
 
     def playSound(self):
-        pygame.mixer.music.play() 
-        while pygame.mixer.music.get_busy(): #idk why this is needed but it is
-            wait(2) # idk what value to put here tbh
+        if self.loop:
+            self.sound.play(-1)
+        else:
+            self.sound.play()
+        # pygame.mixer.music.play() 
+        # while pygame.mixer.music.get_busy(): #idk why this is needed but it is
+        #     pygame.time.Clock().tick(10) # idk what value to put here tbh
 
     def getLength(self): # returns duration of wav file in seconds
         import wave
@@ -362,12 +371,6 @@ class Sound():
             return frames / float(rate)
 
     def stopSounds(self): # stops all sounds
-        pygame.mixer.music.stop()
-        log("stopped playing" + self.fileName)
+        self.sound.stop()
+        #log("stopped playing " + self.fileName)
 
-# Sound('etheral unlock 1.mp3')
-Sound('low piano G sharp.wav')
-s = Sound('splash.wav')
-wait(1)
-s.stopSounds()
-print('test')
