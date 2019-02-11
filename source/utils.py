@@ -11,6 +11,9 @@ import pickle
 from prompt_toolkit import print_formatted_text, HTML
 import getpass
 import logging
+import sys
+import msvcrt
+import threading
 
 #### console / user input #############################################
 
@@ -106,14 +109,74 @@ def checkInput(inp, choice):
         return True
     else: return False
 
-def wait(seconds, printThisStringEachSecond=False): # accepts floats
+def wait(seconds): # accepts floats
     ''' printOnSecond is a string btw'''
-    if printThisStringEachSecond == False:
-        time.sleep(seconds)
-    else:
-        for s in range(seconds):
-            print(printThisStringEachSecond),
-            time.sleep(1)
+    sys.stdout.flush()
+    time.sleep(seconds)
+    sys.stdout.flush()
+    
+class printSlowly():
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True, skipable=True, addParenthesis=True):
+        # .03 is a pretty good talking speed
+        # you no longer need to have parenthesis around dialogue when addparanthesis=true
+        self.text = text
+        self.secondsBetweenChars=secondsBetweenChars
+        self.newline=newline
+        self.pause=pause
+        self.initialWait=initialWait
+        self.skipable=skipable    
+        self.finished=False    
+        self.finishNow=False
+        self.i = 0
+        if addParenthesis and len(self.text)>0:
+            firstChar = self.text[0]
+            #check if first char is ' or "
+            if firstChar != "'" and firstChar != '"':
+                self.text = '"' + self.text + '"'
+
+        t1 = threading.Thread(target=self.go, args=())
+        t2 = threading.Thread(target=self.handleUserInput, args=())
+        t2.start()  
+        t1.start() 
+        t1.join()  # waits here until thread is finished
+    
+    def go(self):
+        pausePoints = ['.', ',', '!', '?', ':', '\n']
+        skipThese = ['"', "'"]
+        waitOnNextChar=False
+        if self.initialWait: wait(self.pause)
+        for self.i in range(len(self.text)):
+            if self.finishNow:
+                self.secondsBetweenChars = 0
+                self.pause = 0
+            print(str(self.text[self.i]), end='')
+            if waitOnNextChar: 
+                wait(self.pause)
+                waitOnNextChar=False
+            if str(self.text[self.i]) in pausePoints: # wait longer conditionally
+                waitOnNextChar=True
+            if str(self.text[self.i]) not in skipThese: # dont wait if printing quotes
+                wait(self.secondsBetweenChars)
+        if self.newline:print('')
+        self.finished=True
+
+    def handleUserInput(self):
+        while True:
+            if self.finished==True:
+                return
+            else:              # FIXME this isnt perfect
+                while msvcrt.kbhit(): # try not to let user type while printing
+                    x = getpass.getpass('')
+                    print('\033[{}C\033[1A'.format(self.i+1) , end ='') # go back to where current printing char is and don't insert a newline
+                    if x == '' and self.skipable:
+                        self.finishNow=True
+
+def thread(targetFunction, numberOfThreads=1,): # not used
+    threads = []
+    for i in range(numberOfThreads):
+        t = threading.Thread(target=targetFunction, args=(i,))
+        threads.append(t)
+        t.start()
 
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
@@ -138,21 +201,22 @@ def dichotomy(option1, option2):
         else:
             print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
-def getInput(player):
+def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
     while True:
-        inp = input("> ").lower().strip()
+        inp = input(prompt).lower().strip()
+
         if player.devmode and inp == "debug damage":
             player.takeDamage(int(input("How much damage? : ")))
         elif player.devmode and inp == "debug level up":
             player.levelUp()
         elif player.devmode and inp == "debug add xp":
-            player.addExperience(int(input("How much XP?: ")), input("Scale? (True or False): "))
+            player.gainXp(int(input("How much XP?: ")), input("Scale? (True or False): "))
         elif inp == "hp":
             print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
             print("("),
             print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
             print("% )")
-        elif inp == "i" or inp == "inventory":
+        elif inp == "inv" or inp == "inventory":
             player.openInventory()
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
@@ -162,17 +226,22 @@ def getInput(player):
         elif inp == "load":
             player = pickle.load(open("AdventureQuestSave.meme", "r"))
             show("@Game loaded!@green@")
+        elif inp == '':
+            continue
         else:
             return inp
+        if oneTry:
+            return inp
 
-def checkForCancel(input):
-    if checkInput(input, 'back') or checkInput(input, 'cancel') or checkInput(input, 'return'):
+def checkForCancel(inp):
+    if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
         return True
     else:
         return False
 
 # the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
 def wrap(text, limit=40, padding=True):
+    text = str(text)
     if padding: pad = " "
     else: pad = ""
     out = ''
@@ -224,15 +293,23 @@ def getRandomIndex(arr):
 def getRandInt(min = 1, max= 10): # return random int between 1 and max
     return random.randint(1, max)
 
+def getOtherHand(player):
+    if player.aspect['hand']=='right':
+        return 'left'
+    else:
+        return 'right'
+
 #### UI stuff ############################################
 
 def getStats(player):
     s = ''
     s += "Health:   " + str(player.hp) + " / " + str(player.maxhp) + "\n"
     s += "Level:    " + str(player.level) + "\n"
-    s += "XP:       " + str(player.xp) + "\n"
+    s += "XP:       " + str(player.xp) + " / " + str(player.levelupxp) +"\n"
     s += "Money:    $ " + str(player.money) + "\n"
-    s += "Strength: " + str(player.strength) 
+    s += "Strength: " + str(player.strength) + "\n"
+    s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
+    s += "Block:    " + str(player.getTotalBlock())
     return s
 
 def openInventoryFromCombat(combatUI, inventoryUI):
@@ -243,40 +320,59 @@ def openInventoryFromCombat(combatUI, inventoryUI):
 
 #### animations #########################################
 
-def printIntroAnimationHelper(rows, width, place = 1,):
-    subtraction = 0
-    spaces = 7
-    rowsToPrint = len(rows) % place
-    done=False
-    s=''
-    for rowIndex in range(0, rowsToPrint):
-        for char in range(0,place):
-            if char < place + subtraction and char < width:
-                s += rows[rowIndex][char] # print char in this row
-            elif char < width -1:
-                s += ' '
-                
-            if rowIndex == len(rows)-1 and char+subtraction==width:
-                done = True
-        s += '\n'
-        subtraction -= spaces
+class Animation():
+    def __init__(self, animationName):
+        '''animationNames: introAnimation, (string)'''
+        clear()
+        self.finished=False
+        if animationName == 'introAnimation':
+            rows = ASCII_LOGO.splitlines()
+            width = len(rows[0])
+            self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
+        else:
+            print("Thats not one of the animations.")
+            return
 
-    clear()
-    print(s)
-    wait(.05)
-    if done: return
-    printIntroAnimationHelper(rows, width, place = place + 1)
+        self.t2 = threading.Thread(target=self.handleUserInput, args=())
+        self.t1.start() 
+        self.t2.start()
+        self.t1.join()
 
-def printIntroAnimation():
-    clear()
-    rows = ASCII_LOGO.splitlines()
-    width = len(rows[0])
-    printIntroAnimationHelper(rows, width, )
-
-# print first row up to place
-# clear
-# place += 1
-# recursion
+    def handleUserInput(self):
+        while True:
+            if self.finished==True:
+                return
+            else:     
+                while msvcrt.kbhit(): # try not to let user type while printing
+                    x = getpass.getpass('')
+                    if x == '':
+                        self.finished=True
+                    
+    def introAnimation(self, rows, width, place = 1,):
+        if self.finished:
+            clear()
+            print(ASCII_LOGO)
+            return
+        subtraction = 0
+        spaces = 7
+        rowsToPrint = len(rows) % place
+        done=False
+        s=''
+        for rowIndex in range(0, rowsToPrint):
+            for char in range(0,place):
+                if char < place + subtraction and char < width:
+                    s += rows[rowIndex][char] # print char in this row
+                elif char < width -1:
+                    s += ' '
+                if rowIndex == len(rows)-1 and char+subtraction==width:
+                    done = True
+            s += '\n'
+            subtraction -= spaces
+        clear()
+        print(s)
+        wait(.05)
+        if done: return
+        self.introAnimation(rows, width, place = place + 1)
 
 ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗██╗   ██╗██████╗ ███████╗
 ██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝██║   ██║██╔══██╗██╔════╝
@@ -294,3 +390,17 @@ ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗�
 
 
 
+def endDemo(player):
+    show("Suddenly you don't feel right.")
+    show("There's something wrong here.")
+    show("Wait a minute, is that...")
+    printSlowly('The end of the demo?', secondsBetweenChars=.1)
+    show("Yes.")
+    show("It is.")
+    show("You jolt upright in bed.")
+    show("Huh, what a strange dream.")
+    show("You walk down stairs and eat a piece of toast.")
+    # TODO peieo fo toasta
+    show("Deciding you better start your day, you make your way outside.")
+    from source.places_maintown import maintown
+    return maintown(player)

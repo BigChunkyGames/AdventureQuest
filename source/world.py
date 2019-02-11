@@ -4,11 +4,11 @@ from source.utils import getInput, clear, show, printc, bug, yesno, checkForCanc
 from source.lists import getInvalidOptionText
 
 def world(player):
-    player.addVisit("world")
+    player.registerVisit("world")
     
     while True:
-        # print player.currentLocationX
-        # print player.currentLocationY 
+        clear()
+        # TODO: make seperate biome synomyms for this part
         printc("To the @'North'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY - 1)), 
         printc("To the @'East'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX +1 , player.currentLocationY )), 
         printc("To the @'South'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),
@@ -27,6 +27,7 @@ def world(player):
             player.map.goTo(player.currentLocationX -1, player.currentLocationY, player)
             
         elif (checkForCancel(x)):
+            show("You turn around, having not finished your time at " + player.map.getTile(player.currentLocationX,player.currentLocationY).description + ".")
             player.map.goTo(player.currentLocationX, player.currentLocationY , player)
             return
         else:

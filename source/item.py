@@ -4,13 +4,14 @@ import random
 from source.lists import getRandomWeaponName, getRandomItemPrefix, getRandomArmourSlot, getRandomArmourName
 
 class Item():
-    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None):
+    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None, scale=True):
         '''
         Rarities: None, common, rare, epic, legendary
-        Types: weapon, armour, consumable, quest, 
+        Types: weapon, armour, consumable, quest, misc
         ArmourSlots: head, offhand, chest, legs, feet
         Set sellValue to None to generate a default value
         customActivationFunction is a lambda that gets called when item is activated (equipped)
+        if scale as true, stats will be scaled to fit player level
         '''
         self.player = player
         self.name = name
@@ -27,6 +28,8 @@ class Item():
 
         if sellValue == None: self.sellValue = self.generateSellValue() 
         else: self.sellValue = sellValue
+
+        if scale: self.scale()
 
         self.description = self.buildItemDescriptionString()
 
@@ -56,7 +59,7 @@ class Item():
         s = ''
         if not self.rarity == None: # if has a rarity
             s += ' [' + self.rarity.capitalize() + '] ' + '\n'
-        elif self.type == 'weapon' or self.type == 'armour':
+        elif self.type == 'weapon' or self.type == 'armour': # if doesnt have rarity and is a weapon or armour
             s += ' [Common] ' + '\n'
         if self.sellValue > 0:
             s += 'Value: $' + str(self.sellValue) +  '\n'
@@ -72,7 +75,8 @@ class Item():
         # TODO: flavorize
 
     def whereIsIt(self):
-        hand = self.player.aspect["hand"]
+        if not 'hand' in self.player.aspect: hand = 'right'
+        else: hand = self.player.aspect["hand"]
         if hand == 'right': otherhand='left'
         else: otherhand='right'
         if self.type ==  "weapon":
@@ -87,13 +91,14 @@ class Item():
             return "holding this in your " + otherhand + " hand."
 
     def whereDoesItGo(self):
-        hand = self.player.aspect["hand"]
+        if not 'hand' in self.player.aspect: hand = 'right'
+        else: hand = self.player.aspect["hand"]
         if hand == 'right': otherhand='left'
         else: otherhand='right'
-        if self.type ==  "weapon":
-            return "Weapon"
+        if self.type ==   "weapon":
+            return "This goes in your " + hand + " hand"
         elif self.armourSlot == "head":
-            return "This goes on your head head."
+            return "This goes on your head."
         elif self.armourSlot == "chest":
             return "This goes on your chest."
         elif self.armourSlot == "legs":
@@ -104,17 +109,23 @@ class Item():
             return "This goes in your " + otherhand + " hand."
         return "You can't hold this."
 
-    def consume(self, text=None, heal=None, xpgain=None):
+    def consume(self, text=None, heal=None, xpgain=None, karma=None):
         ''' returns string about what happened after consumption (because consumption is only possible form inventory menu). '''
         # TODO make lots of effects
         if self.type == 'consumable':
             if text == None:
-                text = "You ate the " + self.name + ".\n It was delicious.\n"
+                text = "You ate the " + str(self.name) + ".\n It was delicious.\n"
             if heal:
-                self.player.regenHealth(health = heal, returnString=False, showCurrentHealth=False)
-                text += "\nYou regained " + heal + " HP!"
+                self.player.regenHealth(health = heal, returnString=True, showCurrentHealth=False)
+                text += "\nYou regained " + str(heal) + " HP!"
             if xpgain:
-                text += '\n' + self.player.gainXp(xpgain, returnString=True)
+                text += '\n' + str(self.player.gainXp(xpgain, returnString=True))
+            if karma:
+                self.player.karma = self.player.karma + karma
+                if karma <0:
+                    text += '\n' + 'You didn\'t feel too great about doing that.'
+                elif karma >0:
+                    text += '\n' + "You're proud of yourself for doing that."
             self.player.inventory.remove(self)
         else:
             text = "You can't eat that!"
@@ -126,10 +137,11 @@ class Item():
         self.block = self.player.scale(self.block)
         self.sellValue = self.sellValue + self.player.level # TODO not sure about this
 
-def generateRandomArmourOrWeapon(player, _type='armour',rarity = 'common', armourSlot=None, goodnessBoost=0, extreme=False, customDescription='', prefix=True, scale=True): 
-    ''' goodnessBoost makes the weapon a lot better (or worse if neg)'''
-    goodnessBoost += getNumberBasedOnRarity(rarity)
-    if prefix == True: prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=goodnessBoost+2)
+def generateRandomArmourOrWeapon(player, _type='armour',rarity = None, armourSlot=None, bonus=0, extreme=False, customDescription='', prefix=True, scale=True): 
+    ''' bonus makes the weapon a lot better (or worse if neg)'''
+    if rarity == None:
+        rarity = getRarityBasedOnNumber(bonus)
+    if prefix == True: prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=bonus+2)
     if _type == 'armour':
         if armourSlot == None: armourSlot = getRandomArmourSlot()
         damage = 0
@@ -140,9 +152,10 @@ def generateRandomArmourOrWeapon(player, _type='armour',rarity = 'common', armou
         damage = prefix.damageMod
         block = 0
         name = prefix.adjective + " " + getRandomWeaponName(extreme) 
-    i = Item(player, name, customDescription=customDescription, rarity=rarity, _type=_type, armourSlot = armourSlot, damage=damage, block=block)
+    i = Item(player, name, customDescription=customDescription, rarity=rarity, _type=_type, armourSlot = armourSlot, damage=damage, block=block, scale=scale)
+    i.damage = int(i.damage) # round
+    i.block = int(i.block)
     i.description = i.buildItemDescriptionString()
-    if scale: i.scale()
     return i
 
 def getNumberBasedOnRarity(rarity):
@@ -155,6 +168,17 @@ def getNumberBasedOnRarity(rarity):
     if rarity == 'legendary':
         return 3
 
+def getRarityBasedOnNumber(number):
+    number = int(number)
+    if number == None or number <= 0 :
+        return 'common'
+    if number == 1 :
+        return 'rare'
+    if number == 2 :
+        return 'epic'
+    if number >= 3 :
+        return 'legendary'
+
 
 class ItemPrefix():
     def __init__(self, adjective, damageMod = 0, blockMod=0):
@@ -165,17 +189,17 @@ class ItemPrefix():
 def generatePrefix(player, _type='weapon', prefixLevelOutOf5 = 3):
     '''prefix level: 1 is shitty, 5 is really good'''
     i = ItemPrefix(getRandomItemPrefix(prefixLevelOutOf5))
+    luckOfTheDraw = random.uniform(0,1)
     if _type == 'weapon':
-        i.damageMod = prefixLevelOutOf5
+        i.damageMod = prefixLevelOutOf5 + luckOfTheDraw
     elif _type == 'armour':
-        i.blockMod = prefixLevelOutOf5
-
+        i.blockMod = prefixLevelOutOf5 + luckOfTheDraw
     if i.damageMod<0: i.damageMod==0
     if i.blockMod<0: i.blockMod==0
-    # TODO make more special
+    # TODO advanced combat make more special
     return i
 
-def tryForDrop(percent): # TODO drops
+def tryForDrop(percent): 
     dropchance = random.randint(1, 100)
     if dropchance <= percent:
         return True

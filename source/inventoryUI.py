@@ -104,28 +104,35 @@ class InventoryUI():
             self.makeListCurrentRadios(self.listOfItems,self.selectedRadios._selected_index) 
 
     def updateListOfItems(self):
-        if   self.mainRadios._selected_index == 0:
+        category = self.mainRadios.values[self.mainRadios._selected_index][1]
+        if category == 'Weapons':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='weapon')
-        elif self.mainRadios._selected_index == 1:
+        elif category == 'Armour':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='armour')
-        elif self.mainRadios._selected_index == 2:
+        elif category == 'Consumable':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='consumable')
-        elif self.mainRadios._selected_index == 3:
+        elif category == 'Quest':
             self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='quest')
+        elif category == 'Misc':
+            self.listOfItems = self.player.getAllInventoryItemsAsObjectList(_type='misc')
         if len(self.listOfItems) == 0:
             self.populateMainRadios()
             self.currentRadios = self.mainRadios
             self.refresh()
 
     def makeListCurrentRadios(self, lisp, selectedIndex=0):
-        lisp = self.refreshItemDescriptions(lisp)
-        self.listOfItemsTupled = self.tuplify(lisp)
-        self.selectedRadios = RadioList2(
-            values=self.listOfItemsTupled,
-            app = self)    
-        self.selectedRadios._selected_index = selectedIndex
-        self.currentRadios = self.selectedRadios 
-        # self.description = self.currentRadios.values[selectedIndex]
+        if len(lisp) == 0:
+            self.populateMainRadios()
+            self.currentRadios = self.mainRadios
+        else: 
+            lisp = self.refreshItemDescriptions(lisp)
+            self.listOfItemsTupled = self.tuplify(lisp)
+            self.selectedRadios = RadioList2(
+                values=self.listOfItemsTupled,
+                app = self)    
+            self.selectedRadios._selected_index = selectedIndex
+            self.currentRadios = self.selectedRadios 
+            # self.description = self.currentRadios.values[selectedIndex]
         self.refresh()
 
     def refreshItemDescriptions(self, lis):
@@ -162,6 +169,7 @@ class InventoryUI():
         self.populateMainRadiosHelper('armour')
         self.populateMainRadiosHelper('consumable')
         self.populateMainRadiosHelper('quest')
+        self.populateMainRadiosHelper('misc')
         self.mainRadios = RadioList2(
             values=self.mainRadiosRows,
             app = self)
@@ -206,11 +214,11 @@ class InventoryUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        width = 60
+        width = 40
         smallerWidth = 40
         height = 10
         if self.currentRadios != self.mainRadios: descriptionTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
-        else: descriptionTitle = "Description"
+        else: descriptionTitle = FormattedText([('#ffffff', "Description")])
         actionsTitle = FormattedText([('#ffffff', "Inventory")])
         desc = wrap(self.description, width-2)
         root_container = VSplit([

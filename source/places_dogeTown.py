@@ -3,11 +3,11 @@ from source.lists import getInvalidOptionText
 from source.enemy import *
 from source.combat import *
 from source.item import Item, generateRandomArmourOrWeapon
-from source.shopUI import ShopUI
+from source.shops import *
 
 #TODO QUEST get information from dogetown (but its funny because they only say bark)
 def dogeTown(player):
-    if player.getVisits("dogeTown", "add") == 1 :
+    if player.registerVisit("dogeTown") == 1 :
         show("You approach what seems to be a town completely inhabited by polite and playful doggos.")
         show("It's magnificent. You have never seen anything like it. There are puggos and long boys and shoobos and wrinklers... All types of doge boys run about playing fetch and chase through the streets and in the open fields around the town.")
         show("Yappers are yipping from rooftops and floofers woof from below.")
@@ -84,7 +84,7 @@ def dogeTown(player):
 
             show("You head back down the stairs to the courtyard.")
         elif checkInput(x, "Synadogue"):
-            if player.getVisits("dogetownChurch", "add") == 1: # if first time here
+            if player.registerVisit("dogetownChurch") == 1: # if first time here
                 if not player.equippedArmourChest and not player.equippedArmourChest.name == "Doggy-Style Costume": # if not naked and chest doggy style constume not equipped
                     show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
                     show("The Synadogue has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
@@ -114,7 +114,8 @@ def dogeTown(player):
                 show('"We praise you, almighty DOG. We lift our paws to you."')
                 show('"Now please turn to page bork-hundred and 3."')
                 show("You pick up a book from under the seat in front of you.")
-                show("You have acquired 'The Sacred Texts of Buddhogism'.") # TODO inventory
+                show("You have acquired 'The Sacred Texts of Buddhogism'.") 
+                getBook(player)
                 print( "Read it?")
                 if yesno(player):
                     show("The entire book is written using dog words that you cannot understand.")
@@ -193,7 +194,7 @@ def party(player):
                 show('"Bork bark. Roof bork riffity bork ruff.')
                 show("A quest has been added to your quest log.") #TODO quests
         elif x == 'dance' or x == 'd':
-            if player.getVisits("dogetown dance", "add") == 1:
+            if player.registerVisit("dogetown dance") == 1:
                 show("The dance floor is packed with sweating grinding bitches, so you dive in.")
                 show("Just when you think you've got your boogy on, you find yourself in the middle of the mosh pit.")
                 show("You realize a bit too late what you've gotten yourself into. There's no way out!")
@@ -215,7 +216,7 @@ def party(player):
         elif x == 'leave' or x == 'l':
             return
         elif x == 'hallway' or x == 'h':
-            if player.getVisits("dogetown hallway", "add") >1 :
+            if player.registerVisit("dogetown hallway") >1 :
                 show("You don't have to go to the bathroom anymore.")
                 continue
             show("You make your way down the hallway and come to a set of two doors each with their own sign.")
@@ -259,20 +260,20 @@ def party(player):
                 print("Which door will you choose?")
                 x = getInput(player)
                 if checkInput(x, "left"):
-                    if player.getVisits("dogeTown boy's bathroom"):
+                    if player.getVisits("dogeTown boy's bathroom")>0:
                         show("You probably want to choose the other door.")
                     if player.aspect["gender"] == "girl" or player.aspect["gender"] == "gril":
                         show("The doogs inside the bathroom bork angrily at you and you are forced to leave.")
-                        player.getVisits("dogeTown boy's bathroom", "add")
+                        player.registerVisit("dogeTown boy's bathroom")
                         continue
                     bathroom(player)
                     break
                 elif checkInput(x, "right"):
-                    if player.getVisits("dogeTown girls's bathroom"):
+                    if player.getVisits("dogeTown girls's bathroom")>0:
                         show("You probably want to choose the other door.")
                     if player.aspect["gender"] == "boy" or player.aspect["gender"] == "boi":
                         show("The doogettes inside the bathroom birk angrily at you and you are forced to leave.")
-                        player.getVisits("dogeTown girls's bathroom", "add")
+                        player.registerVisit("dogeTown girls's bathroom")
                         continue
                     bathroom(player)
                     break
@@ -287,7 +288,7 @@ def bathroom(player):
     show("In front of you is a very dirty fire hydrant.")
     show("You take a seat.")
     show("You notice, hanging on the back of the door, a kinky doggy-style costume.")
-    show("@You acquired the doggy-style costume.@yellow@") #TODO inventory
+    show("@You acquired the doggy-style costume.@yellow@")
     i = getTheCostume(player)
     player.addToInventory(i)
     print("Put it on?")
@@ -300,7 +301,7 @@ def bathroom(player):
         show("You wipe your hands on the grassy countertop and check yourself out in the mirror.")
         show("At the sight of yourself, you are fullfilled with confidence.")
         show("Damn, you look fine.") 
-        player.addExperience(1)
+        player.gainXp(1)
         # TODO different reaction depending on if constume was equipped
     show("You walk back into the club.")
 
@@ -309,7 +310,10 @@ def getTheCostume(player):
     
 
 def bonysShop(player):
-    asciiArt ="""
+    if openIfExists(player, "Bony's Convenience Store"): return
+
+    s = Shop(player, "Bony's Convenience Store")
+    s.shopAsciiArt ="""
        /^-^\\
       / o o \\
      /   Y   \\      woof
@@ -318,33 +322,45 @@ def bonysShop(player):
       /    |
 (    /     |
  ===/___) ||"""
+
     inv = []
 
-    i = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3)
-    i.customActivationFunction = lambda:i.consume(heal=int(player.maxhp/6))
-    inv.append(i)
+    i1 = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3)
+    i1.customActivationFunction = lambda:i1.consume(heal=int(player.maxhp/6))
+    inv.append(i1) # CONSUMABLES MUST HAVE UNIQUE VAR NAME
 
-    i = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12)
-    i.customActivationFunction = lambda:self.consume(xpgain=3) 
-    inv.append(i)
+    i2 = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12)
+    i2.customActivationFunction = lambda:i2.consume(xpgain=3)
+    inv.append(i2)
 
     i = Item(player, 'Frizbee', damage=4, customDescription="It's red and as chew marks in it.", _type='weapon', sellValue=6)
     inv.append(i)
 
     i = generateRandomArmourOrWeapon(player, _type='armour', rarity='rare')
-    i.scale()
     inv.append(i)
 
     i = Item(player, 'Doge Collar', block=2, customDescription="This furry red collar comes equipped with a stylish silver doge tag.", _type='weapon', sellValue=6)
-    i.scale()
     inv.append(i)
 
     if "Bud joined the party" in player.choices: desc = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!"
     else: desc = "You unravel the paper to find that it is an extremely old missing dog poster. You remember making these years ago when you lost Bud. The hand drawn image of a Bud brings back nostalgic memories but you try to shove them out of your mind."
 
-    i = Item(player, 'Crumped Paper', customDescription= desc, _type='quest', sellValue=1)
+    i = Item(player, 'Crumped Paper', customDescription= desc, _type='misc', sellValue=1)
     inv.append(i)
 
-                # rare armour
-    x = ShopUI(player, "Bony's Convenience Store", inv, shopKeeperAsciiArt=asciiArt, customCurrency='dogecoins' )
-    x.run()
+    s.originalInventory = inv
+    s.restock()
+    s.openUI()
+
+def getBook(player):
+    desc = ''
+    for sentences in range(3):
+        words = random.randint(5, 12)
+        for i in range(words):
+            if i == 0:
+                desc += getRandomDogNoise().capitalize() + " "
+            elif i == words-1:
+                desc += '. '
+            else:
+                desc += " " + getRandomDogNoise()
+    player.addToInventory(Item(player, 'The Sacred Texts of Buddhogism', customDescription = desc, rarity='rare', _type='misc', sellValue=8, ))

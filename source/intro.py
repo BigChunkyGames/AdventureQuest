@@ -1,4 +1,5 @@
 from source.utils import *
+from source.item import Item
 
 def introduction(player): #TODO i think we should change the intro to be less demanding of the player first thing. maybe we can add an option to have the lore given to the player or if they player can write the lore themselves
     clear()
@@ -6,21 +7,14 @@ def introduction(player): #TODO i think we should change the intro to be less de
          "hell, we looked to the legends.")
     show("Only one true hero could save us from our seemingly "
          "inevitable fate. The legends spoke of a time long ago.")
-    print("In the {0} land of {1} was a town named {2}. Here "
-          "resided the adventurer, {3}, a {4} and {5} {6}."
-          ).format(player.aspect['adj1'], player.aspect['land'], player.aspect['town'],
-                   player.aspect['name'], player.aspect['adj2'], player.aspect['adj3'],
-                   player.aspect['occ'])
+    print("In the " + player.aspect['adj1']+ " land of "+player.aspect['land']+" was a town named "+player.aspect['town']+'. Here resided the adventurer, '+player.aspect['name']+', a '+player.aspect['adj2']+' and '+player.aspect['adj3']+' '+player.aspect['occ']+".")
     input("... ")  # TODO: Replace "a" with "an" when needed
-    print ("{0} was a {1} {2}, ready to {3} any evil that would dare " \
-          "to cross {4} path.").format(player.aspect['HeShe'], player.aspect['adj4'],
-                                      player.aspect['occ'], player.aspect['viverb'],
-                                      player.aspect['hisher'])
+    print (player.aspect['HeShe'].capitalize()+" was a "+player.aspect['adj4']+" "+player.aspect['occ']+", ready to "+player.aspect['viverb']+" any evil that would dare to cross "+player.aspect['hisher']+" path.")
     input("... ")
-    show("but first, %s was thirsty." % player.aspect['heshe'])
+    show("But first, %s was thirsty." % player.aspect['heshe'])
     clear()    
     printc("You recognize your humble town's @'tavern'@yellow@ to the north.")
-    print("Type 'tavern' and press enter to enter the tavern. ")
+    print("Type 'tavern' to enter the tavern. ")
     attempts = 0
     dies = 0
     move = getInput(player)
@@ -51,25 +45,24 @@ def introduction(player): #TODO i think we should change the intro to be less de
     # Tavern in intro is different from tavern.py
     show("The tavern in %s is old and rugged. Beaten down by countless "
          "travelers, it's acquired a homey atmosphere." % player.aspect['town'])
-    print('You approach the bartender. "Ey, what\'ll it be for ya?" he '
-          'says.')
-    print("On the shelf is a bottle of 'rum' and a can of Mountain 'Dew'. "
-          "Which do you choose? ('rum', 'dew') ")
+    show('You approach the bartender.')
+    show('"Ey, what\'ll it be for ya?"')
+    printc("On the shelf is a bottle of @'Rum'@yellow@ and a can of Mountain @'Dew'@yellow@.\nWhich do you choose?")
     drink = input("> ").lower()
-    while drink != "rum" and drink != "dew":
+    while not checkInput(drink, 'rum') and not checkInput(drink, 'dew'):
         if drink == 'neither':
             print("You've got to drink something. What'll it be? ")
         else:
-            print("Come on, 'rum' or 'dew'. ")
+            printc("Come on, @'Rum'@yellow@ or @'Dew'@yellow@. ")
         drink = input("> ").lower()
-    if drink == "rum":
+    if checkInput(drink, 'rum'):
         show("You start to reach for the rum, and then realize that "
              "you're way too MLG for that weak shit.")
         show('"Gimme dat dew," you say, gently placing your fedora on '
              'your head.')
         show('"Wow, you really are as dank as you look." the bartender '
              'says, looking impressed.')
-    elif drink == "dew":
+    elif  checkInput(drink, 'dew'):
         show('"Gimme dat dew," you say. "I knew you were a dank one," '
              'the bartender says knowingly.')
         show('You tip your fedora gently to show how euphoric you are '
@@ -105,14 +98,13 @@ def introduction(player): #TODO i think we should change the intro to be less de
     input(" ")
     print(".    .    .")
     input(" ")
-    show('"k."')
+    printSlowly('"k."')
     show("You sprint to your house to grab your shit.")
-    show('You enter your house, hoping mum will get the camera. "Mom! I\'m '
-         'going on an adventure!!1!!!!1one!!"')
-    show('She looks up from the dick sock she\'s knitting. "Alright '
-         'sweetie, be safe! Here, take this."')
-    show('You have acquired the camera.')
-    printc("Enter '@i@yellow@' to open your inventory.")
+    print('You enter your house and exclaim to your mom about how you are going on an adventure.')
     player.getInput()
-    show('After taking the camera, you leave your house and walk into town, '
-         'ready to head into whatever building you choose.')
+    show('She looks up from the dick sock she\'s knitting.')
+    printSlowly("Alright sweetie, be safe! Here, take this.")
+    player.addToInventory(Item(player, 'Camera', customDescription='Mom got this for you.', _type='misc'))
+    printc("Type @'inventory'@yellow@ any time you are prompted for input to open your inventory.")
+    player.getInput(oneTry=True)
+    show('After taking the camera, you leave your house and walk into town, ready to head into whatever building you choose.')

@@ -18,9 +18,9 @@ def wormHome(player):
             if checkInput(x, "Worm TV"):
                 show("You put Tubeworms in your eyes, sit back, and watch some T.V.")
                 for i in range(23):
-                    wait(1, ". ")
+                    printSlowly(". ",newline=False, secondsBetweenChars=.5, initialWait=False, pause=0)
                     if i % 6 == 0 and i != 0:
-                        print( getRandomTVShow())
+                        printSlowly( getRandomTVShow(), secondsBetweenChars=.1, newline=False)
                 show("Your entire day is wasted.")
                 show("After a few too many hours, you stand up, lethargic and groggy, and try to regain your wasted time.")
                 show("But it is lost forever.")
@@ -50,37 +50,37 @@ def wormHome(player):
                 print(getInvalidOptionText())
     elif True: # visit before submitting poem # TODO set a player choice after submitting poem
         show('Andy Worm Poet is extremely excited to see you again.')
-        show('"Hey there friend!"')
-        print('"Would you care for some tea?"')
+        printSlowly('"Hey there friend!"')
+        printSlowly('"Would you care for some tea?"')
         if yesno(player): tea(player)
-        show('"Things are really looking up for me, friend!"')
-        show('"I\'m really feeling good these days!"')
-        show('"But I talk too much."')
-        print('"Tell me about yourself!"')
+        printSlowly('"Things are really looking up for me, friend!"')
+        printSlowly('"I\'m really feeling good these days!"')
+        printSlowly('"But I talk too much."')
+        printSlowly('"Tell me about yourself!"')
         for i in range(getRandInt(min=2, max=3)):
             x = getInput(player)
-            print(getConversationResponse( responses = getRandInt(min=1, max=3)))
+            printSlowly(getConversationResponse( responses = getRandInt(min=1, max=3)))
         show('Andy Worm Poet gets distracted from your conversation.')
         show('He looks at you after staring at a wall for a few minutes.')
-        print('"Did you need to use my wormholes to go somewhere?"')
+        printSlowly('"Did you need to use my wormholes to go somewhere?"')
         x = yesno(player)
-        show('"Okay, see you again soon!"')
+        printSlowly('"Okay, see you again soon!"')
         if x: return wormHole(player)
         else: return
 
 def tea(player): 
     player.count("tea from andy", increment=True)
     while(True):
-        if player.counters["tea from andy"]==1:
+        if player.stats["tea from andy"]==1:
             tea1 = "Chamomile"
             tea2 = "Lavender"
-        elif player.counters("tea from andy")==2:
+        elif player.stats("tea from andy")==2:
             tea1 = "Oolong"
             tea2 = "Kombucha"
-        elif player.counters("tea from andy")==3:
+        elif player.stats("tea from andy")==3:
             tea1 = "Sencha"
             tea2 = "Matcha"
-        elif player.counters("tea from andy")>3:
+        elif player.stats("tea from andy")>3:
             show("Oh, I don't have any more tea. Sorry about that.")
             break
         else: bug(player)

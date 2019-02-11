@@ -7,19 +7,15 @@ from source.devMode import *
 from source.world import *
 from source.places_flowers import flowers
 from source.places_wormHome import tea, wormHome
-#from source.places_dogeTown import dogeTown, bonysShop, getBook
+from source.places_dogeTown import dogeTown, bonysShop, getBook
 from source.places_burntTown import burntTown
 from source.shopUI import ShopUI
 from source.combat import Combat
 from source.enemy import Enemy
-# from source.SlotMachine import *
-# from source.places_grandpasTrailer import grandpasTrailer
+from source.SlotMachine import *
+from source.places_grandpasTrailer import grandpasTrailer
 
 clear() 
-show(printIntroAnimation())
-print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
-
-# Define Functions
 
 class Game: # perhaps this is what should be saved
     def __init__(self):
@@ -31,12 +27,14 @@ class Game: # perhaps this is what should be saved
 
     def start(self):
         if not self.player.devMode: 
+            Animation('introAnimation')
+            print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
             self.player.charcreation() 
             introduction(self.player)
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            # grandpasTrailer(self.player)
+            grandpasTrailer(self.player)
             #burntTown(self.player)
             
             #introduction(self.player)
