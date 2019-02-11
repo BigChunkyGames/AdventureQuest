@@ -29,6 +29,7 @@
 
 from source.utils import *
 s = Sound('piano 1.wav')
+s2 = Sound('paper.wav')
 printSlowly("testesttestestestas./ldirkng")
 
 s.stopSounds()

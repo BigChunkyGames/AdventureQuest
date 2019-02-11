@@ -328,6 +328,7 @@ def getStats(player):
 class Sound(): 
     # to play a sample: Sound('low piano G sharp.wav')
     # FIXME: this probably has a lot of bugs yet to be discovered
+    # TODO: add channels for better handling of sounds (might not be necessary)
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
     def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=False):
         self.fileName = "source/audio/" + fileName
