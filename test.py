@@ -1,5 +1,8 @@
-from source.utils import *
 
-printSlowly("t   \n grdg\n\n\nest")
-printSlowly('"test"')
-printSlowly("'test'")
+
+x = x.strip()
+# x = x.splitlines()
+for i in x:
+    if i == ' ':
+        i = ''
+print(x)

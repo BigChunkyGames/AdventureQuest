@@ -28,7 +28,7 @@ def burntTown(player):
                 show("The rest of the flyer is destroyed, except for a large list of participating libraries, none of which you have ever heard of.")
                 break
         show("From somewhere behind you you can hear faint wimpering.")
-        show("A man in a burnt and shredded suit is sitting with his back to the wall of a burnt building.")
+        show("A man in a charred and shredded suit is sitting with his back to the wall of a burnt building.")
         show("He lets out a cough, his body badly burned.")
         printSlowly("\"You... I've seen you before...\"", secondsBetweenChars=.1, pause=.3)
         printSlowly("\"Your grandpa... \"", secondsBetweenChars=.1, pause=.3)
@@ -38,7 +38,7 @@ def burntTown(player):
         printSlowly("\"MANIAC\"", secondsBetweenChars=.2)
         printSlowly("\"I bet he caused this whole fire!\"", secondsBetweenChars=.03, pause=.1)
         printSlowly("\"Come to think of it, that explosion came from right around his house!\"", secondsBetweenChars=.03, pause=.1)
-        printSlowly("\"He probably had this whole thing planned out and then fled to his trailer North of town.\"", secondsBetweenChars=.03)
+        printSlowly("\"That illuminati loving piece of shit probably had this whole thing planned out and then fled to his trailer North of town.\"", secondsBetweenChars=.03)
         printSlowly("\"That bastard.\"", secondsBetweenChars=.1)
         show("He slumps over and dies.")
         show("You grandpa's reputation around here has never been great, but you doubt he is capable of destroying an entire city.")

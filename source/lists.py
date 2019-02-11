@@ -117,6 +117,9 @@ def getDifficulty(index):
 def getRandomFinalThought():
     return "*" + getRandomIndex(FINALTHOUGHTS) + "...*"
 
+def getRandomColor():
+    return getRandomIndex(COLORS)
+
 
 # these are constants. thats why they're all caps
 ### misc ##############################################################################
@@ -132,7 +135,7 @@ TV_SHOWS = ["Commercials", 'Soap Opera', 'The News', 'Jeopardy', 'Wheel of Fortu
 DIFFICULTIES = ['Easy','Cheesy','Grandma','Baby','Veteran','Veterinarian','Constant','Linear','Polynomial','Exponential','Double Exponential','Triple Exponential','Quadruple Exponential','Quintuple Exponential','Sextuple Exponential','Septuple Exponential','Octuple Exponential','Chaitin Omega Number','Random','Normal','Abnormal','Very Easy','Win Instantly','Difficult','Ultra-Difficult','Impossible', 'Easy-Hard', 'Baby-X', 'Brutal', 'Minority', 'Dandelion', 'Starts easy but gets harder later', "Enemys always deal damage equal to twice your health", 'Starts easy, gets harder in the middle but gets easier towards the end', 'Starts hard then gets harder until it\'s impossibly hard but then gets easier', 'Starts normal then gets hard then gets easier then gets baby-X then gets easier then gets harder', 'Come on this is only the second choice in the game you\'ve got to choose something', 'If you don\'t choose this one it\'s just going to be set to very hard', "I'm warning you. You're just going to have to restart because of how hard it's going to be", "Seriously, you won't even want to keep playing because the first enemy will always insta-kill you", "Each time you say no the difficulty only gets harder", "The difficulty is getting so hard you're going to lose before you're even introduced to the concept of health", "That's it. Say no again. I dare you", "Last chance", 
 ]
 FINALTHOUGHTS = ['I think I left the oven on at home',"I wonder what was going to be for dinner tonight", 'How can this be!', 'I am in excruciating pain!', 'Am I dying, or is this my birthday?', 'This is the last of Earth! I am content!', 'Fuuuuuuuuuuuuuuuuck', 'Oh noooooooo', 'How could I let this happen', 'So I put my hands up, they\'re playing my song, butterflys fly away', 'In west Philadelphia, born and raised', "What is love, baby don't hurt me", "Who let the dogs out", "I wonder if I'll lose XP for this", "Not Again!", "They never made a garfield 3"] # TODO more
-
+COLORS = ['White', 'silver', 'grey','black','navy','blue','cerulean','sky','blue','turquoise','blue-green','azure','teal',   'cyan','green','lime','chartreuse','olive',   'yellow',  'gold',    'amber',   'orange',  'brown',   'orange-red',      'red',     'maroon',  'rose',    'red-violet',  'pink','magenta', 'purple',  'blue-violet',     'indigo','violet',  'peach',   'apricot', 'ochre',   'plum']
 ### NPC's #############################################################################
 
 #(hints)

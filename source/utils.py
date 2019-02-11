@@ -210,7 +210,7 @@ def dichotomy(option1, option2):
         else:
             print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
-def getInput(player, oneTry=False, prompt='> '):
+def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
     while True:
         inp = input(prompt).lower().strip()
 
@@ -242,8 +242,8 @@ def getInput(player, oneTry=False, prompt='> '):
         if oneTry:
             return inp
 
-def checkForCancel(input):
-    if checkInput(input, 'back') or checkInput(input, 'cancel') or checkInput(input, 'return'):
+def checkForCancel(inp):
+    if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
         return True
     else:
         return False
