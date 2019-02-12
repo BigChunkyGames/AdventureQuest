@@ -23,7 +23,7 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait, wrap
+from source.utils import wait, wrap, Sound
 from source.inventoryUI import InventoryUI
 
 import re
@@ -31,7 +31,8 @@ import random
 
 class CombatUI():
 
-    def __init__(self, player, enemy):
+    def __init__(self, player, enemy, song='worry 1.mp3'):
+        self.song = Sound(song, loop=-1)
         self.player = player
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
@@ -151,8 +152,7 @@ class CombatUI():
             s += "How did you do that!?"
             
         if self.enemy.hp == 0: # check if he dead
-            self.result = "win"
-            get_app().exit(result="win")
+            self.done("win")
             return
         self.enemyTurn(s)
     
@@ -161,8 +161,7 @@ class CombatUI():
         s += "You tried to run..." 
         if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
             s += " and escaped the combat!" # #TODO advanced combat: isnt ever visible
-            self.result = "escaped"
-            get_app().exit(result="escaped")
+            self.done("escaped")
         else:
             s += " but failed to escape!"
         return s
@@ -200,8 +199,7 @@ class CombatUI():
             self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp))
             if self.player.hp == 0: #dead
                 # TODO make death less awkwawrd
-                self.result = "lose"
-                get_app().exit(result="lose")
+                self.done("lose")
                 return
         if textOfPlayerTurn: 
             self.battleLog = textOfPlayerTurn + '\n\n' + s 
@@ -294,6 +292,7 @@ class CombatUI():
 
     def done(self, result='?'):
         self.result = result
+        self.song.stopSound()
         get_app().exit(result=result)
  
 # STILL TODO

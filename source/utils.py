@@ -14,6 +14,12 @@ import logging
 import sys
 import msvcrt
 import threading
+### sounds
+import contextlib
+with contextlib.redirect_stdout(None): # prevents console ouput during import
+    import pygame
+import pygame.mixer
+###
 
 #### console / user input #############################################
 
@@ -227,6 +233,7 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
             print("% )")
         elif inp == "inv" or inp == "inventory":
             player.openInventory()
+            return inp
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         elif inp == "save":
@@ -303,23 +310,12 @@ def getRandInt(min = 1, max= 10): # return random int between 1 and max
     return random.randint(1, max)
 
 def getOtherHand(player):
+    if 'hand' not in player.aspect:
+        return 'right' # just guess instead of crashing
     if player.aspect['hand']=='right':
         return 'left'
     else:
         return 'right'
-
-#### UI stuff ############################################
-
-def getStats(player):
-    s = ''
-    s += "Health:   " + str(player.hp) + " / " + str(player.maxhp) + "\n"
-    s += "Level:    " + str(player.level) + "\n"
-    s += "XP:       " + str(player.xp) + " / " + str(player.levelupxp) +"\n"
-    s += "Money:    $ " + str(player.money) + "\n"
-    s += "Strength: " + str(player.strength) + "\n"
-    s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
-    s += "Block:    " + str(player.getTotalBlock())
-    return s
 
 def endDemo(player):
     show("Suddenly you don't feel right.")
@@ -334,3 +330,61 @@ def endDemo(player):
     # TODO peieo fo toasta
     show("Deciding you better start your day, you make your way outside.")
     return maintown(player)
+
+#### UI stuff ############################################
+
+def getStats(player):
+    s = ''
+    s += "Health:   " + str(player.hp) + " / " + str(player.maxhp) + "\n"
+    s += "Level:    " + str(player.level) + "\n"
+    s += "XP:       " + str(player.xp) + " / " + str(player.levelupxp) +"\n"
+    s += "Money:    $ " + str(player.money) + "\n"
+    s += "Strength: " + str(player.strength) + "\n"
+    s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
+    s += "Block:    " + str(player.getTotalBlock())
+    return s
+
+#### sounds #####################################################
+
+class Sound(): 
+    # to play a sample: Sound('low piano G sharp.wav')
+    # FIXME: this probably has a lot of bugs yet to be discovered
+    # TODO: add channels for better handling of sounds (might not be necessary)
+    # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
+    # NOTE: make loop -1 to loop forever
+    # NOTE: volume adjustments (fade in out) only work with wav files
+    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=1):
+        self.fileName = "source/audio/" + fileName
+        self.loop = loop
+        # initialize
+        self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
+        self.mixer.init()
+        if '.wav' in self.fileName:
+            self.format = 'wav'
+            self.sound = self.mixer.Sound(self.fileName) # sound method only supports wav files
+            self.sound.set_volume(volume)
+            if playNow:
+                self.sound.play(self.loop)
+        elif '.mp3' in self.fileName:
+            self.format = 'mp3'
+            self.sound = self.mixer.music.load(self.fileName)
+            if playNow:
+                self.mixer.music.play(self.loop)
+
+    def getLength(self): # returns duration of wav file in seconds
+        import wave
+        import contextlib
+        with contextlib.closing(wave.open(self.fileName,'r')) as f:
+            frames = f.getnframes()
+            rate = f.getframerate()
+            return frames / float(rate)
+
+    def stopSound(self): # stops all sounds
+        if self.format == 'wav':
+            self.sound.stop()
+        elif self.format == 'mp3':
+            self.mixer.music.stop()
+        self.mixer.quit()
+
+        #log("stopped playing " + self.fileName)
+

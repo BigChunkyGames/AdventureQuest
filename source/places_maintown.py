@@ -58,6 +58,7 @@ def maintown(player):
             print(getInvalidOptionText() + '\n')
 
 def home(player):
+    s = Sound('home 1.mp3', loop=-1)
     show("You enter your house through the familiar front door, taking in "
          "the sights of your childhood abode, reminiscing about all the "
          "dank shit you did as a kid.")
@@ -138,10 +139,11 @@ def home(player):
             show("You look around your house for a bit, before deciding to leave.")
             print("Your mother looks up from the " + getRandomDankClothing()  + " she's knitting.")
             input("... ")
-            printSlowly('"Bye sweetie, good luck on your adventures! Don\'t forget: ' + getMotherlyPlattitude() )
+            printSlowly('Bye sweetie, good luck on your adventures! Don\'t forget: ' + getMotherlyPlattitude() )
             break
         else:
             print("Please input a valid action.")
+    s.stopSound()
     # TODO: add more stuff to do in your house
 
 

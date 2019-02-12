@@ -106,5 +106,12 @@ def introduction(player): #TODO i think we should change the intro to be less de
     printSlowly("Alright sweetie, be safe! Here, take this.")
     player.addToInventory(Item(player, 'Camera', customDescription='Mom got this for you.', _type='misc'))
     printc("Type @'inventory'@yellow@ any time you are prompted for input to open your inventory.")
-    player.getInput(oneTry=True)
-    show('After taking the camera, you leave your house and walk into town, ready to head into whatever building you choose.')
+    while True:
+        x = player.getInput()
+        if x == 'inventory' or x == 'inv':
+            break
+        else:
+            printc("Come on now, you can just type @'inv'@yellow@ if you can't handle big words like @'inventory'@yellow@.") 
+
+    show('After taking the camera, you leave your house and walk into town, '
+         'ready to head into whatever building you choose.')

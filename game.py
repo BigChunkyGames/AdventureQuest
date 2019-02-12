@@ -35,11 +35,11 @@ class Game: # perhaps this is what should be saved
             maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            grandpasTrailer(self.player)
+            #grandpasTrailer(self.player)
             #burntTown(self.player)
             
             #introduction(self.player)
-            maintown(self.player)
+            #maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)
@@ -55,7 +55,7 @@ class Game: # perhaps this is what should be saved
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            #c = Combat(self.player) # jump to combat
+            c = Combat(self.player) # jump to combat
 
             #self.player.openInventory()
             

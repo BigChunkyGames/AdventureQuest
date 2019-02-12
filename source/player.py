@@ -273,6 +273,7 @@ class Player:
         #TODO italisize
 
     def gainXp(self, xp, scale = True, returnString=False):
+        Sound('etheral_unlock_1.mp3')
         if scale:
             xp = self.scale(xp) # gain xp based on base xp * 2^level
         self.xp = self.xp + xp
