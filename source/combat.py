@@ -37,8 +37,10 @@ class Combat:
         show("@You're being attacked!@red@") 
 
     def startCombat(self, GivenCombatUI=None):
-        if GivenCombatUI==None: c = CombatUI(self.player, self.enemy)
-        else: c = GivenCombatUI
+        if GivenCombatUI==None: 
+            c = CombatUI(self.player, self.enemy)
+        else: 
+            c = GivenCombatUI
         c.run()
         self.result = c.result
         clear()
