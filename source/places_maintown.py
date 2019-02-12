@@ -43,6 +43,7 @@ def maintown(player):
                 i = Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='consumable')
                 i.customActivationFunction = lambda: i.consume(karma=-3) # TODO fix conumables lambdas are stupid
                 player.addToInventory(i)
+                printSlowly("He's a real brainiac and can probably help you out with your adventure.", secondsBetweenChars=.03) 
                 printSlowly('"He lives to the East."', secondsBetweenChars=.03) 
                 printSlowly('"You know the way."', secondsBetweenChars=.03) 
                 printSlowly('"Come back soon sweety!"', secondsBetweenChars=.03) 

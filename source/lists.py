@@ -117,6 +117,9 @@ def getDifficulty(index):
 def getRandomFinalThought():
     return "*" + getRandomIndex(FINALTHOUGHTS) + "...*"
 
+def getRandomColor():
+    return getRandomIndex(COLORS)
+
 
 # these are constants. thats why they're all caps
 ### misc ##############################################################################
@@ -132,7 +135,7 @@ TV_SHOWS = ["Commercials", 'Soap Opera', 'The News', 'Jeopardy', 'Wheel of Fortu
 DIFFICULTIES = ['Easy','Cheesy','Grandma','Baby','Veteran','Veterinarian','Constant','Linear','Polynomial','Exponential','Double Exponential','Triple Exponential','Quadruple Exponential','Quintuple Exponential','Sextuple Exponential','Septuple Exponential','Octuple Exponential','Chaitin Omega Number','Random','Normal','Abnormal','Very Easy','Win Instantly','Difficult','Ultra-Difficult','Impossible', 'Easy-Hard', 'Baby-X', 'Brutal', 'Minority', 'Dandelion', 'Starts easy but gets harder later', "Enemys always deal damage equal to twice your health", 'Starts easy, gets harder in the middle but gets easier towards the end', 'Starts hard then gets harder until it\'s impossibly hard but then gets easier', 'Starts normal then gets hard then gets easier then gets baby-X then gets easier then gets harder', 'Come on this is only the second choice in the game you\'ve got to choose something', 'If you don\'t choose this one it\'s just going to be set to very hard', "I'm warning you. You're just going to have to restart because of how hard it's going to be", "Seriously, you won't even want to keep playing because the first enemy will always insta-kill you", "Each time you say no the difficulty only gets harder", "The difficulty is getting so hard you're going to lose before you're even introduced to the concept of health", "That's it. Say no again. I dare you", "Last chance", 
 ]
 FINALTHOUGHTS = ['I think I left the oven on at home',"I wonder what was going to be for dinner tonight", 'How can this be!', 'I am in excruciating pain!', 'Am I dying, or is this my birthday?', 'This is the last of Earth! I am content!', 'Fuuuuuuuuuuuuuuuuck', 'Oh noooooooo', 'How could I let this happen', 'So I put my hands up, they\'re playing my song, butterflys fly away', 'In west Philadelphia, born and raised', "What is love, baby don't hurt me", "Who let the dogs out", "I wonder if I'll lose XP for this", "Not Again!", "They never made a garfield 3", "Not again!", "Ouch", "At least it's just a game", "Damnit I'm still a vergin", "Look at how easily the life spills out... like water seeping through my cupped hands", "If only I didn’t waste so much of my life playing video games", "Finally, silence.", "To die—to sleep,\nNo more; and by a sleep to say we end\nThe heart-ache and the thousand natural shocks\nThat flesh is heir to: 'tis a consummation\nDevoutly to be wish'd. To die, to sleep;\nTo sleep, perchance to dream—ay, there's the rub:\nFor in that sleep of death what dreams may come..."  ] # TODO more
-
+COLORS = ['White', 'silver', 'grey','black','navy','blue','cerulean','sky','blue','turquoise','blue-green','azure','teal',   'cyan','green','lime','chartreuse','olive',   'yellow',  'gold',    'amber',   'orange',  'brown',   'orange-red',      'red',     'maroon',  'rose',    'red-violet',  'pink','magenta', 'purple',  'blue-violet',     'indigo','violet',  'peach',   'apricot', 'ochre',   'plum']
 ### NPC's #############################################################################
 
 #(hints)
@@ -175,11 +178,11 @@ ALL_POKEYMON = ["Bulbasaur","Ivysaur","Venusaur","Charmander","Charmeleon","Char
 
 ### biome descriptors used in map.py ##############################################################################
 
-FOREST_SYNONYMS = ["a forest", "some trees", "a woods" ,"an aesthetic arberetum of luscious shrubbery"]
+FOREST_SYNONYMS = ["a forest", "some trees", "a woods" ,"an aesthetic arberetum of luscious shrubbery", 'a winding path through moss covered trees']
 PLAINS_SYNONYMS = ["some plains" , "a vast expanse of grass ;)", "a flowing green field", "the open expanse of nature", "an open prairie", "wide lowlands"]
 DESERT_SYNONYMS = ["an expanse of dunes", "a desert", "naked golden fields of sand", ]
 MOUNTAINS_SYNONYMS = ["a specious assortment of unbridled peaks", "some mountains", "shimmering peaks of aestitic rapture", "huge rocks", "just a fucking ton of huge gigantic fucking rocks"]
-TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way toward", "You thought there was nothing but when you turned around you saw", "On your left you see",    "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say, \"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
+TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way towards", "You thought there was nothing but when you turned around you saw", "On your left you see", "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say, \"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]
 
 ### verbs ##############################################################################
 

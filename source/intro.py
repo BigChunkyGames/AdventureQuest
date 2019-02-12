@@ -98,12 +98,12 @@ def introduction(player): #TODO i think we should change the intro to be less de
     input(" ")
     print(".    .    .")
     input(" ")
-    show('"k."')
+    printSlowly('"k."')
     show("You sprint to your house to grab your shit.")
     print('You enter your house and exclaim to your mom about how you are going on an adventure.')
     player.getInput()
-    show('She looks up from the dick sock she\'s knitting. "Alright '
-         'sweetie, be safe! Here, take this."')
+    show('She looks up from the dick sock she\'s knitting.')
+    printSlowly("Alright sweetie, be safe! Here, take this.")
     player.addToInventory(Item(player, 'Camera', customDescription='Mom got this for you.', _type='misc'))
     printc("Type @'inventory'@yellow@ any time you are prompted for input to open your inventory.")
     while True:
