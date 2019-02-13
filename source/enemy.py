@@ -6,12 +6,12 @@ class Enemy:
 
     # 
     # make sure not to misspell those
-    def __init__(self, player, biome, toughness=0):
+    def __init__(self, player, biome, powerLevel=0):
         '''biome options are plains, firest, desert, mountain'''
         self.player = player
         # traits
         self.biome = biome
-        self.toughness = toughness # can be a float, casted to int during scaling, between -inf and 3
+        self.powerLevel = powerLevel # can be a float, casted to int during scaling, between -inf and 3
         self.name = getRandomEnemyName(biome)
         # stats
         self.maxhp = self.setHP()
@@ -22,16 +22,16 @@ class Enemy:
         self.listOfAttacks = None
 
     def setHP(self): 
-        return self.player.scale(10+self.toughness) # SCALING
+        return self.player.scale(10+self.powerLevel) # SCALING
 
     def setAttack(self):
-        return self.player.scale(1+self.toughness) # SCALING
+        return self.player.scale(2+self.powerLevel) # SCALING
         
     def setxpworth(self):
-        return self.player.scale(random.randint(2+self.toughness,3+self.toughness))  # SCALING
+        return self.player.scale(random.randint(2+self.powerLevel,3+self.powerLevel))  # SCALING
     
     def setMissChancePercent(self):
-        return int(40 - 2*self.toughness) # SCALING
+        return int(40 - 2*self.powerLevel) # SCALING
 
     def getRandomAttack(self):
         if self.listOfAttacks == None: return getRandomAttackVerb()  

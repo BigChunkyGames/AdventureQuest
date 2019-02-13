@@ -100,7 +100,6 @@ def tea(player):
     receiveTea(player, tea)
 
 def receiveTea(player, tea):
-    i = Item(player, tea + ' tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
-    i.customActivationFunction = lambda:i.consume(heal=3)
+    i = Item(player, tea + ' tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5, consumable=Consumable(player, heal=2))
     player.addToInventory(i)
             

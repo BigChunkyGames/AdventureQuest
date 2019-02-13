@@ -8,7 +8,7 @@ from source.utils import *
 from source.lists import *
 from source.miniGames.RockPaperScissors import RPSGame
 from source.world import *
-from source.item import Item, generateRandomArmourOrWeapon
+from source.item import *
 from source.shopUI import ShopUI
 from source.shops import *
 from source.SlotMachine import *
@@ -40,8 +40,7 @@ def maintown(player):
                 show("Just before you set foot outside of "+townName+", mom catches up with you.")
                 printSlowly('"Sweety I almost forgot!"', secondsBetweenChars=.05, initialWait=False)
                 printSlowly('"While you\'re out would you mind taking this lasagna to Grandpa?"', secondsBetweenChars=.03) 
-                i = Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='consumable')
-                i.customActivationFunction = lambda: i.consume(karma=-3) # TODO fix conumables lambdas are stupid
+                i = Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='consumable', consumable=Consumable(player, heal=10, karma=-3, consumeText='Hope Grandpa won\'t be mad that you ate his lasagna!'))
                 player.addToInventory(i)
                 printSlowly("He's a real brainiac and can probably help you out with your adventure.", secondsBetweenChars=.03) 
                 printSlowly('"He lives to the East."', secondsBetweenChars=.03) 
@@ -71,8 +70,7 @@ def home(player):
                      "You realize that you left your can of Mtn Dew laying on top "
                      "of your dresser.")
                 show("You grab the can just in case you need it later.")
-                i = Item(player, 'Mtn Dew', customDescription='Consume for a healthy, energetic boost.', _type='consumable')
-                i.customActivationFunction=lambda:i.consume(heal=4)
+                i = Item(player, 'Mtn Dew', customDescription='Consume for a healthy, energetic boost.', _type='consumable', consumable=Consumable(player, heal=4))
                 player.addToInventory(i)
                 show("You take a look at the framed picture of your childhood dog on your bedside table.")
                 show("Bud must be in a better place now.")
@@ -227,55 +225,55 @@ def tavernGame(player):
              "yourself for the beginning of the match.")
         show('"Enough waiting around! Let\'s do this!"')
         while True:
-          yourchoice, opchoice, outcome = RPSGame().game()
-          show("The world seems to fade away around you as the only thing "
-               "you focus on is your own hand and that of your opponent.")
-          show("Over the rushing sound in your ears you hear the patrons of "
-               "the bar chanting, your fist hitting your open hand.")
-          printSlowly('"ROCK"', pause=.1)
-          printSlowly('"PAPER"', pause=.1)
-          printSlowly('"SCISSORS"', pause=.1)
-          printSlowly('"SHOOT!"', pause=.1)
-          if opchoice == 'rock':
-               show("The pirate slams his closed fist down into his open "
-                    "palm. He played rock!")
-          else:
-               print("The pirate opens his hand a split second before slamming "
-                    "his fist into his open palm, revealing his true choice: "
-                    "%s!" % opchoice)
-               input("... ")
-          show("The bar erupts in cheers when they see the outcome of your "
-               "match.")
-          if outcome == 'win':
-               print("You look down into your own hand. "+yourchoice+" beats "+opchoice+"! You "
-                    "actually won!")
-               input("... ")
-               show("The pirate looks up at you, clearly impressed.")
-               if player.registerVisit('maintown_tavern_rps_win') == 1:
-                    printSlowly('"Not many can beat me at this game. I think you deserve '
-                         'to be in my clan, it houses only the best rock paper '
-                         'scissors players in the entire world."')
-                    player.clantags.append("[Pyr8]")
-                    show("You have joined The Pirates' Clan! @[Pyr8]@magenta@")
-               else:
-                    printSlowly('"Again you have defeated me. You are truly are an RPS master and I am honored to have you in my clan!"')
-               show("After your rousing game, you return to the front of the tavern.")
-               break
-          elif outcome == 'tie':
-               print("You look down into your own hand. Both of you played "+yourchoice+"! "
-                    "It's a tie!")
-               input("... ")
-               printSlowly('"What a match! It looks like we\'re fairly even in skill,"', newline=False)
-               show(' the pirate says.')
-               printSlowly('"Let\'s play again to settle who really is the better player!"')
-          else:
-               print("You look down into your own hand. "+opchoice.title()+" beats "+yourchoice+"! He beat "
-                    "you!")
-               input("... ")
-               printSlowly('"Heh heh, well that\'s alright. Not everybody has what '
-                    'it takes to play with the best of them. Better luck next time!"')
-               show("After your rousing game, you head back to the front of the tavern.")
-               break
+            yourchoice, opchoice, outcome = RPSGame().game()
+            show("The world seems to fade away around you as the only thing "
+                "you focus on is your own hand and that of your opponent.")
+            show("Over the rushing sound in your ears you hear the patrons of "
+                "the bar chanting, your fist hitting your open hand.")
+            printSlowly('"ROCK"', pause=.1)
+            printSlowly('"PAPER"', pause=.1)
+            printSlowly('"SCISSORS"', pause=.1)
+            printSlowly('"SHOOT!"', pause=.1)
+            if opchoice == 'rock':
+                show("The pirate slams his closed fist down into his open "
+                        "palm. He played rock!")
+            else:
+                print("The pirate opens his hand a split second before slamming "
+                        "his fist into his open palm, revealing his true choice: "
+                        "%s!" % opchoice)
+                input("... ")
+            show("The bar erupts in cheers when they see the outcome of your "
+                "match.")
+            if outcome == 'win':
+                print("You look down into your own hand. "+yourchoice+" beats "+opchoice+"! You "
+                        "actually won!")
+                input("... ")
+                show("The pirate looks up at you, clearly impressed.")
+                if player.registerVisit('maintown_tavern_rps_win') == 1:
+                        printSlowly('"Not many can beat me at this game. I think you deserve '
+                            'to be in my clan, it houses only the best rock paper '
+                            'scissors players in the entire world."')
+                        player.clantags.append("[Pyr8]")
+                        show("You have joined The Pirates' Clan! @[Pyr8]@magenta@")
+                else:
+                        printSlowly('"Again you have defeated me. You are truly are an RPS master and I am honored to have you in my clan!"')
+                show("After your rousing game, you return to the front of the tavern.")
+                break
+            elif outcome == 'tie':
+                print("You look down into your own hand. Both of you played "+yourchoice+"! "
+                        "It's a tie!")
+                input("... ")
+                printSlowly('"What a match! It looks like we\'re fairly even in skill,"', newline=False)
+                show(' the pirate says.')
+                printSlowly('"Let\'s play again to settle who really is the better player!"')
+            else:
+                print("You look down into your own hand. "+opchoice.title()+" beats "+yourchoice+"! He beat "
+                        "you!")
+                input("... ")
+                printSlowly('"Heh heh, well that\'s alright. Not everybody has what '
+                        'it takes to play with the best of them. Better luck next time!"')
+                show("After your rousing game, you head back to the front of the tavern.")
+                break
     else:
         printSlowly('"Just as I figured, maybe you can come back when you\'re not '
              'such a fuckin whimp lol')
@@ -311,12 +309,10 @@ def maintownShop(player):
 
     inv = []
 
-    i1 = Item(player, 'Lesser Health Potion', customDescription="A small glass vial filled with sparkly red liquid.", _type='consumable', sellValue=3)
-    i1.customActivationFunction = lambda:i1.consume(heal=4)
+    i1 = Item(player, 'Lesser Health Potion', customDescription="A small glass vial filled with sparkly red liquid.", _type='consumable', sellValue=3, consumable=Consumable(player, heal=2))
     inv.append(i1) # CONSUMABLES MUST HAVE UNIQUE VAR NAME
 
-    i2 = Item(player, 'Big Cheeseburger', customDescription="Oh man this big juicy cheeseburger just look's so delicious that you know it has to be worth the price.", _type='consumable', sellValue=8)
-    i2.customActivationFunction = lambda:i2.consume(xpgain=int(player.levelupxp / 3))
+    i2 = Item(player, 'Big Cheeseburger', customDescription="Oh man this big juicy cheeseburger just look's so delicious that you know it has to be worth the price.", _type='consumable', sellValue=8, consumable=Consumable(player, xpgain=2, heal=4))
     inv.append(i2)
 
     inv.append(Item(player, 'Salad Fork', damage=1, customDescription="It's plastic. Good for poking.", _type='weapon', sellValue=3))

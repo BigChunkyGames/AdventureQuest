@@ -3,7 +3,7 @@ from source.lists import *
 from source.utils import *
 from source.map import Map
 from source.inventoryUI import *
-from source.item import Item
+from source.item import Item, Consumable, consume
 from source.combat import Combat
 
 class Player:
@@ -56,12 +56,21 @@ class Player:
     def getInput(self, oneTry=False): # redundency for easier coding
         return getInput(self, oneTry)
 
-#### inventory #########################################
-
     def scale(self, number, returnInt=True):
-        factor = 1.2
+        factor = 1.15 # determines how fast all scaled values ramp with player level
         if returnInt: return int(number * (factor ** (self.level)))
         else: return number * (factor ** (self.level))
+        # player max hp scales 10
+        # next level xp scales 12
+        # enemy damage scales 2
+        # enemy hp scales 10
+        # enemy xp worth scales 2-3
+        # random armour or weapon attack/block scales with rarity (3 for common)
+        # random consumable damage scales 3 
+        # random consumable heal scales 3 
+        # random consumable xp scales 3 
+
+#### inventory #########################################
 
     def getInitialItems(self):
         fists = Item(self, 'Fists', customDescription="Knuckle up!", rarity=None, _type='weapon', damage=2, sellValue=0 )
@@ -126,8 +135,8 @@ class Player:
 
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
     def activateItem(self, item):
-        if not item.customActivationFunction == None: # if has custom function
-            return item.customActivationFunction()
+        if item.type == 'consumable' and item.consumable != None: # if has custom function
+            return consume(item)
         if item.equipped == True:
             item.toggleEquipped()
             return
@@ -250,7 +259,7 @@ class Player:
             if printAboutIt: print("You now have " + str(self.strength) + " strength!")
 
             # max hp
-            self.maxhp = self.scale(5) # SCALING
+            self.maxhp = self.scale(10) # SCALING
             if printAboutIt:print("You now have " + str(self.maxhp) + " maximum HP!")
 
             # regain all health
@@ -263,7 +272,7 @@ class Player:
             if printAboutIt:print("You now regain " + str(self.healthRegen) + " after each battle!")
 
             # next level xp
-            self.levelupxp = self.scale(10) # SCALING
+            self.levelupxp = self.scale(12) # SCALING
             if self.xp >= self.levelupxp:
                 if printAboutIt:print("You have enough XP to level up again!")
             else:

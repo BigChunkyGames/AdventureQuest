@@ -3,18 +3,19 @@ from source.utils import show, clear
 from source.lists import getRandomEnemyName, getRandomAttackVerb
 from source.enemy import *
 from source.combatUI import *
-from source.item import tryForDrop, generateRandomArmourOrWeapon
+from source.item import tryForDrop, generateRandomArmourOrWeapon, generateRandomConsumable
 #  TODO: consult other adventure games to see what a good attack:HP ratio is
 
 class Combat:
-    def __init__(self, player, biome=None, alert=True, enemy=None, enemyToughness=0 ,startCombatNow=True):
+    def __init__(self, player, biome=None, alert=True, enemy=None, enemyPowerLevel=0 ,startCombatNow=True):
+        # will  use given enemy's power level over enemyPowerLevel
         self.player = player
         self.biome = biome
         self.result = None # win, escaped, lose
         if not enemy == None: # if giving enemy
             self.enemy = enemy
         else: 
-            self.enemy = Enemy(player,biome, toughness=enemyToughness) # make random enemy with given biome
+            self.enemy = Enemy(player,biome, powerLevel=enemyPowerLevel) # make random enemy with given biome
         self.dropchance = 0 # TODO drops
         if alert: self.alert()
         if startCombatNow: self.startCombat()
@@ -48,8 +49,7 @@ class Combat:
             show("You defeated " + self.enemy.name + "!")
             self.player.gainXp(self.enemy.xpworth, scale=False) # xp already scales when creating enemy
             self.player.regenHealth()# gain health
-            if tryForDrop(25): 
-                show("You got some loot!")
+            if tryForDrop(25): # TODO luck
                 self.getLoot()
         elif c.result == "lose":
             self.player.death()
@@ -61,8 +61,14 @@ class Combat:
         return
 
     def getLoot(self):
-        bonus = self.enemy.toughness
-        self.player.addToInventory(generateRandomArmourOrWeapon(self.player, bonus=bonus))
+        rand = random.randint(0,2)
+        bonus = self.enemy.powerLevel
+        if rand <=1: # 2/3 chance
+            item = generateRandomArmourOrWeapon(self.player, bonus=bonus)
+        elif rand ==2:
+            item = generateRandomConsumable(self.player, powerLevel=bonus)
+        show("You found a "+item.name)
+        self.player.addToInventory(item)
         
 
 

@@ -2,6 +2,7 @@ from source.utils import *
 from source.lists import CURSES
 from source.enemy import *
 from source.combat import *
+from source.item import generateRandomConsumable
 import random
 from source.places_maintown import *
 
@@ -159,9 +160,7 @@ def grandpasTrailer(player):
                 printSlowly("Oh. I'm out of that stuff he offered you last time, but you can have some of this.")
                 color = getRandomColor()
                 show("TROG opens the door on his chest and reveals a small vial filled with " + color + " liquid.")
-                i = Item(player, 'Vial of ' + color + ' liquid', customDescription="Trog gave you this from inside of him. It's still warm.", _type='consumable', consumable=Consumable(''))
-                # TODO: fix consumables and make this a random one
-                player.addToInventory(i)
+                player.addToInventory(generateRandomConsumable(player, name= 'Vial of ' + color + ' liquid', customDescription="Trog gave you this from inside of him. It's still warm.", powerLevel=-2))
                 printSlowly("Alright *bleep*face now get out of here.")
                 show("Guess grandpa isn't home right now. You take the trail back through the woods.")
                 return

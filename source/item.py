@@ -1,15 +1,15 @@
 
 # generates items
 import random
-from source.lists import getRandomWeaponName, getRandomItemPrefix, getRandomArmourSlot, getRandomArmourName
+from source.lists import getRandomWeaponName, getRandomItemPrefix, getRandomArmourSlot, getRandomArmourName, getRandomConsumableName
 
 class Item():
-    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  consumable=False, scale=True):
+    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  consumable=None, scale=True):
         '''
         Rarities: None, common, rare, epic, legendary
         Types: weapon, armour, consumable, quest, misc
         ArmourSlots: head, offhand, chest, legs, feet
-        Set sellValue to None to generate a default value
+        Set sellValue to None to generate a default value, or 0 if unable to be sold
         consumable is False or a Consumable object
         if scale as true, stats will be scaled to fit player level
         '''
@@ -109,7 +109,7 @@ class Item():
             return "This goes in your " + otherhand + " hand."
         return "You can't hold this."
 
-    def scale(self):
+    def scale(self): #SCALING
         '''change an items stats to scale with player level'''
         self.damage = self.player.scale(self.damage)
         self.block = self.player.scale(self.block)
@@ -185,44 +185,69 @@ def tryForDrop(percent):
         return False
 
 class Consumable():
-    def __init__ (self, consumeText=None, heal=0, xpgain=0, dealDamage=0, karma=0):
+    def __init__ (self, player, consumeText=None, heal=0, xpgain=0, dealDamage=0, karma=0, scale=True):
+        self.player =  player
         self.consumeText=consumeText
         self.heal = heal
         self.xpgain = xpgain
         self.dealDamage = dealDamage
         self.karma=karma
 
-def consume(player, item): # for consuming consumables
+        if scale: self.scaleConsumable()
+
+    def scaleConsumable(self):
+        aLittleBit = random.uniform(0, 1)
+        if self.heal != 0: self.heal = self.player.scale(self.heal+aLittleBit)
+        if self.xpgain != 0: self.xpgain = self.player.scale(self.xpgain+aLittleBit)
+        if self.dealDamage != 0: self.dealDamage = self.player.scale(self.dealDamage+aLittleBit)
+
+def consume(item): # for consuming consumables
     text=''
-    if item._type=='consumable' and item.consumable != False:
+    if item.type=='consumable' and item.consumable != None:
         if item.consumable.consumeText == None:
             text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
         else:
             text += item.consumable.consumeText + '\n' 
-        if item.consumable.heal:
-            player.regenHealth(health = item.consumable.heal, returnString=True, showCurrentHealth=False)
+        if item.consumable.heal != 0:
+            item.player.regenHealth(health = item.consumable.heal, returnString=True, showCurrentHealth=False)
             text += "You regained " + str(item.consumable.heal) + " HP!\n"
-        if item.consumable.xpgain:
-            text += str(player.gainXp(item.consumable.xpgain, returnString=True)) + '\n' 
-        if item.consumable.karma:
-            player.karma = player.karma + item.consumable.karma
-            if item.consumable.karma <0:
-                text += 'You didn\'t feel too great about doing that.\n'
-            elif item.consumable.karma >0:
-                text += "You're proud of yourself for doing that.\n"
+        if item.consumable.xpgain != 0:
+            text += str(item.player.gainXp(item.consumable.xpgain, returnString=True)) + '\n' 
+        if item.consumable.karma != 0:
+            item.player.karma = item.player.karma + item.consumable.karma
+            # if item.consumable.karma <0:
+            #     text += 'You didn\'t feel too great about doing that.\n'
+            # elif item.consumable.karma >0:
+            #     text += "You're proud of yourself for doing that.\n"
 
-        player.inventory.remove(item)
+        item.player.inventory.remove(item)
     else:
         text = "You can't eat that!"
     return text
     # TODO damage
 
-def getRanomConsumable(consumable=None, powerLevel=0):
-    # can pass a consumable object to add random effects to it (this functino wont change consume text)
+def generateRandomConsumable(player, name = None, customDescription='', consumable=None, powerLevel=0, returnItem=True):
+    # returns an item of type consumable or just a consumable object if returnItem is false (in which case name and description are not used)
+    # can pass a consumable object to add random effects to it (this functino wont change consume text or karma)
+    # powerLevel can be negative, but values less than 3 can hurt you
     if consumable:
         c = consumable
-    randomNumber = random.randint(0,10)
-    # TODO for loop for power level
-    if randomNumer <= 4:
-        c.consumable.heal += 
+    else:
+        c = Consumable(player)
+    for i in range(powerLevel+1):
+        randomNumber = random.randint(0,10)
+        aLittleBit = random.uniform(0, 1)
+        if randomNumber <= 5:
+            c.heal += player.scale(3+powerLevel+aLittleBit)
+        elif randomNumber <= 8:
+            c.dealDamage += player.scale(3+powerLevel+aLittleBit) # TODO advanced combat, SCALING
+        elif randomNumber >8:
+            c.xpgain += player.scale(3+powerLevel+aLittleBit)
+
+    if name == None: 
+        name = getRandomConsumableName()       
+    if returnItem:
+        return Item(player, name, customDescription=customDescription, _type='consumable', consumable=c)
+    else:
+        return c
     

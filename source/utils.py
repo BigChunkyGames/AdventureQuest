@@ -122,7 +122,7 @@ def wait(seconds): # accepts floats
     sys.stdout.flush()
     
 class printSlowly():
-    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.7, initialWait=True, skipable=True, addParenthesis=True):
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, addParenthesis=True):
         # .03 is a pretty good talking speed
         # you no longer need to have parenthesis around dialogue when addparanthesis=true
         self.text = text
@@ -224,7 +224,6 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
             print("% )")
         elif inp == "inv" or inp == "inventory":
             player.openInventory()
-            return inp
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         elif inp == "save":
