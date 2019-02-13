@@ -176,15 +176,6 @@ class printSlowly():
                     print('\033[{}C\033[1A'.format(self.i+1) , end ='') # go back to where current printing char is and don't insert a newline
                     if x == '' and self.skipable:
                         self.finishNow=True
-                
-
-    
-
-def preventUserInput():
-    while msvcrt.kbhit(): # try not to let user type while printing
-        x = getpass.getpass('')
-        if x == '':
-            print("test")
 
 def thread(targetFunction, numberOfThreads=1,): # not used
     threads = []
@@ -300,7 +291,7 @@ def log(text = "log!", warning=False):
     else:
         logging.info(text)
 
-#### misc #############################################
+#### random #############################################
 
 # takes an array returns a random index
 def getRandomIndex(arr):
@@ -343,6 +334,12 @@ def getStats(player):
     s += "Damage:   " + str(player.getTotalAttackPower()) + "\n"
     s += "Block:    " + str(player.getTotalBlock())
     return s
+
+def openInventoryFromCombat(combatUI, inventoryUI):
+    save = combatUI
+    combatUI.done('inventory')
+    inventoryUI.run()
+    combatUI.run()
 
 #### sounds #####################################################
 
@@ -388,3 +385,89 @@ class Sound():
 
         #log("stopped playing " + self.fileName)
 
+#### animations #########################################
+
+class Animation():
+    def __init__(self, animationName):
+        '''animationNames: introAnimation, (string)'''
+        clear()
+        self.finished=False
+        if animationName == 'introAnimation':
+            rows = ASCII_LOGO.splitlines()
+            width = len(rows[0])
+            self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
+        else:
+            print("Thats not one of the animations.")
+            return
+
+        self.t2 = threading.Thread(target=self.handleUserInput, args=())
+        self.t1.start() 
+        self.t2.start()
+        self.t1.join()
+
+    def handleUserInput(self):
+        while True:
+            if self.finished==True:
+                return
+            else:     
+                while msvcrt.kbhit(): # try not to let user type while printing
+                    x = getpass.getpass('')
+                    if x == '':
+                        self.finished=True
+                    
+    def introAnimation(self, rows, width, place = 1,):
+        if self.finished:
+            clear()
+            print(ASCII_LOGO)
+            return
+        subtraction = 0
+        spaces = 7
+        rowsToPrint = len(rows) % place
+        done=False
+        s=''
+        for rowIndex in range(0, rowsToPrint):
+            for char in range(0,place):
+                if char < place + subtraction and char < width:
+                    s += rows[rowIndex][char] # print char in this row
+                elif char < width -1:
+                    s += ' '
+                if rowIndex == len(rows)-1 and char+subtraction==width:
+                    done = True
+            s += '\n'
+            subtraction -= spaces
+        clear()
+        print(s)
+        wait(.05)
+        if done: return
+        self.introAnimation(rows, width, place = place + 1)
+
+ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗██╗   ██╗██████╗ ███████╗
+██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝██║   ██║██╔══██╗██╔════╝
+███████║██║  ██║██║   ██║█████╗  ██╔██╗ ██║   ██║   ██║   ██║██████╔╝█████╗  
+██╔══██║██║  ██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██╔══██╗██╔══╝  
+██║  ██║██████╔╝ ╚████╔╝ ███████╗██║ ╚████║   ██║   ╚██████╔╝██║  ██║███████╗
+╚═╝  ╚═╝╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
+                                                                             
+             ██████╗ ██╗   ██╗███████╗███████╗████████╗                          
+            ██╔═══██╗██║   ██║██╔════╝██╔════╝╚══██╔══╝                          
+            ██║   ██║██║   ██║█████╗  ███████╗   ██║                             
+            ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║                             
+            ╚██████╔╝╚██████╔╝███████╗███████║   ██║                             
+             ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝                             """
+
+
+
+def endDemo(player):
+    show("Suddenly you don't feel right.")
+    show("There's something wrong here.")
+    show("Wait a minute, is that...")
+    printSlowly('The end of the demo?', secondsBetweenChars=.1)
+    show("Yes.")
+    show("It is.")
+    show("You jolt upright in bed.")
+    show("Huh, what a strange dream.")
+    show("You walk down stairs and eat a piece of toast.")
+    # TODO peieo fo toasta
+    show("Deciding you better start your day, you make your way outside.")
+    from source.places_maintown import maintown
+    return maintown(player)
