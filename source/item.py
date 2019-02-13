@@ -4,13 +4,13 @@ import random
 from source.lists import getRandomWeaponName, getRandomItemPrefix, getRandomArmourSlot, getRandomArmourName
 
 class Item():
-    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  customActivationFunction=None, scale=True):
+    def __init__(self, player, name, customDescription='', rarity = None, _type=None, armourSlot = None, damage=0, block=0, sellValue = None,  consumable=False, scale=True):
         '''
         Rarities: None, common, rare, epic, legendary
         Types: weapon, armour, consumable, quest, misc
         ArmourSlots: head, offhand, chest, legs, feet
         Set sellValue to None to generate a default value
-        customActivationFunction is a lambda that gets called when item is activated (equipped)
+        consumable is False or a Consumable object
         if scale as true, stats will be scaled to fit player level
         '''
         self.player = player
@@ -20,7 +20,7 @@ class Item():
         self.damage = damage
         self.block = block
         self.equipped = False
-        self.customActivationFunction = customActivationFunction
+        self.consumable = consumable
         self.customDescription = customDescription
 
         if self.type == 'armour': self.armourSlot = armourSlot
@@ -109,28 +109,6 @@ class Item():
             return "This goes in your " + otherhand + " hand."
         return "You can't hold this."
 
-    def consume(self, text=None, heal=None, xpgain=None, karma=None):
-        ''' returns string about what happened after consumption (because consumption is only possible form inventory menu). '''
-        # TODO make lots of effects
-        if self.type == 'consumable':
-            if text == None:
-                text = "You ate the " + str(self.name) + ".\n It was delicious.\n"
-            if heal:
-                self.player.regenHealth(health = heal, returnString=True, showCurrentHealth=False)
-                text += "\nYou regained " + str(heal) + " HP!"
-            if xpgain:
-                text += '\n' + str(self.player.gainXp(xpgain, returnString=True))
-            if karma:
-                self.player.karma = self.player.karma + karma
-                if karma <0:
-                    text += '\n' + 'You didn\'t feel too great about doing that.'
-                elif karma >0:
-                    text += '\n' + "You're proud of yourself for doing that."
-            self.player.inventory.remove(self)
-        else:
-            text = "You can't eat that!"
-        return text
-
     def scale(self):
         '''change an items stats to scale with player level'''
         self.damage = self.player.scale(self.damage)
@@ -205,3 +183,46 @@ def tryForDrop(percent):
         return True
     else:
         return False
+
+class Consumable():
+    def __init__ (self, consumeText=None, heal=0, xpgain=0, dealDamage=0, karma=0):
+        self.consumeText=consumeText
+        self.heal = heal
+        self.xpgain = xpgain
+        self.dealDamage = dealDamage
+        self.karma=karma
+
+def consume(player, item): # for consuming consumables
+    text=''
+    if item._type=='consumable' and item.consumable != False:
+        if item.consumable.consumeText == None:
+            text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
+        else:
+            text += item.consumable.consumeText + '\n' 
+        if item.consumable.heal:
+            player.regenHealth(health = item.consumable.heal, returnString=True, showCurrentHealth=False)
+            text += "You regained " + str(item.consumable.heal) + " HP!\n"
+        if item.consumable.xpgain:
+            text += str(player.gainXp(item.consumable.xpgain, returnString=True)) + '\n' 
+        if item.consumable.karma:
+            player.karma = player.karma + item.consumable.karma
+            if item.consumable.karma <0:
+                text += 'You didn\'t feel too great about doing that.\n'
+            elif item.consumable.karma >0:
+                text += "You're proud of yourself for doing that.\n"
+
+        player.inventory.remove(item)
+    else:
+        text = "You can't eat that!"
+    return text
+    # TODO damage
+
+def getRanomConsumable(consumable=None, powerLevel=0):
+    # can pass a consumable object to add random effects to it (this functino wont change consume text)
+    if consumable:
+        c = consumable
+    randomNumber = random.randint(0,10)
+    # TODO for loop for power level
+    if randomNumer <= 4:
+        c.consumable.heal += 
+    

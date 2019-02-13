@@ -325,12 +325,10 @@ def bonysShop(player):
 
     inv = []
 
-    i1 = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3)
-    i1.customActivationFunction = lambda:i1.consume(heal=int(player.maxhp/6))
-    inv.append(i1) # CONSUMABLES MUST HAVE UNIQUE VAR NAME
+    i1 = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3, consumable=Consumable(heal=int(player.maxhp/6)))
+    inv.append(i1) 
 
-    i2 = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12)
-    i2.customActivationFunction = lambda:i2.consume(xpgain=3)
+    i2 = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12,consumable=Consumable(consumeText='You chewed on the bone for a few minutes. It made you feel alive.',xpgain=int(player.levelupxp/6))
     inv.append(i2)
 
     i = Item(player, 'Frizbee', damage=4, customDescription="It's red and as chew marks in it.", _type='weapon', sellValue=6)

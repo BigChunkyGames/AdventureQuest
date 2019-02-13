@@ -1,4 +1,4 @@
-from source.item import generateRandomArmourOrWeapon, Item
+from source.item import generateRandomArmourOrWeapon, Item, Consumable
 
 
 def devMode(player):
@@ -56,8 +56,7 @@ def devMode(player):
     i = generateRandomArmourOrWeapon(player, _type='weapon', rarity='legendary')
     player.inventory.append(i)
     
-    i1 = Item(player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5)
-    i1.customActivationFunction = lambda:i1.consume(heal=3)
+    i1 = Item(player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5, consumable=Consumable(heal=3))
     player.inventory.append(i1)
 
     

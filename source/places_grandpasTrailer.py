@@ -159,7 +159,7 @@ def grandpasTrailer(player):
                 printSlowly("Oh. I'm out of that stuff he offered you last time, but you can have some of this.")
                 color = getRandomColor()
                 show("TROG opens the door on his chest and reveals a small vial filled with " + color + " liquid.")
-                i = Item(player, 'Vial of ' + color + ' liquid', customDescription="Trog gave you this from inside of him. It's still warm.", _type='consumable')
+                i = Item(player, 'Vial of ' + color + ' liquid', customDescription="Trog gave you this from inside of him. It's still warm.", _type='consumable', consumable=Consumable(''))
                 # TODO: fix consumables and make this a random one
                 player.addToInventory(i)
                 printSlowly("Alright *bleep*face now get out of here.")

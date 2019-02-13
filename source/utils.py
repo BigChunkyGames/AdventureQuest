@@ -228,8 +228,7 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         elif inp == "save":
-            pickle.dump(player, open("AdventureQuestSave.meme", "w"))
-            show("@Game saved!@green@")
+            saveGame(player)
         elif inp == "load":
             player = pickle.load(open("AdventureQuestSave.meme", "r"))
             show("@Game loaded!@green@")
@@ -239,12 +238,25 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
             return inp
         if oneTry:
             return inp
+        
+def saveGame(player):
+    # increments saves up forever with a new save each time
+    incrementDictValue(player.stats, 'saveIndex')
+    
+    saveIndex = str(player.stats['saveIndex'])
+    with open("AdventureQuestSave" + saveIndex +".meme", 'wb') as output: 
+        pickle.dump(player, output, pickle.HIGHEST_PROTOCOL)
+    show("@Game saved!@green@")
 
 def checkForCancel(inp):
     if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
         return True
     else:
         return False
+
+def incrementDictValue(dictionary, key):
+    # will add 1 to a dictionary value or set to 1 if key not in dict
+    dictionary[key] = dictionary.get(key, 0) + 1
 
 # the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
 def wrap(text, limit=40, padding=True):
@@ -299,6 +311,8 @@ def getRandomIndex(arr):
 
 def getRandInt(min = 1, max= 10): # return random int between 1 and max
     return random.randint(1, max)
+
+#### misc ####################################################
 
 def getOtherHand(player):
     if 'hand' not in player.aspect:

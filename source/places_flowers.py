@@ -2,7 +2,7 @@
 from source.utils import *
 from source.enemy import Enemy
 from source.combat import Combat
-from source.item import Item
+from source.item import Item, Consumable
 from source.places_wormHome import wormHome, tea
 
 # this file and wormhome sort of go together
@@ -190,10 +190,8 @@ def flowers(player):
             return
 
 def takeThePie(player):
-    i = Item(player, "Angry Worm Poet's Pie", customDescription="It's strawberry rhubarb, his favorite.", _type='consumable', sellValue=8)
-    i.customActivationFunction = lambda:i.consume(heal=3)
+    i = Item(player, "Angry Worm Poet's Pie", customDescription="It's strawberry rhubarb, his favorite.", _type='consumable', sellValue=8, consumable=Consumable(consumeText="You're not really a big fan of rhubarb.", heal=3))
     player.addToInventory(i)            
-    # TODO test that this works, also say something about how bad you feel eating this when it is consumed
 
 def recievePoem(player):
     i = Item(player, 'Song of a Worm by Andy Worm Poet', customDescription="Song of a Worm\n\nMy lonely home is a hole in the soil\nI've exhausted my thoughts\nAnd now gladly recoil.", _type='quest', sellValue=0 )
