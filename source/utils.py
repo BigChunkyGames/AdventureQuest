@@ -459,6 +459,9 @@ class Animation():
     def __init__(self, animationName):
         '''animationNames: introAnimation, (string)'''
         clear()
+        self.specialChar = ' '
+        self.smash = False
+        self.makeUnique()
         self.finished=False
         if animationName == 'introAnimation':
             rows = ASCII_LOGO.splitlines()
@@ -472,6 +475,17 @@ class Animation():
         self.t1.start() 
         self.t2.start()
         self.t1.join()
+
+    def makeUnique(self):
+        rand = random.randint(0,1000)
+        if rand == 0:
+            self.specialChar = '<3'
+        elif rand == 1:
+            self.specialChar = 'xD'
+        elif rand == 2:
+            self.specialChar = "▽"
+        elif rand == 100:
+            self.smash = True
 
     def handleUserInput(self):
         while True:
@@ -493,18 +507,25 @@ class Animation():
         rowsToPrint = len(rows) % place
         done=False
         s=''
-        for rowIndex in range(0, rowsToPrint):
+        for rowIndex in range(0, len(rows)):
             for char in range(0,place):
                 if char < place + subtraction and char < width:
                     s += rows[rowIndex][char] # print char in this row
                 elif char < width -1:
-                    s += ' '
+                    s += self.specialChar
                 if rowIndex == len(rows)-1 and char+subtraction==width:
                     done = True
             s += '\n'
             subtraction -= spaces
-        clear()
-        print(s)
+        # clear()
+        # sys.stdout.write(s)
+        # sys.stdout.flush()
+        if self.smash:
+            sys.stdout.write("\033["+str(len(rows))+"A")
+            print(s)
+        else:
+            sys.stdout.write("\033["+str(len(rows)+1)+"A")
+            print(s)
         wait(.05)
         if done: return
         self.introAnimation(rows, width, place = place + 1)
