@@ -34,6 +34,7 @@ class Game: # perhaps this is what should be saved
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
             
@@ -67,5 +68,5 @@ class Game: # perhaps this is what should be saved
 g = Game()
 g.start()
 
-printSlowly("The End", secondsBetweenChars=.2)
+printSlowly("The End", secondsBetweenChars=.4)
 

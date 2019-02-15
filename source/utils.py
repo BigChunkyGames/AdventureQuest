@@ -21,9 +21,77 @@ with contextlib.redirect_stdout(None): # prevents console ouput during import
 import pygame.mixer
 from os import listdir
 from os.path import isfile, join
-###
+import time, datetime
 
-#### console / user input #############################################
+#### user input #############################################
+
+# returns true if lowercase of input == choice or first char of choice
+def checkInput(inp, choice):
+    choice = choice.strip().lower()
+    if inp == choice or inp == choice[0]:
+        return True
+    else: return False
+
+def yesno(player):
+    #  Returns True if user input is yes, returns False if no.
+    while True:
+        userinput = getInput(player)
+        if userinput == "yes" or userinput == "y":
+            return True
+        elif userinput == "no" or userinput == "n":
+            return False
+        else:
+            printc("@'yes'@yellow@ or @'no'@yellow@.")
+
+def dichotomy(option1, option2):
+    # Returns True if user input is option1, returns False if option2.
+    # Make sure the options are in stripped lowercase form
+    while True:
+        userinput = input("> ").lower().strip()
+        if userinput == option1:
+            return True
+        elif userinput == option2:
+            return False
+        else:
+            print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
+
+def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
+    while True:
+        inp = input(prompt).lower().strip()
+
+        if player.devmode and inp == "debug damage":
+            player.takeDamage(int(input("How much damage? : ")))
+        elif player.devmode and inp == "debug level up":
+            player.levelUp()
+        elif player.devmode and inp == "debug add xp":
+            player.gainXp(int(input("How much XP?: ")), input("Scale? (True or False): "))
+        elif inp == "hp":
+            print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
+            print("("),
+            print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
+            print("% )")
+        elif inp == "inv" or inp == "inventory":
+            player.openInventory()
+        elif inp == "me":
+            print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
+        # elif inp == "save":
+        #     saveGame(player)
+        elif inp == "load":
+            loadGame(player)
+        elif inp == '':
+            continue
+        else:
+            return inp
+        if oneTry:
+            return inp
+
+def checkForCancel(inp):
+    if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
+        return True
+    else:
+        return False
+
+#### printing ################################################
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
@@ -34,6 +102,30 @@ def show(text, dots=True):
     if dots: text='... '
     else: text = ''
     x=getpass.getpass(text) # waits for enter, doesnt show typed input becuase it's treated like a password
+
+# the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
+def wrap(text, limit=40, padding=True):
+    text = str(text)
+    if padding: pad = " "
+    else: pad = ""
+    out = ''
+    l = text.split("\n")
+    for s in l: # for each line
+        if s == "":
+            out += "\n"
+            continue
+        out += pad
+        w=0 
+        for d in s.split(): # for each word
+            if w + len(d) + 2 < limit: # if fits in limit
+                out += d + " "
+                w += len(d) + 1 
+            else: # if goes over limit
+                out += "\n "
+                out += d + " "
+                w = len(d)
+        if l[len(l)-1] != s: out += "\n" # only add newline if not on last line
+    return out
 
 # more ansi colors: https://github.com/prompt-toolkit/python-prompt-toolkit/blob/master/examples/print-text/ansi-colors.py
 # prints colored text. if more=true, will return s
@@ -60,6 +152,7 @@ def printWithColor(text, color, before="", after="", more=False):
 
 def printc(text, stringList=False): # now supports multiple colors per call
     #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
+    #printc('@test@red@uncollored@color@blue@@color@yellow@')
     if not stringList: # if stringlist false
         t = text.split('@')
     else:
@@ -79,7 +172,6 @@ def printc(text, stringList=False): # now supports multiple colors per call
                 s = printWithColor(t[1],t[2], before=t[0], after = "", more=True)
             printc( s, stringList=t[3:] )
     else: printc("@You used the at sign syntax wrong.@red@")
-#printc('@test@red@uncollored@color@blue@@color@yellow@')
 
 # formats text in ways besides color. only bold and underline and reverse seem to work in my vs code terminal
 def formatText(text, format):
@@ -109,19 +201,6 @@ def formatText(text, format):
 # formatText("reverse", "reverse") 
 # formatText("underline", "underline") 
 # formatText("hidden", "hidden") # still visible
-
-# returns true if lowercase of input == choice or first char of choice
-def checkInput(inp, choice):
-    choice = choice.strip().lower()
-    if inp == choice or inp == choice[0]:
-        return True
-    else: return False
-
-def wait(seconds): # accepts floats
-    ''' printOnSecond is a string btw'''
-    sys.stdout.flush()
-    time.sleep(seconds)
-    sys.stdout.flush()
     
 class printSlowly():
     def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, addParenthesis=True):
@@ -175,7 +254,6 @@ class printSlowly():
                 return
             wait(.01)
 
-
     def handleUserInput(self):
         while True:
             if self.finished==True:
@@ -194,119 +272,54 @@ def thread(targetFunction, numberOfThreads=1,): # not used
         threads.append(t)
         t.start()
 
-def yesno(player):
-    #  Returns True if user input is yes, returns False if no.
-    while True:
-        userinput = getInput(player)
-        if userinput == "yes" or userinput == "y":
-            return True
-        elif userinput == "no" or userinput == "n":
-            return False
-        else:
-            printc("@'yes'@yellow@ or @'no'@yellow@.")
-
-def dichotomy(option1, option2):
-    # Returns True if user input is option1, returns False if option2.
-    # Make sure the options are in stripped lowercase form
-    while True:
-        userinput = input("> ").lower().strip()
-        if userinput == option1:
-            return True
-        elif userinput == option2:
-            return False
-        else:
-            print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
-
-def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
-    while True:
-        inp = input(prompt).lower().strip()
-
-        if player.devmode and inp == "debug damage":
-            player.takeDamage(int(input("How much damage? : ")))
-        elif player.devmode and inp == "debug level up":
-            player.levelUp()
-        elif player.devmode and inp == "debug add xp":
-            player.gainXp(int(input("How much XP?: ")), input("Scale? (True or False): "))
-        elif inp == "hp":
-            print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
-            print("("),
-            print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
-            print("% )")
-        elif inp == "inv" or inp == "inventory":
-            player.openInventory()
-        elif inp == "me":
-            print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
-        elif inp == "save":
-            saveGame(player)
-        elif inp == "load":
-            loadGame(player)
-        elif inp == '':
-            continue
-        else:
-            return inp
-        if oneTry:
-            return inp
+#### file management #######################################################
         
-def saveGame(player):
+def saveGame(player, printAboutIt=False):
     # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
-    with open("saves/AdventureQuestSave" + saveIndex +".meme", 'wb') as output: 
+    with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
         pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
-    printc("@Game "+saveIndex+" saved!@green@")
+    if printAboutIt:
+        printc("@Game "+saveIndex+" saved!@green@")
 
-def loadGame(player, loadThisSaveNumber=None):
-    # set loadThisSaveNumber to an int to load the save with that int
-    if loadThisSaveNumber == None:
-        if 'saveIndex' in player.stats:
-            saveIndex = str(player.stats['saveIndex'])
-        else:
-            show("There are no saved games yet! Type @'save'@yellow@ to save your current progress.")
-    else:
-        saveIndex = int(loadThisSaveNumber)
-    try:
-        with open("saves/AdventureQuestSave" + saveIndex + ".meme", "rb") as loading:
+def loadGame(player): # loads most recent save file
+    newestFile = getNewestFile()
+    if newestFile==None:
+        show("There are no saved games yet! You need to go somewhere first!")
+        return
+    try: # try to load newest save file
+        with open('saves/' + newestFile, "rb") as loading:
             player = pickle.load(loading)
     except FileNotFoundError:
-        printc("@Couldn't find save file number " + saveIndex + "!@red@")
+        printc("@Couldn't find any files to load!@red@")
         return False
-    show("@Game "+saveIndex+" loaded!@green@")
+    show("@Game loaded!@green@")
     player.map.goToCurrentLocation(player)
-    
 
-def checkForCancel(inp):
-    if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
-        return True
-    else:
-        return False
+def newOrLoad(player):
+    # returns false if loaded a game
+    while True:
+        saves = os.listdir('saves')
+        if len(saves) == 0:
+            return True # (if there are no saves, new game)
+        printc("@'New'@yellow@ game or @'continue'@yellow@ game?")
+        x = input('> ').lower()
+        if checkInput(x, 'new'):
+            return True
+        elif checkInput(x, 'load') or checkInput(x, 'continue'):
+            loadGame(player)
+            return False
+ 
+def generateTimeStamp(): 
+    ts = time.time()
+    return datetime.datetime.fromtimestamp(ts).strftime('_%Y-%m-%d_%H-%M-%S')
 
-def incrementDictValue(dictionary, key):
-    # will add 1 to a dictionary value or set to 1 if key not in dict
-    dictionary[key] = dictionary.get(key, 0) + 1
-
-# the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
-def wrap(text, limit=40, padding=True):
-    text = str(text)
-    if padding: pad = " "
-    else: pad = ""
-    out = ''
-    l = text.split("\n")
-    for s in l: # for each line
-        if s == "":
-            out += "\n"
-            continue
-        out += pad
-        w=0 
-        for d in s.split(): # for each word
-            if w + len(d) + 2 < limit: # if fits in limit
-                out += d + " "
-                w += len(d) + 1 
-            else: # if goes over limit
-                out += "\n "
-                out += d + " "
-                w = len(d)
-        if l[len(l)-1] != s: out += "\n" # only add newline if not on last line
-    return out
+def getNewestFile():
+    files = os.listdir('saves')
+    if len(files)>0:
+        return max(os.listdir('saves'), key=lambda f: os.path.getctime("{}/{}".format('saves', f)))
+    return None
 
 #### dev #############################################
 
@@ -329,6 +342,11 @@ def log(text = "log!", warning=False):
     else:
         logging.info(text)
 
+def incrementDictValue(dictionary, key):
+    # will add 1 to a dictionary value or set to 1 if key not in dict
+    dictionary[key] = dictionary.get(key, 0) + 1
+    return dictionary[key]
+
 #### random #############################################
 
 # takes an array returns a random index
@@ -340,20 +358,11 @@ def getRandInt(min = 1, max= 10): # return random int between 1 and max
 
 #### misc ####################################################
 
-def newOrLoad(player):
-    while True:
-        saves = [f for f in listdir('saves') if isfile(join('saves', f))]
-        #saves = len(fnmatch.filter(os.listdir('saves'), '*.meme'))
-        if len(saves) == 0:
-            return True # (if there are no saves, new game)
-        printc("@'New'@yellow@ game or @'load'@yellow@ game?")
-        x = input('> ').lower()
-        if 'new' in x:
-            return True
-        elif 'load' in x:
-            TODO PROMPT ABOUT WHICH FILE TO LOAD
-            loadGame(player)
-            return False
+def wait(seconds): # accepts floats
+    ''' printOnSecond is a string btw'''
+    sys.stdout.flush()
+    time.sleep(seconds)
+    sys.stdout.flush()
 
 def getOtherHand(player):
     if 'hand' not in player.aspect:
