@@ -19,6 +19,8 @@ import contextlib
 with contextlib.redirect_stdout(None): # prevents console ouput during import
     import pygame
 import pygame.mixer
+from os import listdir
+from os.path import isfile, join
 ###
 
 #### console / user input #############################################
@@ -150,14 +152,14 @@ class printSlowly():
         pausePoints = ['.', ',', '!', '?', ':', '\n']
         skipThese = ['"', "'"]
         waitOnNextChar=False
-        if self.initialWait: wait(self.pause)
+        if self.initialWait: self.interuptableWait(self.pause)
         for self.i in range(len(self.text)):
             if self.finishNow:
                 self.secondsBetweenChars = 0
                 self.pause = 0
             print(str(self.text[self.i]), end='')
             if waitOnNextChar: 
-                wait(self.pause)
+                self.interuptableWait(self.pause)
                 waitOnNextChar=False
             if str(self.text[self.i]) in pausePoints: # wait longer conditionally
                 waitOnNextChar=True
@@ -165,6 +167,14 @@ class printSlowly():
                 wait(self.secondsBetweenChars)
         if self.newline:print('')
         self.finished=True
+
+    def interuptableWait(self, seconds):
+        s = int(seconds * 100)
+        for t in range(s):
+            if self.finishNow:
+                return
+            wait(.01)
+
 
     def handleUserInput(self):
         while True:
@@ -229,8 +239,7 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
         elif inp == "save":
             saveGame(player)
         elif inp == "load":
-            player = pickle.load(open("AdventureQuestSave.meme", "r"))
-            show("@Game loaded!@green@")
+            loadGame(player)
         elif inp == '':
             continue
         else:
@@ -239,13 +248,31 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
             return inp
         
 def saveGame(player):
-    # increments saves up forever with a new save each time
+    # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
-    
     saveIndex = str(player.stats['saveIndex'])
-    with open("AdventureQuestSave" + saveIndex +".meme", 'wb') as output: 
-        pickle.dump(player, output, pickle.HIGHEST_PROTOCOL)
-    show("@Game saved!@green@")
+    with open("saves/AdventureQuestSave" + saveIndex +".meme", 'wb') as output: 
+        pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+    printc("@Game "+saveIndex+" saved!@green@")
+
+def loadGame(player, loadThisSaveNumber=None):
+    # set loadThisSaveNumber to an int to load the save with that int
+    if loadThisSaveNumber == None:
+        if 'saveIndex' in player.stats:
+            saveIndex = str(player.stats['saveIndex'])
+        else:
+            show("There are no saved games yet! Type @'save'@yellow@ to save your current progress.")
+    else:
+        saveIndex = int(loadThisSaveNumber)
+    try:
+        with open("saves/AdventureQuestSave" + saveIndex + ".meme", "rb") as loading:
+            player = pickle.load(loading)
+    except FileNotFoundError:
+        printc("@Couldn't find save file number " + saveIndex + "!@red@")
+        return False
+    show("@Game "+saveIndex+" loaded!@green@")
+    player.map.goToCurrentLocation(player)
+    
 
 def checkForCancel(inp):
     if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
@@ -313,6 +340,21 @@ def getRandInt(min = 1, max= 10): # return random int between 1 and max
 
 #### misc ####################################################
 
+def newOrLoad(player):
+    while True:
+        saves = [f for f in listdir('saves') if isfile(join('saves', f))]
+        #saves = len(fnmatch.filter(os.listdir('saves'), '*.meme'))
+        if len(saves) == 0:
+            return True # (if there are no saves, new game)
+        printc("@'New'@yellow@ game or @'load'@yellow@ game?")
+        x = input('> ').lower()
+        if 'new' in x:
+            return True
+        elif 'load' in x:
+            TODO PROMPT ABOUT WHICH FILE TO LOAD
+            loadGame(player)
+            return False
+
 def getOtherHand(player):
     if 'hand' not in player.aspect:
         return 'right' # just guess instead of crashing
@@ -333,6 +375,7 @@ def endDemo(player):
     show("You walk down stairs and eat a piece of toast.")
     # TODO peieo fo toasta
     show("Deciding you better start your day, you make your way outside.")
+    from source.places_maintown import maintown
     return maintown(player)
 
 #### UI stuff ############################################
@@ -369,17 +412,20 @@ class Sound():
         # initialize
         self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
         self.mixer.init()
-        if '.wav' in self.fileName:
-            self.format = 'wav'
-            self.sound = self.mixer.Sound(self.fileName) # sound method only supports wav files
-            self.sound.set_volume(volume)
-            if playNow:
-                self.sound.play(self.loop)
-        elif '.mp3' in self.fileName:
-            self.format = 'mp3'
-            self.sound = self.mixer.music.load(self.fileName)
-            if playNow:
-                self.mixer.music.play(self.loop)
+        try:
+            if '.wav' in self.fileName:
+                self.format = 'wav'
+                self.sound = self.mixer.Sound(self.fileName) # sound method only supports wav files
+                self.sound.set_volume(volume)
+                if playNow:
+                    self.sound.play(self.loop)
+            elif '.mp3' in self.fileName:
+                self.format = 'mp3'
+                self.sound = self.mixer.music.load(self.fileName)
+                if playNow:
+                    self.mixer.music.play(self.loop)
+        except:
+            print("(couldn't load sound file: " + self.fileName + ")")
 
     def getLength(self): # returns duration of wav file in seconds
         import wave

@@ -20,18 +20,18 @@ clear()
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = True 
+        self.player.devMode = False 
 
     def getPlayer(self):
         return self.player
 
     def start(self):
-        if not self.player.devMode: 
+        if not self.player.devMode: # not dev mode
             Animation('introAnimation')
-            print("Welcome to ADVENTURE QUEST Version 0.00.42P! The P stands for python.\n")
-            self.player.charcreation() 
-            introduction(self.player)
-            maintown(self.player)
+            if newOrLoad(self.player):
+                self.player.charcreation() 
+                introduction(self.player)
+                maintown(self.player)
         else: # dev mode
             devMode(self.player)
             #grandpasTrailer(self.player)
@@ -63,13 +63,9 @@ class Game: # perhaps this is what should be saved
 
             world(self.player)
         
-#TODO: assuming ne
-# w game each time. Should
-#  ask to load saved game data or start 
-# new game. Below line creates a new game object but should
-# \ load if loading saved" game
+
 g = Game()
 g.start()
 
-print ("the end")
+printSlowly("The End", secondsBetweenChars=.2)
 

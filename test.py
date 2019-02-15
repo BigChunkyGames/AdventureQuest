@@ -27,13 +27,22 @@
 # chan2.queue(sound2)
 
 
-from source.utils import *
-s = Sound('low piano G sharp.wav', loop=2)
-# s2 = Sound('paper.wav')
-wait(1)
-s.stopSound()
-s = Sound('etheral_unlock_1.mp3', loop=2)
-# s2 = Sound('paper.wav')
-wait(1)
-s.stopSound()
-print("t")
+# from source.utils import *
+# s = Sound('low piano G sharp.wav', loop=2)
+# # s2 = Sound('paper.wav')
+# wait(1)
+# s.stopSound()
+# s = Sound('etheral_unlock_1.mp3', loop=2)
+# # s2 = Sound('paper.wav')
+# wait(1)
+# s.stopSound()
+# print("t")
+
+import os, os.path
+
+# simple version for working with CWD
+print(len([name for name in os.listdir('.saves') if os.path.isfile(name)])
+)
+# path joining version for other paths
+DIR = '.saves'
+print (len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))]))

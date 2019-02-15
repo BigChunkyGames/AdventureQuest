@@ -19,7 +19,7 @@ def maintown(player):
     player.registerVisit(townName) # places inside of this here while loop return to the while loop when they are finished
     player.addToTeleportableAreas(townName, maintown)
     while True:
-        print("You stand in the homey town of "+townName+", a lovely place.")
+        show("You stand in the homey town of "+townName+", a lovely place.")
         printc("You could go @'home'@yellow@ and check that out.")
         printc("The @'tavern'@yellow@ is always a cool place to hang out.")
         printc("The @'store'@yellow@ is probably open at this time of day.")

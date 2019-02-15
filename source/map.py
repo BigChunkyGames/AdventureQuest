@@ -13,17 +13,23 @@ from source.places_grandpasTrailer import grandpasTrailer
 class Map:
 
     def __init__(self):
-        self.map = [i[:] for i in [[None] * 17] * 16] # declare empty actual map. makes a 15 col 16 row emtpy 2d list
-        x = lambda x, y : self.addToMap(Tile(x,y,"impassible", None, None, 0, None))
-        o = lambda x, y : self.addToMap(Tile(x,y,"wilderness", None, "forest", .5, None) ) # havent coded yet
-        f = lambda x, y : self.addToMap(Tile(x,y,"wilderness", None, "forest", .5, None) )
-        p = lambda x, y : self.addToMap(Tile(x,y,"wilderness", None, "plains", .5, None) )
-        d = lambda x, y : self.addToMap(Tile(x,y,"wilderness", None, "desert", .5, None) )
-        m = lambda x, y : self.addToMap(Tile(x,y,"wilderness", None, "mountains", .5, None) )
-        t = lambda x, y : self.addToMap(Tile(x,y,"town", None, None, 0 , None))
+        self.map = [i[:] for i in [[None] * 17] * 16] # declare empty 2d array. makes a 15 col 16 row emtpy 2d list
+        
+        self.initializeMap() # sets self.map to be a new INITIAL_MAP
+        self.initializeTileAttributes()
+
+
+    def initializeMap(self):
+        x = lambda x, y : Tile(x,y,"impassible", None, None, 0, None)
+        o = lambda x, y : Tile(x,y,"wilderness", None, "forest", .5, None) 
+        f = lambda x, y : Tile(x,y,"wilderness", None, "forest", .5, None) 
+        p = lambda x, y : Tile(x,y,"wilderness", None, "plains", .5, None) 
+        d = lambda x, y : Tile(x,y,"wilderness", None, "desert", .5, None) 
+        m = lambda x, y : Tile(x,y,"wilderness", None, "mountains", .5, None) 
+        t = lambda x, y : Tile(x,y,"town", None, None, 0 , None)
         # this is the constant map of the realm
         # each index of the 2d array is a tile object
-        self.INITIAL_MAP = [  # 16 x 17
+        INITIAL_MAP = [  # 16 x 17
         # 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 X
         [ x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x ], # 0 
         [ x, x, x, x, m, f, f, t, m, x, t, m, x, x, x, x, x ], # 1 
@@ -42,22 +48,13 @@ class Map:
         [ x, x, x, x, x, x, x, x, f, f, t, x, x, x, x, x, x ], # 13
         [ x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x ]  # 15 Y
         ] 
-        self.initializeMap() # sets self.map to be a new INITIAL_MAP
-        self.initializeTileAttributes()
-
-        
-
-    def addToMap(self, tile):
-        self.map[tile.x][tile.y] = tile
-
-    def initializeMap(self):
-        for i in range(0,len(self.INITIAL_MAP)): # height
-            for j in range(0,len(self.INITIAL_MAP[0])): # width
-                self.INITIAL_MAP[i][j](i,j)
+        for i in range(0,len(INITIAL_MAP)): # height
+            for j in range(0,len(INITIAL_MAP[0])): # width
+                self.map[i][j] = INITIAL_MAP[i][j](i,j)
                 #print self.getTileDescription(i,j)
 
-    def getTile(self,x ,y): # i literally made this function just so i can use x y instead of y x
-        return (self.map[y][x]) # it took me so fucking long to realize this needed to be y x not x y
+    def getTile(self,xCoordinate ,yCoordinate):
+        return self.map[yCoordinate][xCoordinate] # it took me so fucking long to realize this needed to be y x not x y
 
     def getTileDescription(self, x, y):
         if not self.getTile(x,y).description == None: # if description exists
@@ -94,21 +91,21 @@ class Map:
 
         #            x,y
         self.getTile(7,1).description = "a number of cute doggos prancing about."
-        self.getTile(7,1).placeFunction = lambda player: dogeTown(player) 
+        self.getTile(7,1).placeFunction = dogeTown
 
         self.getTile(10,4).description = "Grandpa's trailer."
-        self.getTile(10,4).placeFunction = lambda player: grandpasTrailer(player)
+        self.getTile(10,4).placeFunction = grandpasTrailer
 
         self.getTile(6,5).description = "your home town." # maintown
-        self.getTile(6,5).placeFunction = lambda player: maintown(player) 
+        self.getTile(6,5).placeFunction = maintown
 
         self.getTile(7,5).fightChance = 0 # tile to right of hometown
 
         self.getTile(8,5).description = "a beautiful field of flowers." # maintown
-        self.getTile(8,5).placeFunction = lambda player: flowers(player)
+        self.getTile(8,5).placeFunction = flowers
 
         self.getTile(10,5).description = "smoke billowing from over the hills."
-        self.getTile(10,5).placeFunction = lambda player: burntTown(player) 
+        self.getTile(10,5).placeFunction = burntTown
         
 
     def goTo(self,x,y, player):
@@ -127,3 +124,7 @@ class Map:
                 return
         else:
             self.getTile(x,y).placeFunction(player)
+
+    def goToCurrentLocation(self, player):
+        self.goTo(player.currentLocationX, player.currentLocationY, player)
+        

@@ -67,8 +67,9 @@ class Combat:
             item = generateRandomArmourOrWeapon(self.player, bonus=bonus)
         elif rand ==2:
             item = generateRandomConsumable(self.player, powerLevel=bonus)
-        show("You found a "+item.name)
-        self.player.addToInventory(item)
+        show("@You found a "+item.name +".@green@")
+        #self.player.addToInventory(item)
+        self.player.inventory.insert(0, item)
         
 
 
