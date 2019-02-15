@@ -203,7 +203,7 @@ def formatText(text, format):
 # formatText("hidden", "hidden") # still visible
     
 class printSlowly():
-    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, addParenthesis=True):
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True):
         # .03 is a pretty good talking speed
         # you no longer need to have parenthesis around dialogue when addparanthesis=true
         self.text = text
@@ -215,7 +215,7 @@ class printSlowly():
         self.finished=False    
         self.finishNow=False
         self.i = 0
-        if addParenthesis and len(self.text)>0:
+        if quotes and len(self.text)>0:
             firstChar = self.text[0]
             #check if first char is ' or "
             if firstChar != "'" and firstChar != '"':
@@ -416,7 +416,12 @@ class Sound():
     # NOTE: make loop -1 to loop forever
     # NOTE: volume adjustments (fade in out) only work with wav files
     def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=1):
-        self.fileName = "source/audio/" + fileName
+        if os.path.exists('source/audio/music loops/' + fileName):
+            self.fileName = "source/audio/music loops/" + fileName
+        elif os.path.exists('source/audio/one shots/' + fileName):
+            self.fileName = "source/audio/one shots/" + fileName
+        else:
+            print("(couldn't find sound file: " + self.fileName + ")")
         self.loop = loop
         # initialize
         self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
@@ -445,13 +450,14 @@ class Sound():
             return frames / float(rate)
 
     def stopSound(self): # stops all sounds
-        if self.format == 'wav':
-            self.sound.stop()
-        elif self.format == 'mp3':
-            self.mixer.music.stop()
-        self.mixer.quit()
-
-        #log("stopped playing " + self.fileName)
+        try:
+            if self.format == 'wav':
+                self.sound.stop()
+            elif self.format == 'mp3':
+                self.mixer.music.stop()
+            self.mixer.quit()
+        except:
+            log('tried to end a song but mixer wasnt being used')
 
 #### animations #########################################
 

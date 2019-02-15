@@ -1,7 +1,7 @@
 from source.utils import *
 from source.lists import getInvalidOptionText,getConversationResponse, getRandomTVShow
 from source.world import wormHole
-from source.item import Item
+from source.item import Item, Consumable
 
 def wormHome(player):
 
@@ -74,13 +74,13 @@ def tea(player):
         if player.stats["tea from andy"]==1:
             tea1 = "Chamomile"
             tea2 = "Lavender"
-        elif player.stats("tea from andy")==2:
+        elif player.stats["tea from andy"]==2:
             tea1 = "Oolong"
             tea2 = "Kombucha"
-        elif player.stats("tea from andy")==3:
+        elif player.stats["tea from andy"]==3:
             tea1 = "Sencha"
             tea2 = "Matcha"
-        elif player.stats("tea from andy")>3:
+        elif player.stats["tea from andy"]>3:
             show("Oh, I don't have any more tea. Sorry about that.")
             break
         else: bug(player)

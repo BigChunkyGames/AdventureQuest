@@ -35,7 +35,7 @@ def burntTown(player):
         printSlowly("\"That... \"", secondsBetweenChars=.09, pause=.3)
         printSlowly("\"That... \"", secondsBetweenChars=.1, pause=.3)
         wait(1.4)
-        printSlowly("\"MANIAC\"", secondsBetweenChars=.2)
+        printSlowly("\"MANIAC\"", secondsBetweenChars=.2, skipable=False)
         printSlowly("\"I bet he caused this whole fire!\"", secondsBetweenChars=.03, pause=.1)
         printSlowly("\"Come to think of it, that explosion came from right around his house!\"", secondsBetweenChars=.03, pause=.1)
         printSlowly("\"That illuminati loving piece of shit probably had this whole thing planned out and then fled to his trailer North of town.\"", secondsBetweenChars=.03)

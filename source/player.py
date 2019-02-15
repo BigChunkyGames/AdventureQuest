@@ -129,7 +129,7 @@ class Player:
         for x in self.inventory:
             if x.name == nameOfItem:
                 self.inventory.remove(x)
-                show(str(x.name) + " was removed from your inventory.")
+                show("@" + str(x.name) + " was removed from your inventory.@red@")
                 return True
         return False
 
@@ -407,11 +407,11 @@ class Player:
     def generateAspects(self):
         self.aspect['name'] = "Michael"
         self.aspect['difficulty'] = 'Normal'
-        self.aspect['gender'] = "boi"
+        self.aspect['gender'] = "boy"
         self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
         self.aspect['hand'] = "right"
         self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
-        self.aspect['town'], self.aspect['land'] = "your home town", "Flat Earth"
+        self.aspect['town'], self.aspect['land'] = "Townsville", "Flat Earth"
         self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
     
         

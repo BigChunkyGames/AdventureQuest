@@ -1,14 +1,15 @@
  # player comes here when they are not inside of a place or experiancing an event
 
-from source.utils import getInput, clear, show, printc, bug, yesno, checkForCancel
+from source.utils import getInput, clear, show, printc, bug, yesno, checkForCancel, saveGame
 from source.lists import getInvalidOptionText
 
 def world(player):
     player.registerVisit("world")
+    saveGame(player)
     
     while True:
         clear()
-        # TODO: make seperate biome synomyms for this part
+        # TODO flavorize make seperate biome synomyms for this part
         printc("To the @'North'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY - 1)), 
         printc("To the @'East'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX +1 , player.currentLocationY )), 
         printc("To the @'South'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),

@@ -292,7 +292,8 @@ class CombatUI():
 
     def done(self, result='?'):
         self.result = result
-        self.song.stopSound()
+        if self.result != 'inventory':
+            self.song.stopSound()
         get_app().exit(result=result)
  
 # STILL TODO

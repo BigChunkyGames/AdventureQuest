@@ -25,7 +25,7 @@ def flowers(player):
                 s = ''
                 for i in range(30):
                     s +=". "
-                printSlowly(s, secondsBetweenChars=.5, pause=0)
+                printSlowly(s, secondsBetweenChars=.5, pause=0, skipable=False, quotes=False)
                 print("Are you sure you don't want to attack the flowers?")
                 if not yesno(player):
                     if not attackFlowers(player): #if escaped
@@ -33,7 +33,7 @@ def flowers(player):
                     else: break
                 else:
                     show("You continue waiting.")
-                    printSlowly(s, secondsBetweenChars=.5, pause=0)
+                    printSlowly(s, secondsBetweenChars=.5, pause=0, skipable=False, quotes=False)
                     player.choices.append("waited for flowers")
                     show("The flowers, appreciating your patience, slowly part, revealing a path.")
                     show("You continue to the end of the field.")
@@ -138,7 +138,7 @@ def flowers(player):
                     tea(player)
                     printSlowly('"You know, this ol\' home is just too big for a small guy like me."')
                     printSlowly('"I wish I lived closer to some kind people that liked my poem."')
-                    show("@Andy is really starting to open up to you@green@.")
+                    show("@Andy is really starting to open up to you@cyan@.")
                     printSlowly('"If only there where a way that I could show my poem to the world..."')
                     printSlowly('"Why don\'t you keep it. You obviously love it even more than I do."')
                     recievePoem(player)

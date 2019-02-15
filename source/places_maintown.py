@@ -178,7 +178,6 @@ def tavern(player):
         printc("In front of you lies a pretty dope looking @'slot'@yellow@ machine")
         printc("You could @'ask'@yellow@ the bartender for some rumors")
         printc("It looks like one of the patrons is challenging others to a @'game'@yellow@")
-        printc("You could get a room to @'rest'@yellow@ for the night")
         printc("Or you could just @'leave'@yellow@.")
         action = getInput(player)
         if action == "slot" or action == "s":
@@ -193,10 +192,8 @@ def tavern(player):
             # TODO quest Rumors (random maybe?)
         elif action == "game" or action == "g":
                 tavernGame(player)
-        elif action == "rest" or action =="r":
-            pass # TODO
         elif action == "leave" or action == "l":
-            show("You've had enough fun at the tavern for today, and decide to blow this popsicle stand.")
+            show("You've had enough fun at the tavern for today, and so you blow this popsicle stand.")
             break
         else:
             print("You need to choose something to do!")
@@ -219,7 +216,7 @@ def tavernGame(player):
              "for a friendly handshake.")
         show("You accept his offer, shaking his hand, when he suddenly "
              "grins at you.")
-        printSlowly('"Heh, new to the game, are you? I can feel in your hand '
+        printSlowly('"Heh, new to the game are you? I can feel in your hand '
              'what you\'re about to play!"')
         show("You gulp nervously and ready your fist, mentally preparing "
              "yourself for the beginning of the match.")

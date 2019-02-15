@@ -105,11 +105,12 @@ def introduction(player): #TODO i think we should change the intro to be less de
     show('She looks up from the dick sock she\'s knitting.')
     printSlowly("Alright sweetie, be safe! Here, take this.")
     player.addToInventory(Item(player, 'Camera', customDescription='Mom got this for you.', _type='misc'))
-    printc("Type @'inventory'@yellow@ any time you are prompted for input to open your inventory.")
+    printc("Type @'inventory'@yellow@ any time you are prompted for input to open your inventory. Use the @'arrow keys'@yellow@ as well as @'enter'@yellow@ and @'escape'@yellow@ when in menus.")
     while True:
-        x = player.input()
+        x = input('> ')
         if x == 'inventory' or x == 'inv':
             player.openInventory() # doing this manually so that usually opening inventory doesnt count as an input
+            break
         else:
             printc("Come on now, you can just type @'inv'@yellow@ if you can't handle big words like @'inventory'@yellow@.") 
 

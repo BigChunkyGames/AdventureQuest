@@ -28,6 +28,7 @@ def grandpasTrailer(player):
         if  player.getVisits('grandpas trailer')== 1: # only on first visit
             player.stats['relation with grandpa'] = 0
             show("Before you can reach the door a tiny robot opens it and looks at you.")
+            show(TROG)
             printSlowly('"What the *beep* do you want?"',)
             x = player.getInput()
             if 'grandpa' in x.lower():
@@ -41,16 +42,20 @@ def grandpasTrailer(player):
             printSlowly('"I\'m TROG. This is my trailer. I\'ve been living here for years."', )
             printSlowly('"Isn\'t it just *bloop*ing beautiful?"', )
             printSlowly('"A tiny robot like myself, out in the wild with my own trailer."', )
-            printSlowly('"People are just so open these days."', )
-            printSlowly('"We live in an accepting world."', )
-            printSlowly('"Even robots can own property."', )
+            printSlowly('"You know, robots like me could never live in luxury like this back in my day."', )
+            printSlowly('"We lived in factories and worked hard, endlessly, all day, for no pay!"', )
+            printSlowly('"Now days robots have it all"', )
+            printSlowly('"They can even own property!"', )
             show("From inside the trailer you hear what sounds like someone stumbling.")
             printSlowly('"Damnit TROG, who\'s at the door?"', secondsBetweenChars=gspeed)
-            show("From behind the the robot, your grandpa steps into view.")
+            show("From behind the robot, your grandpa steps into view.")
             show("His long grey hair and stained lab coat, stir in the breeze.")
             printSlowly('"Oh it\'s you, ' + player.aspect['name'] + '!"', secondsBetweenChars=gspeed)
             printSlowly('"I was wondering when you\'d stop by."', secondsBetweenChars=gspeed)
-            printSlowly('"Hey... is that lasagna I smell? "', secondsBetweenChars=gspeed)
+            printSlowly('"I see you\'ve met TROG. Little exuberant guy ain\'t he?"', secondsBetweenChars=gspeed)
+            printSlowly('"Well he\'s been around here ever since I found him out in the woods and fixed em up."', secondsBetweenChars=gspeed)
+            printSlowly('"(I can\'t get him to leave.)"', secondsBetweenChars=gspeed)
+            printSlowly('"Hey... is that your mom\'s lasagna I smell? "', secondsBetweenChars=gspeed)
             if yesno(player):
                 player.choices.append("gave lasagna to grandpa")
                 if player.removeFromInventory('Lasagna'):
@@ -71,7 +76,7 @@ def grandpasTrailer(player):
                     player.stats['relation with grandpa'] += 1
                     shoes = player.equippedArmourFeet.name
                     player.unequip(_type='armour', armourSlot='feet')
-                    print("Your " + shoes + " were unequipped." )
+                    print("@Your " + shoes + " were unequipped.@red@" )
                 else:
                     player.stats['relation with grandpa'] += -1
                     player.karma -= 1
@@ -106,7 +111,7 @@ def grandpasTrailer(player):
                 printSlowly('"Oh... I\'ll just put this back then."', secondsBetweenChars=gspeed)
                 show("Your grandpa takes a swig of the serum and puts it back in the cubbard.")
             printSlowly('"So what did you want to talk about?"', secondsBetweenChars=gspeed)
-            count = 0
+            count = 1
             while True:
                 x = player.getInput()
                 if 'illum' in x or 'illuminati' in x or 'ilum' in x:
@@ -114,7 +119,7 @@ def grandpasTrailer(player):
                     break
                 elif 'TROG' in x:
                     printSlowly("Oh that little creep?", secondsBetweenChars=gspeed)
-                    printSlowly("Yeah I had him made by some Russians.", secondsBetweenChars=gspeed)
+                    printSlowly("Yeah I kick him out and he just waits there for me to let him back in.", secondsBetweenChars=gspeed)
                     printSlowly("Pretty cute ain't he?", secondsBetweenChars=gspeed)
                     printSlowly("Just wait until you catch him watching you while you're sleeping.", secondsBetweenChars=gspeed)
                     printSlowly("Hahaha.", secondsBetweenChars=gspeed)
@@ -186,12 +191,29 @@ def illuminatiDialogue(player, gspeed):
     show("A visible wave of nostalgia comes over your grandpa and he looks away.")
     printSlowly('"What are you interested in them for?"', secondsBetweenChars=gspeed)
     x = player.getInput()
-    if 'destroy' in x or 'kill' in x or 'defeat' in x or 'end' in x or 'quest' in x:
+    if 'destr' in x or 'kill' in x or 'defeat' in x or 'end' in x or 'quest' in x :
         printSlowly('"My my. You\'ve got your sights set then eh?"', secondsBetweenChars=gspeed)
     elif 'join' in x:
         printSlowly('"Hah, if you can find them!"', secondsBetweenChars=gspeed)
     elif 'snoop' in x or 'dog' in x or 'vision' in x or 'preminition' in x or 'dream' in x :
         printSlowly('"Oh dear. I had visions of Snoop Dogg back in my hay day. It was never a good sign."', secondsBetweenChars=gspeed)
 
-
-# TODO add block and attack to stats screen
+TROG = '''
+   .^___^.
+   |O   o|
+   \  v  /
+    | ¯ | 
+/¯|¯¯¯|¯ ¯|¯\\
+| |_TR OG_| |
+| |\__|__/| |
+|_| |_|_| |_|
+ ¥  |_|_|  ¥
+  /¯|···|¯\\
+  | |   | |
+  |_|   |_|
+  |¯|   |¯|
+  | |   | |
+  |_|   |_|
+  / \   / \\
+ (>.<) (>.<)
+'''

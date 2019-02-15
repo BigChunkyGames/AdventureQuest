@@ -9,6 +9,7 @@ from source.places_burntTown import burntTown
 from source.places_dogeTown import dogeTown
 from source.places_flowers import flowers
 from source.places_grandpasTrailer import grandpasTrailer
+from source.world import world
 
 class Map:
 
@@ -70,7 +71,7 @@ class Map:
             return "nothing at all don't even worry about it." # if you see this it means a place was not given a description
 
     def makeWildernessEvent(self, x,y):
-        s = ''
+        s = '' # TODO flavorize
         s+=getRandomIndex(TRANSIT_SYNONYMS) + " "
         if self.getTile(x,y).getBiome() == "forest":
             s+=getRandomIndex(FOREST_SYNONYMS) + "." 
@@ -111,7 +112,7 @@ class Map:
     def goTo(self,x,y, player):
         clear()
         if self.getTile(x,y).type == "impassible":
-            print( "you can't go that way.") #TODO flavor add flavor text
+            show( "You can't go that way.") #TODO flavor add flavor text
             return
         player.currentLocationX = x
         player.currentLocationY = y
@@ -128,4 +129,5 @@ class Map:
 
     def goToCurrentLocation(self, player):
         self.goTo(player.currentLocationX, player.currentLocationY, player)
+        world(player)
         
