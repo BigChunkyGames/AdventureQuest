@@ -14,13 +14,14 @@ from source.combat import Combat
 from source.enemy import Enemy
 from source.SlotMachine import *
 from source.places_grandpasTrailer import grandpasTrailer
+from source.places_babel import babel
 
 clear() 
 
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = False 
+        self.player.devMode = True 
 
     def getPlayer(self):
         return self.player
@@ -34,12 +35,12 @@ class Game: # perhaps this is what should be saved
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            loadGame(self.player)
+            #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
-            
+            babel(self.player)
             #introduction(self.player)
-            maintown(self.player)
+            #maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)

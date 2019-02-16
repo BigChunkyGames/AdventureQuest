@@ -10,6 +10,7 @@ from source.places_dogeTown import dogeTown
 from source.places_flowers import flowers
 from source.places_grandpasTrailer import grandpasTrailer
 from source.world import world
+from source.places_babel import babel
 
 class Map:
 
@@ -107,6 +108,9 @@ class Map:
 
         self.getTile(10,5).description = "smoke billowing from over the hills."
         self.getTile(10,5).placeFunction = burntTown
+
+        self.getTile(10,10).description = 'a giant hexagonal library.'
+        self.getTile(10,10).placeFunction = babel
         
 
     def goTo(self,x,y, player):
