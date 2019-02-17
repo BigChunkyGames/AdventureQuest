@@ -3,6 +3,7 @@ from source.item import Item
 
 def introduction(player): #TODO i think we should change the intro to be less demanding of the player first thing. maybe we can add an option to have the lore given to the player or if they player can write the lore themselves
     clear()
+    saveGame(player)
     show("In a time before the world fell into the splitting fires of "
          "hell, we looked to the legends.")
     show("Only one true hero could save us from our seemingly "
@@ -107,12 +108,11 @@ def introduction(player): #TODO i think we should change the intro to be less de
     player.addToInventory(Item(player, 'Camera', customDescription='Mom got this for you.', _type='misc'))
     printc("Type @'inventory'@yellow@ any time you are prompted for input to open your inventory. Use the @'arrow keys'@yellow@ as well as @'enter'@yellow@ and @'escape'@yellow@ when in menus.")
     while True:
-        x = input('> ')
+        x = input('> ').lower()
         if x == 'inventory' or x == 'inv':
             player.openInventory() # doing this manually so that usually opening inventory doesnt count as an input
             break
         else:
             printc("Come on now, you can just type @'inv'@yellow@ if you can't handle big words like @'inventory'@yellow@.") 
 
-    show('After taking the camera, you leave your house and walk into town, '
-         'ready to head into whatever building you choose.')
+    show('After taking the camera, you leave your house and walk into town, ready to head into whatever building you choose.')

@@ -133,6 +133,13 @@ class Player:
                 return True
         return False
 
+    def checkIfInInventory(self, nameOfItem):
+        for i in self.inventory:
+            if i.name == nameOfItem:
+                return True
+        return False
+
+
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
     def activateItem(self, item):
         if item.type == 'consumable' and item.consumable != None: # if has custom function
@@ -353,7 +360,7 @@ class Player:
         sys.exit()
 
     
-    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True):
+    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, show=True):
         ''' set health to None for regen health like at end of combat'''
         if health == None:
             health = self.healthRegen
@@ -368,7 +375,10 @@ class Player:
         if returnString:
             return text
         else:
-            printc(text)
+            if show:
+                show(text)
+            else:
+                printc(text)
 
     def sleep(self, customText=None):
         self.hp = self.maxhp

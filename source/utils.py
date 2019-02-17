@@ -36,9 +36,9 @@ def yesno(player):
     #  Returns True if user input is yes, returns False if no.
     while True:
         userinput = getInput(player)
-        if userinput == "yes" or userinput == "y":
+        if 'y' in userinput:
             return True
-        elif userinput == "no" or userinput == "n":
+        elif 'n' in userinput:
             return False
         else:
             printc("@'yes'@yellow@ or @'no'@yellow@.")
@@ -278,10 +278,14 @@ def saveGame(player, printAboutIt=False):
     # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
-    with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
-        pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
-    if printAboutIt:
-        printc("@Game "+saveIndex+" saved!@green@")
+    try:
+        with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
+            pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+        if printAboutIt:
+            printc("@Game "+saveIndex+" saved!@green@")
+    except:
+        printc("@(The game should have saved right there but it didn't D: )@red@")
+    
 
 def loadGame(player): # loads most recent save file
     newestFile = getNewestFile()
@@ -305,9 +309,9 @@ def newOrLoad(player):
             return True # (if there are no saves, new game)
         printc("@'New'@yellow@ game or @'continue'@yellow@ game?")
         x = input('> ').lower()
-        if checkInput(x, 'new'):
+        if 'new' in x or checkInput(x, 'new'):
             return True
-        elif checkInput(x, 'load') or checkInput(x, 'continue'):
+        elif 'load' in x or 'continue' in x or checkInput(x, 'load') or checkInput(x, 'continue'):
             loadGame(player)
             return False
  

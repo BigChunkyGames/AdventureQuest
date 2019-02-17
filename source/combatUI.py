@@ -23,7 +23,7 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait, wrap, Sound
+from source.utils import wait, wrap, Sound, getStats
 from source.inventoryUI import InventoryUI
 
 import re
@@ -238,41 +238,35 @@ class CombatUI():
     def getRootContainer(self):
         height = self.maxHeightOfBattleLogWindow
         enemyName = self.makeFormattedText(self.enemy.name) 
+        statsWidth = 20 #TODO make fitting nicely
         battleLogTitle = FormattedText([
             ('#ffffff', "Battle Log") 
         ])
         actionsTitle = FormattedText([
             ('#ffffff', "Actions") 
         ])
-        t = TextArea(
-            scrollbar=False,
-            line_numbers=False,
-            wrap_lines=True,
-            dont_extend_height=True,
-            dont_extend_width=True,
-            focusable=True,
-            focus_on_click=True,
-            read_only=False,
-            text=self.battleLog,  
-            style='bg:#000000',
-            height=10,
-            )
         root_container = HSplit([
             VSplit([
-                Dialog(
+                Dialog( # actions
                     title=actionsTitle,
                     body=HSplit([
                         self.radios,
                     ], height= height),
                     width=self.smallWidth
-                ),
+                ), # battlelog 
                 Dialog(
                     title = battleLogTitle,
                     body=Label(self.battleLog),
-                    width=self.width-self.smallWidth
+                    width=self.width-self.smallWidth - statsWidth
+                ),
+                Dialog(
+                    title = self.playerName,
+                    body=Label(getStats(self.player)),
+                    width=statsWidth ,
                 ),
             ], padding=0, width = self.smallWidth, height=height+2 ),
-            VSplit([
+            # health bars #
+            VSplit([ 
                 Frame(
                     body=self.playerHPBar,
                     title=self.playerName,

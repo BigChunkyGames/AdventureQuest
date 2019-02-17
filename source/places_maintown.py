@@ -175,9 +175,9 @@ def tavern(player):
           "dank shit to do here or something.")
     while True:
         print("You have a look around to see what's up:")
-        printc("In front of you lies a pretty dope looking @'slot'@yellow@ machine")
-        printc("You could @'ask'@yellow@ the bartender for some rumors")
-        printc("It looks like one of the patrons is challenging others to a @'game'@yellow@")
+        printc("In front of you lies a pretty dope looking @'slot'@yellow@ machine.")
+        printc("You could @'ask'@yellow@ the bartender for some rumors.")
+        printc("It looks like one of the patrons is challenging others to a @'game'@yellow@.")
         printc("Or you could just @'leave'@yellow@.")
         action = getInput(player)
         if action == "slot" or action == "s":
@@ -207,8 +207,7 @@ def tavernGame(player):
              "someone willing to play a game with him.")
     show("The old pirate sitting at the table looks up at you and takes a "
          "sip out of his flask.")
-    printSlowly('"I\'ve been challenging travelers across these lands to the '
-         'game of my people for many years. You think you\'ve got what '
+    printSlowly('"I\'ve been challenging travelers across these lands to the game of my people for many years. You think you\'ve got what '
          'it takes to beat me?" ')
     if yesno(player):
         printSlowly('"Hah! Let\'s see how good you really are!')
@@ -223,8 +222,7 @@ def tavernGame(player):
         show('"Enough waiting around! Let\'s do this!"')
         while True:
             yourchoice, opchoice, outcome = RPSGame().game()
-            show("The world seems to fade away around you as the only thing "
-                "you focus on is your own hand and that of your opponent.")
+            show("The world seems to fade away around you as the only thing you focus on is your own hand and that of your opponent.")
             show("Over the rushing sound in your ears you hear the patrons of "
                 "the bar chanting, your fist hitting your open hand.")
             printSlowly('"ROCK"', pause=.1)
@@ -282,8 +280,7 @@ def store(player):
     show("You stride into the sedentary sales store supplementing the "
          "not-so-silent town of "+player.aspect['town']+", where succulent sweets and sundries "
          "are sold. ")
-    show("You approach the shopkeeper, an old and wary gentleman with age on "
-         "his face and experience in his eyes.")
+    show("You approach the shopkeeper, an old and wary gentleman with age on his face and experience in his eyes.")
     printSlowly('"What\'ll it be for ya today?"', pause=1.2)
     maintownShop(player)
     # show("You make a point of considering the shopkeeper's wares, but you're "

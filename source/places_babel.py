@@ -1,6 +1,8 @@
 from source.utils import *
 
 
+
+
 def babel(player):
     show("You stand before an immense hexagonal structure that seems to go on endlessly into the sky.")
     show("A poster on the front door advertises a poetry contest.")

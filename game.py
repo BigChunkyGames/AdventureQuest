@@ -38,7 +38,7 @@ class Game: # perhaps this is what should be saved
             #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
-            babel(self.player)
+            #babel(self.player)
             #introduction(self.player)
             #maintown(self.player)
             #bonysShop(self.player)

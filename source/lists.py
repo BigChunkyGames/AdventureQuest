@@ -142,7 +142,7 @@ COLORS = ['White', 'silver', 'grey','black','navy','blue','cerulean','sky','blue
 ### NPC's #############################################################################
 
 #(hints)
-MOTHERLYPLATITUDES = ["There's no 'I' in 'Team'!", "Everybody makes mistakes. Don't forget to save often!", "Time heals all wounds. If you're injured, find a place to sleep!", "Work smarter, not harder. A lot of times, you can just type the first letter of a choice instead of the whole word.", "Sometimes you can choose options that aren't listed, like 'back' to cancel what you're doing."]# TODO more
+MOTHERLYPLATITUDES = ["There's no 'I' in 'Team'!", "Everybody makes mistakes. Don't forget that the game saves every time you travel!", "Time heals all wounds. If you're injured, find a place to sleep!", "Work smarter, not harder. A lot of times, you can just type the first letter of a choice instead of the whole word.", "Not everything is obvious! Sometimes you can choose options that aren't listed, like 'back' to cancel what you're doing."]# TODO more
 CONVERSATION = ["Oh wow!", "That sounds incredible.", "No way!"," You are so amazing.", "I can't even believe how great that is.", "Of course!", "Tell me more!", "More!", "WHAT.", "You're fearless.", "JEALOUS!", "You didn't."]
 DOG_NOISES = ["bark", "woof", "scrrf","yarrar","boof","birf","huuurg","ruff","rough","yip","yip yip", "bark bark","gruph","bow", "bow wow", "grrrrr"]
 CURSES = ['fuck', 'shit', 'bitch', 'hoe', 'ho', 'cunt', 'wretch', 'whore', 'ass', 'dick', 'prick', 'cock', 'peener', 'vag', 'pussy', 'asshole', 'bastard', 'damn', 'bollocks', 'christ', 'hell', 'motherfucker', 'mother fucker', 'shitass', 'twat', 'jesus', 'song of a bitch', 'omg']
