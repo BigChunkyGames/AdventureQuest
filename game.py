@@ -20,7 +20,7 @@ clear()
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = False 
+        self.player.devMode = True 
 
     def getPlayer(self):
         return self.player
@@ -34,12 +34,12 @@ class Game: # perhaps this is what should be saved
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            loadGame(self.player)
+            #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
             
             #introduction(self.player)
-            maintown(self.player)
+            #maintown(self.player)
             #bonysShop(self.player)
             #maintownShop(self.player)
             #dogeTown(self.player)
