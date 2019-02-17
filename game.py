@@ -14,6 +14,7 @@ from source.combat import Combat
 from source.enemy import Enemy
 from source.SlotMachine import *
 from source.places_grandpasTrailer import grandpasTrailer
+from source.places_babel import babel
 
 clear() 
 
@@ -37,7 +38,7 @@ class Game: # perhaps this is what should be saved
             #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
-            
+            babel(self.player)
             #introduction(self.player)
             #maintown(self.player)
             #bonysShop(self.player)
