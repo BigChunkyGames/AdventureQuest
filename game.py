@@ -29,7 +29,7 @@ class Game: # perhaps this is what should be saved
     def start(self):
         if not self.player.devMode: # not dev mode
             Animation('introAnimation')
-            if newOrLoad(self.player):
+            if newOrLoad(self.player): # loads or returns true
                 self.player.charcreation() 
                 introduction(self.player)
                 maintown(self.player)

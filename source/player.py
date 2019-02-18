@@ -70,6 +70,17 @@ class Player:
         # random consumable heal scales 3 
         # random consumable xp scales 3 
 
+    def getName(self, includeClantags=True):
+        s = self.aspect['name']
+        if includeClantags:
+            for c in self.clantags:
+                s += " " + str(c)
+        else:
+            return  s
+
+
+
+
 #### inventory #########################################
 
     def getInitialItems(self):
@@ -360,7 +371,7 @@ class Player:
         sys.exit()
 
     
-    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, show=True):
+    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, showText=True):
         ''' set health to None for regen health like at end of combat'''
         if health == None:
             health = self.healthRegen
@@ -375,7 +386,7 @@ class Player:
         if returnString:
             return text
         else:
-            if show:
+            if showText:
                 show(text)
             else:
                 printc(text)

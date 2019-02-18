@@ -38,11 +38,33 @@
 # s.stopSound()
 # print("t")
 
-import os, os.path
+# import os, os.path
 
-# simple version for working with CWD
-print(len([name for name in os.listdir('.saves') if os.path.isfile(name)])
-)
-# path joining version for other paths
-DIR = '.saves'
-print (len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))]))
+# # simple version for working with CWD
+# print(len([name for name in os.listdir('.saves') if os.path.isfile(name)])
+# )
+# # path joining version for other paths
+# DIR = '.saves'
+# print (len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))]))
+
+from source.utils import *
+
+def rollNumbers(start, end, speed=1.5):
+    r = start-end # range
+    maxSpeed = .01
+    if r < 0: r *= -1
+    s = ''
+    startTime = .5
+    for t in range(r):
+        startTime /= speed
+    time = startTime
+    for c in range(r+1):
+        s = str(start - c )
+        print(s)
+        if time < maxSpeed:
+            wait(maxSpeed)
+        else:
+            wait(time)
+        time *= speed 
+
+rollNumbers(100, 3)

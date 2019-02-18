@@ -176,16 +176,16 @@ ENEMYNAMES_PLAINS = ["FaZe Fanboy", "Sonic", "Tails", "Knuckles", "Ciallou", "Cr
 'Gary "Roach" Sanderson', 'Brutus the Buckeye', "Chad", "Angry Cat" ]
 ENEMYNAMES_FOREST = ["Shrek", "Donkey", "Big Huge Rat Monster", "Forest Squidward", "Treant", "Murloc", "Huge Bear", "The SnapChat Ghost",
 "Dragonfly"  ]
-ENEMYNAMES_DESERT = ["Huge Fucking Scorpion", "Bobcat", "Agent 008"]
+ENEMYNAMES_DESERT = ["Huge-Ass Scorpion", "Bobcat", "Agent 008"]
 ENEMYNAMES_MOUNTAIN = ["Baby Dinosour", "Dwayne 'The Rock' Johnson", "Possessed Rock"]
-ENEMYNAMES_SPOOKY = ["Zombie", "Skeleton", "Ghost", "Count Spookula", "Big Spider", 'Colony of Bats', 'Floating Skull', 'Tarantula', 'Mr. Spooks', 'Spook-o-Johnson'] 
+ENEMYNAMES_SPOOKY = ["Zombie", "Skeleton", "Ghost", "Count Spookula", "Big Spider", 'Colony of Bats', 'Floating Skull', 'Tarantula', 'Mr. Spooks', 'Spook-o-Johnson', 'Scary Pumpkin'] 
 ENEMYNAMES_BIG_GUYS = ["Deadra", "Mr. Skeltal"] # FIXME not currently used
 
 
 ### biome descriptors used in map.py ##############################################################################
 
 FOREST_SYNONYMS = ["a forest", "some trees", "a woods" ,"an aesthetic arberetum of luscious shrubbery", 'a winding path through moss covered trees']
-PLAINS_SYNONYMS = ["some plains" , "a vast expanse of grass ;)", "a flowing green field", "the open expanse of nature", "an open prairie", "wide lowlands"]
+PLAINS_SYNONYMS = ["rolling hills" , "a vast expanse of grass", "a flowing green field", "the open expanse of nature", "an open prairie", "wide lowlands"]
 DESERT_SYNONYMS = ["an expanse of dunes", "a desert", "naked golden fields of sand", ]
 MOUNTAINS_SYNONYMS = ["a specious assortment of unbridled peaks", "some mountains", "shimmering peaks of aestitic rapture", "huge rocks", "just a fucking ton of huge gigantic fucking rocks"]
 TRANSIT_SYNONYMS = ["You walk past" ,"You stroll your way towards", "You thought there was nothing but when you turned around you saw", "On your left you see", "Enjoying the nice weather, you suddenly come accross", "Half asleep, you notice", "Not paying attention, you almost fail to take notice of", "You hear someone say, \"" + getMotherlyPlattitude() + "\" but when you turn around it was only" ]

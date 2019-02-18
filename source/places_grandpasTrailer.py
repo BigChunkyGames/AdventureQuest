@@ -50,7 +50,7 @@ def grandpasTrailer(player):
             printSlowly('"Damnit TROG, who\'s at the door?"', secondsBetweenChars=gspeed)
             show("From behind the robot, your grandpa steps into view.")
             show("His long grey hair and stained lab coat, stir in the breeze.")
-            printSlowly('"Oh it\'s you, ' + player.aspect['name'] + '!"', secondsBetweenChars=gspeed)
+            printSlowly('"Oh it\'s you, ' + player.getName() + '!"', secondsBetweenChars=gspeed)
             printSlowly('"I was wondering when you\'d stop by."', secondsBetweenChars=gspeed)
             printSlowly('"I see you\'ve met TROG. Little exuberant guy ain\'t he?"', secondsBetweenChars=gspeed)
             printSlowly('"Well he\'s been around here ever since I found him out in the woods and fixed em up."', secondsBetweenChars=gspeed)

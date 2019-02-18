@@ -34,9 +34,10 @@ def checkInput(inp, choice):
 
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
+    # if user types 'absolutely not' it counts as yes
     while True:
         userinput = getInput(player)
-        if 'y' in userinput:
+        if 'y' in userinput or 'sure' in userinput or 'ok' in userinput:
             return True
         elif 'n' in userinput:
             return False
@@ -272,6 +273,24 @@ def thread(targetFunction, numberOfThreads=1,): # not used
         t = threading.Thread(target=targetFunction, args=(i,))
         threads.append(t)
         t.start()
+
+def rollNumbers(start, end, speed=1.5):
+    r = start-end # range
+    maxSpeed = .01
+    if r < 0: r *= -1
+    s = ''
+    startTime = .5
+    for t in range(r):
+        startTime /= speed
+    time = startTime
+    for c in range(r+1):
+        s = str(start - c )
+        print(s)
+        if time < maxSpeed:
+            wait(maxSpeed)
+        else:
+            wait(time)
+        time *= speed 
 
 #### file management #######################################################
         
