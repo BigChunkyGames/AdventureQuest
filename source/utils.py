@@ -102,6 +102,7 @@ def show(text, dots=True):
     if dots: text='... '
     else: text = ''
     x=getpass.getpass(text) # waits for enter, doesnt show typed input becuase it's treated like a password
+    Sound('click.wav')
 
 # the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
 def wrap(text, limit=40, padding=True):
@@ -416,10 +417,11 @@ class Sound():
     # to play a sample: Sound('low piano G sharp.wav')
     # FIXME: this probably has a lot of bugs yet to be discovered
     # TODO: add channels for better handling of sounds (might not be necessary)
+    # TODO make it so you dont have to intialize the mixer each time because its slow
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
     # NOTE: make loop -1 to loop forever
     # NOTE: volume adjustments (fade in out) only work with wav files
-    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=1):
+    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0):
         if os.path.exists('source/audio/music loops/' + fileName):
             self.fileName = "source/audio/music loops/" + fileName
         elif os.path.exists('source/audio/one shots/' + fileName):

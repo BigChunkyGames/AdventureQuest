@@ -52,6 +52,8 @@ class CombatUI():
 
         self.playerGoesNext = True # by default, enemy always gets first strike
         self.playerJustDodged = False
+        self.escapeTries = 0
+        self.escapeChance = .3
         self.battleLog = '\n\n\n\n\n\n\n'
         self.maxHeightOfBattleLogWindow = 8
         self.width = 90
@@ -59,7 +61,6 @@ class CombatUI():
 
         self.selectedIndexText = ''
         self.result = None
-        self.escapeChancePercent = 20
 
         self.playerHPBar = ProgressBar()
         self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp)) 
@@ -159,11 +160,13 @@ class CombatUI():
     def tryToEscape(self, event=None):
         s = ''
         s += "You tried to run..." 
-        if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
-            s += " and escaped the combat!" # #TODO advanced combat: isnt ever visible
+        randomChance = random.uniform(0,1) - (self.escapeTries-1) *.1 # each try makes it 10 percent easier to escape after first try
+        if self.escapeChance > randomChance and self.escapeTries>0: #has to have already tried to escape once
+            s += " and escaped the combat!" # TODO advanced combat: isnt ever visible
             self.done("escaped")
         else:
             s += " but failed to escape!"
+        self.escapeTries += 1
         return s
 
     def enemyTurn(self, textOfPlayerTurn=False):
@@ -294,4 +297,3 @@ class CombatUI():
 # fix scrolling issue in battelog
 # fix color of battlelog
 # description of selection text
-# what the hell is this dumb line at the bottom of the battlelog
