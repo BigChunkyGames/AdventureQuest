@@ -18,7 +18,7 @@ from source.enemy import Enemy
 from source.SlotMachine import *
 from source.places_grandpasTrailer import grandpasTrailer
 from source.places_babel import babel
-
+import sys
 
 clear() 
 
@@ -30,7 +30,8 @@ class Game: # perhaps this is what should be saved
     def start(self):
         #os.system('mode con: cols='+WINDOW_WIDTH+' lines='+WINDOW_HEIGHT) # set dimensions of window (imported from utils)
         if not self.player.devMode: # not dev mode
-            Animation('introAnimation')
+            # FIXME animation started not wokring????????
+            #Animation('introAnimation')
             if newOrLoad(self.player): # loads or returns true
                 self.player.charcreation() 
                 introduction(self.player)
@@ -73,6 +74,8 @@ try:
     g.start()
 except Exception as e:
     if g.player.devMode:
+        print(e)
+        print('\nand the other exception text: \n')
         printException()
     else:
         bug(g.player, assertFalse=False)
@@ -82,5 +85,5 @@ except Exception as e:
 
 
 printSlowly("The End", secondsBetweenChars=.4)
-Animation('credits')
+#Animation('credits')
 

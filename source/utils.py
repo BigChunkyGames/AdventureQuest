@@ -23,8 +23,8 @@ from os import listdir
 from os.path import isfile, join
 import time, datetime
 
-WINDOW_HEIGHT = '40'
-WINDOW_WIDTH = '91'
+# WINDOW_HEIGHT = '40'
+# WINDOW_WIDTH = '91'
 
 #### user input #############################################
 
