@@ -25,6 +25,7 @@ from prompt_toolkit.formatted_text import FormattedText
 from source.lists import getRandomAttackVerb
 from source.utils import wait, wrap, Sound, getStats
 from source.inventoryUI import InventoryUI
+import threading
 
 import re
 import random
@@ -198,7 +199,11 @@ class CombatUI():
             if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!"
             else: 
                 s += " It dealt " + str(damage) + " damage!"
-            self.player.hp = self.player.hp - damage
+            # self.player.hp = self.player.hp - damage # lose health
+            t1 = threading.Thread(target=self.rollNumbers(self.player.hp, self.player.hp - damage), args=())
+            t1.start()
+            # self.rollNumbers(self.player.hp, self.player.hp - damage)
+
             if self.player.hp < 0:
                 self.player.hp = 0
             self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp))
@@ -211,6 +216,24 @@ class CombatUI():
         else:
             self.battleLog = s 
         self.refresh()
+
+    def rollNumbers(self, start, end, speed=1.5):
+        r = start-end # range
+        maxSpeed = .01
+        if r < 0: r *= -1
+        startTime = .5
+        for t in range(r):
+            startTime /= speed
+        time = startTime
+        for c in range(r+1):
+            s = int(start - c )
+            self.player.hp = s
+            self.refresh()
+            if time < maxSpeed:
+                wait(maxSpeed)
+            else:
+                wait(time)
+            time *= speed 
 
     def refresh(self):
         self.fillBattleLogWithNewlines()

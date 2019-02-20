@@ -19,15 +19,16 @@ from source.SlotMachine import *
 from source.places_grandpasTrailer import grandpasTrailer
 from source.places_babel import babel
 
-os.system('mode con: cols=100 lines=40')
+
 clear() 
 
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = True 
+        self.player.devMode = False 
 
     def start(self):
+        #os.system('mode con: cols='+WINDOW_WIDTH+' lines='+WINDOW_HEIGHT) # set dimensions of window (imported from utils)
         if not self.player.devMode: # not dev mode
             Animation('introAnimation')
             if newOrLoad(self.player): # loads or returns true
@@ -60,7 +61,7 @@ class Game: # perhaps this is what should be saved
 
             c = Combat(self.player) # jump to combat
 
-            #self.player.openInventory()
+            self.player.openInventory()
             
             #s = Slots(self.player)
             #s.slot_machine()
@@ -81,4 +82,5 @@ except Exception as e:
 
 
 printSlowly("The End", secondsBetweenChars=.4)
+Animation('credits')
 

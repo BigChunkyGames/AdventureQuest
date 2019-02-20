@@ -214,13 +214,14 @@ class InventoryUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        width = 40
-        smallerWidth = 40
-        height = 10
+        statsWidth = 20
+        largerWidth = 40
+        smallerWidth = 30
         if self.currentRadios != self.mainRadios: descriptionTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
         else: descriptionTitle = FormattedText([('#ffffff', "Description")])
         actionsTitle = FormattedText([('#ffffff', "Inventory")])
-        desc = wrap(self.description, width-2)
+        stats = FormattedText([('#ffffff', "Stats")])
+        desc = wrap(self.description, largerWidth-2)
         root_container = VSplit([
             HSplit([
                 Dialog(
@@ -235,13 +236,14 @@ class InventoryUI():
                     title = descriptionTitle,
                     body=Label(desc),
                 ),
-            ], padding=0, width = width, height= height,),
+            ], padding=0, width = largerWidth, ),
             HSplit([
                 Dialog(
-                    title = self.playerName,
+                    title = stats,
                     body=Label(getStats(self.player)),
+                    
                 ),
-            ], padding=0, width = smallerWidth, height= height,),
+            ], padding=0, width=statsWidth ),
         ])
         return root_container 
 
