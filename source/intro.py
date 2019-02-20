@@ -8,7 +8,7 @@ def introduction(player): #TODO i think we should change the intro to be less de
          "hell, we looked to the legends.")
     show("Only one true hero could save us from our seemingly "
          "inevitable fate. The legends spoke of a time long ago.")
-    print("In the " + player.aspect['adj1']+ " land of "+player.aspect['land']+" was a town named "+player.aspect['town']+'. Here resided the adventurer, '+player.aspect['name']+', a '+player.aspect['adj2']+' and '+player.aspect['adj3']+' '+player.aspect['occ']+".")
+    print("In the " + player.aspect['adj1']+ " land of "+player.aspect['land']+" was a town named "+player.aspect['town']+'. Here resided the adventurer, '+player.getName()+', a '+player.aspect['adj2']+' and '+player.aspect['adj3']+' '+player.aspect['occ']+".")
     input("... ")  # TODO: Replace "a" with "an" when needed
     print (player.aspect['HeShe'].capitalize()+" was a "+player.aspect['adj4']+" "+player.aspect['occ']+", ready to "+player.aspect['viverb']+" any evil that would dare to cross "+player.aspect['hisher']+" path.")
     input("... ")
@@ -86,7 +86,7 @@ def introduction(player): #TODO i think we should change the intro to be less de
          'rushes over you as Snoop Dogg steps into view.')
     show("\"And you know why you're here, for only you, %s, have the "
          "swagger dank enough to defeat the greatest enemy of all... "
-         "the illum-\"" % player.aspect['name'])
+         "the illum-\"" % player.getName())
     show('You wake up on the floor of the tavern covered in doritos '
          'and see the bartender standing over you. "I know what I must '
          'do," you say.')

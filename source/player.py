@@ -70,6 +70,17 @@ class Player:
         # random consumable heal scales 3 
         # random consumable xp scales 3 
 
+    def getName(self, includeClantags=True):
+        s = self.aspect['name']
+        if includeClantags:
+            for c in self.clantags:
+                s += " " + str(c)
+        else:
+            return  s
+
+
+
+
 #### inventory #########################################
 
     def getInitialItems(self):

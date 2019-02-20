@@ -35,6 +35,7 @@ from prompt_toolkit.lexers import DynamicLexer
 from prompt_toolkit.mouse_events import MouseEventType
 from prompt_toolkit.utils import get_cwidth
 from prompt_toolkit.keys import Keys
+from source.utils import wrap
 
 __all__ = [
     'TextArea',
@@ -554,7 +555,7 @@ class RadioList(object):
 
     :param values: List of (value, label) tuples.
     """
-    def __init__(self, values, weaponName):
+    def __init__(self, values, player, width):
         assert isinstance(values, list)
         assert len(values) > 0
         assert all(isinstance(i, tuple) and len(i) == 2
@@ -563,9 +564,12 @@ class RadioList(object):
         self.values = values
         self.current_value = values[0][0]
         self._selected_index = 0
-        self.weaponName = weaponName
+        self.player = player
         self.description = ''
+        self.width = width
+
         self.setDescription()
+        
 
         # Key bindings.
         kb = KeyBindings()
@@ -630,13 +634,21 @@ class RadioList(object):
     def setDescription(self):
         index = self._selected_index
         if index == 0:
-            self.description = "Attack with your " + self.weaponName 
+            self.description = "Attack with your " + self.getWeaponName() 
         elif index == 1:
             self.description = "Attempt to avoid attack"
         elif index == 2:
             self.description = "Open your inventory"
         elif index == 3:
             self.description = "Get out of here"
+        self.description = wrap(self.description, self.width-1 )
+
+    def getWeaponName(self):
+        if self.player.equippedWeapon.name != None: 
+            weaponName = self.player.equippedWeapon.name
+        else: 
+            weaponName = "Bare Hands"
+        return weaponName
 
     def _get_text_fragments(self):
         result = []

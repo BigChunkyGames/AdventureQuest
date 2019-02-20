@@ -116,10 +116,12 @@ class Item():
         self.sellValue = self.sellValue + self.player.level # TODO not sure about this
 
 def generateRandomArmourOrWeapon(player, _type='armour',rarity = None, armourSlot=None, bonus=0, extreme=False, customDescription='', prefix=True, scale=True): 
-    ''' bonus makes the weapon a lot better (or worse if neg)'''
+    ''' bonus makes the weapon a lot better (or worse if neg)
+        bonus and rarity both add points for prefix'''
     if rarity == None:
         rarity = getRarityBasedOnNumber(bonus)
-    if prefix == True: prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=bonus+2)
+    if prefix == True: 
+        prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=bonus+2 + getNumberBasedOnRarity(rarity))
     if _type == 'armour':
         if armourSlot == None: armourSlot = getRandomArmourSlot()
         damage = 0

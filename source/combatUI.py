@@ -45,19 +45,18 @@ class CombatUI():
             self.playerClans =  self.playerName = FormattedText([
                 ('#ffffff', str(player.aspect['name'])),
             ]) 
-        if self.player.equippedWeapon.name != None: self.weaponName = self.player.equippedWeapon.name
-        else: self.weaponName = "Bare Hands"
-
         self.enemy = enemy
 
         self.playerGoesNext = True # by default, enemy always gets first strike
         self.playerJustDodged = False
         self.escapeTries = 0
         self.escapeChance = .3
-        self.battleLog = '\n\n\n\n\n\n\n'
-        self.maxHeightOfBattleLogWindow = 8
-        self.width = 90
-        self.smallWidth = 30
+
+        self.battleLog = '\n\n\n\n\n\n'
+        self.maxHeightOfBattleLogWindow = 7
+        self.totalWidth = 90
+        self.actionsWidth = 30
+        self.statsWidth = 20 
 
         self.selectedIndexText = ''
         self.result = None
@@ -76,7 +75,8 @@ class CombatUI():
                 # more options could be:
                 # check - returns text about enemy potentially indicating weaknessess
             ],
-            weaponName = self.weaponName)
+            player = self.player,
+            width = self.actionsWidth)
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -101,6 +101,8 @@ class CombatUI():
             mouse_support=True,
             full_screen=True,
             )
+
+    
 
     # call this function to change the value a progress bar (prog) to a percent
     def setHealthProgressBar(self,progbar, percent):
@@ -217,7 +219,7 @@ class CombatUI():
             focused_element=self.radios)
 
     def fillBattleLogWithNewlines(self):
-        self.battleLog = wrap(self.battleLog, limit=self.width-self.smallWidth)
+        self.battleLog = wrap(self.battleLog, limit=self.totalWidth-self.actionsWidth-self.statsWidth)
         slicedBattleLog = self.battleLog.split('\n') # list of rows of the battlelog
         while True:
             if len(slicedBattleLog) < self.maxHeightOfBattleLogWindow: 
@@ -241,12 +243,14 @@ class CombatUI():
     def getRootContainer(self):
         height = self.maxHeightOfBattleLogWindow
         enemyName = self.makeFormattedText(self.enemy.name) 
-        statsWidth = 20 #TODO make fitting nicely
         battleLogTitle = FormattedText([
             ('#ffffff', "Battle Log") 
         ])
         actionsTitle = FormattedText([
             ('#ffffff', "Actions") 
+        ])
+        statsTitle = FormattedText([
+            ('#ffffff', "Stats") 
         ])
         root_container = HSplit([
             VSplit([
@@ -255,32 +259,32 @@ class CombatUI():
                     body=HSplit([
                         self.radios,
                     ], height= height),
-                    width=self.smallWidth
+                    width=self.actionsWidth
                 ), # battlelog 
                 Dialog(
                     title = battleLogTitle,
                     body=Label(self.battleLog),
-                    width=self.width-self.smallWidth - statsWidth
+                    width=self.totalWidth-self.actionsWidth - self.statsWidth
                 ),
-                Dialog(
-                    title = self.playerName,
+                Dialog( # stats
+                    title = statsTitle,
                     body=Label(getStats(self.player)),
-                    width=statsWidth ,
+                    width=self.statsWidth ,
                 ),
-            ], padding=0, width = self.smallWidth, height=height+2 ),
+            ], padding=0, width = self.actionsWidth, height=height+2 ),
             # health bars #
             VSplit([ 
                 Frame(
                     body=self.playerHPBar,
                     title=self.playerName,
-                    width=int(self.width/2)
+                    width=int(self.totalWidth/2)
                 ),
                 Frame(
                     body=self.enemyHPBar,
                     title=enemyName,
-                    width=int(self.width/2)
+                    width=int(self.totalWidth/2)
                 ), 
-            ], padding=0, width = self.width, height=height)
+            ], padding=0, width = self.totalWidth)
         ])
         return root_container
 
@@ -294,6 +298,5 @@ class CombatUI():
         get_app().exit(result=result)
  
 # STILL TODO
-# fix scrolling issue in battelog
 # fix color of battlelog
 # description of selection text
