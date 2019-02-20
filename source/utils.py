@@ -274,24 +274,6 @@ def thread(targetFunction, numberOfThreads=1,): # not used
         threads.append(t)
         t.start()
 
-def rollNumbers(start, end, speed=1.5):
-    r = start-end # range
-    maxSpeed = .01
-    if r < 0: r *= -1
-    s = ''
-    startTime = .5
-    for t in range(r):
-        startTime /= speed
-    time = startTime
-    for c in range(r+1):
-        s = str(start - c )
-        print(s)
-        if time < maxSpeed:
-            wait(maxSpeed)
-        else:
-            wait(time)
-        time *= speed 
-
 #### file management #######################################################
         
 def saveGame(player, printAboutIt=False):
@@ -498,6 +480,12 @@ class Animation():
             rows = ASCII_LOGO.splitlines()
             width = len(rows[0])
             self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
+        elif animationName == 'credits':
+            from source.credits import CREDITS
+            x = fillWithSpaces(CREDITS, 60)
+            rows = x.splitlines()
+            width = len(rows[0])
+            self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
         else:
             print("Thats not one of the animations.")
             return
@@ -541,7 +529,10 @@ class Animation():
         for rowIndex in range(0, len(rows)):
             for char in range(0,place):
                 if char < place + subtraction and char < width:
-                    s += rows[rowIndex][char] # print char in this row
+                    try:
+                        s += rows[rowIndex][char] # print char in this row
+                    except:
+                        pass
                 elif char < width -1:
                     s += self.specialChar
                 if rowIndex == len(rows)-1 and char+subtraction==width:
@@ -561,6 +552,16 @@ class Animation():
         if done: return
         self.introAnimation(rows, width, place = place + 1)
 
+def fillWithSpaces(text, length):
+    # makes white space of a multi line string up to length
+    rows = text.splitlines()
+    for r in rows:
+        r = rows[:length]
+        for c in r:
+            if len(r) < length:
+                r.append(' ')
+    return join(rows) 
+
 ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗██╗   ██╗██████╗ ███████╗
 ██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝██║   ██║██╔══██╗██╔════╝
 ███████║██║  ██║██║   ██║█████╗  ██╔██╗ ██║   ██║   ██║   ██║██████╔╝█████╗  
@@ -574,20 +575,3 @@ ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗�
             ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║                             
             ╚██████╔╝╚██████╔╝███████╗███████║   ██║                             
              ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝                             """
-
-
-
-def endDemo(player):
-    show("Suddenly you don't feel right.")
-    show("There's something wrong here.")
-    show("Wait a minute, is that...")
-    printSlowly('The end of the demo?', secondsBetweenChars=.1)
-    show("Yes.")
-    show("It is.")
-    show("You jolt upright in bed.")
-    show("Huh, what a strange dream.")
-    show("You walk down stairs and eat a piece of toast.")
-    # TODO peieo fo toasta
-    show("Deciding you better start your day, you make your way outside.")
-    from source.places_maintown import maintown
-    return maintown(player)

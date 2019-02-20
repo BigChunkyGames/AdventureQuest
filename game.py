@@ -35,6 +35,7 @@ class Game: # perhaps this is what should be saved
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            Animation('credits')
             #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
@@ -58,7 +59,7 @@ class Game: # perhaps this is what should be saved
 
             c = Combat(self.player) # jump to combat
 
-            #self.player.openInventory()
+            self.player.openInventory()
             
             #s = Slots(self.player)
             #s.slot_machine()
@@ -70,4 +71,5 @@ g = Game()
 g.start()
 
 printSlowly("The End", secondsBetweenChars=.4)
+Animation('credits')
 

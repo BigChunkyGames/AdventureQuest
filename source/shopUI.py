@@ -250,20 +250,21 @@ class ShopUI():
             return text
 
     def getShopContainer(self):
-        width = 60
-        smallerWidth = 40
+        width = 40
+        smallerWidth = 30
+        statsWidth = 20
         height = 10
         if self.playerIs == "at buy/sell menu":
             leftWindowTitle = ""
-            rightWindowTitle = self.makeFormattedText(self.name)
+            descriptionArea = self.makeFormattedText(self.name)
             desc = self.rightWindowDescription
         elif self.playerIs == "buying":
             leftWindowTitle = self.makeFormattedText(self.name)
-            rightWindowTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
+            descriptionArea = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
             desc = wrap(self.rightWindowDescription, width-2)
         elif self.playerIs == "selling":
             leftWindowTitle = self.makeFormattedText(self.player.aspect["name"])
-            rightWindowTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
+            descriptionArea = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
             desc = wrap(self.rightWindowDescription, width-2)
         root_container = VSplit([
             HSplit([
@@ -276,16 +277,16 @@ class ShopUI():
             ], padding=0, width = smallerWidth, ),
             HSplit([
                 Dialog(
-                    title = rightWindowTitle,
+                    title = descriptionArea,
                     body=Label(desc),
                 ),
             ], padding=0, width = width,),
             HSplit([
                 Dialog(
-                    title = self.playerName,
+                    title =  self.makeFormattedText("Stats"),
                     body=Label(getStats(self.player)),
                 ),
-            ], padding=0, width = smallerWidth, height= height,),
+            ], padding=0, width = statsWidth, height= height,),
         ])
         return root_container 
 
