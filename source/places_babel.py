@@ -83,7 +83,8 @@ SHARK = '''
          '`-._       ,   (((   o _,,,>
         jgs   `'""----\   ,--..--"""
                        '-' '''
-listOfRows = SHARK.splitlines()
-for i in listOfRows:
+                       
+# listOfRows = SHARK.splitlines()
+# for i in listOfRows:
 
-    printc(i)
+#     printc(i)

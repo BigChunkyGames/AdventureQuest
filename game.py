@@ -1,5 +1,8 @@
+print('loading...')
+
 import random
 from source.utils import * # import all functions from utils
+
 from source.intro import *
 from source.places_maintown import *
 from source.player import *
@@ -16,15 +19,13 @@ from source.SlotMachine import *
 from source.places_grandpasTrailer import grandpasTrailer
 from source.places_babel import babel
 
+os.system('mode con: cols=100 lines=40')
 clear() 
 
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
         self.player.devMode = True 
-
-    def getPlayer(self):
-        return self.player
 
     def start(self):
         if not self.player.devMode: # not dev mode
@@ -35,6 +36,7 @@ class Game: # perhaps this is what should be saved
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            #Sound('worry 1.mp3')
             #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
@@ -64,10 +66,19 @@ class Game: # perhaps this is what should be saved
             #s.slot_machine()
 
             world(self.player)
-        
 
 g = Game()
-g.start()
+try:
+    g.start()
+except Exception as e:
+    if g.player.devMode:
+        printException()
+    else:
+        bug(g.player, assertFalse=False)
+        printException()
+    while True: input('')
+
+
 
 printSlowly("The End", secondsBetweenChars=.4)
 

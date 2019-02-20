@@ -360,7 +360,7 @@ class Player:
         sys.exit()
 
     
-    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, show=True):
+    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, showText=True):
         ''' set health to None for regen health like at end of combat'''
         if health == None:
             health = self.healthRegen
@@ -375,7 +375,7 @@ class Player:
         if returnString:
             return text
         else:
-            if show:
+            if showText:
                 show(text)
             else:
                 printc(text)

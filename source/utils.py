@@ -102,7 +102,6 @@ def show(text, dots=True):
     if dots: text='... '
     else: text = ''
     x=getpass.getpass(text) # waits for enter, doesnt show typed input becuase it's treated like a password
-    Sound('click.wav')
 
 # the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
 def wrap(text, limit=40, padding=True):
@@ -328,7 +327,7 @@ def getNewestFile():
 
 #### dev #############################################
 
-def bug(player):
+def bug(player, assertFalse=True):
     if player.devmode:
         show("@Well you hit a bug... You should probably fix that@red@")
     else:
@@ -339,7 +338,8 @@ def bug(player):
         show("Hurry!")
         show("What is happening?! WHAT IS HAPPENING!?")
         show("NOOOOOOOOOOOOO!!!!!!!!!!!")
-        assert False
+        if assertFalse:
+            assert False
 
 def log(text = "log!", warning=False):
     if warning:
@@ -351,6 +351,15 @@ def incrementDictValue(dictionary, key):
     # will add 1 to a dictionary value or set to 1 if key not in dict
     dictionary[key] = dictionary.get(key, 0) + 1
     return dictionary[key]
+
+def printException():
+    exc_type, exc_obj, tb = sys.exc_info()
+    f = tb.tb_frame
+    lineno = tb.tb_lineno
+    filename = f.f_code.co_filename
+    linecache.checkcache(filename)
+    line = linecache.getline(filename, lineno, f.f_globals)
+    print ('EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
 
 #### random #############################################
 
@@ -419,7 +428,7 @@ class Sound():
     # TODO: add channels for better handling of sounds (might not be necessary)
     # TODO make it so you dont have to intialize the mixer each time because its slow
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
-    # NOTE: make loop -1 to loop forever
+    # NOTE: make loop -1 to loop forever, loop 0 to loop once
     # NOTE: volume adjustments (fade in out) only work with wav files
     def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0):
         if os.path.exists('source/audio/music loops/' + fileName):
@@ -427,7 +436,8 @@ class Sound():
         elif os.path.exists('source/audio/one shots/' + fileName):
             self.fileName = "source/audio/one shots/" + fileName
         else:
-            print("(couldn't find sound file: " + self.fileName + ")")
+            print("(couldn't find sound file: " + fileName + ")")
+            input('halt')
         self.loop = loop
         # initialize
         self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
@@ -445,7 +455,7 @@ class Sound():
                 if playNow:
                     self.mixer.music.play(self.loop)
         except:
-            print("(couldn't load sound file: " + self.fileName + ")")
+            print("Couldn't load " + fileName)
 
     def getLength(self): # returns duration of wav file in seconds
         import wave

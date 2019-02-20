@@ -32,7 +32,7 @@ import random
 class CombatUI():
 
     def __init__(self, player, enemy, song='worry 1.mp3'):
-        self.song = Sound(song, loop=-1)
+        self.song = Sound(fileName = song, loop=-1)
         self.player = player
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
