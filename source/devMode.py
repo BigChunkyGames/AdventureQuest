@@ -56,17 +56,20 @@ def devMode(player):
     i = generateRandomArmourOrWeapon(player, _type='weapon', rarity='legendary')
     player.inventory.append(i)
     
-    i1 = Item(player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5, consumable=Consumable(player, heal=3))
+    player.inventory.append(Item(player, 'Tea', customDescription="Andy Worm Poet gave you this cup of tea. It's still warm and smells delicious.", _type='consumable', sellValue=5, consumable=Consumable(player, heal=3)))
 
-    player.inventory.append(generateRandomConsumable(player))
-    player.inventory.append(generateRandomConsumable(player))
-    player.inventory.append(generateRandomConsumable(player))
-    player.inventory.append(generateRandomConsumable(player))
-    player.inventory.append(generateRandomConsumable(player))
-    player.inventory.append(generateRandomConsumable(player))
-
-    
+    for i in range(50):
+        player.inventory.append(generateRandomConsumable(player))
 
 
 
+
+
+
+
+
+
+
+
+        
     return

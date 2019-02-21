@@ -120,9 +120,13 @@ def getRandomFinalThought():
 def getRandomColor():
     return getRandomIndex(COLORS)
 
-def getRandomConsumableName():
-    return getRandomIndex(CONSUMABLE)
-
+def getRandomConsumableName(consumableType='heal'):
+    if consumableType == 'heal':
+        return getRandomIndex(HEALING_CONSUMABLES)
+    elif consumableType == 'damage':
+        return getRandomIndex(DAMAGING_CONSUMABLES)
+    elif consumableType == 'xp':
+        return getRandomIndex(EXPERIENCE_CONSUMABLES)
 
 # these are constants. thats why they're all caps
 ### misc ##############################################################################

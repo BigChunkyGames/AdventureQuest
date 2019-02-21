@@ -39,7 +39,7 @@ class Game: # perhaps this is what should be saved
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            pod(self.player)
+            #pod(self.player)
             #Sound('worry 1.mp3')
             #loadGame(self.player)
             #grandpasTrailer(self.player)
@@ -62,7 +62,7 @@ class Game: # perhaps this is what should be saved
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            c = Combat(self.player) # jump to combat
+            #c = Combat(self.player) # jump to combat
 
             self.player.openInventory()
             
@@ -72,17 +72,17 @@ class Game: # perhaps this is what should be saved
             world(self.player)
 
 g = Game()
-try:
-    g.start()
-except Exception as e:
-    if g.player.devMode:
-        print(e)
-        print('\nand the other exception text: \n')
-        #printException()
-    else:
-        bug(g.player, assertFalse=False)
-        #printException()
-    while True: input('')
+# try:
+g.start()
+# except Exception as e:
+#     if g.player.devMode:
+#         print(e)
+#         print('\nand the other exception text: \n')
+#         printException()
+#     else:
+#         bug(g.player, assertFalse=False)
+#         printException()
+#     while True: input('')
 
 
 

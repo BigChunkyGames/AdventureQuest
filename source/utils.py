@@ -22,6 +22,9 @@ import pygame.mixer
 from os import listdir
 from os.path import isfile, join
 import time, datetime
+from prompt_toolkit.formatted_text import FormattedText
+import linecache
+
 
 WINDOW_HEIGHT = '40'
 WINDOW_WIDTH = '91'
@@ -426,6 +429,31 @@ def openInventoryFromCombat(combatUI, inventoryUI):
     combatUI.done('inventory')
     inventoryUI.run()
     combatUI.run()
+
+def colorItem(item, useGetName=False): # also colors consumables, returns name
+    if useGetName: name = item.getName()
+    else: name = item.name
+    if item.type == 'consumable' and item.consumable != None:
+        if item.consumable.consumableType == 'xp':
+            color = '#99ff66' # yellow
+        elif item.consumable.consumableType == 'heal':
+            color = '#1FDE43' # green
+        elif item.consumable.consumableType == 'damage':
+            color = '#DE3A1F' # red
+    elif item.rarity == "None" or item.rarity == None or item.rarity == "common":
+        color = '#ffffff' # white
+    elif item.rarity == "rare":
+        color = '#0066ff' # blue
+    elif item.rarity == 'epic':
+        color = '#cc3300' # orange
+    elif item.rarity == 'legendary':
+        color = '#9900cc' # magenta
+    return makeFormattedText(name, color=color)
+
+def makeFormattedText(text, color='#ffffff'):
+    return FormattedText([
+        (color, str(text) )# this shit is shit
+    ])
 
 #### sounds #####################################################
 
