@@ -19,13 +19,14 @@ from source.SlotMachine import *
 from source.places_grandpasTrailer import grandpasTrailer
 from source.places_babel import babel
 import sys
+from source.places_pod import pod
 
 clear() 
 
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = False 
+        self.player.devMode = True 
 
     def start(self):
         #os.system('mode con: cols='+WINDOW_WIDTH+' lines='+WINDOW_HEIGHT) # set dimensions of window (imported from utils)
@@ -38,6 +39,7 @@ class Game: # perhaps this is what should be saved
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            pod(self.player)
             #Sound('worry 1.mp3')
             #loadGame(self.player)
             #grandpasTrailer(self.player)
@@ -76,10 +78,10 @@ except Exception as e:
     if g.player.devMode:
         print(e)
         print('\nand the other exception text: \n')
-        printException()
+        #printException()
     else:
         bug(g.player, assertFalse=False)
-        printException()
+        #printException()
     while True: input('')
 
 

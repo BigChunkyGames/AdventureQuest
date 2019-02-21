@@ -232,6 +232,7 @@ def generateRandomConsumable(player, name = None, customDescription='', consumab
     # returns an item of type consumable or just a consumable object if returnItem is false (in which case name and description are not used)
     # can pass a consumable object to add random effects to it (this functino wont change consume text or karma)
     # powerLevel can be negative, but values less than 3 can hurt you
+    #
     if consumable:
         c = consumable
     else:
@@ -247,7 +248,7 @@ def generateRandomConsumable(player, name = None, customDescription='', consumab
             c.xpgain += player.scale(3+powerLevel+aLittleBit)
 
     if name == None: 
-        name = getRandomConsumableName()       
+        name = getRandomConsumableName() # TODO get type of consumable       
     if returnItem:
         return Item(player, name, customDescription=customDescription, _type='consumable', consumable=c)
     else:

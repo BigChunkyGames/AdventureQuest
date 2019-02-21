@@ -23,8 +23,8 @@ from os import listdir
 from os.path import isfile, join
 import time, datetime
 
-# WINDOW_HEIGHT = '40'
-# WINDOW_WIDTH = '91'
+WINDOW_HEIGHT = '40'
+WINDOW_WIDTH = '91'
 
 #### user input #############################################
 
@@ -147,6 +147,8 @@ def printWithColor(text, color, before="", after="", more=False):
         s +=  '<ansimagenta>' + text + '</ansimagenta>'
     elif color == "cyan":
         s +=  '<ansicyan>' + text + '</ansicyan>'
+    elif color == 'gray':
+        s += '<ansigray>' + text + '</ansigray>'
     else:
         s +=  '<ansiwhite>' + text + '</ansiwhite>'
     s += after

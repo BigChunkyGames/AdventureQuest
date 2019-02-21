@@ -47,24 +47,81 @@
 # DIR = '.saves'
 # print (len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))]))
 
+# from source.utils import *
+
+# def rollNumbers(start, end, speed=1.5):
+#     r = start-end # range
+#     maxSpeed = .01
+#     if r < 0: r *= -1
+#     s = ''
+#     startTime = .5
+#     for t in range(r):
+#         startTime /= speed
+#     time = startTime
+#     for c in range(r+1):
+#         s = str(start - c )
+#         print(s)
+#         if time < maxSpeed:
+#             wait(maxSpeed)
+#         else:
+#             wait(time)
+#         time *= speed 
+
+# rollNumbers(100, 3)
+
+
+
+
+
+
+
+
+
+
+
 from source.utils import *
+import random
+LISTOFANSWERS = [
+    'What the fuck why would you ask me that.',
+    "I can't tell if you're joking or if you're serious.",
+    "Yeah. Sure.",
+    "Absolutely not.",
+    "Yes. It is destined to be so.",
+    "Sometimes.",
+    "I wouldn't count on it.",
+    "Probably!",
+    "It could be so.",
+    "You'll know soon enough.",
+    "Not sure."
+]
+def punchJacksonInTheFace(stealth=True):
+    clear()
+    x = input("Ask me a question: ")
+    printSlowly(LISTOFANSWERS[random.randint(0,len(LISTOFANSWERS))])
 
-def rollNumbers(start, end, speed=1.5):
-    r = start-end # range
-    maxSpeed = .01
-    if r < 0: r *= -1
-    s = ''
-    startTime = .5
-    for t in range(r):
-        startTime /= speed
-    time = startTime
-    for c in range(r+1):
-        s = str(start - c )
-        print(s)
-        if time < maxSpeed:
-            wait(maxSpeed)
-        else:
-            wait(time)
-        time *= speed 
+while True: punchJacksonInTheFace()
 
-rollNumbers(100, 3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
