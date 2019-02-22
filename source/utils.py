@@ -85,8 +85,13 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
         #     saveGame(player)
         elif inp == "load":
             loadGame(player)
+        elif inp == 'quit':
+            print("Are you sure you would like to quit?")
+            if yesno(player):
+                print("Bye!")
+                sys.exit()
         elif inp == '':
-            continue
+            continue # prevents no input from being accepted
         else:
             return inp
         if oneTry:

@@ -26,13 +26,13 @@ clear()
 class Game: # perhaps this is what should be saved
     def __init__(self):
         self.player= Player()
-        self.player.devMode = True 
+        self.player.devMode = False 
 
     def start(self):
         #os.system('mode con: cols='+WINDOW_WIDTH+' lines='+WINDOW_HEIGHT) # set dimensions of window (imported from utils)
         if not self.player.devMode: # not dev mode
             # FIXME animation started not wokring????????
-            #Animation('introAnimation')
+            Animation('introAnimation')
             if newOrLoad(self.player): # loads or returns true
                 self.player.charcreation() 
                 introduction(self.player)
