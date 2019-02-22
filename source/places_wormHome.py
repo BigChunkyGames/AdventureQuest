@@ -5,7 +5,7 @@ from source.item import Item, Consumable
 
 def wormHome(player):
 
-    if "owns worm home" in player.choices:
+    if "owns worm home" in player.history:
         print("There are a few things to do inside of the quaint worm abode.")
         while(True):
             printc("There is a @'Worm TV'@yellow@ at the other end of the room.")
@@ -26,7 +26,7 @@ def wormHome(player):
                 show("But it is lost forever.")
             elif checkInput(x, 'bed'):
                 show("You continue into the next room.")
-                if "killed angry worm poet" in player.choices:
+                if "killed angry worm poet" in player.history:
                     show("It used to be Angry Worm Poet's bedroom.")
                 else:
                     show("It used to be Andy Worm Poet's bedroom.")

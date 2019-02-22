@@ -34,7 +34,7 @@ def flowers(player):
                 else:
                     show("You continue waiting.")
                     printSlowly(s, secondsBetweenChars=.5, pause=0, skipable=False, quotes=False)
-                    player.choices.append("waited for flowers")
+                    player.history.append("waited for flowers")
                     show("The flowers, appreciating your patience, slowly part, revealing a path.")
                     show("You continue to the end of the field.")
                     break
@@ -77,12 +77,12 @@ def flowers(player):
                 clear()
                 if c.result == 'win':
                     player.karma = player.karma - 3
-                    player.choices.append("killed angry worm poet")
+                    player.history.append("killed angry worm poet")
 
                     show("Angry Worm Poet is smashed into the dust and drops the deed to Worm Home. ")
                     description = "Tiny tattered legal document. It says:\nWhomst ever holds    this deed has rightful ownshership over 'Worm Home'."
                     i = Item(player, "Deed to 'Worm Home'", customDescription=description,      _type='Quest', )
-                    player.choices.append("owns worm home")
+                    player.history.append("owns worm home")
                     player.addToInventory(i) # FIXME inventory
                     print("Enter Worm Home?")
                     if yesno(player):
@@ -175,9 +175,9 @@ def flowers(player):
                 print("If you liked his poem, just tell him.")
 
     else: # youve already been to flowers
-        if 'attacked flowers' in player.choices:
+        if 'attacked flowers' in player.history:
             show("You come to a field of destoyed and uprooted flowers and find Worm Home.")
-        elif 'waited for flowers' in player.choices:
+        elif 'waited for flowers' in player.history:
             show("You come to a field of flowers that part away from you wherever you walk and find Worm Home.")
         else:
             bug(player)
@@ -212,7 +212,7 @@ def attackFlowers(player):
     ])
     c = Combat(player, alert=False, enemy=e)
     if c.result == 'win':
-        player.choices.append("attacked flowers")
+        player.history.append("attacked flowers")
         player.map.getTile(8,5).description = "a field of destoyed flowers."
         clear()
         show("Having just ripped all of the flowers from the ground, you finally make it to the other side of the field.")

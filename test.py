@@ -1,3 +1,5 @@
+#!/usr/bin/env LC_ALL=en_US.UTF-8 /usr/local/bin/python3
+
 # import os
 # from source.utils import wait
 # os.system("start G:/Code/AdventureQuest/source/audio/paper.wav")
@@ -79,29 +81,38 @@
 
 
 
-from source.utils import *
-import random
-LISTOFANSWERS = [
-    'What the fuck why would you ask me that.',
-    "I can't tell if you're joking or if you're serious.",
-    "Yeah. Sure.",
-    "Absolutely not.",
-    "Yes. It is destined to be so.",
-    "Sometimes.",
-    "I wouldn't count on it.",
-    "Probably!",
-    "It could be so.",
-    "You'll know soon enough.",
-    "Not sure."
-]
-def punchJacksonInTheFace(stealth=True):
-    clear()
-    x = input("Ask me a question: ")
-    printSlowly(LISTOFANSWERS[random.randint(0,len(LISTOFANSWERS))])
+# from source.utils import *
+# import random
+# LISTOFANSWERS = [
+#     'What the fuck why would you ask me that.',
+#     "I can't tell if you're joking or if you're serious.",
+#     "Yeah. Sure.",
+#     "Absolutely not.",
+#     "Yes. It is destined to be so.",
+#     "Sometimes.",
+#     "I wouldn't count on it.",
+#     "Probably!",
+#     "It could be so.",
+#     "You'll know soon enough.",
+#     "Not sure."
+# ]
+# def punchJacksonInTheFace(stealth=True):
+#     clear()
+#     x = input("Ask me a question: ")
+#     printSlowly(LISTOFANSWERS[random.randint(0,len(LISTOFANSWERS))])
 
-while True: punchJacksonInTheFace()
+# while True: punchJacksonInTheFace()
+from __future__ import unicode_literals
+import unicodedata
+s=''
+# s = str(s)
+print('aaaàçççñññ'.decode('unicode-escape'))
 
+# s = unicodedata.normalize('NFKD', s).encode('ascii','ignore')
 
+# print(s)
+
+# print(u'█'.encode('utf-8'))
 
 
 

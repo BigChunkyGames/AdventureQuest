@@ -28,11 +28,11 @@ def find_data_files(source,target,patterns):
 
 setup(
     name='AdventureQuest',
-    console=['game.py'],
+    console=['AdventureQuest.py'],
     data_files=find_data_files(
         'source',
         'source',
-        ['README','audio/music loops/*', 'audio/one shots/*'
+        ['README','audio/music loops/*', 'audio/one shots/*', 
     ]),
     options={
         "py2exe":{

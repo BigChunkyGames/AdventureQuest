@@ -78,7 +78,11 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
             print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
             print("% )")
         elif inp == "inv" or inp == "inventory":
-            player.openInventory()
+            if 'learned inventory' in player.history:
+                player.openInventory()
+            else:
+                print("Don't get ahead of yourself!")
+                continue
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         # elif inp == "save":
@@ -218,7 +222,7 @@ def formatText(text, format):
 # formatText("hidden", "hidden") # still visible
     
 class printSlowly():
-    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True):
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True,):
         # .03 is a pretty good talking speed
         # you no longer need to have parenthesis around dialogue when addparanthesis=true
         self.text = text
@@ -294,7 +298,7 @@ def saveGame(player, printAboutIt=False):
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
     try:
-        with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
+        with open(player.stats['saveDirectory']+"/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
             pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
         if printAboutIt:
             printc("@Game "+saveIndex+" saved!@green@")
@@ -303,12 +307,12 @@ def saveGame(player, printAboutIt=False):
     
 
 def loadGame(player): # loads most recent save file
-    newestFile = getNewestFile()
+    newestFile = getNewestFile(player)
     if newestFile==None:
         show("There are no saved games yet! You need to go somewhere first!")
         return
     try: # try to load newest save file
-        with open('saves/' + newestFile, "rb") as loading:
+        with open(player.stats['saveDirectory'] +'/'+ newestFile, "rb") as loading:
             player = pickle.load(loading)
     except FileNotFoundError:
         printc("@Couldn't find any files to load!@red@")
@@ -319,11 +323,15 @@ def loadGame(player): # loads most recent save file
 def newOrLoad(player):
     # returns false if loaded a game
     while True:
-        saves = os.listdir('saves')
+        try:
+            saves = os.listdir(player.stats['saveDirectory'])
+        except:
+            print("Couldn't find the saves folder D:")
+            return True # new game
         if len(saves) == 0:
             return True # (if there are no saves, new game)
         printc("@'New'@yellow@ game or @'continue'@yellow@ game?")
-        x = input('> ').lower()
+        x = getInput(player)
         if 'new' in x or checkInput(x, 'new'):
             return True
         elif 'load' in x or 'continue' in x or checkInput(x, 'load') or checkInput(x, 'continue'):
@@ -334,11 +342,24 @@ def generateTimeStamp():
     ts = time.time()
     return datetime.datetime.fromtimestamp(ts).strftime('_%Y-%m-%d_%H-%M-%S')
 
-def getNewestFile():
-    files = os.listdir('saves')
+def getNewestFile(player):
+    files = os.listdir(player.stats['saveDirectory'])
     if len(files)>0:
-        return max(os.listdir('saves'), key=lambda f: os.path.getctime("{}/{}".format('saves', f)))
+        return max(files, key=lambda f: os.path.getctime("{}/{}".format(player.stats['saveDirectory'], f)))
     return None
+
+def handleFolderLocations(player):
+    try:
+        files = os.listdir('saves')
+        player.stats['saveDirectory'] = 'saves'
+    except:
+        try: 
+            files = os.listdir('dist/saves')
+            player.stats['saveDirectory'] = 'dist/saves'
+        except:
+            print("Couldn't find save folder D:")
+
+    #try:
 
 #### dev #############################################
 
@@ -471,10 +492,14 @@ class Sound():
     # NOTE: make loop -1 to loop forever, loop 0 to loop once
     # NOTE: volume adjustments (fade in out) only work with wav files
     def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0):
-        if os.path.exists('source/audio/music loops/' + fileName):
-            self.fileName = "source/audio/music loops/" + fileName
-        elif os.path.exists('source/audio/one shots/' + fileName):
-            self.fileName = "source/audio/one shots/" + fileName
+        if os.path.exists('dist/audio/music loops/' + fileName):
+            self.fileName = "dist/audio/music loops/" + fileName
+        elif os.path.exists('dist/audio/one shots/' + fileName):
+            self.fileName = "dist/audio/one shots/" + fileName
+        elif os.path.exists('audio/music loops/' + fileName):
+            self.fileName = "audio/music loops/" + fileName
+        elif os.path.exists('audio/one shots/' + fileName):
+            self.fileName = "audio/one shots/" + fileName
         else:
             print("(couldn't find sound file: " + fileName + ")")
             input('halt')
@@ -528,6 +553,8 @@ class Animation():
         try:
             if animationName == 'introAnimation':
                 rows = ASCII_LOGO.splitlines()
+                # for r in rows:
+                #     r = r.decode('unicode-escape')
                 width = len(rows[0])
                 self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
             elif animationName == 'credits':
@@ -582,7 +609,7 @@ class Animation():
             for char in range(0,place):
                 if char < place + subtraction and char < width:
                     try:
-                        s += rows[rowIndex][char] # print char in this row
+                        s += rows[rowIndex][char].decode('unicode-escape') # print char in this row
                     except:
                         pass
                 elif char < width -1:
@@ -596,10 +623,10 @@ class Animation():
         # sys.stdout.flush()
         if self.smash:
             sys.stdout.write("\033["+str(len(rows))+"A")
-            print(s)
         else:
             sys.stdout.write("\033["+str(len(rows)+1)+"A")
-            print(s)
+        print(s)
+        #print(s.decode('unicode-escape'))#.encode('utf-8'))
         wait(.05)
         if done: return
         self.introAnimation(rows, width, place = place + 1)
