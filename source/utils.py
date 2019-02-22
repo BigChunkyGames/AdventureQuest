@@ -78,11 +78,8 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
             print(str(int(round(float(player.hp)/float(player.maxhp), 2) * 100))),
             print("% )")
         elif inp == "inv" or inp == "inventory":
-            if 'learned inventory' in player.history:
-                player.openInventory()
-            else:
-                print("Don't get ahead of yourself!")
-                continue
+            player.openInventory()
+            continue
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         # elif inp == "save":
@@ -293,17 +290,25 @@ def thread(targetFunction, numberOfThreads=1,): # not used
 
 #### file management #######################################################
         
-def saveGame(player, printAboutIt=False):
+def saveGame(player, printAboutIt=False): # just do yourself a favor and don't look at this disgusting code
     # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
     try:
         with open(player.stats['saveDirectory']+"/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
             pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
-        if printAboutIt:
-            printc("@Game "+saveIndex+" saved!@green@")
-    except:
-        printc("@(The game should have saved right there but it didn't D: )@red@")
+    except Exception as e:
+        try:
+            with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
+                pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+        except Exception as e2:
+            printc("@(The game should have saved right there but it didn't D: )@red@")
+            print(e)
+            print(e2)
+            return
+
+    if printAboutIt:
+        printc("@Game "+saveIndex+" saved!@green@")
     
 
 def loadGame(player): # loads most recent save file

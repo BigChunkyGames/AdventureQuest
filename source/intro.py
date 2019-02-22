@@ -155,7 +155,6 @@ def introduction(player):
         x = input('> ').lower()
         if x == 'inventory' or x == 'inv':
             player.openInventory() # doing this manually so that usually opening inventory doesnt count as an input
-            player.history.append('learned inventory')
             break
         else:
             printc("Come on now, you can just type @'inv'@yellow@ if you can't handle big words like @'inventory'@yellow@.") 
