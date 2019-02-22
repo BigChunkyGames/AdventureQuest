@@ -22,7 +22,7 @@ from prompt_toolkit.layout.margins import ScrollbarMargin, NumberedMargin
 from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
-from source.utils import wait, wrap, getStats
+from source.utils import wait, wrap, getStats, makeFormattedText, colorItem
 import random
 
 class InventoryUI():
@@ -96,9 +96,18 @@ class InventoryUI():
             self.updateListOfItems()
             self.makeListCurrentRadios(self.listOfItems) 
         elif self.currentRadios == self.selectedRadios: # if not on main page
-            if self.listOfItems[self.currentRadios._selected_index].type == "consumable":
+            currentItem = self.listOfItems[self.currentRadios._selected_index]
+            if currentItem.type == "consumable":
+                if currentItem.consumable.consumableType == 'xp':
+                    description = 'Eat it?'
+                elif currentItem.consumable.consumableType == 'damage':
+                    description = 'Throw it?'
+                elif currentItem.consumable.consumableType == 'heal':
+                    description = 'Eat it?'
+                else:
+                    description = 'Crash the game?' # shouldnt ever see
                 self.requestingConfirmation = True
-                self.refresh(setDescription="Eat it?")
+                self.refresh(setDescription=description)
                 return
             self.player.activateItem(self.listOfItems[self.currentRadios._selected_index]) # can delete items
             self.makeListCurrentRadios(self.listOfItems,self.selectedRadios._selected_index) 
@@ -144,10 +153,10 @@ class InventoryUI():
         if len(listt) == 0:
             return [] # should never see this
         newlist=[]
-        for i in range(len(listt)):
+        for i in listt:
             l = []
-            l.append(self.unicodify(listt[i].description))
-            l.append(self.unicodify(self.colorBasedOnRarity(listt[i], useGetName=True))) # colors
+            l.append(self.unicodify(i.description))
+            l.append(self.unicodify(colorItem(i, useGetName=True))) # colors
             newlist.append( tuple(l) )
         return newlist
 
@@ -183,26 +192,6 @@ class InventoryUI():
             else: tup.append(category.capitalize())
             self.mainRadiosRows.append( tuple(tup) )
 
-    def makeFormattedText(self, text, color='#ffffff'): 
-        return FormattedText([
-            (color, str(text))
-        ])
-
-    def colorBasedOnRarity(self, item, useGetName=False): # also colors consumables 
-        if useGetName: name = item.getName()
-        else: name = item.name
-        if item.type == 'consumable':
-            color = '#99ff66'
-        elif item.rarity == "None" or item.rarity == None or item.rarity == "common":
-            color = '#ffffff'
-        elif item.rarity == "rare":
-            color = '#0066ff' # blue
-        elif item.rarity == 'epic':
-            color = '#cc3300' # orange
-        elif item.rarity == 'legendary':
-            color = '#9900cc'
-        return self.makeFormattedText(name, color=color)
-
     def unicodify(self, text):
         if isinstance(text, str):
             return str(text)
@@ -214,13 +203,14 @@ class InventoryUI():
 
     # returns new root container (updates text and stuff)
     def getRootContainer(self):
-        width = 40
-        smallerWidth = 40
-        height = 10
-        if self.currentRadios != self.mainRadios: descriptionTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
+        statsWidth = 20
+        largerWidth = 40
+        smallerWidth = 30
+        if self.currentRadios != self.mainRadios: descriptionTitle = colorItem(self.getCurrentlySelectedItem())
         else: descriptionTitle = FormattedText([('#ffffff', "Description")])
         actionsTitle = FormattedText([('#ffffff', "Inventory")])
-        desc = wrap(self.description, width-2)
+        stats = FormattedText([('#ffffff', "Stats")])
+        desc = wrap(self.description, largerWidth-2)
         root_container = VSplit([
             HSplit([
                 Dialog(
@@ -235,13 +225,14 @@ class InventoryUI():
                     title = descriptionTitle,
                     body=Label(desc),
                 ),
-            ], padding=0, width = width, height= height,),
+            ], padding=0, width = largerWidth, ),
             HSplit([
                 Dialog(
-                    title = self.playerName,
+                    title = stats,
                     body=Label(getStats(self.player)),
+                    
                 ),
-            ], padding=0, width = smallerWidth, height= height,),
+            ], padding=0, width=statsWidth ),
         ])
         return root_container 
 

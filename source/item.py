@@ -116,10 +116,12 @@ class Item():
         self.sellValue = self.sellValue + self.player.level # TODO not sure about this
 
 def generateRandomArmourOrWeapon(player, _type='armour',rarity = None, armourSlot=None, bonus=0, extreme=False, customDescription='', prefix=True, scale=True): 
-    ''' bonus makes the weapon a lot better (or worse if neg)'''
+    ''' bonus makes the weapon a lot better (or worse if neg)
+        bonus and rarity both add points for prefix'''
     if rarity == None:
         rarity = getRarityBasedOnNumber(bonus)
-    if prefix == True: prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=bonus+2)
+    if prefix == True: 
+        prefix = generatePrefix(player, _type=_type ,prefixLevelOutOf5=bonus+2 + getNumberBasedOnRarity(rarity))
     if _type == 'armour':
         if armourSlot == None: armourSlot = getRandomArmourSlot()
         damage = 0
@@ -185,8 +187,9 @@ def tryForDrop(percent):
         return False
 
 class Consumable():
-    def __init__ (self, player, consumeText=None, heal=0, xpgain=0, dealDamage=0, karma=0, scale=True):
+    def __init__ (self, player, consumableType='heal', consumeText=None, heal=0, xpgain=0, dealDamage=0, karma=0, scale=True):
         self.player =  player
+        self.consumableType = consumableType
         self.consumeText=consumeText
         self.heal = heal
         self.xpgain = xpgain
@@ -205,7 +208,9 @@ def consume(item): # for consuming consumables
     text=''
     if item.type=='consumable' and item.consumable != None:
         if item.consumable.consumeText == None:
-            text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
+            if item.consumable.consumableType == 'xp' or item.consumable.consumableType == 'heal': verb = 'ate'
+            else: verb = 'threw'
+            text += "You "+verb+" the " + str(item.name) + ".\n It was delicious.\n"
         else:
             text += item.consumable.consumeText + '\n' 
         if item.consumable.heal != 0:
@@ -222,32 +227,41 @@ def consume(item): # for consuming consumables
 
         item.player.inventory.remove(item)
     else:
-        text = "You can't eat that!"
+        text = "You can't use that!"
     return text
     # TODO damage
 
-def generateRandomConsumable(player, name = None, customDescription='', consumable=None, powerLevel=0, returnItem=True):
+def generateRandomConsumable(player, name = None, consumableType=None, customDescription='', consumable=None, powerLevel=0, returnItem=True):
     # returns an item of type consumable or just a consumable object if returnItem is false (in which case name and description are not used)
     # can pass a consumable object to add random effects to it (this functino wont change consume text or karma)
     # powerLevel can be negative, but values less than 3 can hurt you
+    # consumable types: damage, heal, xp
     if consumable:
         c = consumable
     else:
-        c = Consumable(player)
+        if consumableType == None:
+            r = random.randint(1,3)
+            if r == 1:
+                consumableType = 'xp'
+            elif r == 2:
+                consumableType = 'heal'
+            elif r == 3:
+                consumableType = 'damage' 
+        c = Consumable(player, consumableType)
     for i in range(powerLevel+1):
-        randomNumber = random.randint(0,10)
         aLittleBit = random.uniform(0, 1)
-        if randomNumber <= 5:
-            c.heal += player.scale(3+powerLevel+aLittleBit)
-        elif randomNumber <= 8:
-            c.dealDamage += player.scale(3+powerLevel+aLittleBit) # TODO advanced combat, SCALING
-        elif randomNumber >8:
-            c.xpgain += player.scale(3+powerLevel+aLittleBit)
+        if consumableType == 'heal':
+            c.heal += player.scale(1+powerLevel+aLittleBit)
+        elif consumableType == 'damage':
+            c.dealDamage += player.scale(1+powerLevel+aLittleBit) # TODO advanced combat, SCALING
+        elif consumableType == 'xp':
+            c.xpgain += player.scale(1+powerLevel+aLittleBit)
 
     if name == None: 
-        name = getRandomConsumableName()       
+        name = getRandomConsumableName(consumableType)     
     if returnItem:
         return Item(player, name, customDescription=customDescription, _type='consumable', consumable=c)
     else:
         return c
     
+# TODO make it so you cant use damage consumables outside of comabt

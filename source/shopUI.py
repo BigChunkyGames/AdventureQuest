@@ -23,7 +23,7 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait, wrap, log, getStats
+from source.utils import wait, wrap, log, getStats, makeFormattedText, colorItem
 import random
 
 class ShopUI():
@@ -192,29 +192,13 @@ class ShopUI():
         for i in range(len(listt)):
             l = []
             l.append(self.unicodify(listt[i].description))
-            l.append(self.unicodify(self.colorBasedOnRarity(listt[i], useGetName=True))) # colors
+            l.append(self.unicodify(colorItem(listt[i], useGetName=True))) # colors
             newlist.append( tuple(l) )
         return newlist
 
-    def makeFormattedText(self, text, color='#ffffff'):
-        return FormattedText([
-            (color, str(text) )# this shit is shit
-        ])
+    
         
-    def colorBasedOnRarity(self, item, useGetName=False): # also colors consumables, returns name
-        if useGetName: name = item.getName()
-        else: name = item.name
-        if item.type == 'consumable':
-            color = '#99ff66'
-        elif item.rarity == "None" or item.rarity == None or item.rarity == "common":
-            color = '#ffffff'
-        elif item.rarity == "rare":
-            color = '#0066ff' # blue
-        elif item.rarity == 'epic':
-            color = '#cc3300' # orange
-        elif item.rarity == 'legendary':
-            color = '#9900cc'
-        return self.makeFormattedText(name, color=color)
+    
 
     def refresh(self, setDescription=False):
         index = self.currentRadios._selected_index
@@ -250,20 +234,21 @@ class ShopUI():
             return text
 
     def getShopContainer(self):
-        width = 60
-        smallerWidth = 40
+        width = 40
+        smallerWidth = 30
+        statsWidth = 20
         height = 10
         if self.playerIs == "at buy/sell menu":
             leftWindowTitle = ""
-            rightWindowTitle = self.makeFormattedText(self.name)
+            descriptionArea =makeFormattedText(self.name)
             desc = self.rightWindowDescription
         elif self.playerIs == "buying":
-            leftWindowTitle = self.makeFormattedText(self.name)
-            rightWindowTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
+            leftWindowTitle = makeFormattedText(self.name)
+            descriptionArea = colorItem(self.getCurrentlySelectedItem())
             desc = wrap(self.rightWindowDescription, width-2)
         elif self.playerIs == "selling":
-            leftWindowTitle = self.makeFormattedText(self.player.aspect["name"])
-            rightWindowTitle = self.colorBasedOnRarity(self.getCurrentlySelectedItem())
+            leftWindowTitle = makeFormattedText(self.player.aspect["name"])
+            descriptionArea = colorItem(self.getCurrentlySelectedItem())
             desc = wrap(self.rightWindowDescription, width-2)
         root_container = VSplit([
             HSplit([
@@ -276,16 +261,16 @@ class ShopUI():
             ], padding=0, width = smallerWidth, ),
             HSplit([
                 Dialog(
-                    title = rightWindowTitle,
+                    title = descriptionArea,
                     body=Label(desc),
                 ),
             ], padding=0, width = width,),
             HSplit([
                 Dialog(
-                    title = self.playerName,
+                    title =  self.makeFormattedText("Stats"),
                     body=Label(getStats(self.player)),
                 ),
-            ], padding=0, width = smallerWidth, height= height,),
+            ], padding=0, width = statsWidth, height= height,),
         ])
         return root_container 
 

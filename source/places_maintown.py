@@ -42,7 +42,7 @@ def maintown(player):
                 printSlowly('"While you\'re out would you mind taking this lasagna to Grandpa?"', secondsBetweenChars=.03) 
                 i = Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='consumable', consumable=Consumable(player, heal=10, karma=-3, consumeText='Hope Grandpa won\'t be mad that you ate his lasagna!'))
                 player.addToInventory(i)
-                printSlowly("He's a real brainiac and can probably help you out with your adventure.", secondsBetweenChars=.03) 
+                printSlowly("He's seen a thing or two and can probably help you out with your adventure.", secondsBetweenChars=.03) 
                 printSlowly('"He lives to the East."', secondsBetweenChars=.03) 
                 printSlowly('"You know the way."', secondsBetweenChars=.03) 
                 printSlowly('"Come back soon sweety!"', secondsBetweenChars=.03) 
@@ -60,20 +60,21 @@ def home(player):
     s = Sound('home 1.mp3', loop=-1)
     show("You enter your house through the familiar front door, taking in "
          "the sights of your childhood abode, reminiscing about all the "
-         "dank shit you did as a kid.")
+         "things you did as a kid.")
     while True:
         printc("You could @'explore'@yellow@ your house some more, @'sleep'@yellow@, @'play'@yellow@ a console game, or just @'leave'@yellow@.")
         action = getInput(player)
         if action == "explore" or action == "e":
             if player.registerVisit("Explore House") == 1:
                 show("You head upstairs to your room and look around for a bit. "
-                     "You realize that you left your can of Mtn Dew laying on top "
+                     "You realize that you left your can of Terbo Juice laying on top "
                      "of your dresser.")
                 show("You grab the can just in case you need it later.")
-                i = Item(player, 'Mtn Dew', customDescription='Consume for a healthy, energetic boost.', _type='consumable', consumable=Consumable(player, heal=4))
+                i = Item(player, 'Terbo Juice', customDescription='Consume for a healthy, energetic boost.', _type='consumable', consumable=Consumable(player, heal=4))
                 player.addToInventory(i)
-                show("You take a look at the framed picture of your childhood dog on your bedside table.")
-                show("Bud must be in a better place now.")
+                if 'Bud joined the party' not in player.history:
+                    show("You take a look at the framed picture of your childhood dog on your bedside table.")
+                    show("Bud must be in a better place now.")
             else:
                 show("You look around the house, but shockingly can't find anywhere you haven't already explored")
         elif action == "sleep" or action == "s":
@@ -93,14 +94,14 @@ def home(player):
                 show("After popping the disc into your GameSphere 420, you realize that it needs to install and update.")
                 show("You watch the loading bar move at an astoundingly slow pace. This could take a while.")
                 show("Standing up, you decide to do something fun in the mean time.")
-            elif player.day > 6 and "entered first game password" not in player.choices:
+            elif player.day > 6 and "entered first game password" not in player.history:
                 show("Finally! The game is finished installing!")
                 show("You start the game and prepare to jump right into the beautiful world of Call of Duty: Black Ops 4: Pro Edition: Platinum Hits Version.")
                 show("The game says that you need to log in.")
                 print("Enter you password:")
                 x = player.getInput()
-                if x == password1 and "entered first game password" not in player.choices: 
-                    player.choices.append("entered first game password")
+                if x == password1 and "entered first game password" not in player.history: 
+                    player.history.append("entered first game password")
                     show("You're logged in.")
                     show("Wait a minute, this isn't your account.")
                     show("You log out, switch GameSphere 420 accounts, and restart the game.")
@@ -109,14 +110,14 @@ def home(player):
                 else:
                     show("Huh... You can't seem to remember it.")
                     show("Oh well. I'm sure you'll remember eventually.")
-            elif player.day > 23 and "entered first game password" in player.choices: 
+            elif player.day > 23 and "entered first game password" in player.history: 
                 show("Finally! After waiting " +player.day+ " whole days, you are ready to play some good ol' fashioned Call of Duty: Black Ops 4: Pro Edition: Platinum Hits Version.")
                 show("Bursting with excitement, you boot up the game. ")
                 show("The game says that you need to log in.")
                 print("Enter you password:")
                 x = player.getInput()
                 if x == password2: 
-                    player.choices.append("entered first game password")
+                    player.history.append("entered first game password")
                     show("You're logged in.")
                     # TODO
                 elif x == password1:
@@ -146,18 +147,17 @@ def home(player):
 
 
 def blacksmith(player):
+    show("You decide to take a look at the quality goods at your local blacksmith.")
     if player.registerVisit("Main Town Blacksmith") == 1:
-        show("You decide to take a look at the quality goods at your local blacksmith.")
         show("You walk over to your town's forge and approach the blacksmith, "
              "she's 6'5\" and the strongest one in your town.")
         printSlowly('"Hello!"', secondsBetweenChars=.1)
         show('She reaches out to shake your hand and ends up hurting it '
              'slightly.')
         player.takeDamage(1)
-        show("You leave.") # TODO @ Erik
+        show("Erik said he would finish this interaction. ") # TODO @ Erik
     else:
-        show("You head over to the blacksmith's place to take a look at some "
-             "quality goods.")
+        show("The blacksmith is gone right now. You should come back later.")
         # TODO crafting
 
 def tavern(player):
@@ -168,16 +168,22 @@ def tavern(player):
              "at you.")
         printSlowly('"Ah, it\'s you."',newline=False)
         show(" the bartender says. ")
-        printSlowly('Make sure to watch how much Mtn Dew you have this time!') 
+        if 'got dew' in player.history:
+            drink = "Mountain Dew"
+        elif 'got rum' in player.history:
+            drink = 'Rum'
+        else:
+            drink = 'Void Juice'
+        printSlowly('Make sure to watch how much '+drink+' you have this time!') 
         show('Several of the bar\'s guests chuckle jovially.')
     else:
         show("You walk into the old tavern once again, determined to find some "
           "dank shit to do here or something.")
     while True:
         print("You have a look around to see what's up:")
-        printc("In front of you lies a pretty dope looking @'slot'@yellow@ machine")
-        printc("You could @'ask'@yellow@ the bartender for some rumors")
-        printc("It looks like one of the patrons is challenging others to a @'game'@yellow@")
+        printc("In front of you lies a pretty dope looking @'slot'@yellow@ machine.")
+        printc("You could @'ask'@yellow@ the bartender for some rumors.")
+        printc("It looks like one of the patrons is challenging others to a @'game'@yellow@.")
         printc("Or you could just @'leave'@yellow@.")
         action = getInput(player)
         if action == "slot" or action == "s":
@@ -193,12 +199,11 @@ def tavern(player):
         elif action == "game" or action == "g":
                 tavernGame(player)
         elif action == "leave" or action == "l":
-            show("You've had enough fun at the tavern for today, and so you blow this popsicle stand.")
             break
         else:
             print("You need to choose something to do!")
             print("")
-    show("You leave the tavern, heading outside to the rest of the town.")
+    show("You've had enough fun at the tavern for today, and so you blow this popsicle stand.")
 
 
 def tavernGame(player):
@@ -207,8 +212,7 @@ def tavernGame(player):
              "someone willing to play a game with him.")
     show("The old pirate sitting at the table looks up at you and takes a "
          "sip out of his flask.")
-    printSlowly('"I\'ve been challenging travelers across these lands to the '
-         'game of my people for many years. You think you\'ve got what '
+    printSlowly('"I\'ve been challenging travelers across these lands to the game of my people for many years. You think you\'ve got what '
          'it takes to beat me?" ')
     if yesno(player):
         printSlowly('"Hah! Let\'s see how good you really are!')
@@ -223,8 +227,7 @@ def tavernGame(player):
         show('"Enough waiting around! Let\'s do this!"')
         while True:
             yourchoice, opchoice, outcome = RPSGame().game()
-            show("The world seems to fade away around you as the only thing "
-                "you focus on is your own hand and that of your opponent.")
+            show("The world seems to fade away around you as the only thing you focus on is your own hand and that of your opponent.")
             show("Over the rushing sound in your ears you hear the patrons of "
                 "the bar chanting, your fist hitting your open hand.")
             printSlowly('"ROCK"', pause=.1)
@@ -282,8 +285,7 @@ def store(player):
     show("You stride into the sedentary sales store supplementing the "
          "not-so-silent town of "+player.aspect['town']+", where succulent sweets and sundries "
          "are sold. ")
-    show("You approach the shopkeeper, an old and wary gentleman with age on "
-         "his face and experience in his eyes.")
+    show("You approach the shopkeeper, an old and wary gentleman with age on his face and experience in his eyes.")
     printSlowly('"What\'ll it be for ya today?"', pause=1.2)
     maintownShop(player)
     # show("You make a point of considering the shopkeeper's wares, but you're "

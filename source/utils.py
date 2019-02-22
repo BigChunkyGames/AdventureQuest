@@ -22,6 +22,12 @@ import pygame.mixer
 from os import listdir
 from os.path import isfile, join
 import time, datetime
+from prompt_toolkit.formatted_text import FormattedText
+import linecache
+
+
+WINDOW_HEIGHT = '40'
+WINDOW_WIDTH = '91'
 
 #### user input #############################################
 
@@ -34,11 +40,12 @@ def checkInput(inp, choice):
 
 def yesno(player):
     #  Returns True if user input is yes, returns False if no.
+    # if user types 'absolutely not' it counts as yes
     while True:
         userinput = getInput(player)
-        if userinput == "yes" or userinput == "y":
+        if 'y' in userinput or 'sure' in userinput or 'ok' in userinput:
             return True
-        elif userinput == "no" or userinput == "n":
+        elif 'n' in userinput:
             return False
         else:
             printc("@'yes'@yellow@ or @'no'@yellow@.")
@@ -72,14 +79,20 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
             print("% )")
         elif inp == "inv" or inp == "inventory":
             player.openInventory()
+            continue
         elif inp == "me":
             print("You are a level " + str(player.level) + " " + player.aspect['occ'] + " with " + str(player.money) + " money to your name.")
         # elif inp == "save":
         #     saveGame(player)
         elif inp == "load":
             loadGame(player)
+        elif inp == 'quit':
+            print("Are you sure you would like to quit?")
+            if yesno(player):
+                print("Bye!")
+                sys.exit()
         elif inp == '':
-            continue
+            continue # prevents no input from being accepted
         else:
             return inp
         if oneTry:
@@ -143,6 +156,8 @@ def printWithColor(text, color, before="", after="", more=False):
         s +=  '<ansimagenta>' + text + '</ansimagenta>'
     elif color == "cyan":
         s +=  '<ansicyan>' + text + '</ansicyan>'
+    elif color == 'gray':
+        s += '<ansigray>' + text + '</ansigray>'
     else:
         s +=  '<ansiwhite>' + text + '</ansiwhite>'
     s += after
@@ -152,13 +167,14 @@ def printWithColor(text, color, before="", after="", more=False):
 
 def printc(text, stringList=False): # now supports multiple colors per call
     #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
-    #printc('@test@red@uncollored@color@blue@@color@yellow@')
+    #printc('@test@red@uncollored@colored@blue@@color@yellow@')
+    #text = wrap(text, int(WINDOW_WIDTH))
     if not stringList: # if stringlist false
         t = text.split('@')
     else:
         t=stringList
     if len(t) == 1: #no @ in string
-        print(text)
+        print(text, )
     elif (len(t)%3) -1 == 0: # has right amount of @'s
         if len(t) == 4:
             if stringList: # if using stringlist
@@ -203,7 +219,7 @@ def formatText(text, format):
 # formatText("hidden", "hidden") # still visible
     
 class printSlowly():
-    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True):
+    def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True,):
         # .03 is a pretty good talking speed
         # you no longer need to have parenthesis around dialogue when addparanthesis=true
         self.text = text
@@ -274,22 +290,34 @@ def thread(targetFunction, numberOfThreads=1,): # not used
 
 #### file management #######################################################
         
-def saveGame(player, printAboutIt=False):
+def saveGame(player, printAboutIt=False): # just do yourself a favor and don't look at this disgusting code
     # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
-    with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
-        pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+    try:
+        with open(player.stats['saveDirectory']+"/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
+            pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+    except Exception as e:
+        try:
+            with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
+                pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+        except Exception as e2:
+            printc("@(The game should have saved right there but it didn't D: )@red@")
+            print(e)
+            print(e2)
+            return
+
     if printAboutIt:
         printc("@Game "+saveIndex+" saved!@green@")
+    
 
 def loadGame(player): # loads most recent save file
-    newestFile = getNewestFile()
+    newestFile = getNewestFile(player)
     if newestFile==None:
         show("There are no saved games yet! You need to go somewhere first!")
         return
     try: # try to load newest save file
-        with open('saves/' + newestFile, "rb") as loading:
+        with open(player.stats['saveDirectory'] +'/'+ newestFile, "rb") as loading:
             player = pickle.load(loading)
     except FileNotFoundError:
         printc("@Couldn't find any files to load!@red@")
@@ -300,14 +328,18 @@ def loadGame(player): # loads most recent save file
 def newOrLoad(player):
     # returns false if loaded a game
     while True:
-        saves = os.listdir('saves')
+        try:
+            saves = os.listdir(player.stats['saveDirectory'])
+        except:
+            print("Couldn't find the saves folder D:")
+            return True # new game
         if len(saves) == 0:
             return True # (if there are no saves, new game)
         printc("@'New'@yellow@ game or @'continue'@yellow@ game?")
-        x = input('> ').lower()
-        if checkInput(x, 'new'):
+        x = getInput(player)
+        if 'new' in x or checkInput(x, 'new'):
             return True
-        elif checkInput(x, 'load') or checkInput(x, 'continue'):
+        elif 'load' in x or 'continue' in x or checkInput(x, 'load') or checkInput(x, 'continue'):
             loadGame(player)
             return False
  
@@ -315,15 +347,28 @@ def generateTimeStamp():
     ts = time.time()
     return datetime.datetime.fromtimestamp(ts).strftime('_%Y-%m-%d_%H-%M-%S')
 
-def getNewestFile():
-    files = os.listdir('saves')
+def getNewestFile(player):
+    files = os.listdir(player.stats['saveDirectory'])
     if len(files)>0:
-        return max(os.listdir('saves'), key=lambda f: os.path.getctime("{}/{}".format('saves', f)))
+        return max(files, key=lambda f: os.path.getctime("{}/{}".format(player.stats['saveDirectory'], f)))
     return None
+
+def handleFolderLocations(player):
+    try:
+        files = os.listdir('saves')
+        player.stats['saveDirectory'] = 'saves'
+    except:
+        try: 
+            files = os.listdir('dist/saves')
+            player.stats['saveDirectory'] = 'dist/saves'
+        except:
+            print("Couldn't find save folder D:")
+
+    #try:
 
 #### dev #############################################
 
-def bug(player):
+def bug(player, assertFalse=True):
     if player.devmode:
         show("@Well you hit a bug... You should probably fix that@red@")
     else:
@@ -334,7 +379,8 @@ def bug(player):
         show("Hurry!")
         show("What is happening?! WHAT IS HAPPENING!?")
         show("NOOOOOOOOOOOOO!!!!!!!!!!!")
-        assert False
+        if assertFalse:
+            assert False
 
 def log(text = "log!", warning=False):
     if warning:
@@ -346,6 +392,15 @@ def incrementDictValue(dictionary, key):
     # will add 1 to a dictionary value or set to 1 if key not in dict
     dictionary[key] = dictionary.get(key, 0) + 1
     return dictionary[key]
+
+def printException():
+    exc_type, exc_obj, tb = sys.exc_info()
+    f = tb.tb_frame
+    lineno = tb.tb_lineno
+    filename = f.f_code.co_filename
+    linecache.checkcache(filename)
+    line = linecache.getline(filename, lineno, f.f_globals)
+    print ('EXCEPTION IN ({}, LINE {} "{}"): {}'.format(filename, lineno, line.strip(), exc_obj))
 
 #### random #############################################
 
@@ -406,22 +461,53 @@ def openInventoryFromCombat(combatUI, inventoryUI):
     inventoryUI.run()
     combatUI.run()
 
+def colorItem(item, useGetName=False): # also colors consumables, returns name
+    if useGetName: name = item.getName()
+    else: name = item.name
+    if item.type == 'consumable' and item.consumable != None:
+        if item.consumable.consumableType == 'xp':
+            color = '#99ff66' # yellow
+        elif item.consumable.consumableType == 'heal':
+            color = '#1FDE43' # green
+        elif item.consumable.consumableType == 'damage':
+            color = '#DE3A1F' # red
+    elif item.rarity == "None" or item.rarity == None or item.rarity == "common":
+        color = '#ffffff' # white
+    elif item.rarity == "rare":
+        color = '#0066ff' # blue
+    elif item.rarity == 'epic':
+        color = '#cc3300' # orange
+    elif item.rarity == 'legendary':
+        color = '#9900cc' # magenta
+    return makeFormattedText(name, color=color)
+
+def makeFormattedText(text, color='#ffffff'):
+    return FormattedText([
+        (color, str(text) )# this shit is shit
+    ])
+
 #### sounds #####################################################
 
 class Sound(): 
     # to play a sample: Sound('low piano G sharp.wav')
     # FIXME: this probably has a lot of bugs yet to be discovered
     # TODO: add channels for better handling of sounds (might not be necessary)
+    # TODO make it so you dont have to intialize the mixer each time because its slow
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
-    # NOTE: make loop -1 to loop forever
+    # NOTE: make loop -1 to loop forever, loop 0 to loop once
     # NOTE: volume adjustments (fade in out) only work with wav files
-    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=1):
-        if os.path.exists('source/audio/music loops/' + fileName):
-            self.fileName = "source/audio/music loops/" + fileName
-        elif os.path.exists('source/audio/one shots/' + fileName):
-            self.fileName = "source/audio/one shots/" + fileName
+    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0):
+        if os.path.exists('dist/audio/music loops/' + fileName):
+            self.fileName = "dist/audio/music loops/" + fileName
+        elif os.path.exists('dist/audio/one shots/' + fileName):
+            self.fileName = "dist/audio/one shots/" + fileName
+        elif os.path.exists('audio/music loops/' + fileName):
+            self.fileName = "audio/music loops/" + fileName
+        elif os.path.exists('audio/one shots/' + fileName):
+            self.fileName = "audio/one shots/" + fileName
         else:
-            print("(couldn't find sound file: " + self.fileName + ")")
+            print("(couldn't find sound file: " + fileName + ")")
+            input('halt')
         self.loop = loop
         # initialize
         self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
@@ -439,7 +525,7 @@ class Sound():
                 if playNow:
                     self.mixer.music.play(self.loop)
         except:
-            print("(couldn't load sound file: " + self.fileName + ")")
+            print("Couldn't load " + fileName)
 
     def getLength(self): # returns duration of wav file in seconds
         import wave
@@ -469,18 +555,29 @@ class Animation():
         self.smash = False
         self.makeUnique()
         self.finished=False
-        if animationName == 'introAnimation':
-            rows = ASCII_LOGO.splitlines()
-            width = len(rows[0])
-            self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
-        else:
-            print("Thats not one of the animations.")
-            return
+        try:
+            if animationName == 'introAnimation':
+                rows = ASCII_LOGO.splitlines()
+                # for r in rows:
+                #     r = r.decode('unicode-escape')
+                width = len(rows[0])
+                self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
+            elif animationName == 'credits':
+                from source.credits import CREDITS
+                x = fillWithSpaces(CREDITS, 60)
+                rows = x.splitlines()
+                width = len(rows[0])
+                self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
+            else:
+                print("Thats not one of the animations.")
+                return
 
-        self.t2 = threading.Thread(target=self.handleUserInput, args=())
-        self.t1.start() 
-        self.t2.start()
-        self.t1.join()
+            self.t2 = threading.Thread(target=self.handleUserInput, args=())
+            self.t1.start() 
+            self.t2.start()
+            self.t1.join()
+        except:
+            print("Animation: '" + animationName + "' failed to do its sweet thang.")
 
     def makeUnique(self):
         rand = random.randint(0,1000)
@@ -516,7 +613,10 @@ class Animation():
         for rowIndex in range(0, len(rows)):
             for char in range(0,place):
                 if char < place + subtraction and char < width:
-                    s += rows[rowIndex][char] # print char in this row
+                    try:
+                        s += rows[rowIndex][char].decode('unicode-escape') # print char in this row
+                    except:
+                        pass
                 elif char < width -1:
                     s += self.specialChar
                 if rowIndex == len(rows)-1 and char+subtraction==width:
@@ -528,13 +628,23 @@ class Animation():
         # sys.stdout.flush()
         if self.smash:
             sys.stdout.write("\033["+str(len(rows))+"A")
-            print(s)
         else:
             sys.stdout.write("\033["+str(len(rows)+1)+"A")
-            print(s)
+        print(s)
+        #print(s.decode('unicode-escape'))#.encode('utf-8'))
         wait(.05)
         if done: return
         self.introAnimation(rows, width, place = place + 1)
+
+def fillWithSpaces(text, length):
+    # makes white space of a multi line string up to length
+    rows = text.splitlines()
+    for r in rows:
+        r = rows[:length]
+        for c in r:
+            if len(r) < length:
+                r.append(' ')
+    return join(rows) 
 
 ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗██╗   ██╗██████╗ ███████╗
 ██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝██║   ██║██╔══██╗██╔════╝
@@ -549,20 +659,3 @@ ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗�
             ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║                             
             ╚██████╔╝╚██████╔╝███████╗███████║   ██║                             
              ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝                             """
-
-
-
-def endDemo(player):
-    show("Suddenly you don't feel right.")
-    show("There's something wrong here.")
-    show("Wait a minute, is that...")
-    printSlowly('The end of the demo?', secondsBetweenChars=.1)
-    show("Yes.")
-    show("It is.")
-    show("You jolt upright in bed.")
-    show("Huh, what a strange dream.")
-    show("You walk down stairs and eat a piece of toast.")
-    # TODO peieo fo toasta
-    show("Deciding you better start your day, you make your way outside.")
-    from source.places_maintown import maintown
-    return maintown(player)

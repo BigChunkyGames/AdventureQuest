@@ -23,8 +23,9 @@ from prompt_toolkit import print_formatted_text, HTML
 from prompt_toolkit.formatted_text import FormattedText
 
 from source.lists import getRandomAttackVerb
-from source.utils import wait, wrap, Sound
+from source.utils import wait, wrap, Sound, getStats
 from source.inventoryUI import InventoryUI
+import threading
 
 import re
 import random
@@ -32,7 +33,7 @@ import random
 class CombatUI():
 
     def __init__(self, player, enemy, song='worry 1.mp3'):
-        self.song = Sound(song, loop=-1)
+        self.song = Sound(fileName = song, loop=-1)
         self.player = player
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
@@ -45,21 +46,21 @@ class CombatUI():
             self.playerClans =  self.playerName = FormattedText([
                 ('#ffffff', str(player.aspect['name'])),
             ]) 
-        if self.player.equippedWeapon.name != None: self.weaponName = self.player.equippedWeapon.name
-        else: self.weaponName = "Bare Hands"
-
         self.enemy = enemy
 
         self.playerGoesNext = True # by default, enemy always gets first strike
         self.playerJustDodged = False
-        self.battleLog = '\n\n\n\n\n\n\n'
-        self.maxHeightOfBattleLogWindow = 8
-        self.width = 90
-        self.smallWidth = 30
+        self.escapeTries = 0
+        self.escapeChance = .3
+
+        self.battleLog = '\n\n\n\n\n\n'
+        self.maxHeightOfBattleLogWindow = 7
+        self.totalWidth = 90
+        self.actionsWidth = 30
+        self.statsWidth = 20 
 
         self.selectedIndexText = ''
         self.result = None
-        self.escapeChancePercent = 20
 
         self.playerHPBar = ProgressBar()
         self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp)) 
@@ -75,7 +76,8 @@ class CombatUI():
                 # more options could be:
                 # check - returns text about enemy potentially indicating weaknessess
             ],
-            weaponName = self.weaponName)
+            player = self.player,
+            width = self.actionsWidth)
         
         self.bindings = KeyBindings()
         self.bindings.add('right' )(focus_next)
@@ -100,6 +102,8 @@ class CombatUI():
             mouse_support=True,
             full_screen=True,
             )
+
+    
 
     # call this function to change the value a progress bar (prog) to a percent
     def setHealthProgressBar(self,progbar, percent):
@@ -159,11 +163,13 @@ class CombatUI():
     def tryToEscape(self, event=None):
         s = ''
         s += "You tried to run..." 
-        if self.escapeChancePercent> random.randint(0,100): # chance to escape is always 20% i guess
-            s += " and escaped the combat!" # #TODO advanced combat: isnt ever visible
+        randomChance = random.uniform(0,1) - (self.escapeTries-1) *.1 # each try makes it 10 percent easier to escape after first try
+        if self.escapeChance > randomChance and self.escapeTries>0: #has to have already tried to escape once
+            s += " and escaped the combat!" # TODO advanced combat: isnt ever visible
             self.done("escaped")
         else:
             s += " but failed to escape!"
+        self.escapeTries += 1
         return s
 
     def enemyTurn(self, textOfPlayerTurn=False):
@@ -193,7 +199,11 @@ class CombatUI():
             if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!"
             else: 
                 s += " It dealt " + str(damage) + " damage!"
-            self.player.hp = self.player.hp - damage
+            # self.player.hp = self.player.hp - damage # lose health
+            t1 = threading.Thread(target=self.rollNumbers(self.player.hp, self.player.hp - damage), args=())
+            t1.start()
+            # self.rollNumbers(self.player.hp, self.player.hp - damage)
+
             if self.player.hp < 0:
                 self.player.hp = 0
             self.setHealthProgressBar(self.playerHPBar, self.toPercent(self.player.hp, self.player.maxhp))
@@ -207,6 +217,24 @@ class CombatUI():
             self.battleLog = s 
         self.refresh()
 
+    def rollNumbers(self, start, end, speed=1.5):
+        r = start-end # range
+        maxSpeed = .01
+        if r < 0: r *= -1
+        startTime = .5
+        for t in range(r):
+            startTime /= speed
+        time = startTime
+        for c in range(r+1):
+            s = int(start - c )
+            self.player.hp = s
+            self.refresh()
+            if time < maxSpeed:
+                wait(maxSpeed)
+            else:
+                wait(time)
+            time *= speed 
+
     def refresh(self):
         self.fillBattleLogWithNewlines()
         self.application.layout=Layout(
@@ -214,7 +242,7 @@ class CombatUI():
             focused_element=self.radios)
 
     def fillBattleLogWithNewlines(self):
-        self.battleLog = wrap(self.battleLog, limit=self.width-self.smallWidth)
+        self.battleLog = wrap(self.battleLog, limit=self.totalWidth-self.actionsWidth-self.statsWidth)
         slicedBattleLog = self.battleLog.split('\n') # list of rows of the battlelog
         while True:
             if len(slicedBattleLog) < self.maxHeightOfBattleLogWindow: 
@@ -244,46 +272,42 @@ class CombatUI():
         actionsTitle = FormattedText([
             ('#ffffff', "Actions") 
         ])
-        t = TextArea(
-            scrollbar=False,
-            line_numbers=False,
-            wrap_lines=True,
-            dont_extend_height=True,
-            dont_extend_width=True,
-            focusable=True,
-            focus_on_click=True,
-            read_only=False,
-            text=self.battleLog,  
-            style='bg:#000000',
-            height=10,
-            )
+        statsTitle = FormattedText([
+            ('#ffffff', "Stats") 
+        ])
         root_container = HSplit([
             VSplit([
-                Dialog(
+                Dialog( # actions
                     title=actionsTitle,
                     body=HSplit([
                         self.radios,
                     ], height= height),
-                    width=self.smallWidth
-                ),
+                    width=self.actionsWidth
+                ), # battlelog 
                 Dialog(
                     title = battleLogTitle,
                     body=Label(self.battleLog),
-                    width=self.width-self.smallWidth
+                    width=self.totalWidth-self.actionsWidth - self.statsWidth
                 ),
-            ], padding=0, width = self.smallWidth, height=height+2 ),
-            VSplit([
+                Dialog( # stats
+                    title = statsTitle,
+                    body=Label(getStats(self.player)),
+                    width=self.statsWidth ,
+                ),
+            ], padding=0, width = self.actionsWidth, height=height+2 ),
+            # health bars #
+            VSplit([ 
                 Frame(
                     body=self.playerHPBar,
                     title=self.playerName,
-                    width=int(self.width/2)
+                    width=int(self.totalWidth/2)
                 ),
                 Frame(
                     body=self.enemyHPBar,
                     title=enemyName,
-                    width=int(self.width/2)
+                    width=int(self.totalWidth/2)
                 ), 
-            ], padding=0, width = self.width, height=height)
+            ], padding=0, width = self.totalWidth)
         ])
         return root_container
 
@@ -297,7 +321,5 @@ class CombatUI():
         get_app().exit(result=result)
  
 # STILL TODO
-# fix scrolling issue in battelog
 # fix color of battlelog
 # description of selection text
-# what the hell is this dumb line at the bottom of the battlelog

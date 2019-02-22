@@ -2,7 +2,7 @@ from source.utils import show, getInput, checkInput, yesno, printc
 from source.lists import getInvalidOptionText
 from source.enemy import *
 from source.combat import *
-from source.item import Item, generateRandomArmourOrWeapon
+from source.item import Item, generateRandomArmourOrWeapon, Consumable
 from source.shops import *
 
 #TODO QUEST get information from dogetown (but its funny because they only say bark)
@@ -114,7 +114,6 @@ def dogeTown(player):
                 show('"We praise you, almighty DOG. We lift our paws to you."')
                 show('"Now please turn to page bork-hundred and 3."')
                 show("You pick up a book from under the seat in front of you.")
-                show("You have acquired 'The Sacred Texts of Buddhogism'.") 
                 getBook(player)
                 print( "Read it?")
                 if yesno(player):
@@ -147,21 +146,21 @@ def dogeTown(player):
                     show("Tears roll down your face as you realize that you are now reunited with your childhood dog, Bud.")
                     show('"It has been so long, ' + player.aspect["name"] + '".')
                     printc("@Bud has joined the party!@cyan@") # TODO party members, 
-                    player.choices.append("Bud joined the party")
+                    player.history.append("Bud joined the party")
                     for i in player.inventory: # change description of crumpled paper
                         if i.name == 'Crumped Paper':
                             i.customDescription = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!" 
                     input("... ")
                     show("Bud will aid you in your quest. With your efforts combined, you are one step closer to defeating your greatest enemy.")
 
-            elif "Bud joined the party" in player.choices and not "Prayed at alter in dogetown" in player.choices:
+            elif "Bud joined the party" in player.history and not "Prayed at alter in dogetown" in player.history:
                 show("There is nothing left to do inside the Synadogue except pray at the alter.")
                 print("Pray?")
                 if yesno(player):
                     show("You kneel down next to the huge alter of DOG and wisper some words of repentance:")
                     getInput(player)
                     show("@Your sins are forgiven.@magenta@")
-                    player.choices.append("Prayed at alter in dogetown")
+                    player.history.append("Prayed at alter in dogetown")
                     if player.karma < 0:
                         player.karma += 1
             else:
@@ -325,10 +324,10 @@ def bonysShop(player):
 
     inv = []
 
-    i1 = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3, consumable=Consumable(heal=int(player.maxhp/6)))
+    i1 = Item(player, 'Doge Treat', customDescription="A small bone shaped factory produced biscuit.", _type='consumable', sellValue=3, consumable=Consumable(player, heal=int(player.maxhp/6)))
     inv.append(i1) 
 
-    i2 = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12,consumable=Consumable(consumeText='You chewed on the bone for a few minutes. It made you feel alive.',xpgain=int(player.levelupxp/6)))
+    i2 = Item(player, 'Bone', customDescription="Looks like a tibia.", _type='consumable', sellValue=12,consumable=Consumable(player, consumeText='You chewed on the bone for a few minutes. It made you feel alive.',xpgain=int(player.levelupxp/6)))
     inv.append(i2)
 
     i = Item(player, 'Frizbee', damage=4, customDescription="It's red and as chew marks in it.", _type='weapon', sellValue=6)
@@ -340,7 +339,7 @@ def bonysShop(player):
     i = Item(player, 'Doge Collar', block=2, customDescription="This furry red collar comes equipped with a stylish silver doge tag.", _type='weapon', sellValue=6)
     inv.append(i)
 
-    if "Bud joined the party" in player.choices: desc = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!"
+    if "Bud joined the party" in player.history: desc = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!"
     else: desc = "You unravel the paper to find that it is an extremely old missing dog poster. You remember making these years ago when you lost Bud. The hand drawn image of a Bud brings back nostalgic memories but you try to shove them out of your mind."
 
     i = Item(player, 'Crumped Paper', customDescription= desc, _type='misc', sellValue=1)

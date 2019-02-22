@@ -21,7 +21,7 @@ class Player:
         self.teleportableAreas = {} # same as visitedareas but these are the places the wormhole can go to 
         # lists
         self.clantags = []
-        self.choices = [] # a list of choices (strings) used to keep track of what the player did (should probably be called player history)
+        self.history = [] # a list of things that happened, choices (strings) used to keep track of what the player did 
         # points
         self.money = 5
         self.dankpoints = 0 # TODO
@@ -69,6 +69,17 @@ class Player:
         # random consumable damage scales 3 
         # random consumable heal scales 3 
         # random consumable xp scales 3 
+
+    def getName(self, includeClantags=True):
+        s = self.aspect['name']
+        if includeClantags:
+            for c in self.clantags:
+                s += " " + str(c)
+        else:
+            return  s
+
+
+
 
 #### inventory #########################################
 
@@ -122,7 +133,7 @@ class Player:
 
     def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
-        if printAboutIt: show("@You have acquired the " + item.name + "@green@.")
+        if printAboutIt: show("@You have acquired " + item.name + "@green@.")
         if activateNow: self.activateItem(item)
 
     def removeFromInventory(self, nameOfItem, printAboutIt=True):
@@ -132,6 +143,13 @@ class Player:
                 show("@" + str(x.name) + " was removed from your inventory.@red@")
                 return True
         return False
+
+    def checkIfInInventory(self, nameOfItem):
+        for i in self.inventory:
+            if i.name == nameOfItem:
+                return True
+        return False
+
 
     '''equip weapons and armour, consume consumables, examine other things. unequips currently equipped items if armour or weapon slot is occupied.'''
     def activateItem(self, item):
@@ -353,7 +371,7 @@ class Player:
         sys.exit()
 
     
-    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True):
+    def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, showText=True):
         ''' set health to None for regen health like at end of combat'''
         if health == None:
             health = self.healthRegen
@@ -368,7 +386,10 @@ class Player:
         if returnString:
             return text
         else:
-            printc(text)
+            if showText:
+                show(text)
+            else:
+                printc(text)
 
     def sleep(self, customText=None):
         self.hp = self.maxhp
@@ -381,129 +402,4 @@ class Player:
         self.restockShops()
         show("@Your HP has been restored to full!@green@")
 
-#### INTRO STUFF #################################################
-
-    def charcreation(self):
-        while True:
-            printc("Would you like to @'create'@yellow@ your own character or @'roleplay'@yellow@ one created for you?") 
-            dec = getInput(self) 
-            if dec == "create" or dec == "c":
-                self.aspect['name'] = self.name()
-                self.aspect['difficulty'] = self.difficulty()
-                self.aspect['gender'] = self.gender()
-                self.aspect['heshe'], self.aspect['HeShe'], self.aspect['himher'], self.aspect['hisher'] = self.pronouns() 
-                self.aspect['hand'] = self.hand()
-                self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = self.impropernouns()
-                self.aspect['town'], self.aspect['land'] = self.propernouns()
-                self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = self.adjectives()
-                break
-            elif dec == "roleplay" or dec == "r":
-                self.generateAspects()
-                break
-            else:
-                pass
-        
-
-    def generateAspects(self):
-        self.aspect['name'] = "Michael"
-        self.aspect['difficulty'] = 'Normal'
-        self.aspect['gender'] = "boy"
-        self.aspect['heshe'], self.aspect['HeShe'], self.aspect['hisher'] = "he", "He", "his"
-        self.aspect['hand'] = "right"
-        self.aspect['occ'], self.aspect['viverb'], self.aspect['skill1'], self.aspect['skill2'] = "fireman", "evicerate", "sewing", "rubiks cube solving"
-        self.aspect['town'], self.aspect['land'] = "Townsville", "Flat Earth"
-        self.aspect['adj1'], self.aspect['adj2'], self.aspect['adj3'], self.aspect['adj4'], self.aspect['adj5'] = "impressive", "well liked", "sick nasty", "wiggity wiggity whack", "excellent"
     
-        
-    def name(self):
-        print("What is your name?")
-        while True:
-            charname = input("> ").strip().title()
-            if charname == "":
-                print("Your hero may not be nameless.")
-            else: return charname
-
-    def difficulty(self):
-        i = 0
-        while True:
-            dif = getDifficulty(i)
-            if dif == 'Lose':
-                self.death()
-            print("Would you like the difficulty, " + dif + "?")
-            if yesno(self):
-                return dif 
-            i += 1
-
-    def gender(self):
-        print("What is your gender?")
-        chargender = input("> ").strip()
-        return chargender
-    
-    def hand(self):
-        printc("Which is your dominant hand, @'right'@yellow@ or @'left'@yellow@?")
-        x = input('> ')
-        if checkInput(x, "right"): return "right"
-        elif checkInput(x, "left"): return "left"
-        else: return self.hand()
-
-    def pronouns(self):
-        print("Enter your three pronouns (e.g. 'he him his'): ")
-        while 1:
-            charpronouns = input("> ").strip().lower()
-            charpronouns = charpronouns.split(" ")
-            if len(charpronouns) != 3:
-                print("Make sure to enter 3 pronouns separated by a single space each: ")
-            else:
-                return charpronouns[0], charpronouns[0].title(), charpronouns[1], charpronouns[2]
-
-    def impropernouns(self):
-        occ = input("What is your occupation?").lower().strip()
-        while occ == "":
-            print("Your occupation can not be blank. ")
-            occ = input("Enter the name of your hero's occupation: ").lower().strip()
-        viverb = input("Enter the name of a violent verb: ").lower().strip()
-        while viverb == "":
-            print("The verb can not be blank. ")
-            viverb = input("Enter the name of a violent verb: ").lower().strip()
-        skill1 = input("Enter the name of a special skill: ").lower().strip()
-        while skill1 == "":
-            print("The special skill can not be blank. ")
-            skill1 = input("Enter the name of a special skill: ").lower().strip()
-        skill2 = input("Enter the name of a second special skill: ").lower().strip()
-        while skill2 == "":
-            print("The special skill can not be blank. ")
-            skill2 = input("Enter the name of a second special skill: ").lower().strip()
-        return occ, viverb, skill1, skill2
-
-    def propernouns(self):
-        town = input("Enter the name of the town: ").lower().title().strip()
-        while town == "":
-            print("The name of the town can not be blank.")
-            town = input("Enter the name of the town: ").lower().title().strip()
-        land = input("Enter the name of the land: ").lower().title().strip()
-        while land == "":
-            print("The name of the land can not be blank.")
-            land = input("Enter the name of the land: ").lower().title().strip()
-        return town, land
-
-    def adjectives(self):
-        while True:
-            try:
-                adjinput = input("Enter five adjectives separated by commas: ").lower()
-                adjinputlist = adjinput.split(',')
-                # creates list from input split by commas
-                adjlist = [x.strip() for x in adjinputlist]
-                # creates another list, strips whitespace
-                if adjlist[4]:
-                    pass
-                try:
-                    if adjlist[5]:
-                        pass
-                    print("Your list is too long.")
-                except IndexError:
-                    if adjlist[0] and adjlist[1] and adjlist[2] and adjlist[3] and adjlist[4]:
-                        return adjlist[:]
-                    else:
-                        print("Adjective may not be blank.")
-            except IndexError:
-                print("Your list doesn't seem to be long enough, try again.")
