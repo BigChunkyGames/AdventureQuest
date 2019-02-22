@@ -9,15 +9,15 @@ Requirements:
 *  Computer
 *  Will to live
 
-##How to play:
+## How to play:
 
-###Windows:
+### Windows:
 1. Download this repository.
 2. Unzip into your favorite directory
 3. Go to AdventureQuest/dist/
 4. Run AdventureQuest.exe
 
-###Other operating systems:
+### Other operating systems:
 1.  Download this repository.
 2. Unzip into your favorite directory
 2.  Open your favorite terminal
