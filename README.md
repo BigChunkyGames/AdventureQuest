@@ -3,11 +3,18 @@ A quest for adventure! Created by the Dream Team Xtreme.
 
 \~Get the alpha-demo out now for only a limited time~
 
-
-Requirements: 
+### Requirements: 
 *  Python 3 or Windows
 *  Computer
 *  Will to live
+
+### Features:
+*  No microtransactions
+*  Saving and loading
+*  Colors
+*  Ascii UI
+*  Music and sound elements
+*  True Love
 
 ## How to play:
 
