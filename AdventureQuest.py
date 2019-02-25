@@ -41,7 +41,6 @@ class Game:
                 introduction(self.player)
                 maintown(self.player)
         else: # dev mode
-            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             devMode(self.player)
             # saveGame(self.player, printAboutIt=True)
             # loadGame(self.player)

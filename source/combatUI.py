@@ -133,7 +133,8 @@ class CombatUI():
         choice = self.radios.values[self.radios._selected_index][0] # show change to selection with *
         s = ''
         if choice == "Attack":
-            s += self.attackEnemy()
+            self.attackEnemy()
+            return # return early so attackEnemy can go to enemy turn so damaging consunmables work
         elif choice == "Dodge": # dodging increases chance for enemy to miss by 30% SCALING
             s += "You tried to dodge... "
             self.playerJustDodged = True 
@@ -145,26 +146,25 @@ class CombatUI():
             s += self.tryToEscape()
         else:
             s += "How did you do that!?"
-            
-        if self.enemy.hp == 0: # check if he dead
-            self.done("win")
-            return
+        
         self.enemyTurn(s)
 
-    def attackEnemy(self, alwaysHit=True, consumableDamage=False, ):
-        if consumableDamage not False:
-            "You threw the " + str(item.name) + "." YO FIGURE OUT WHAT TO PUT HERE
+    def attackEnemy(self, alwaysHit=True, consumableDamage=None, consumableName=None ):
+        s = ''
+        if not consumableDamage == None: # if has consumable damage
+            damage = consumableDamage # better also have a name
+            s += "You threw the " + str(consumableName) + "... "
         else:
             s +=  "You tried to attack... "
             damage = self.player.getTotalAttackPower()
-            s += " and did " 
-            s += str(damage)
-            s += " damage!" # TODO color
-            self.enemy.hp = self.enemy.hp - damage
-            if self.enemy.hp < 0:
-                self.enemy.hp = 0
-            self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
-            return s
+        s += " and did " 
+        s += str(damage)
+        s += " damage!" # TODO color
+        self.enemy.hp = self.enemy.hp - int(damage)
+        if self.enemy.hp < 0:
+            self.enemy.hp = 0
+        self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
+        self.enemyTurn(s)
     
     def tryToEscape(self, event=None):
         s = ''
@@ -179,6 +179,9 @@ class CombatUI():
         return s
 
     def enemyTurn(self, textOfPlayerTurn=False):
+        if self.enemy.hp == 0: # check if he dead
+            self.done("win")
+            return
         # for now, always try to attack TODO advanced combat
         self.playerGoesNext = True
         s=''
@@ -324,7 +327,7 @@ class CombatUI():
         self.result = result
         if self.result != 'inventory':
             self.song.stopSound()
-        get_app().exit(result=result)
+        get_app().exit(result=self.result)
  
 # STILL TODO
 # fix color of battlelog

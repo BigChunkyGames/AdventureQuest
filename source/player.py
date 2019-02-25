@@ -57,9 +57,10 @@ class Player:
         self.oneShotMixer = pygame.mixer
         self.oneShotMixer.pre_init(44100, -16, 8, 512)
         self.oneShotMixer.init()
-        # combat
+        # UI
         self.inCombat = False
         self.combatUI = None
+        self.inventoryUI = None
 
 #### misc ##############################################
 
@@ -139,9 +140,9 @@ class Player:
         return l
 
     def openInventory(self):
-        x = InventoryUI(self)
-        x.run()
-        return x.result
+        self.inventoryUI = InventoryUI(self)
+        self.inventoryUI.run()
+        return self.inventoryUI.result
 
     def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front

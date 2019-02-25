@@ -212,28 +212,37 @@ def consume(item): # for consuming consumables
                 text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
         else:
             text += item.consumable.consumeText + '\n' 
+
+        if item.consumable.dealDamage != 0:
+            if item.player.inCombat == True:
+                
+                # close inventory
+                item.player.inventoryUI.done()
+                # act as attack in combatUI
+                item.player.combatUI.attackEnemy(consumableDamage=item.consumable.dealDamage, consumableName=item.name)
+                return 'damage consumable'
+            else:
+                text += "There is no one to throw that at."
+                return text
+
         if item.consumable.heal != 0:
             item.player.regenHealth(health = item.consumable.heal, returnString=True, showCurrentHealth=False)
             text += "You regained " + str(item.consumable.heal) + " HP!\n"
+
         if item.consumable.xpgain != 0:
             text += str(item.player.gainXp(item.consumable.xpgain, returnString=True)) + '\n' 
+
         if item.consumable.karma != 0:
             item.player.karma = item.player.karma + item.consumable.karma
             # if item.consumable.karma <0:
             #     text += 'You didn\'t feel too great about doing that.\n'
             # elif item.consumable.karma >0:
             #     text += "You're proud of yourself for doing that.\n"
-        if item.consumable.damage != 0:
-            if item.player.inCombat == True:
-                item.player.combatUI.attackEnemy(consumableDamage=item.consumable.damage)
-                text += "You threw the " + str(item.name) + "."
-                text += "\nIt did "+item.consumable.damage+" damage!"
 
         item.player.inventory.remove(item)
     else:
         text = "You can't use that!"
     return text
-    # TODO damage
 
 def generateRandomConsumable(player, name = None, consumableType=None, customDescription='', consumable=None, powerLevel=0, returnItem=True):
     # returns an item of type consumable or just a consumable object if returnItem is false (in which case name and description are not used)

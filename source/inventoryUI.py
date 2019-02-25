@@ -86,6 +86,8 @@ class InventoryUI():
         if self.requestingConfirmation:
             self.requestingConfirmation = False
             result = self.player.activateItem(self.getCurrentlySelectedItem())
+            if result == 'damage consumable':
+                self.done(result)# this should be different
             self.updateListOfItems()
             self.makeListCurrentRadios(self.listOfItems) 
             self.refresh(setDescription=result)
@@ -239,9 +241,9 @@ class InventoryUI():
     def run(self):
         self.application.run()
 
-    def done(self):
-        self.result = "hit escape"
-        get_app().exit(result="hit escape")
+    def done(self, result="hit escape"):
+        self.result = result
+        get_app().exit(result=self.result)
  
 # TODO:
 # colors

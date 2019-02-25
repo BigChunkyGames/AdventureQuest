@@ -59,7 +59,7 @@ class Combat:
             show("You escaped from " + self.enemy.name + "! That was a close one!")
         elif self.player.combatUI.result == 'inventory':
             self.player.openInventory()
-            self.player.combatUI.resume()
+            #self.player.combatUI.resume()
             self.startCombat(self.player.combatUI)
         self.player.inCombat = False
         return
