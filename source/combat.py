@@ -38,13 +38,17 @@ class Combat:
         printc(s)
         show("@You're being attacked!@red@") 
 
-    def startCombat(self, GivenCombatUI=None):
+    def startCombat(self, GivenCombatUI=None, attackWithConsumable=None):
         self.player.inCombat = True
         if GivenCombatUI==None: 
             self.player.combatUI = CombatUI(self.player, self.enemy, song=self.song)
         else: 
             self.player.combatUI = GivenCombatUI
-        self.player.combatUI.run()
+            try: # this workaround is ugly as hell, but now killing enemy with consumable doesnt crash the game, so thats nice 
+                self.player.combatUI.attackEnemy(consumableDamage=attackWithConsumable.consumable.dealDamage, consumableName=attackWithConsumable.name)
+            except:
+                self.player.combatUI.result == 'win'
+        if self.player.combatUI.result != 'win': self.player.combatUI.run()
         self.result = self.player.combatUI.result
         clear()
         if self.player.combatUI.result == "win":
@@ -58,9 +62,11 @@ class Combat:
         elif self.player.combatUI.result == "escaped":
             show("You escaped from " + self.enemy.name + "! That was a close one!")
         elif self.player.combatUI.result == 'inventory':
-            self.player.openInventory()
-            #self.player.combatUI.resume()
-            self.startCombat(self.player.combatUI)
+            result = self.player.openInventory()
+            if not isinstance(result, str): # if result not string (because its a consumable)
+                self.startCombat(self.player.combatUI, attackWithConsumable=result)
+            else:
+                self.startCombat(self.player.combatUI)
         self.player.inCombat = False
         return
 

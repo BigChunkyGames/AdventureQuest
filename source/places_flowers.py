@@ -11,9 +11,8 @@ def flowers(player):
     if player.registerVisit("flowers")==1:
         while True:
             show("Daffodils, irises, daisies, larkspurs, dahlias, sunflowers, carnations, and amaryllis sprawl for miles around.")
-            show("They are so densly arranged and neatly packed that they block your path.")
+            show("They are so neatly arranged and densly packed that they block your path.")
             show("There is no other way across the field.")
-            show("There is only one way to get through the flowers.")
             print ("Attack the flowers?")
             if yesno(player):
                 player.karma = player.karma - 1
@@ -23,7 +22,7 @@ def flowers(player):
             else:
                 show("You decide to wait.")
                 s = ''
-                for i in range(30):
+                for i in range(20):
                     s +=". "
                 printSlowly(s, secondsBetweenChars=.5, pause=0, skipable=False, quotes=False)
                 print("Are you sure you don't want to attack the flowers?")
@@ -71,8 +70,8 @@ def flowers(player):
                 e = Enemy(player, "plains")
                 e.name = "Angry Worm Poet"
                 e.attack = 1
-                e.hp = 3
-                e.setListOfAttacks(["slime on your shoe...*"])
+                e.hp = 12
+                e.setListOfAttacks(["slime on your shoe...*", 'cower in fear...*', 'pray for mercy...*'])
                 c = Combat(player, alert=False, enemy=e)
                 clear()
                 if c.result == 'win':
@@ -80,19 +79,19 @@ def flowers(player):
                     player.history.append("killed angry worm poet")
 
                     show("Angry Worm Poet is smashed into the dust and drops the deed to Worm Home. ")
-                    description = "Tiny tattered legal document. It says:\nWhomst ever holds    this deed has rightful ownshership over 'Worm Home'."
+                    description = "Tiny tattered legal document. It says:\nWhomst ever holds this deed has rightful ownshership over 'Worm Home'."
                     i = Item(player, "Deed to 'Worm Home'", customDescription=description,      _type='Quest', )
                     player.history.append("owns worm home")
                     player.addToInventory(i) # FIXME inventory
                     print("Enter Worm Home?")
                     if yesno(player):
                         show("You open the tiny door to the worm's underground abode and walk inside.")
-                        show("However small it looked from the outside, Worm Home is    surprisingly spacious.")
+                        show("However small it looked from the outside, Worm Home is surprisingly spacious.")
                         show("There are pictures hanging on the dirt walls of the entryway.")
-                        show("The pictures is a family photo of Angry Worm Poet and his loving  parents.")
+                        show("The pictures is a family photo of Angry Worm Poet and his loving parents.")
                         show("He was an even smaller wormling then.")
                         show("A happy wormling with joyfilled cherub cheeks.")
-                        show("A family tree is knitted into a tapestry on the far wall above a  quaint table supporting a bouquet of freshly picked flowers.")
+                        show("A family tree is knitted into a tapestry on the far wall above a quaint table supporting a bouquet of freshly picked flowers.")
                         show('"Angry Worm Poet" is the last worm on the family tree.')
                         show("A freshly baked pie lays uneaten on the windowsill.")
                         show("There is a note next to the pie.")
@@ -100,7 +99,6 @@ def flowers(player):
                         show("It's strawberry rhubarb, your favorite!")
                         show("I hope you think of me with every scrumptious bite.")
                         show("I'll have a new one for you next week.")
-                        print("")
                         show("So, how are things with Beautiful Worm Girlfriend?")
                         show("Did you pop the question yet?")
                         show("She is just going to love Worm Grandmother's old wedding ring.")
@@ -190,7 +188,7 @@ def flowers(player):
             return
 
 def takeThePie(player):
-    i = Item(player, "Angry Worm Poet's Pie", customDescription="It's strawberry rhubarb, his favorite.", _type='consumable', sellValue=8, consumable=Consumable(consumeText="You're not really a big fan of rhubarb.", heal=3))
+    i = Item(player, "Angry Worm Poet's Pie", customDescription="It's strawberry rhubarb, his favorite.", _type='consumable', sellValue=8, consumable=Consumable(player, consumeText="You're not really a big fan of rhubarb.", heal=3))
     player.addToInventory(i)            
 
 def recievePoem(player):

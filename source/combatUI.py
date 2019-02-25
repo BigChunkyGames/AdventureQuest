@@ -125,12 +125,10 @@ class CombatUI():
 
     def handleEnter(self, event):
         if not self.playerGoesNext: # check if it's actually your turn
-            self.enemyTurn()
             return
         self.playerGoesNext = False
 
-        # handle choice
-        choice = self.radios.values[self.radios._selected_index][0] # show change to selection with *
+        choice = self.radios.values[self.radios._selected_index][0] 
         s = ''
         if choice == "Attack":
             self.attackEnemy()

@@ -27,7 +27,7 @@ clear()
 class Game:
     def __init__(self):
         self.player= Player()
-        self.player.devMode = True 
+        self.player.devMode = False 
 
     def start(self):
         setConsoleWindowSize(WINDOW_WIDTH, 15) # set dimensions of window (imported from utils)

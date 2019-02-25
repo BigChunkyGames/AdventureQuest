@@ -86,7 +86,7 @@ class InventoryUI():
         if self.requestingConfirmation:
             self.requestingConfirmation = False
             result = self.player.activateItem(self.getCurrentlySelectedItem())
-            if result == 'damage consumable':
+            if not isinstance(result, str): # if result isnt a string
                 self.done(result)# this should be different
             self.updateListOfItems()
             self.makeListCurrentRadios(self.listOfItems) 
