@@ -2,7 +2,7 @@
 
 print('loading...')
 import random
-from source.utils import * # import all functions from utils
+from source.utils import Sound, show , wait # import all functions from utils
 from source.intro import charCreation, introduction
 from source.places_maintown import *
 from source.player import *
@@ -24,41 +24,48 @@ from source.places_pod import pod
 clear() 
 
 
-class Game: # perhaps this is what should be saved
+class Game:
     def __init__(self):
         self.player= Player()
-        self.player.devMode = False 
+        self.player.devMode = True 
 
     def start(self):
-        os.system('mode con: cols='+WINDOW_WIDTH+' lines='+WINDOW_HEIGHT) # set dimensions of window (imported from utils)
+        setConsoleWindowSize(WINDOW_WIDTH, 15) # set dimensions of window (imported from utils)
         handleFolderLocations(self.player)
         if not self.player.devMode: # not dev mode
             # FIXME animation started not wokring????????
-            # Animation('introAnimation')
+            Animation('introAnimation')
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             if newOrLoad(self.player): # loads or returns true
                 charCreation(self.player) 
                 introduction(self.player)
                 maintown(self.player)
         else: # dev mode
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             devMode(self.player)
+            # saveGame(self.player, printAboutIt=True)
+            # loadGame(self.player)
+
+            #Sound( self.player,'worry 1.wav')
+            
+            # places 
+
             #pod(self.player)
-            #saveGame(self.player)
-            #loadGame(self.player)
-            Sound('worry 1.mp3')
-            #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
             #babel(self.player)
             #introduction(self.player)
             #maintown(self.player)
-            #bonysShop(self.player)
-            #maintownShop(self.player)
+            
             #dogeTown(self.player)
-
             #flowers(self.player)
-
             #self.player.history.append('owns worm home')
             #wormHome(self.player)
+
+            # ui
+
+            #bonysShop(self.player)
+            #maintownShop(self.player)
             
 
             # lisht = []
@@ -66,7 +73,7 @@ class Game: # perhaps this is what should be saved
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            #c = Combat(self.player) # jump to combat
+            c = Combat(self.player) # jump to combat
 
             self.player.openInventory()
             

@@ -32,8 +32,8 @@ import random
 
 class CombatUI():
 
-    def __init__(self, player, enemy, song='worry 1.mp3'):
-        self.song = Sound(fileName = song, loop=-1)
+    def __init__(self, player, enemy, song):
+        self.song = Sound( player,fileName = song, loop=-1)
         self.player = player
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
@@ -130,19 +130,10 @@ class CombatUI():
         self.playerGoesNext = False
 
         # handle choice
-        self.radios.current_value = self.radios.values[self.radios._selected_index][0] # show change to selection with *
-        choice = self.radios.current_value
+        choice = self.radios.values[self.radios._selected_index][0] # show change to selection with *
         s = ''
         if choice == "Attack":
-            s +=  "You tried to attack... "
-            damage = self.player.getTotalAttackPower()
-            s += " and did " 
-            s += str(damage)
-            s += " damage!" # TODO color
-            self.enemy.hp = self.enemy.hp - damage
-            if self.enemy.hp < 0:
-                self.enemy.hp = 0
-            self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
+            s += self.attackEnemy()
         elif choice == "Dodge": # dodging increases chance for enemy to miss by 30% SCALING
             s += "You tried to dodge... "
             self.playerJustDodged = True 
@@ -159,6 +150,21 @@ class CombatUI():
             self.done("win")
             return
         self.enemyTurn(s)
+
+    def attackEnemy(self, alwaysHit=True, consumableDamage=False, ):
+        if consumableDamage not False:
+            "You threw the " + str(item.name) + "." YO FIGURE OUT WHAT TO PUT HERE
+        else:
+            s +=  "You tried to attack... "
+            damage = self.player.getTotalAttackPower()
+            s += " and did " 
+            s += str(damage)
+            s += " damage!" # TODO color
+            self.enemy.hp = self.enemy.hp - damage
+            if self.enemy.hp < 0:
+                self.enemy.hp = 0
+            self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
+            return s
     
     def tryToEscape(self, event=None):
         s = ''
@@ -200,8 +206,8 @@ class CombatUI():
             else: 
                 s += " It dealt " + str(damage) + " damage!"
             # self.player.hp = self.player.hp - damage # lose health
-            t1 = threading.Thread(target=self.rollNumbers(self.player.hp, self.player.hp - damage), args=())
-            t1.start()
+            #t1 = threading.Thread(target=self.rollNumbers(self.player.hp, self.player.hp - damage), args=())
+            #t1.start()
             # self.rollNumbers(self.player.hp, self.player.hp - damage)
 
             if self.player.hp < 0:

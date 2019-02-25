@@ -57,7 +57,7 @@ def maintown(player):
             print(getInvalidOptionText() + '\n')
 
 def home(player):
-    s = Sound('home 1.mp3', loop=-1)
+    s = Sound( player,'home 1.mp3', loop=-1)
     show("You enter your house through the familiar front door, taking in "
          "the sights of your childhood abode, reminiscing about all the "
          "things you did as a kid.")
@@ -161,6 +161,7 @@ def blacksmith(player):
         # TODO crafting
 
 def tavern(player):
+    Sound(player, 'cumulus.wav')
     if player.registerVisit("Main Town Tavern") == 1:
         show("You walk into the old tavern, wanting to visit the old place "
              "once again.")

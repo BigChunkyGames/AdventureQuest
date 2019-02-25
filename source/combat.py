@@ -11,6 +11,7 @@ class Combat:
         # will  use given enemy's power level over enemyPowerLevel
         self.player = player
         self.biome = biome
+        self.song = self.getSong()
         self.result = None # win, escaped, lose
         if not enemy == None: # if giving enemy
             self.enemy = enemy
@@ -38,26 +39,29 @@ class Combat:
         show("@You're being attacked!@red@") 
 
     def startCombat(self, GivenCombatUI=None):
+        self.player.inCombat = True
         if GivenCombatUI==None: 
-            c = CombatUI(self.player, self.enemy)
+            self.player.combatUI = CombatUI(self.player, self.enemy, song=self.song)
         else: 
-            c = GivenCombatUI
-        c.run()
-        self.result = c.result
+            self.player.combatUI = GivenCombatUI
+        self.player.combatUI.run()
+        self.result = self.player.combatUI.result
         clear()
-        if c.result == "win":
+        if self.player.combatUI.result == "win":
             show("You defeated " + self.enemy.name + "!")
             self.player.gainXp(self.enemy.xpworth, scale=False) # xp already scales when creating enemy
             self.player.regenHealth()# gain health
             if tryForDrop(25): # TODO luck
                 self.getLoot()
-        elif c.result == "lose":
+        elif self.player.combatUI.result == "lose":
             self.player.death()
-        elif c.result == "escaped":
+        elif self.player.combatUI.result == "escaped":
             show("You escaped from " + self.enemy.name + "! That was a close one!")
-        elif c.result == 'inventory':
+        elif self.player.combatUI.result == 'inventory':
             self.player.openInventory()
-            self.startCombat(c)
+            self.player.combatUI.resume()
+            self.startCombat(self.player.combatUI)
+        self.player.inCombat = False
         return
 
     def getLoot(self):
@@ -70,6 +74,13 @@ class Combat:
         show("@You found "+item.name +".@green@")
         #self.player.addToInventory(item)
         self.player.inventory.insert(0, item)
+
+    def getSong(self):
+        if self.biome == 'desert':
+            return 'Third Castle.wav'
+        else:
+            return 'worry 1.wav'
+
         
 
 

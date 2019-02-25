@@ -212,8 +212,8 @@ def hand(player):
 
 def propernouns(player):
     print('What is the name of your home town?')
-    town = player.getInput()
+    town = player.getInput().title()
     print("What is the name of the land?")
-    land = player.getInput()
+    land = player.getInput().title()
     return town, land
 

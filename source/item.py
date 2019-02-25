@@ -208,9 +208,8 @@ def consume(item): # for consuming consumables
     text=''
     if item.type=='consumable' and item.consumable != None:
         if item.consumable.consumeText == None:
-            if item.consumable.consumableType == 'xp' or item.consumable.consumableType == 'heal': verb = 'ate'
-            else: verb = 'threw'
-            text += "You "+verb+" the " + str(item.name) + ".\n It was delicious.\n"
+            if item.consumable.consumableType == 'xp' or item.consumable.consumableType == 'heal': 
+                text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
         else:
             text += item.consumable.consumeText + '\n' 
         if item.consumable.heal != 0:
@@ -224,6 +223,11 @@ def consume(item): # for consuming consumables
             #     text += 'You didn\'t feel too great about doing that.\n'
             # elif item.consumable.karma >0:
             #     text += "You're proud of yourself for doing that.\n"
+        if item.consumable.damage != 0:
+            if item.player.inCombat == True:
+                item.player.combatUI.attackEnemy(consumableDamage=item.consumable.damage)
+                text += "You threw the " + str(item.name) + "."
+                text += "\nIt did "+item.consumable.damage+" damage!"
 
         item.player.inventory.remove(item)
     else:

@@ -2,13 +2,11 @@ from source.item import generateRandomArmourOrWeapon, Item, Consumable,generateR
 
 
 def devMode(player):
-    player.aspect['name'] = "devMode"
-    player.aspect['gender'] = "boi"
-    player.aspect['heshe'], player.aspect['HeShe'], player.aspect['hisher'] = "he", "He", "his"
+
+    player.aspect['name'] = "Jim Johnson"
     player.aspect['hand'] = 'right'
-    player.aspect['occ'], player.aspect['viverb'], player.aspect['skill1'], player.aspect['skill2'] = "fireman", "stab", "sewing", "rubiks cube solving"
     player.aspect['town'], player.aspect['land'] = "Swagsburgh", "Skyrim"
-    player.aspect['adj1'], player.aspect['adj2'], player.aspect['adj3'], player.aspect['adj4'], player.aspect['adj5'] = "cool", "neato", "sick nasty", "wiggity wiggity whack", "excellent"
+    player.aspect['age'] = 21
 
     #change some more values
     player.money = 8000
@@ -18,17 +16,17 @@ def devMode(player):
 
 
 
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
-    player.levelUp(printAboutIt=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
+    player.levelUp(printAboutIt=False, sound=False)
 
     player.clantags.append('[test1]')
     player.clantags.append('[test]')

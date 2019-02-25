@@ -104,10 +104,12 @@
 # while True: punchJacksonInTheFace()
 from __future__ import unicode_literals
 import unicodedata
+import sys
 s=''
-# s = str(s)
-print('aaaàçççñññ'.decode('unicode-escape'))
 
+# s = str(s)
+#print(u'aaaàçççñññ')
+sys.stdout.buffer.write(u'█'.encode('UTF-8'))
 # s = unicodedata.normalize('NFKD', s).encode('ascii','ignore')
 
 # print(s)

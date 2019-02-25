@@ -50,8 +50,21 @@ class Player:
         self.currentLocationY = 5 # maintown
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
         self.day = 1
+        # sound
+        self.musicMixer = pygame.mixer
+        self.musicMixer.pre_init(44100, -16, 1, 512)
+        self.musicMixer.init()
+        self.oneShotMixer = pygame.mixer
+        self.oneShotMixer.pre_init(44100, -16, 8, 512)
+        self.oneShotMixer.init()
+        # combat
+        self.inCombat = False
+        self.combatUI = None
 
 #### misc ##############################################
+
+    def stopMusic(self):
+        self.musicMixer.stop()
 
     def getInput(self, oneTry=False): # redundency for easier coding
         return getInput(self, oneTry)
@@ -75,8 +88,7 @@ class Player:
         if includeClantags:
             for c in self.clantags:
                 s += " " + str(c)
-        else:
-            return  s
+        return s
 
 
 
@@ -264,7 +276,8 @@ class Player:
 
 #### leveling ####################################################
 
-    def levelUp(self, printAboutIt=True):
+    def levelUp(self, printAboutIt=True, sound=True):
+        if sound==True: Sound(self, 'achieve.wav')
         while True:
             self.level = self.level + 1
             if printAboutIt:printWithColor(str(self.level), before='\nYou are now level ', color="magenta", after= "!")
@@ -300,7 +313,7 @@ class Player:
         #TODO italisize
 
     def gainXp(self, xp, scale = True, returnString=False):
-        Sound('etheral_unlock_1.mp3')
+        Sound( self,'etheral_unlock_1.mp3')
         if scale:
             xp = self.scale(xp) # gain xp based on base xp * 2^level
         self.xp = self.xp + xp
@@ -358,6 +371,7 @@ class Player:
 
     def die(self, customText=None): self.death(customText)
     def death(self, customText=None):
+        Sound(self, 'etheral plunge.wav')
         if customText:
             printSlowly(str(customText), skipable=False)
         else:

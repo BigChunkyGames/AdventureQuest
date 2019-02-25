@@ -7,6 +7,7 @@ import random
 # from colorama import *
 import time
 import pickle 
+import dill as pickle2
 # init(autoreset=True) # init colors and reset to white each time
 from prompt_toolkit import print_formatted_text, HTML
 import getpass
@@ -26,7 +27,7 @@ from prompt_toolkit.formatted_text import FormattedText
 import linecache
 
 
-WINDOW_HEIGHT = '40'
+WINDOW_HEIGHT = '35'
 WINDOW_WIDTH = '91'
 
 #### user input #############################################
@@ -63,6 +64,7 @@ def dichotomy(option1, option2):
             print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
 def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
+    #click = Click(player)
     while True:
         inp = input(prompt).lower().strip()
 
@@ -94,9 +96,12 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
         elif inp == '':
             continue # prevents no input from being accepted
         else:
-            return inp
+            break
         if oneTry:
-            return inp
+            break
+    #click.click()
+    Sound(player, 'click.wav')
+    return inp
 
 def checkForCancel(inp):
     if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
@@ -289,23 +294,18 @@ def thread(targetFunction, numberOfThreads=1,): # not used
         t.start()
 
 #### file management #######################################################
-        
+
 def saveGame(player, printAboutIt=False): # just do yourself a favor and don't look at this disgusting code
     # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
     try:
         with open(player.stats['saveDirectory']+"/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
-            pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle2.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
     except Exception as e:
-        try:
-            with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
-                pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
-        except Exception as e2:
-            printc("@(The game should have saved right there but it didn't D: )@red@")
-            print(e)
-            print(e2)
-            return
+        printc("@(The game should have saved right there but it didn't D: )@red@")
+        print(e)
+        return
 
     if printAboutIt:
         printc("@Game "+saveIndex+" saved!@green@")
@@ -317,8 +317,9 @@ def loadGame(player): # loads most recent save file
         show("There are no saved games yet! You need to go somewhere first!")
         return
     try: # try to load newest save file
-        with open(player.stats['saveDirectory'] +'/'+ newestFile, "rb") as loading:
-            player = pickle.load(loading)
+        with open(player.stats['saveDirectory'] +'/'+ newestFile, "rb") as file:
+            unpickler = pickle.Unpickler(file)
+            player = unpickler.load()
     except FileNotFoundError:
         printc("@Couldn't find any files to load!@red@")
         return False
@@ -350,17 +351,33 @@ def generateTimeStamp():
 def getNewestFile(player):
     files = os.listdir(player.stats['saveDirectory'])
     if len(files)>0:
-        return max(files, key=lambda f: os.path.getctime("{}/{}".format(player.stats['saveDirectory'], f)))
+        fileName = max(files, key=lambda f: os.path.getctime("{}/{}".format(player.stats['saveDirectory'], f)))
+        if os.stat(player.stats['saveDirectory']+'/'+fileName).st_size > 0:
+            return fileName
+        else:
+            os.remove(fileName)
+            return getNewestFile(player)
     return None
 
 def handleFolderLocations(player):
     try:
-        files = os.listdir('saves')
-        player.stats['saveDirectory'] = 'saves'
+        files = os.listdir('dist/saves')
+        player.stats['saveDirectory'] = 'dist/saves'
+        
     except:
         try: 
-            files = os.listdir('dist/saves')
-            player.stats['saveDirectory'] = 'dist/saves'
+            files = os.listdir('saves')
+            player.stats['saveDirectory'] = 'saves'
+        except:
+            print("Couldn't find save folder D:")
+
+    try:
+        files = os.listdir('dist/audio/music loops/')
+        player.stats['audioDirectory'] = 'dist/audio'
+    except:
+        try: 
+            files = os.listdir('audio')
+            player.stats['audioDirectory'] = 'audio'
         except:
             print("Couldn't find save folder D:")
 
@@ -412,6 +429,9 @@ def getRandInt(min = 1, max= 10): # return random int between 1 and max
     return random.randint(1, max)
 
 #### misc ####################################################
+
+def setConsoleWindowSize(width, height):
+    os.system('mode con: cols='+str(width)+' lines='+str(height))
 
 def wait(seconds): # accepts floats
     ''' printOnSecond is a string btw'''
@@ -496,36 +516,62 @@ class Sound():
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
     # NOTE: make loop -1 to loop forever, loop 0 to loop once
     # NOTE: volume adjustments (fade in out) only work with wav files
-    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0):
-        if os.path.exists('dist/audio/music loops/' + fileName):
-            self.fileName = "dist/audio/music loops/" + fileName
-        elif os.path.exists('dist/audio/one shots/' + fileName):
-            self.fileName = "dist/audio/one shots/" + fileName
-        elif os.path.exists('audio/music loops/' + fileName):
-            self.fileName = "audio/music loops/" + fileName
-        elif os.path.exists('audio/one shots/' + fileName):
-            self.fileName = "audio/one shots/" + fileName
+    def __init__(self, player=None, fileName=None, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0, stopOtherMusicLoops=True):
+
+        self.loop = loop
+        self.player = player
+        folder = player.stats['audioDirectory']
+
+        if   os.path.exists(folder+'/music loops/' + fileName):
+            self.fileName = folder+"/music loops/" + fileName
+            self.setMixer('music loops')
+            if self.loop == 0: # just make music loop always
+                self.loop = -1
+        elif os.path.exists(folder+'/one shots/' + fileName):
+            self.fileName = folder+'/one shots/' + fileName
+            self.setMixer('one shots')
         else:
             print("(couldn't find sound file: " + fileName + ")")
             input('halt')
-        self.loop = loop
-        # initialize
-        self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
-        self.mixer.init()
+
         try:
             if '.wav' in self.fileName:
                 self.format = 'wav'
                 self.sound = self.mixer.Sound(self.fileName) # sound method only supports wav files
                 self.sound.set_volume(volume)
-                if playNow:
-                    self.sound.play(self.loop)
+                if playNow: # play it
+                    if self.mixer.get_busy() and stopOtherMusicLoops and 'music loops' in self.fileName:
+                        self.mixer.stop()
+                    self.channel.play(self.sound, self.loop)
             elif '.mp3' in self.fileName:
                 self.format = 'mp3'
                 self.sound = self.mixer.music.load(self.fileName)
                 if playNow:
                     self.mixer.music.play(self.loop)
         except:
-            print("Couldn't load " + fileName)
+            print("Couldn't load " + fileName + ' >:O')
+
+    def setMixer(self, whichOne): # also makes channels
+        if self.player == None:
+            self.makeNewMixer()
+        else:
+            try:
+                if whichOne == 'one shots':
+                    self.mixer = self.player.oneShotMixer
+                elif whichOne == 'music loops':
+                    self.mixer = self.player.musicMixer
+                self.channel = self.mixer.find_channel()
+            except:
+                self.makeNewMixer()
+
+
+    def makeNewMixer(self):
+        self.mixer = pygame.mixer
+        self.mixer.pre_init(44100, -16, 1, 512)
+        self.mixer.init()
+        self.channel = self.mixer.Channel(0)
+        
+
 
     def getLength(self): # returns duration of wav file in seconds
         import wave
@@ -614,7 +660,7 @@ class Animation():
             for char in range(0,place):
                 if char < place + subtraction and char < width:
                     try:
-                        s += rows[rowIndex][char].decode('unicode-escape') # print char in this row
+                        s += rows[rowIndex][char] # print char in this row
                     except:
                         pass
                 elif char < width -1:
@@ -624,13 +670,14 @@ class Animation():
             s += '\n'
             subtraction -= spaces
         # clear()
+        sys.stdout.buffer.write(s.encode('cp437'))
         # sys.stdout.write(s)
         # sys.stdout.flush()
-        if self.smash:
-            sys.stdout.write("\033["+str(len(rows))+"A")
-        else:
-            sys.stdout.write("\033["+str(len(rows)+1)+"A")
-        print(s)
+        # if self.smash:
+        #     sys.stdout.write("\033["+str(len(rows))+"A")
+        # else:
+        #     sys.stdout.write("\033["+str(len(rows)+1)+"A")
+        # print(s)
         #print(s.decode('unicode-escape'))#.encode('utf-8'))
         wait(.05)
         if done: return
@@ -646,16 +693,16 @@ def fillWithSpaces(text, length):
                 r.append(' ')
     return join(rows) 
 
-ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗██╗   ██╗██████╗ ███████╗
-██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝██║   ██║██╔══██╗██╔════╝
-███████║██║  ██║██║   ██║█████╗  ██╔██╗ ██║   ██║   ██║   ██║██████╔╝█████╗  
-██╔══██║██║  ██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██╔══██╗██╔══╝  
-██║  ██║██████╔╝ ╚████╔╝ ███████╗██║ ╚████║   ██║   ╚██████╔╝██║  ██║███████╗
-╚═╝  ╚═╝╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
+ASCII_LOGO = """ █████╗  ██████╗  ██╗   ██╗ ███████╗ ███╗   ██╗ ████████╗ ██╗   ██╗ ██████╗  ███████╗
+██╔══██╗ ██╔══██╗ ██║   ██║ ██╔════╝ ████╗  ██║ ╚══██╔══╝ ██║   ██║ ██╔══██╗ ██╔════╝
+███████║ ██║  ██║ ██║   ██║ █████╗   ██╔██╗ ██║    ██║    ██║   ██║ ██████╔╝ █████╗  
+██╔══██║ ██║  ██║ ╚██╗ ██╔╝ ██╔══╝   ██║╚██╗██║    ██║    ██║   ██║ ██╔══██╗ ██╔══╝  
+██║  ██║ ██████╔╝  ╚████╔╝  ███████╗ ██║ ╚████║    ██║    ╚██████╔╝ ██║  ██║ ███████╗
+╚═╝  ╚═╝ ╚═════╝    ╚═══╝   ╚══════╝ ╚═╝  ╚═══╝    ╚═╝     ╚═════╝  ╚═╝  ╚═╝ ╚══════╝
                                                                              
-             ██████╗ ██╗   ██╗███████╗███████╗████████╗                          
-            ██╔═══██╗██║   ██║██╔════╝██╔════╝╚══██╔══╝                          
-            ██║   ██║██║   ██║█████╗  ███████╗   ██║                             
-            ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║                             
-            ╚██████╔╝╚██████╔╝███████╗███████║   ██║                             
-             ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝                             """
+                  ██████╗  ██╗   ██╗ ███████╗ ███████╗ ████████╗                          
+                 ██╔═══██╗ ██║   ██║ ██╔════╝ ██╔════╝ ╚══██╔══╝                          
+                 ██║   ██║ ██║   ██║ █████╗   ███████╗    ██║                             
+                 ██║▄▄ ██║ ██║   ██║ ██╔══╝   ╚════██║    ██║                             
+                 ╚██████╔╝ ╚██████╔╝ ███████╗ ███████║    ██║                             
+                  ╚══▀▀═╝   ╚═════╝  ╚══════╝ ╚══════╝    ╚═╝                             """
