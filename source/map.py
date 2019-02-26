@@ -120,6 +120,7 @@ class Map:
             return
         player.currentLocationX = x
         player.currentLocationY = y
+        saveGame(player)
         if not (self.getTile(x,y).placeFunction):
             # no interesting thing at this tile,
             self.makeWildernessEvent(x,y)

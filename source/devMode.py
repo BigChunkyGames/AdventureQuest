@@ -5,7 +5,7 @@ def devMode(player):
 
     player.aspect['name'] = "Jim Johnson"
     player.aspect['hand'] = 'right'
-    player.aspect['town'], player.aspect['land'] = "Swagsburgh", "Skyrim"
+    player.aspect['town'], player.aspect['land'] = "Maintown", "Flat Earth"
     player.aspect['age'] = 21
 
     #change some more values
@@ -69,5 +69,5 @@ def devMode(player):
 
 
 
-        
+
     return

@@ -5,7 +5,6 @@ from source.lists import getInvalidOptionText
 
 def world(player):
     player.registerVisit("world")
-    saveGame(player)
     
     while True:
         clear()

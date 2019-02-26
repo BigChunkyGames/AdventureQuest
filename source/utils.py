@@ -359,7 +359,7 @@ def getNewestFile(player):
             return getNewestFile(player)
     return None
 
-def handleFolderLocations(player):
+def setFolderLocations(player):
     try:
         files = os.listdir('dist/saves')
         player.stats['saveDirectory'] = 'dist/saves'

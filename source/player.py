@@ -61,6 +61,8 @@ class Player:
         self.inCombat = False
         self.combatUI = None
         self.inventoryUI = None
+        # misc
+        setFolderLocations(self)
 
 #### misc ##############################################
 

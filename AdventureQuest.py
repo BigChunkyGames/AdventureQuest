@@ -27,11 +27,10 @@ clear()
 class Game:
     def __init__(self):
         self.player= Player()
-        self.player.devMode = False 
+        self.player.devMode = True 
 
     def start(self):
         setConsoleWindowSize(WINDOW_WIDTH, 15) # set dimensions of window (imported from utils)
-        handleFolderLocations(self.player)
         if not self.player.devMode: # not dev mode
             # FIXME animation started not wokring????????
             Animation('introAnimation')
@@ -72,9 +71,9 @@ class Game:
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            c = Combat(self.player) # jump to combat
+            #c = Combat(self.player) # jump to combat
 
-            self.player.openInventory()
+            #self.player.openInventory()
             
             #s = Slots(self.player)
             #s.slot_machine()
