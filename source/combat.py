@@ -37,6 +37,7 @@ class Combat:
             s += " you!"
         printc(s)
         show("@You're being attacked!@red@") 
+        clear()
 
     def startCombat(self, GivenCombatUI=None, attackWithConsumable=None):
         self.player.inCombat = True
@@ -50,13 +51,14 @@ class Combat:
                 self.player.combatUI.result == 'win'
         if self.player.combatUI.result != 'win': self.player.combatUI.run()
         self.result = self.player.combatUI.result
-        clear()
         if self.player.combatUI.result == "win":
+            s = Sound(self.player, self.getWinNoise())
             show("You defeated " + self.enemy.name + "!")
             self.player.gainXp(self.enemy.xpworth, scale=False) # xp already scales when creating enemy
             self.player.regenHealth()# gain health
             if tryForDrop(25): # TODO luck
                 self.getLoot()
+            s.stopSound()
         elif self.player.combatUI.result == "lose":
             self.player.death()
         elif self.player.combatUI.result == "escaped":
@@ -84,8 +86,18 @@ class Combat:
     def getSong(self):
         if self.biome == 'desert':
             return 'Third Castle.wav'
+        elif self.biome == 'plains':
+            return 'worry 2.wav'
         else:
             return 'worry 1.wav'
+
+    def getWinNoise(self):
+        listOfWinNoises = [
+            'achieve2.wav'
+        ]
+        return getRandomIndex(listOfWinNoises)
+
+
 
         
 

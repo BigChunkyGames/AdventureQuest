@@ -45,8 +45,10 @@ def yesno(player):
     while True:
         userinput = getInput(player)
         if 'y' in userinput or 'sure' in userinput or 'ok' in userinput:
+            Sound(player, 'yes.wav')
             return True
         elif 'n' in userinput:
+            Sound(player, 'no.wav')
             return False
         else:
             printc("@'yes'@yellow@ or @'no'@yellow@.")
@@ -362,22 +364,22 @@ def getNewestFile(player):
 def setFolderLocations(player):
     try:
         files = os.listdir('dist/saves')
-        player.stats['saveDirectory'] = 'dist/saves'
+        player.stats['saveDirectory'] = 'dist/saves/'
         
     except:
         try: 
             files = os.listdir('saves')
-            player.stats['saveDirectory'] = 'saves'
+            player.stats['saveDirectory'] = 'saves/'
         except:
             print("Couldn't find save folder D:")
 
     try:
-        files = os.listdir('dist/audio/music loops/')
-        player.stats['audioDirectory'] = 'dist/audio'
+        files = os.listdir('dist/audio/music_loops/')
+        player.stats['audioDirectory'] = 'dist/audio/'
     except:
         try: 
             files = os.listdir('audio')
-            player.stats['audioDirectory'] = 'audio'
+            player.stats['audioDirectory'] = 'audio/'
         except:
             print("Couldn't find save folder D:")
 
@@ -521,17 +523,18 @@ class Sound():
         self.loop = loop
         self.player = player
         folder = player.stats['audioDirectory']
+        # dist/audio/ or audio/
 
-        if   os.path.exists(folder+'/music loops/' + fileName):
-            self.fileName = folder+"/music loops/" + fileName
-            self.setMixer('music loops')
+        if   os.path.exists(folder+'music_loops/' + fileName):
+            self.fileName = folder+"music_loops/" + fileName
+            self.setMixer('music_loops')
             if self.loop == 0: # just make music loop always
                 self.loop = -1
-        elif os.path.exists(folder+'/one shots/' + fileName):
-            self.fileName = folder+'/one shots/' + fileName
-            self.setMixer('one shots')
+        elif os.path.exists(folder+'one_shots/' + fileName):
+            self.fileName = folder+'one_shots/' + fileName
+            self.setMixer('one_shots')
         else:
-            print("(couldn't find sound file: " + fileName + ")")
+            print("(couldn't find sound file: " + folder + '/?/'+ fileName + ")")
             input('halt')
 
         try:
@@ -540,7 +543,7 @@ class Sound():
                 self.sound = self.mixer.Sound(self.fileName) # sound method only supports wav files
                 self.sound.set_volume(volume)
                 if playNow: # play it
-                    if self.mixer.get_busy() and stopOtherMusicLoops and 'music loops' in self.fileName:
+                    if self.mixer.get_busy() and stopOtherMusicLoops and 'music_loops' in self.fileName:
                         self.mixer.stop()
                     self.channel.play(self.sound, self.loop)
             elif '.mp3' in self.fileName:
@@ -549,16 +552,16 @@ class Sound():
                 if playNow:
                     self.mixer.music.play(self.loop)
         except:
-            print("Couldn't load " + fileName + ' >:O')
+            print("Couldn't load " +fileName + ' >:O')
 
     def setMixer(self, whichOne): # also makes channels
         if self.player == None:
             self.makeNewMixer()
         else:
             try:
-                if whichOne == 'one shots':
+                if whichOne == 'one_shots':
                     self.mixer = self.player.oneShotMixer
-                elif whichOne == 'music loops':
+                elif whichOne == 'music_loops':
                     self.mixer = self.player.musicMixer
                 self.channel = self.mixer.find_channel()
             except:
