@@ -305,6 +305,10 @@ def saveGame(player, printAboutIt=False): # just do yourself a favor and don't l
     except Exception as e:
         printc("@(The game should have saved right there but it didn't D: )@red@")
         print(e)
+        pickle2.detect.trace(True)
+        print(pickle2.detect.baditems(player))
+        print(pickle2.detect.errors(player))
+        print(pickle2.detect.baditems(globals()))
         return
 
     if printAboutIt:

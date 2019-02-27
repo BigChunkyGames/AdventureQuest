@@ -50,8 +50,7 @@ def maintown(player):
                 
             else:
                 show("You decide to leave your home town for greener pastures.")
-            # TODO wormhole
-            world(player)
+                # TODO wormhole
             return
         else:
             print(getInvalidOptionText() + '\n')

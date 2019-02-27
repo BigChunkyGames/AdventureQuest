@@ -133,5 +133,4 @@ class Map:
 
     def goToCurrentLocation(self, player):
         self.goTo(player.currentLocationX, player.currentLocationY, player)
-        world(player)
         

@@ -67,6 +67,6 @@ def wormHole(player):
                     return
                 elif checkForCancel(x):
                     show("Just kidding.")
-                    return world(player) 
+                    return 
                 else:
                     show(getInvalidOptionText(traveling=True))
