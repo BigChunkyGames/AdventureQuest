@@ -3,7 +3,7 @@
 from source.utils import getInput, clear, show, printc, bug, yesno, checkForCancel, saveGame
 from source.lists import getInvalidOptionText
 
-def world(player):
+def world(player): # returning from world should always immedietly call world again
     player.registerVisit("world")
     saveGame(player)
     while True:
@@ -14,6 +14,7 @@ def world(player):
         printc("To the @'South'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),
         printc("To the @'West'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX -1, player.currentLocationY )), 
         x = getInput(player)
+        if x == 'load': return 
         if( x == "north" or x == "n"):
             player.map.goTo(player.currentLocationX , player.currentLocationY - 1, player)
             return

@@ -90,6 +90,7 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
         #     saveGame(player)
         elif inp == "load":
             loadGame(player)
+            return 'load'
         elif inp == 'quit':
             print("Are you sure you would like to quit?")
             if yesno(player):
@@ -301,18 +302,21 @@ def saveGame(player, printAboutIt=False): # just do yourself a favor and don't l
     # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
+    player.removeMixers()
     try:
         with open(player.stats['saveDirectory']+"/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
-            pickle2.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
+            pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
     except Exception as e:
         printc("@(The game should have saved right there but it didn't D: )@red@")
         print(e)
-        pickle2.detect.trace(True)
-        print(pickle2.detect.baditems(player))
-        print(pickle2.detect.errors(player))
-        print(pickle2.detect.baditems(globals()))
-        return
+        #pickle2.detect.trace(True)
+        #print(pickle.detect.baditems(player))
+        input('dang it')
+        #print(pickle2.detect.errors(player))
+        #print(pickle2.detect.baditems(globals()))
+        printAboutIt=False
 
+    player.addMixers()
     if printAboutIt:
         printc("@Game "+saveIndex+" saved!@green@")
     
@@ -330,6 +334,7 @@ def loadGame(player): # loads most recent save file
         printc("@Couldn't find any files to load!@red@")
         return False
     show("@Game loaded!@green@")
+    player.addMixers()
     player.map.goToCurrentLocation(player)
 
 def newOrLoad(player):

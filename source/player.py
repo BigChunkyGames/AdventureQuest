@@ -51,12 +51,7 @@ class Player:
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
         self.day = 1
         # sound
-        self.musicMixer = pygame.mixer
-        self.musicMixer.pre_init(44100, -16, 1, 512)
-        self.musicMixer.init()
-        self.oneShotMixer = pygame.mixer
-        self.oneShotMixer.pre_init(44100, -16, 8, 512)
-        self.oneShotMixer.init()
+        self.addMixers()
         # UI
         self.inCombat = False
         # misc
@@ -91,8 +86,17 @@ class Player:
                 s += " " + str(c)
         return s
 
+    def addMixers(self):
+        self.musicMixer = pygame.mixer
+        self.musicMixer.pre_init(44100, -16, 1, 512)
+        self.musicMixer.init()
+        self.oneShotMixer = pygame.mixer
+        self.oneShotMixer.pre_init(44100, -16, 8, 512)
+        self.oneShotMixer.init()
 
-
+    def removeMixers(self):
+        self.musicMixer = None
+        self.oneShotMixer = None
 
 #### inventory #########################################
 

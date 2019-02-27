@@ -42,33 +42,33 @@ class Combat:
     def startCombat(self, GivenCombatUI=None, attackWithConsumable=None):
         self.player.inCombat = True
         if GivenCombatUI==None: 
-            self.player.combatUI = CombatUI(self.player, self.enemy, song=self.song)
+            self.combatUI = CombatUI(self.player, self.enemy, song=self.song)
         else: 
-            self.player.combatUI = GivenCombatUI
+            self.combatUI = GivenCombatUI
             try: # this workaround is ugly as hell, but now killing enemy with consumable doesnt crash the game, so thats nice 
-                self.player.combatUI.attackEnemy(consumableDamage=attackWithConsumable.consumable.dealDamage, consumableName=attackWithConsumable.name)
+                self.combatUI.attackEnemy(consumableDamage=attackWithConsumable.consumable.dealDamage, consumableName=attackWithConsumable.name)
             except:
-                self.player.combatUI.result == 'win'
-        if self.player.combatUI.result != 'win': self.player.combatUI.run()
-        self.result = self.player.combatUI.result
-        if self.player.combatUI.result == "win":
-            s = Sound(self.player, self.getWinNoise())
+                self.combatUI.result == 'win'
+        if self.combatUI.result != 'win': self.combatUI.run()
+        self.result = self.combatUI.result
+        if self.combatUI.result == "win":
+            #s = Sound(self.player, self.getWinNoise())
             show("You defeated " + self.enemy.name + "!")
             self.player.gainXp(self.enemy.xpworth, scale=False) # xp already scales when creating enemy
             self.player.regenHealth()# gain health
             if tryForDrop(25): # TODO luck
                 self.getLoot()
-            s.stopSound()
-        elif self.player.combatUI.result == "lose":
+            #s.stopSound()
+        elif self.combatUI.result == "lose":
             self.player.death()
-        elif self.player.combatUI.result == "escaped":
+        elif self.combatUI.result == "escaped":
             show("You escaped from " + self.enemy.name + "! That was a close one!")
-        elif self.player.combatUI.result == 'inventory':
+        elif self.combatUI.result == 'inventory':
             result = self.player.openInventory()
             if not isinstance(result, str): # if result not string (because its a consumable)
-                self.startCombat(self.player.combatUI, attackWithConsumable=result)
+                self.startCombat(self.combatUI, attackWithConsumable=result)
             else:
-                self.startCombat(self.player.combatUI)
+                self.startCombat(self.combatUI)
         self.player.inCombat = False
         return
 

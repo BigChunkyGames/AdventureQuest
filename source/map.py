@@ -127,7 +127,6 @@ class Map:
             if self.getTile(x,y).fightChance > random.uniform(0, 1):
                 # if chance of fight is greater than ranom float 
                 Combat(player, self.getTile(x,y).getBiome())
-                return
         else:
             self.getTile(x,y).placeFunction(player)
 

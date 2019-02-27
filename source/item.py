@@ -215,11 +215,7 @@ def consume(item): # for consuming consumables
 
         if item.consumable.dealDamage != 0:
             if item.player.inCombat == True:
-                # close inventory
-                #item.player.inventoryUI.done(result='damage consumable')
-                # act as attack in combatUI
-                #item.player.combatUI.attackEnemy(consumableDamage=item.consumable.dealDamage, consumableName=item.name)
-                return item
+                return item # this gets messy
             else:
                 text += "There is no one to throw that at."
                 return text

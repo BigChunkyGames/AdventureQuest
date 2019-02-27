@@ -42,11 +42,11 @@ class Game:
         else: # dev mode
             devMode(self.player)
             #Sound(self.player, 'yes.wav')
-            # saveGame(self.player, printAboutIt=True)
-            # loadGame(self.player)
+            #saveGame(self.player, printAboutIt=True)
+            #loadGame(self.player)
 
-            Sound( self.player,'yes.wav')
-            yesno(self.player)
+            
+            #yesno(self.player)
             
             # places 
 
@@ -73,7 +73,7 @@ class Game:
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            c = Combat(self.player, biome='plains') # jump to combat
+            #c = Combat(self.player, biome='plains') # jump to combat
 
             #self.player.openInventory()
             
