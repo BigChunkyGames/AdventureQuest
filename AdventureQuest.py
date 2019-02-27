@@ -30,9 +30,9 @@ class Game:
         self.player.devMode = True 
 
     def start(self):
-        setConsoleWindowSize(WINDOW_WIDTH, 15) # set dimensions of window (imported from utils)
         if not self.player.devMode: # not dev mode
             # FIXME animation started not wokring????????
+            setConsoleWindowSize(WINDOW_WIDTH, 15) # set dimensions of window (imported from utils)
             Animation('introAnimation')
             setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             if newOrLoad(self.player): # loads or returns true
@@ -80,6 +80,7 @@ class Game:
             #s = Slots(self.player)
             #s.slot_machine()
 
+        while True:
             world(self.player)
 
 g = Game()

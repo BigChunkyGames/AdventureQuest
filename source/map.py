@@ -120,7 +120,7 @@ class Map:
             return
         player.currentLocationX = x
         player.currentLocationY = y
-        saveGame(player)
+        #saveGame(player)
         if not (self.getTile(x,y).placeFunction):
             # no interesting thing at this tile,
             self.makeWildernessEvent(x,y)
@@ -133,5 +133,4 @@ class Map:
 
     def goToCurrentLocation(self, player):
         self.goTo(player.currentLocationX, player.currentLocationY, player)
-        world(player)
         
