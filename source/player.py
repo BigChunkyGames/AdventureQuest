@@ -59,8 +59,6 @@ class Player:
         self.oneShotMixer.init()
         # UI
         self.inCombat = False
-        self.combatUI = None
-        self.inventoryUI = None
         # misc
         setFolderLocations(self)
 

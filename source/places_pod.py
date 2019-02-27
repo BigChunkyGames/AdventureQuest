@@ -1,7 +1,6 @@
 from source.utils import *
 
 def pod(player):
-    saveGame(player)
     printABunchOfSpaces()
     player.registerVisit('pod')
     if player.getVisits('pod') == 1:
