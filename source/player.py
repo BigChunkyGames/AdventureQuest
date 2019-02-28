@@ -378,13 +378,13 @@ class Player:
     def death(self, customText=None):
         Sound(self, 'etheral plunge.wav')
         if customText:
-            printSlowly(str(customText), skipable=False)
+            printSlowly(str(customText), skipable=False, quotes=False)
         else:
-            printSlowly("Suddenly the clouds crack and rain begins to pour.", skipable=False)
-            printSlowly("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:", skipable=False)
-            printSlowly(getRandomFinalThought(), skipable=False) # TODO flavor
-        printSlowly("With that, everything goes dark.", skipable=False)
-        printSlowly('...')
+            printSlowly("Suddenly the clouds crack and rain begins to pour.", skipable=False, quotes=False)
+            printSlowly("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:", skipable=False, quotes=False)
+            printSlowly(getRandomFinalThought(), skipable=False, quotes=False) # TODO flavor
+        printSlowly("With that, everything goes dark.", skipable=False, quotes=False)
+        printSlowly('...', quotes=False)
         show("@YOU ARE DEAD@red@")
         show("The End", dots=False)
         sys.exit()
