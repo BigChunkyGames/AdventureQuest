@@ -41,11 +41,14 @@ class Game:
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            setConsoleWindowSize(WINDOW_WIDTH, 15)
+
+            printc('loooooong big ibg gib gsoieg goise goies gois egoig soeig gosie goig eogi goie go iegosie gosie gosie gosie gosie g')
+
+
             #Sound(self.player, 'yes.wav')
             #saveGame(self.player, printAboutIt=True)
             #loadGame(self.player)
-
-            
             #yesno(self.player)
             
             # places 
@@ -73,7 +76,7 @@ class Game:
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            #c = Combat(self.player, biome='plains') # jump to combat
+            c = Combat(self.player, biome='plains') # jump to combat
 
             #self.player.openInventory()
             
