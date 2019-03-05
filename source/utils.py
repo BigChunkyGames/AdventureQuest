@@ -156,7 +156,7 @@ def wrap(text, limit=40, padding=True):
                 out += d + " "
                 w += len(d) + 1 
             else: # if goes over limit
-                out += "\n "
+                out += "\n" + pad
                 out += d + " "
                 w = len(d)
         if l[len(l)-1] != s: out += "\n" # only add newline if not on last line
@@ -187,10 +187,14 @@ def printWithColor(text, color, before="", after="", more=False):
         return s
     print_formatted_text(HTML(s))
 
-def printc(text, stringList=False): # now supports multiple colors per call
+def printc(text, stringList=False): 
+    # now supports multiple colors per call
     #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
     #printc('@test@red@uncollored@colored@blue@@color@yellow@')
-    #text = wrap(text, int(WINDOW_WIDTH))
+    text = wrap(text, limit=int(WINDOW_WIDTH), padding=False)
+    return printcHelper(text, stringList)
+
+def printcHelper(text, stringList):
     if not stringList: # if stringlist false
         t = text.split('@')
     else:
@@ -208,8 +212,8 @@ def printc(text, stringList=False): # now supports multiple colors per call
                 s = text+ printWithColor(t[1],t[2], before=t[0], after = "", more=True)
             else:
                 s = printWithColor(t[1],t[2], before=t[0], after = "", more=True)
-            printc( s, stringList=t[3:] )
-    else: printc("@You used the at sign syntax wrong.@red@")
+            printcHelper( s, stringList=t[3:] )
+    else: printcHelper("@You used the at sign syntax wrong.@red@", False)
 
 # formats text in ways besides color. only bold and underline and reverse seem to work in my vs code terminal
 def formatText(text, format):
@@ -244,7 +248,7 @@ class printSlowly():
     def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True,):
         # .03 is a pretty good talking speed
         # you no longer need to have parenthesis around dialogue when addparanthesis=true
-        self.text = text
+        self.text = wrap(text, limit=int(WINDOW_WIDTH), padding=False)
         self.secondsBetweenChars=secondsBetweenChars
         self.newline=newline
         self.pause=pause
@@ -266,7 +270,7 @@ class printSlowly():
         t1.join()  # waits here until thread is finished
     
     def go(self):
-        pausePoints = ['.', ',', '!', '?', ':', '\n']
+        pausePoints = ['.', ',', '!', '?', ':']
         skipThese = ['"', "'"]
         waitOnNextChar=False
         if self.initialWait: self.interuptableWait(self.pause)

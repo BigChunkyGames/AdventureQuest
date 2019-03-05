@@ -206,7 +206,7 @@ class CombatUI():
             if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!"
             else: 
                 s += " It dealt " + str(damage) + " damage!"
-            # self.player.hp = self.player.hp - damage # lose health
+            self.player.hp = self.player.hp - damage # lose health
             #t1 = threading.Thread(target=self.rollNumbers(self.player.hp, self.player.hp - damage), args=())
             #t1.start()
             # self.rollNumbers(self.player.hp, self.player.hp - damage)
