@@ -1,26 +1,31 @@
 # -*- coding: utf-8 -*-
 
 print('loading...')
-import threading
-import random
-from source.utils import Sound, show , wait # import all functions from utils
-from source.intro import charCreation, introduction
-from source.places_maintown import *
-from source.player import *
-from source.devMode import *
-from source.world import *
-from source.places_flowers import flowers
-from source.places_wormHome import tea, wormHome
-from source.places_dogeTown import dogeTown, bonysShop, getBook
-from source.places_burntTown import burntTown
-from source.shopUI import ShopUI
-from source.combat import Combat
-from source.enemy import Enemy
-from source.SlotMachine import *
-from source.places_grandpasTrailer import grandpasTrailer
-from source.places_babel import babel
-import sys
-from source.places_pod import pod
+try:
+    import threading
+    import random
+    from source.utils import Sound, show , wait # import all functions from utils
+    from source.intro import charCreation, introduction
+    from source.places_maintown import *
+    from source.player import *
+    from source.devMode import *
+    from source.world import *
+    from source.places_flowers import flowers
+    from source.places_wormHome import tea, wormHome
+    from source.places_dogeTown import dogeTown, bonysShop, getBook
+    from source.places_burntTown import burntTown
+    from source.shopUI import ShopUI
+    from source.combat import Combat
+    from source.enemy import Enemy
+    from source.SlotMachine import *
+    from source.places_grandpasTrailer import grandpasTrailer
+    from source.places_babel import babel
+    import sys
+    from source.places_pod import pod
+except Exception as e:
+    print(e)
+    input('dang it')
+
 
 clear() 
 
