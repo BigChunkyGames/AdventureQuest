@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 print('loading...')
+import threading
 import random
 from source.utils import Sound, show , wait # import all functions from utils
 from source.intro import charCreation, introduction
@@ -27,23 +28,24 @@ clear()
 class Game:
     def __init__(self):
         self.player= Player()
-        self.player.devMode = True 
+        self.player.devMode = False 
 
     def start(self):
         if not self.player.devMode: # not dev mode
             # FIXME animation started not wokring????????
-            setConsoleWindowSize(WINDOW_WIDTH, 15) # set dimensions of window (imported from utils)
+            setConsoleWindowSize(WINDOW_WIDTH, 16) # set dimensions of window (imported from utils)
             Animation('introAnimation')
+            n = newOrLoad(self.player) # loads or returns true
             setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-            if newOrLoad(self.player): # loads or returns true
+            if n == True: 
                 charCreation(self.player) 
                 introduction(self.player)
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
             #Sound(self.player, 'yes.wav')
-            #saveGame(self.player, printAboutIt=True)
-            #loadGame(self.player)
+            # saveGame(self.player, printAboutIt=True)
+            # loadGame(self.player)
 
             
             #yesno(self.player)
@@ -64,8 +66,8 @@ class Game:
 
             # ui
 
-            #bonysShop(self.player)
-            #maintownShop(self.player)
+            bonysShop(self.player)
+            maintownShop(self.player)
             
 
             # lisht = []
@@ -98,6 +100,5 @@ g.start()
 
 
 
-printSlowly("The End", secondsBetweenChars=.4)
-#Animation('credits')
+theEnd(g.player)
 

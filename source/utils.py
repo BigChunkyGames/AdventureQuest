@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # # The purpose of this file is to hold utility functions that are commonly used
 
 from __future__ import unicode_literals, print_function
@@ -7,7 +6,6 @@ import random
 # from colorama import *
 import time
 import pickle 
-import dill as pickle2
 # init(autoreset=True) # init colors and reset to white each time
 from prompt_toolkit import print_formatted_text, HTML
 import getpass
@@ -25,6 +23,7 @@ from os.path import isfile, join
 import time, datetime
 from prompt_toolkit.formatted_text import FormattedText
 import linecache
+from colored import fg, bg, attr
 
 
 WINDOW_HEIGHT = '35'
@@ -70,12 +69,12 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
     while True:
         inp = input(prompt).lower().strip()
 
-        if player.devmode and inp == "debug damage":
-            player.takeDamage(int(input("How much damage? : ")))
-        elif player.devmode and inp == "debug level up":
-            player.levelUp()
-        elif player.devmode and inp == "debug add xp":
-            player.gainXp(int(input("How much XP?: ")), input("Scale? (True or False): "))
+        if inp == 'secret debug: print player':
+            traits = vars(player)
+            setConsoleWindowSize(WINDOW_WIDTH, 200)
+            print ('\n'.join("%s: %s" % item for item in traits.items()))
+            input('great')
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         elif inp == "hp":
             print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
             print("("),
@@ -94,8 +93,7 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
         elif inp == 'quit':
             print("Are you sure you would like to quit?")
             if yesno(player):
-                print("Bye!")
-                sys.exit()
+                bye()
         elif inp == '':
             continue # prevents no input from being accepted
         else:
@@ -113,6 +111,22 @@ def checkForCancel(inp):
         return False
 
 #### printing ################################################
+
+def bye():
+    print("Bye!")
+    sys.exit()
+
+def theEnd(player):
+    printSlowly("The End\n\n\n", secondsBetweenChars=.4)
+    print("Continue?")
+    if yesno(player):
+        loadGame(player)
+        while True:
+            world(player)
+    else:
+        bye()
+    #Animation('credits')
+
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
@@ -615,9 +629,8 @@ class Animation():
         self.finished=False
         try:
             if animationName == 'introAnimation':
+                #with open('test.txt', 'r', encoding="utf-8") as f:
                 rows = ASCII_LOGO.splitlines()
-                # for r in rows:
-                #     r = r.decode('unicode-escape')
                 width = len(rows[0])
                 self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
             elif animationName == 'credits':
@@ -682,14 +695,14 @@ class Animation():
             s += '\n'
             subtraction -= spaces
         # clear()
-        sys.stdout.buffer.write(s.encode('cp437'))
+        #sys.stdout.buffer.write(s.encode('cp437'))
         # sys.stdout.write(s)
         # sys.stdout.flush()
-        # if self.smash:
-        #     sys.stdout.write("\033["+str(len(rows))+"A")
-        # else:
-        #     sys.stdout.write("\033["+str(len(rows)+1)+"A")
-        # print(s)
+        if self.smash:
+            sys.stdout.write("\033["+str(len(rows))+"A")
+        else:
+            sys.stdout.write("\033["+str(len(rows)+1)+"A")
+        print(s)
         #print(s.decode('unicode-escape'))#.encode('utf-8'))
         wait(.05)
         if done: return

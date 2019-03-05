@@ -209,9 +209,13 @@ def consume(item): # for consuming consumables
     if item.type=='consumable' and item.consumable != None:
         if item.consumable.consumeText == None:
             if item.consumable.consumableType == 'xp' or item.consumable.consumableType == 'heal': 
-                text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
+                text = checkForSpecialItems(item)
+                if text == '':
+                    text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
         else:
             text += item.consumable.consumeText + '\n' 
+
+        
 
         if item.consumable.dealDamage != 0:
             if item.player.inCombat == True:
@@ -225,6 +229,7 @@ def consume(item): # for consuming consumables
             text += "You regained " + str(item.consumable.heal) + " HP!\n"
 
         if item.consumable.xpgain != 0:
+
             text += str(item.player.gainXp(item.consumable.xpgain, returnString=True)) + '\n' 
 
         if item.consumable.karma != 0:
@@ -238,6 +243,13 @@ def consume(item): # for consuming consumables
     else:
         text = "You can't use that!"
     return text
+
+def checkForSpecialItems(item, text):
+    name = item.name
+    if name == 'beer' or name == 'Bottle of Vodka' or name == 'Jar of Moonshine':
+        if player.aspect['age'] <21:
+            return "You're not old enough to have that!\nYou throw it on the ground."
+
 
 def generateRandomConsumable(player, name = None, consumableType=None, customDescription='', consumable=None, powerLevel=0, returnItem=True):
     # returns an item of type consumable or just a consumable object if returnItem is false (in which case name and description are not used)

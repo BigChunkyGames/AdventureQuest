@@ -144,9 +144,9 @@ class Player:
         return l
 
     def openInventory(self):
-        self.inventoryUI = InventoryUI(self)
-        self.inventoryUI.run()
-        return self.inventoryUI.result
+        ui = InventoryUI(self)
+        ui.run()
+        return ui.result
 
     def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
@@ -386,8 +386,7 @@ class Player:
         printSlowly("With that, everything goes dark.", skipable=False)
         printSlowly('...')
         show("@YOU ARE DEAD@red@")
-        show("The End", dots=False)
-        sys.exit()
+        theEnd(self)
 
     
     def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, showText=True):
