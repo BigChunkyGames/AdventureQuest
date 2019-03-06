@@ -1,6 +1,6 @@
  # player comes here when they are not inside of a place or experiancing an event
 
-from source.utils import getInput, clear, show, printc, bug, yesno, checkForCancel, saveGame
+from source.utils import  clear, show, printc, bug, yesno, checkForCancel, saveGame,getInput
 from source.lists import getInvalidOptionText
 
 def world(player): # returning from world should always immedietly call world again

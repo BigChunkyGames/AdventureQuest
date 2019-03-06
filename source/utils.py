@@ -23,8 +23,6 @@ from os.path import isfile, join
 import time, datetime
 from prompt_toolkit.formatted_text import FormattedText
 import linecache
-from colored import fg, bg, attr
-
 
 WINDOW_HEIGHT = '35'
 WINDOW_WIDTH = '91'
@@ -121,6 +119,7 @@ def theEnd(player):
     print("Continue?")
     if yesno(player):
         loadGame(player)
+        from source.world import world
         while True:
             world(player)
     else:
@@ -392,13 +391,14 @@ def setFolderLocations(player):
     try:
         files = os.listdir('dist/saves')
         player.stats['saveDirectory'] = 'dist/saves/'
-        
     except:
         try: 
             files = os.listdir('saves')
             player.stats['saveDirectory'] = 'saves/'
         except:
-            print("Couldn't find save folder D:")
+            makeDirectory('saves')
+            player.stats['saveDirectory'] = 'saves/'
+            
 
     try:
         files = os.listdir('dist/audio/music_loops/')
@@ -408,9 +408,14 @@ def setFolderLocations(player):
             files = os.listdir('audio')
             player.stats['audioDirectory'] = 'audio/'
         except:
-            print("Couldn't find save folder D:")
+            makeDirectory('audio')
+            player.stats['audioDirectory'] = 'audio/'
 
-    #try:
+def makeDirectory(dirName):
+    try:
+        os.mkdir(dirName)
+    except FileExistsError:
+        print('Couldnt make a folder called ' + dirName)
 
 #### dev #############################################
 
@@ -463,7 +468,6 @@ def setConsoleWindowSize(width, height):
     os.system('mode con: cols='+str(width)+' lines='+str(height))
 
 def wait(seconds): # accepts floats
-    ''' printOnSecond is a string btw'''
     sys.stdout.flush()
     time.sleep(seconds)
     sys.stdout.flush()
@@ -631,6 +635,7 @@ class Animation():
         self.smash = False
         self.makeUnique()
         self.finished=False
+
         try:
             if animationName == 'introAnimation':
                 #with open('test.txt', 'r', encoding="utf-8") as f:
@@ -678,12 +683,12 @@ class Animation():
     def introAnimation(self, rows, width, place = 1,):
         if self.finished:
             clear()
-            print(ASCII_LOGO)
+            self.printSpecialChars(ASCII_LOGO)
             return
+        self.notActuallySure( rows)
         subtraction = 0
         spaces = 7
         rowsToPrint = len(rows) % place
-        done=False
         s=''
         for rowIndex in range(0, len(rows)):
             for char in range(0,place):
@@ -695,22 +700,28 @@ class Animation():
                 elif char < width -1:
                     s += self.specialChar
                 if rowIndex == len(rows)-1 and char+subtraction==width:
-                    done = True
+                    self.finished = True
             s += '\n'
             subtraction -= spaces
-        # clear()
-        #sys.stdout.buffer.write(s.encode('cp437'))
-        # sys.stdout.write(s)
-        # sys.stdout.flush()
         if self.smash:
             sys.stdout.write("\033["+str(len(rows))+"A")
+            pass
         else:
-            sys.stdout.write("\033["+str(len(rows)+1)+"A")
-        print(s)
-        #print(s.decode('unicode-escape'))#.encode('utf-8'))
+            pass
+        self.printSpecialChars(s)
         wait(.05)
-        if done: return
+            
         self.introAnimation(rows, width, place = place + 1)
+
+    def printSpecialChars(self, s):
+        sys.stdout.buffer.write(s.encode('cp437'))
+        sys.stdout.flush()
+
+    def notActuallySure(self, rows):
+        sys.stdout.write("\033["+str(len(rows)+1)+"A") # set cursor to top left?
+
+
+
 
 def fillWithSpaces(text, length):
     # makes white space of a multi line string up to length
