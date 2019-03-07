@@ -26,9 +26,9 @@ A quest for adventure! Created by the Dream Team Xtreme.
 
 ### Other operating systems:
 1.  Download this repository.
-2. Unzip into your favorite directory
+2.  Unzip into your favorite directory
 2.  Open your favorite terminal
-4.  pip install prompt_toolkit (I haven't figured out how to have it automatically do this yet)
 5.  Run AdventureQuest.py
+4.  pip install the missing modules until it stops crashing (sorry)
 
 Share your thoughts! If it crashes please let us know what the crash report says.
