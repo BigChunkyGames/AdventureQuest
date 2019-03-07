@@ -267,7 +267,7 @@ class ShopUI():
             ], padding=0, width = width,),
             HSplit([
                 Dialog(
-                    title =  self.makeFormattedText("Stats"),
+                    title =  makeFormattedText("Stats"),
                     body=Label(getStats(self.player)),
                 ),
             ], padding=0, width = statsWidth, height= height,),

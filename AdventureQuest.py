@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 
 print('loading...')
+# try:
+import threading
 import random
-from source.utils import * # import all functions from utils
+from source.utils import Sound, show , wait 
 from source.intro import charCreation, introduction
 from source.places_maintown import *
 from source.player import *
@@ -20,45 +22,63 @@ from source.places_grandpasTrailer import grandpasTrailer
 from source.places_babel import babel
 import sys
 from source.places_pod import pod
+# except Exception as e:
+#     print(e)
+#     print('Failed to do initial import.')
+#     input('dang it')
+
 
 clear() 
 
 
-class Game: # perhaps this is what should be saved
+class Game:
     def __init__(self):
         self.player= Player()
         self.player.devMode = False 
 
     def start(self):
-        os.system('mode con: cols='+WINDOW_WIDTH+' lines='+WINDOW_HEIGHT) # set dimensions of window (imported from utils)
-        handleFolderLocations(self.player)
         if not self.player.devMode: # not dev mode
             # FIXME animation started not wokring????????
-            # Animation('introAnimation')
-            if newOrLoad(self.player): # loads or returns true
+            setConsoleWindowSize(WINDOW_WIDTH, 16) # set dimensions of window (imported from utils)
+            Animation('introAnimation')
+            n = newOrLoad(self.player) # loads or returns true
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+            if n == True: 
                 charCreation(self.player) 
                 introduction(self.player)
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+            
+            
+
+
+            #Sound(self.player, 'yes.wav')
+
+            # saveGame(self.player, printAboutIt=True)
+            #loadGame(self.player)
+
+            #yesno(self.player)
+            
+            # places 
+
             #pod(self.player)
-            #saveGame(self.player)
-            #loadGame(self.player)
-            Sound('worry 1.mp3')
-            #loadGame(self.player)
             #grandpasTrailer(self.player)
             #burntTown(self.player)
             #babel(self.player)
             #introduction(self.player)
-            #maintown(self.player)
-            #bonysShop(self.player)
-            #maintownShop(self.player)
+            maintown(self.player)
+            
             #dogeTown(self.player)
-
             #flowers(self.player)
-
             #self.player.history.append('owns worm home')
             #wormHome(self.player)
+
+            # ui
+
+            # bonysShop(self.player)
+            # maintownShop(self.player)
             
 
             # lisht = []
@@ -66,13 +86,14 @@ class Game: # perhaps this is what should be saved
             # x = ShopUI(self.player, "name of shop", lisht, )
             # x.run()
 
-            #c = Combat(self.player) # jump to combat
+            # c = Combat(self.player, biome='plains') # jump to combat
 
-            self.player.openInventory()
+            #self.player.openInventory()
             
             #s = Slots(self.player)
             #s.slot_machine()
 
+        while True:
             world(self.player)
 
 g = Game()
@@ -90,6 +111,5 @@ g.start()
 
 
 
-printSlowly("The End", secondsBetweenChars=.4)
-#Animation('credits')
+theEnd(g.player)
 

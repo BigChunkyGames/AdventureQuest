@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # # The purpose of this file is to hold utility functions that are commonly used
 
 from __future__ import unicode_literals, print_function
@@ -25,8 +24,7 @@ import time, datetime
 from prompt_toolkit.formatted_text import FormattedText
 import linecache
 
-
-WINDOW_HEIGHT = '40'
+WINDOW_HEIGHT = '35'
 WINDOW_WIDTH = '91'
 
 #### user input #############################################
@@ -44,8 +42,10 @@ def yesno(player):
     while True:
         userinput = getInput(player)
         if 'y' in userinput or 'sure' in userinput or 'ok' in userinput:
+            Sound(player, 'yes.wav')
             return True
         elif 'n' in userinput:
+            Sound(player, 'no.wav')
             return False
         else:
             printc("@'yes'@yellow@ or @'no'@yellow@.")
@@ -63,15 +63,16 @@ def dichotomy(option1, option2):
             print("You must choose @'yes'@yellow@ or @'no'@yellow@.")
 
 def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
+    #click = Click(player)
     while True:
         inp = input(prompt).lower().strip()
 
-        if player.devmode and inp == "debug damage":
-            player.takeDamage(int(input("How much damage? : ")))
-        elif player.devmode and inp == "debug level up":
-            player.levelUp()
-        elif player.devmode and inp == "debug add xp":
-            player.gainXp(int(input("How much XP?: ")), input("Scale? (True or False): "))
+        if inp == 'secret debug: print player':
+            traits = vars(player)
+            setConsoleWindowSize(WINDOW_WIDTH, 200)
+            print ('\n'.join("%s: %s" % item for item in traits.items()))
+            input('great')
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         elif inp == "hp":
             print("You have " + str(player.hp) + " out of " + str(player.maxhp) +  " HP. "),
             print("("),
@@ -86,17 +87,20 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
         #     saveGame(player)
         elif inp == "load":
             loadGame(player)
+            return 'load'
         elif inp == 'quit':
             print("Are you sure you would like to quit?")
             if yesno(player):
-                print("Bye!")
-                sys.exit()
+                bye()
         elif inp == '':
             continue # prevents no input from being accepted
         else:
-            return inp
+            break
         if oneTry:
-            return inp
+            break
+    #click.click()
+    Sound(player, 'click.wav')
+    return inp
 
 def checkForCancel(inp):
     if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
@@ -105,6 +109,23 @@ def checkForCancel(inp):
         return False
 
 #### printing ################################################
+
+def bye():
+    print("Bye!")
+    sys.exit()
+
+def theEnd(player):
+    printSlowly("The End\n\n\n", secondsBetweenChars=.4)
+    print("Continue?")
+    if yesno(player):
+        loadGame(player)
+        from source.world import world
+        while True:
+            world(player)
+    else:
+        bye()
+    #Animation('credits')
+
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear') # Clears terminal
@@ -134,7 +155,7 @@ def wrap(text, limit=40, padding=True):
                 out += d + " "
                 w += len(d) + 1 
             else: # if goes over limit
-                out += "\n "
+                out += "\n" + pad
                 out += d + " "
                 w = len(d)
         if l[len(l)-1] != s: out += "\n" # only add newline if not on last line
@@ -165,10 +186,14 @@ def printWithColor(text, color, before="", after="", more=False):
         return s
     print_formatted_text(HTML(s))
 
-def printc(text, stringList=False): # now supports multiple colors per call
+def printc(text, stringList=False): 
+    # now supports multiple colors per call
     #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
     #printc('@test@red@uncollored@colored@blue@@color@yellow@')
-    #text = wrap(text, int(WINDOW_WIDTH))
+    text = wrap(text, limit=int(WINDOW_WIDTH), padding=False)
+    return printcHelper(text, stringList)
+
+def printcHelper(text, stringList):
     if not stringList: # if stringlist false
         t = text.split('@')
     else:
@@ -186,8 +211,8 @@ def printc(text, stringList=False): # now supports multiple colors per call
                 s = text+ printWithColor(t[1],t[2], before=t[0], after = "", more=True)
             else:
                 s = printWithColor(t[1],t[2], before=t[0], after = "", more=True)
-            printc( s, stringList=t[3:] )
-    else: printc("@You used the at sign syntax wrong.@red@")
+            printcHelper( s, stringList=t[3:] )
+    else: printcHelper("@You used the at sign syntax wrong.@red@", False)
 
 # formats text in ways besides color. only bold and underline and reverse seem to work in my vs code terminal
 def formatText(text, format):
@@ -222,7 +247,7 @@ class printSlowly():
     def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True,):
         # .03 is a pretty good talking speed
         # you no longer need to have parenthesis around dialogue when addparanthesis=true
-        self.text = text
+        self.text = wrap(text, limit=int(WINDOW_WIDTH), padding=False)
         self.secondsBetweenChars=secondsBetweenChars
         self.newline=newline
         self.pause=pause
@@ -244,7 +269,7 @@ class printSlowly():
         t1.join()  # waits here until thread is finished
     
     def go(self):
-        pausePoints = ['.', ',', '!', '?', ':', '\n']
+        pausePoints = ['.', ',', '!', '?', ':']
         skipThese = ['"', "'"]
         waitOnNextChar=False
         if self.initialWait: self.interuptableWait(self.pause)
@@ -289,24 +314,26 @@ def thread(targetFunction, numberOfThreads=1,): # not used
         t.start()
 
 #### file management #######################################################
-        
+
 def saveGame(player, printAboutIt=False): # just do yourself a favor and don't look at this disgusting code
     # increments saves up forever with a new save each time starting at 1 
     incrementDictValue(player.stats, 'saveIndex')
     saveIndex = str(player.stats['saveIndex'])
+    player.removeMixers()
     try:
         with open(player.stats['saveDirectory']+"/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
             pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
     except Exception as e:
-        try:
-            with open("saves/AdventureQuestSave" + saveIndex + generateTimeStamp()+".meme", 'wb') as output: 
-                pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
-        except Exception as e2:
-            printc("@(The game should have saved right there but it didn't D: )@red@")
-            print(e)
-            print(e2)
-            return
+        printc("@(The game should have saved right there but it didn't D: )@red@")
+        print(e)
+        #pickle2.detect.trace(True)
+        #print(pickle.detect.baditems(player))
+        input('dang it')
+        #print(pickle2.detect.errors(player))
+        #print(pickle2.detect.baditems(globals()))
+        printAboutIt=False
 
+    player.addMixers()
     if printAboutIt:
         printc("@Game "+saveIndex+" saved!@green@")
     
@@ -317,12 +344,17 @@ def loadGame(player): # loads most recent save file
         show("There are no saved games yet! You need to go somewhere first!")
         return
     try: # try to load newest save file
-        with open(player.stats['saveDirectory'] +'/'+ newestFile, "rb") as loading:
-            player = pickle.load(loading)
+        # with open(player.stats['saveDirectory'] + newestFile, "rb") as file:
+        #     unpickler = pickle.Unpickler(file)
+        #     player = unpickler.load()
+        f = open(player.stats['saveDirectory'] + newestFile, "rb")
+        unpickler = pickle.Unpickler(f)
+        player = unpickler.load()
     except FileNotFoundError:
         printc("@Couldn't find any files to load!@red@")
         return False
     show("@Game loaded!@green@")
+    player.addMixers()
     player.map.goToCurrentLocation(player)
 
 def newOrLoad(player):
@@ -340,6 +372,7 @@ def newOrLoad(player):
         if 'new' in x or checkInput(x, 'new'):
             return True
         elif 'load' in x or 'continue' in x or checkInput(x, 'load') or checkInput(x, 'continue'):
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             loadGame(player)
             return False
  
@@ -350,21 +383,43 @@ def generateTimeStamp():
 def getNewestFile(player):
     files = os.listdir(player.stats['saveDirectory'])
     if len(files)>0:
-        return max(files, key=lambda f: os.path.getctime("{}/{}".format(player.stats['saveDirectory'], f)))
+        fileName = max(files, key=lambda f: os.path.getctime("{}/{}".format(player.stats['saveDirectory'], f)))
+        if os.stat(player.stats['saveDirectory']+'/'+fileName).st_size > 0:
+            return fileName
+        else:
+            os.remove(fileName)
+            return getNewestFile(player)
     return None
 
-def handleFolderLocations(player):
+def setFolderLocations(player):
+    try: # check if dist/saves exists
+        files = os.listdir('dist/saves')
+        player.stats['saveDirectory'] = 'dist/saves/'
+    except:
+        try:  # check if saves folder exists
+            files = os.listdir('saves')
+            player.stats['saveDirectory'] = 'saves/'
+        except: # make a saves folder 
+            makeDirectory('saves')
+            player.stats['saveDirectory'] = 'saves/'
+            
+
     try:
-        files = os.listdir('saves')
-        player.stats['saveDirectory'] = 'saves'
+        files = os.listdir('dist/audio/music_loops/')
+        player.stats['audioDirectory'] = 'dist/audio/'
     except:
         try: 
-            files = os.listdir('dist/saves')
-            player.stats['saveDirectory'] = 'dist/saves'
+            files = os.listdir('audio')
+            player.stats['audioDirectory'] = 'audio/'
         except:
-            print("Couldn't find save folder D:")
+            makeDirectory('audio')
+            player.stats['audioDirectory'] = 'audio/'
 
-    #try:
+def makeDirectory(dirName):
+    try:
+        os.mkdir(dirName)
+    except FileExistsError:
+        print('Couldnt make a folder called ' + dirName)
 
 #### dev #############################################
 
@@ -413,8 +468,10 @@ def getRandInt(min = 1, max= 10): # return random int between 1 and max
 
 #### misc ####################################################
 
+def setConsoleWindowSize(width, height):
+    os.system('mode con: cols='+str(width)+' lines='+str(height))
+
 def wait(seconds): # accepts floats
-    ''' printOnSecond is a string btw'''
     sys.stdout.flush()
     time.sleep(seconds)
     sys.stdout.flush()
@@ -496,36 +553,63 @@ class Sound():
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
     # NOTE: make loop -1 to loop forever, loop 0 to loop once
     # NOTE: volume adjustments (fade in out) only work with wav files
-    def __init__(self, fileName, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0):
-        if os.path.exists('dist/audio/music loops/' + fileName):
-            self.fileName = "dist/audio/music loops/" + fileName
-        elif os.path.exists('dist/audio/one shots/' + fileName):
-            self.fileName = "dist/audio/one shots/" + fileName
-        elif os.path.exists('audio/music loops/' + fileName):
-            self.fileName = "audio/music loops/" + fileName
-        elif os.path.exists('audio/one shots/' + fileName):
-            self.fileName = "audio/one shots/" + fileName
-        else:
-            print("(couldn't find sound file: " + fileName + ")")
-            input('halt')
+    def __init__(self, player=None, fileName=None, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0, stopOtherMusicLoops=True):
+
         self.loop = loop
-        # initialize
-        self.mixer = pygame.mixer # make a new mixer for each sound. seems easier that way
-        self.mixer.init()
+        self.player = player
+        folder = player.stats['audioDirectory']
+        # dist/audio/ or audio/
+
+        if   os.path.exists(folder+'music_loops/' + fileName):
+            self.fileName = folder+"music_loops/" + fileName
+            self.setMixer('music_loops')
+            if self.loop == 0: # just make music loop always
+                self.loop = -1
+        elif os.path.exists(folder+'one_shots/' + fileName):
+            self.fileName = folder+'one_shots/' + fileName
+            self.setMixer('one_shots')
+        else:
+            print("(couldn't find sound file: " + folder + '/?/'+ fileName + ")")
+            input('halt')
+
         try:
             if '.wav' in self.fileName:
                 self.format = 'wav'
                 self.sound = self.mixer.Sound(self.fileName) # sound method only supports wav files
                 self.sound.set_volume(volume)
-                if playNow:
-                    self.sound.play(self.loop)
+                if playNow: # play it
+                    if self.mixer.get_busy() and stopOtherMusicLoops and 'music_loops' in self.fileName:
+                        self.mixer.stop()
+                    self.channel.play(self.sound, self.loop)
             elif '.mp3' in self.fileName:
                 self.format = 'mp3'
                 self.sound = self.mixer.music.load(self.fileName)
                 if playNow:
                     self.mixer.music.play(self.loop)
         except:
-            print("Couldn't load " + fileName)
+            print("Couldn't load " +fileName + ' >:O')
+
+    def setMixer(self, whichOne): # also makes channels
+        if self.player == None:
+            self.makeNewMixer()
+        else:
+            try:
+                if whichOne == 'one_shots':
+                    self.mixer = self.player.oneShotMixer
+                elif whichOne == 'music_loops':
+                    self.mixer = self.player.musicMixer
+                self.channel = self.mixer.find_channel()
+            except:
+                self.makeNewMixer()
+
+
+    def makeNewMixer(self):
+        self.mixer = pygame.mixer
+        self.mixer.pre_init(44100, -16, 1, 512)
+        self.mixer.init()
+        self.channel = self.mixer.Channel(0)
+        
+
 
     def getLength(self): # returns duration of wav file in seconds
         import wave
@@ -555,11 +639,11 @@ class Animation():
         self.smash = False
         self.makeUnique()
         self.finished=False
+
         try:
             if animationName == 'introAnimation':
+                #with open('test.txt', 'r', encoding="utf-8") as f:
                 rows = ASCII_LOGO.splitlines()
-                # for r in rows:
-                #     r = r.decode('unicode-escape')
                 width = len(rows[0])
                 self.t1 = threading.Thread(target=self.introAnimation, args=(rows, width))
             elif animationName == 'credits':
@@ -576,6 +660,7 @@ class Animation():
             self.t1.start() 
             self.t2.start()
             self.t1.join()
+            print('\n')
         except:
             print("Animation: '" + animationName + "' failed to do its sweet thang.")
 
@@ -603,38 +688,45 @@ class Animation():
     def introAnimation(self, rows, width, place = 1,):
         if self.finished:
             clear()
-            print(ASCII_LOGO)
+            self.printSpecialChars(ASCII_LOGO)
             return
+        self.notActuallySure( rows)
         subtraction = 0
         spaces = 7
         rowsToPrint = len(rows) % place
-        done=False
         s=''
         for rowIndex in range(0, len(rows)):
             for char in range(0,place):
                 if char < place + subtraction and char < width:
                     try:
-                        s += rows[rowIndex][char].decode('unicode-escape') # print char in this row
+                        s += rows[rowIndex][char] # print char in this row
                     except:
                         pass
                 elif char < width -1:
                     s += self.specialChar
                 if rowIndex == len(rows)-1 and char+subtraction==width:
-                    done = True
+                    self.finished = True
             s += '\n'
             subtraction -= spaces
-        # clear()
-        # sys.stdout.write(s)
-        # sys.stdout.flush()
         if self.smash:
             sys.stdout.write("\033["+str(len(rows))+"A")
+            pass
         else:
-            sys.stdout.write("\033["+str(len(rows)+1)+"A")
-        print(s)
-        #print(s.decode('unicode-escape'))#.encode('utf-8'))
+            pass
+        self.printSpecialChars(s)
         wait(.05)
-        if done: return
+            
         self.introAnimation(rows, width, place = place + 1)
+
+    def printSpecialChars(self, s):
+        sys.stdout.buffer.write(s.encode('cp437'))
+        sys.stdout.flush()
+
+    def notActuallySure(self, rows):
+        sys.stdout.write("\033["+str(len(rows)+1)+"A") # set cursor to top left?
+
+
+
 
 def fillWithSpaces(text, length):
     # makes white space of a multi line string up to length
@@ -646,16 +738,16 @@ def fillWithSpaces(text, length):
                 r.append(' ')
     return join(rows) 
 
-ASCII_LOGO = """ █████╗ ██████╗ ██╗   ██╗███████╗███╗   ██╗████████╗██╗   ██╗██████╗ ███████╗
-██╔══██╗██╔══██╗██║   ██║██╔════╝████╗  ██║╚══██╔══╝██║   ██║██╔══██╗██╔════╝
-███████║██║  ██║██║   ██║█████╗  ██╔██╗ ██║   ██║   ██║   ██║██████╔╝█████╗  
-██╔══██║██║  ██║╚██╗ ██╔╝██╔══╝  ██║╚██╗██║   ██║   ██║   ██║██╔══██╗██╔══╝  
-██║  ██║██████╔╝ ╚████╔╝ ███████╗██║ ╚████║   ██║   ╚██████╔╝██║  ██║███████╗
-╚═╝  ╚═╝╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═══╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚══════╝
+ASCII_LOGO = """ █████╗  ██████╗  ██╗   ██╗ ███████╗ ███╗   ██╗ ████████╗ ██╗   ██╗ ██████╗  ███████╗
+██╔══██╗ ██╔══██╗ ██║   ██║ ██╔════╝ ████╗  ██║ ╚══██╔══╝ ██║   ██║ ██╔══██╗ ██╔════╝
+███████║ ██║  ██║ ██║   ██║ █████╗   ██╔██╗ ██║    ██║    ██║   ██║ ██████╔╝ █████╗  
+██╔══██║ ██║  ██║ ╚██╗ ██╔╝ ██╔══╝   ██║╚██╗██║    ██║    ██║   ██║ ██╔══██╗ ██╔══╝  
+██║  ██║ ██████╔╝  ╚████╔╝  ███████╗ ██║ ╚████║    ██║    ╚██████╔╝ ██║  ██║ ███████╗
+╚═╝  ╚═╝ ╚═════╝    ╚═══╝   ╚══════╝ ╚═╝  ╚═══╝    ╚═╝     ╚═════╝  ╚═╝  ╚═╝ ╚══════╝
                                                                              
-             ██████╗ ██╗   ██╗███████╗███████╗████████╗                          
-            ██╔═══██╗██║   ██║██╔════╝██╔════╝╚══██╔══╝                          
-            ██║   ██║██║   ██║█████╗  ███████╗   ██║                             
-            ██║▄▄ ██║██║   ██║██╔══╝  ╚════██║   ██║                             
-            ╚██████╔╝╚██████╔╝███████╗███████║   ██║                             
-             ╚══▀▀═╝  ╚═════╝ ╚══════╝╚══════╝   ╚═╝                             """
+                  ██████╗  ██╗   ██╗ ███████╗ ███████╗ ████████╗                          
+                 ██╔═══██╗ ██║   ██║ ██╔════╝ ██╔════╝ ╚══██╔══╝                          
+                 ██║   ██║ ██║   ██║ █████╗   ███████╗    ██║                             
+                 ██║▄▄ ██║ ██║   ██║ ██╔══╝   ╚════██║    ██║                             
+                 ╚██████╔╝ ╚██████╔╝ ███████╗ ███████║    ██║                             
+                  ╚══▀▀═╝   ╚═════╝  ╚══════╝ ╚══════╝    ╚═╝                             """

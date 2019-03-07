@@ -17,17 +17,18 @@ def dogeTown(player):
         show("Marveling at the beautiful architecture, you wonder how such a place has been only 5 distances away from your home town all this time.")
         show("You reach the top of the staircase and are halted by 2 shoobers armed with spears crossed to block your path.")
         show("Another doggo approaches. This doge, a shibe, greets you with the grandeur of a king. He is surely the doggest. ")
-        show('"Bork."')
+        print('"Bork."')
         x = getInput(player)
-        show('"Woof bork!"')
+        print('"Woof bork!"')
         x = getInput(player)
-        show('"Yip yip bark boof woof, bork yip bark boof?"')
+        print('"Yip yip bark boof woof, bork yip bark boof?"')
         x = getInput(player)
         show("The doge nods his head to the shoober soliders and they uncross their spears. It seems that thanks to your cunning choice of words you have been granted access into Dogetown.")
         
         # gabe
 
     while True:
+        player.stopMusic()
         print("The entrance to DogeTown leads to a courtyard were digdogs of all sizes wag their tails and run in between the structures. ")
         print("Around you are a few buildings with doors large enough for you to enter.")
         printc("There is one called @'party'@yellow@ puppo's puppy palace.")
@@ -174,6 +175,7 @@ def dogeTown(player):
             print(getInvalidOptionText())
 
 def party(player):
+    Sound(player, 'dogetown club.wav')
     while (True):
         printc("On your left you see the @'bar'@yellow@ where doggers are getting crank. ")
         printc("Straight ahead is the @'dance'@yellow@ floor.")
@@ -255,23 +257,24 @@ def party(player):
   """
             print(s)
             input("... ")
+            tries = 0
             while True:
                 print("Which door will you choose?")
                 x = getInput(player)
                 if checkInput(x, "left"):
-                    if player.getVisits("dogeTown boy's bathroom")>0:
-                        show("You probably want to choose the other door.")
-                    if player.aspect["gender"] == "girl" or player.aspect["gender"] == "gril":
+                    tries += 1
+                    if tries == 1:
                         show("The doogs inside the bathroom bork angrily at you and you are forced to leave.")
+                        show("You probably want to choose the other door.")
                         player.registerVisit("dogeTown boy's bathroom")
                         continue
                     bathroom(player)
                     break
                 elif checkInput(x, "right"):
-                    if player.getVisits("dogeTown girls's bathroom")>0:
-                        show("You probably want to choose the other door.")
-                    if player.aspect["gender"] == "boy" or player.aspect["gender"] == "boi":
+                    tries += 1
+                    if tries == 1:
                         show("The doogettes inside the bathroom birk angrily at you and you are forced to leave.")
+                        show("You probably want to choose the other door.")
                         player.registerVisit("dogeTown girls's bathroom")
                         continue
                     bathroom(player)
@@ -282,12 +285,12 @@ def party(player):
             print(getInvalidOptionText())
         
 def bathroom(player):
+    Sound(player, 'dogetown club bathroom.wav')
     show("Inside the bathroom there is one open stall.")
     show("You enter the stall and close the door.")
     show("In front of you is a very dirty fire hydrant.")
     show("You take a seat.")
     show("You notice, hanging on the back of the door, a kinky doggy-style costume.")
-    show("@You acquired the doggy-style costume.@yellow@")
     i = getTheCostume(player)
     player.addToInventory(i)
     print("Put it on?")

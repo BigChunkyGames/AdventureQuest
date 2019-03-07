@@ -208,16 +208,30 @@ def consume(item): # for consuming consumables
     text=''
     if item.type=='consumable' and item.consumable != None:
         if item.consumable.consumeText == None:
-            if item.consumable.consumableType == 'xp' or item.consumable.consumableType == 'heal': verb = 'ate'
-            else: verb = 'threw'
-            text += "You "+verb+" the " + str(item.name) + ".\n It was delicious.\n"
+            if item.consumable.consumableType == 'xp' or item.consumable.consumableType == 'heal': 
+                text = checkForSpecialItems(item)
+                if text == '':
+                    text += "You ate the " + str(item.name) + ".\n It was delicious.\n"
         else:
             text += item.consumable.consumeText + '\n' 
+
+        
+
+        if item.consumable.dealDamage != 0:
+            if item.player.inCombat == True:
+                return item # this gets messy
+            else:
+                text += "There is no one to throw that at."
+                return text
+
         if item.consumable.heal != 0:
             item.player.regenHealth(health = item.consumable.heal, returnString=True, showCurrentHealth=False)
             text += "You regained " + str(item.consumable.heal) + " HP!\n"
+
         if item.consumable.xpgain != 0:
+
             text += str(item.player.gainXp(item.consumable.xpgain, returnString=True)) + '\n' 
+
         if item.consumable.karma != 0:
             item.player.karma = item.player.karma + item.consumable.karma
             # if item.consumable.karma <0:
@@ -229,7 +243,13 @@ def consume(item): # for consuming consumables
     else:
         text = "You can't use that!"
     return text
-    # TODO damage
+
+def checkForSpecialItems(item, text):
+    name = item.name
+    if name == 'beer' or name == 'Bottle of Vodka' or name == 'Jar of Moonshine':
+        if player.aspect['age'] <21:
+            return "You're not old enough to have that!\nYou throw it on the ground."
+
 
 def generateRandomConsumable(player, name = None, consumableType=None, customDescription='', consumable=None, powerLevel=0, returnItem=True):
     # returns an item of type consumable or just a consumable object if returnItem is false (in which case name and description are not used)

@@ -50,14 +50,13 @@ def maintown(player):
                 
             else:
                 show("You decide to leave your home town for greener pastures.")
-            # TODO wormhole
-            world(player)
+                # TODO wormhole
             return
         else:
             print(getInvalidOptionText() + '\n')
 
 def home(player):
-    s = Sound('home 1.mp3', loop=-1)
+    s = Sound( player,'home 1.mp3', loop=-1)
     show("You enter your house through the familiar front door, taking in "
          "the sights of your childhood abode, reminiscing about all the "
          "things you did as a kid.")
@@ -161,6 +160,7 @@ def blacksmith(player):
         # TODO crafting
 
 def tavern(player):
+    s = Sound(player, 'cumulus.wav')
     if player.registerVisit("Main Town Tavern") == 1:
         show("You walk into the old tavern, wanting to visit the old place "
              "once again.")
@@ -199,6 +199,7 @@ def tavern(player):
         elif action == "game" or action == "g":
                 tavernGame(player)
         elif action == "leave" or action == "l":
+            s.stopSound()
             break
         else:
             print("You need to choose something to do!")

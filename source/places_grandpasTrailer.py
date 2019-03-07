@@ -28,7 +28,8 @@ def grandpasTrailer(player):
         if  player.getVisits('grandpas trailer')== 1: # only on first visit
             player.stats['relation with grandpa'] = 0
             show("Before you can reach the door a tiny robot opens it and looks at you.")
-            show(TROG)
+            sys.stdout.buffer.write(TROG.encode('utf-8'))
+            show('')
             printSlowly('"What the *beep* do you want?"',)
             x = player.getInput()
             if 'grandpa' in x.lower():
@@ -50,7 +51,7 @@ def grandpasTrailer(player):
             printSlowly('"Damnit TROG, who\'s at the door?"', secondsBetweenChars=gspeed)
             show("From behind the robot, your grandpa steps into view.")
             show("His long grey hair and stained lab coat, stir in the breeze.")
-            printSlowly('"Oh it\'s you, ' + player.getName() + '!"', secondsBetweenChars=gspeed)
+            printSlowly('"Oh it\'s you, ' + str(player.getName()) + '!"', secondsBetweenChars=gspeed)
             printSlowly('"I was wondering when you\'d stop by."', secondsBetweenChars=gspeed)
             printSlowly('"I see you\'ve met TROG. Little exuberant guy ain\'t he?"', secondsBetweenChars=gspeed)
             printSlowly('"Well he\'s been around here ever since I found him out in the woods and fixed em up."', secondsBetweenChars=gspeed)
@@ -77,7 +78,7 @@ def grandpasTrailer(player):
                     player.stats['relation with grandpa'] += 1
                     shoes = player.equippedArmourFeet.name
                     player.unequip(_type='armour', armourSlot='feet')
-                    print("@Your " + shoes + " were unequipped.@red@" )
+                    printc("@Your " + shoes + " were unequipped.@red@" )
                 else:
                     player.stats['relation with grandpa'] += -1
                     player.karma -= 1
@@ -102,7 +103,7 @@ def grandpasTrailer(player):
                 printSlowly('"You should see the look on your face! Just give it a moment."', secondsBetweenChars=gspeed, skipable=False)
                 waitTime = 0.8
                 while player.hp < player.maxhp:
-                    player.regenHealth(1, show=False)
+                    player.regenHealth(1, showText=False)
                     wait(float(waitTime))
                     waitTime = waitTime*.93
                 printSlowly('', secondsBetweenChars=gspeed)
@@ -125,13 +126,13 @@ def grandpasTrailer(player):
                     printSlowly("Just wait until you catch him watching you while you're sleeping.", secondsBetweenChars=gspeed)
                     printSlowly("Hahaha.", secondsBetweenChars=gspeed)
                     printSlowly("Anything else?", secondsBetweenChars=gspeed)
-                elif 'snoop' in x or 'dog' in x or 'vision' in x or 'preminition' in x or 'dream' in x :
-                    printSlowly("Weird. What was it all about?", secondsBetweenChars=gspeed)
                 elif 'fire' in x or 'burn' in x or 'town' in x:
                     printSlowly("What?!")
                     printSlowly("The whole town is burnt to the ground?!")
                     printSlowly("I thought the fire department had it under control!")
                     printSlowly("Damn, some things can't be helped.", secondsBetweenChars=gspeed)
+                elif 'vision' in x or 'preminition' in x or 'dream' in x or 'pass' in x or 'floor' or 'bar' in x:
+                    printSlowly("Weird. What did you see?", secondsBetweenChars=gspeed)
                 else:
                     if count==1:
                         printSlowly('Surely there is something more important on your mind.', secondsBetweenChars=gspeed)
@@ -182,7 +183,7 @@ def grandpasTrailer(player):
         return
 
 def tryForCombat(player): # TODO trailer park enemys
-    if random.randint(0,100) <= 15:
+    if random.randint(0,100) <= 20:
         e = Enemy(player, 'spooky',  )
         c = Combat(player, enemy=e)
 
@@ -209,7 +210,7 @@ TROG = '''
 | |\__|__/| |
 |_| |_|_| |_|
  ¥  |_|_|  ¥
-  /¯|···|¯\\
+  /¯|   |¯\\
   | |   | |
   |_|   |_|
   |¯|   |¯|

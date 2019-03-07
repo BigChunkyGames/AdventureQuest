@@ -11,6 +11,7 @@ class Combat:
         # will  use given enemy's power level over enemyPowerLevel
         self.player = player
         self.biome = biome
+        self.song = self.getSong()
         self.result = None # win, escaped, lose
         if not enemy == None: # if giving enemy
             self.enemy = enemy
@@ -36,28 +37,39 @@ class Combat:
             s += " you!"
         printc(s)
         show("@You're being attacked!@red@") 
-
-    def startCombat(self, GivenCombatUI=None):
-        if GivenCombatUI==None: 
-            c = CombatUI(self.player, self.enemy)
-        else: 
-            c = GivenCombatUI
-        c.run()
-        self.result = c.result
         clear()
-        if c.result == "win":
+
+    def startCombat(self, GivenCombatUI=None, attackWithConsumable=None):
+        self.player.inCombat = True
+        if GivenCombatUI==None: 
+            self.combatUI = CombatUI(self.player, self.enemy, song=self.song)
+        else: 
+            self.combatUI = GivenCombatUI
+            try: # this workaround is ugly as hell, but now killing enemy with consumable doesnt crash the game, so thats nice 
+                self.combatUI.attackEnemy(consumableDamage=attackWithConsumable.consumable.dealDamage, consumableName=attackWithConsumable.name)
+            except:
+                self.combatUI.result == 'win'
+        if self.combatUI.result != 'win': self.combatUI.run()
+        self.result = self.combatUI.result
+        if self.combatUI.result == "win":
+            #s = Sound(self.player, self.getWinNoise())
             show("You defeated " + self.enemy.name + "!")
             self.player.gainXp(self.enemy.xpworth, scale=False) # xp already scales when creating enemy
             self.player.regenHealth()# gain health
             if tryForDrop(25): # TODO luck
                 self.getLoot()
-        elif c.result == "lose":
+            #s.stopSound()
+        elif self.combatUI.result == "lose":
             self.player.death()
-        elif c.result == "escaped":
+        elif self.combatUI.result == "escaped":
             show("You escaped from " + self.enemy.name + "! That was a close one!")
-        elif c.result == 'inventory':
-            self.player.openInventory()
-            self.startCombat(c)
+        elif self.combatUI.result == 'inventory':
+            result = self.player.openInventory()
+            if not isinstance(result, str): # if result not string (because its a consumable)
+                self.startCombat(self.combatUI, attackWithConsumable=result)
+            else:
+                self.startCombat(self.combatUI)
+        self.player.inCombat = False
         return
 
     def getLoot(self):
@@ -70,6 +82,23 @@ class Combat:
         show("@You found "+item.name +".@green@")
         #self.player.addToInventory(item)
         self.player.inventory.insert(0, item)
+
+    def getSong(self):
+        if self.biome == 'desert':
+            return 'Third Castle.wav'
+        elif self.biome == 'plains':
+            return 'worry 2.wav'
+        else:
+            return 'worry 1.wav'
+
+    def getWinNoise(self):
+        listOfWinNoises = [
+            'achieve2.wav'
+        ]
+        return getRandomIndex(listOfWinNoises)
+
+
+
         
 
 

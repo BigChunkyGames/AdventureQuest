@@ -1,12 +1,11 @@
  # player comes here when they are not inside of a place or experiancing an event
 
-from source.utils import getInput, clear, show, printc, bug, yesno, checkForCancel, saveGame
+from source.utils import  clear, show, printc, bug, yesno, checkForCancel, saveGame,getInput
 from source.lists import getInvalidOptionText
 
-def world(player):
+def world(player): # returning from world should always immedietly call world again
     player.registerVisit("world")
     saveGame(player)
-    
     while True:
         clear()
         # TODO flavorize make seperate biome synomyms for this part
@@ -15,18 +14,19 @@ def world(player):
         printc("To the @'South'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),
         printc("To the @'West'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX -1, player.currentLocationY )), 
         x = getInput(player)
+        if x == 'load': return 
         if( x == "north" or x == "n"):
             player.map.goTo(player.currentLocationX , player.currentLocationY - 1, player)
-            
+            return
         elif( x == "east" or  x == "e"):
             player.map.goTo(player.currentLocationX +1 , player.currentLocationY , player)
-            
+            return
         elif( x == "south" or x == "s"):
             player.map.goTo(player.currentLocationX , player.currentLocationY +1, player)
-            
+            return
         elif( x == "west" or x == "w"):
             player.map.goTo(player.currentLocationX -1, player.currentLocationY, player)
-            
+            return
         elif (checkForCancel(x)):
             show("You turn around, having not finished your time at " + player.map.getTile(player.currentLocationX,player.currentLocationY).description + ".")
             player.map.goTo(player.currentLocationX, player.currentLocationY , player)
@@ -34,6 +34,7 @@ def world(player):
         else:
             clear()
             show(getInvalidOptionText(traveling=True))
+        
 
             
 def wormHole(player):
@@ -68,6 +69,6 @@ def wormHole(player):
                     return
                 elif checkForCancel(x):
                     show("Just kidding.")
-                    return world(player) 
+                    return 
                 else:
                     show(getInvalidOptionText(traveling=True))

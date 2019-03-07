@@ -32,8 +32,8 @@ import random
 
 class CombatUI():
 
-    def __init__(self, player, enemy, song='worry 1.mp3'):
-        self.song = Sound(fileName = song, loop=-1)
+    def __init__(self, player, enemy, song='worry 2.wav'):
+        self.song = Sound( player,fileName = song, loop=-1)
         self.player = player
         self.playerClans = ' '.join(self.player.clantags)
         if len(self.player.clantags) > 0 : 
@@ -125,24 +125,14 @@ class CombatUI():
 
     def handleEnter(self, event):
         if not self.playerGoesNext: # check if it's actually your turn
-            self.enemyTurn()
             return
         self.playerGoesNext = False
 
-        # handle choice
-        self.radios.current_value = self.radios.values[self.radios._selected_index][0] # show change to selection with *
-        choice = self.radios.current_value
+        choice = self.radios.values[self.radios._selected_index][0] 
         s = ''
         if choice == "Attack":
-            s +=  "You tried to attack... "
-            damage = self.player.getTotalAttackPower()
-            s += " and did " 
-            s += str(damage)
-            s += " damage!" # TODO color
-            self.enemy.hp = self.enemy.hp - damage
-            if self.enemy.hp < 0:
-                self.enemy.hp = 0
-            self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
+            self.attackEnemy()
+            return # return early so attackEnemy can go to enemy turn so damaging consunmables work
         elif choice == "Dodge": # dodging increases chance for enemy to miss by 30% SCALING
             s += "You tried to dodge... "
             self.playerJustDodged = True 
@@ -154,10 +144,24 @@ class CombatUI():
             s += self.tryToEscape()
         else:
             s += "How did you do that!?"
-            
-        if self.enemy.hp == 0: # check if he dead
-            self.done("win")
-            return
+        
+        self.enemyTurn(s)
+
+    def attackEnemy(self, alwaysHit=True, consumableDamage=None, consumableName=None ):
+        s = ''
+        if not consumableDamage == None: # if has consumable damage
+            damage = consumableDamage # better also have a name
+            s += "You threw the " + str(consumableName) + "... "
+        else:
+            s +=  "You tried to attack... "
+            damage = self.player.getTotalAttackPower()
+        s += " and did " 
+        s += str(damage)
+        s += " damage!" # TODO color
+        self.enemy.hp = self.enemy.hp - int(damage)
+        if self.enemy.hp < 0:
+            self.enemy.hp = 0
+        self.setHealthProgressBar(self.enemyHPBar, self.toPercent(self.enemy.hp, self.enemy.maxhp))
         self.enemyTurn(s)
     
     def tryToEscape(self, event=None):
@@ -173,6 +177,9 @@ class CombatUI():
         return s
 
     def enemyTurn(self, textOfPlayerTurn=False):
+        if self.enemy.hp == 0: # check if he dead
+            self.done("win")
+            return
         # for now, always try to attack TODO advanced combat
         self.playerGoesNext = True
         s=''
@@ -199,9 +206,9 @@ class CombatUI():
             if not attack[-1] == "*": s += " and dealt " + str(damage) + " damage!"
             else: 
                 s += " It dealt " + str(damage) + " damage!"
-            # self.player.hp = self.player.hp - damage # lose health
-            t1 = threading.Thread(target=self.rollNumbers(self.player.hp, self.player.hp - damage), args=())
-            t1.start()
+            self.player.hp = self.player.hp - damage # lose health
+            #t1 = threading.Thread(target=self.rollNumbers(self.player.hp, self.player.hp - damage), args=())
+            #t1.start()
             # self.rollNumbers(self.player.hp, self.player.hp - damage)
 
             if self.player.hp < 0:
@@ -318,7 +325,7 @@ class CombatUI():
         self.result = result
         if self.result != 'inventory':
             self.song.stopSound()
-        get_app().exit(result=result)
+        get_app().exit(result=self.result)
  
 # STILL TODO
 # fix color of battlelog

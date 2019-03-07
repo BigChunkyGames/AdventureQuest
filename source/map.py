@@ -120,18 +120,16 @@ class Map:
             return
         player.currentLocationX = x
         player.currentLocationY = y
-        saveGame(player)
+        #saveGame(player)
         if not (self.getTile(x,y).placeFunction):
             # no interesting thing at this tile,
             self.makeWildernessEvent(x,y)
             if self.getTile(x,y).fightChance > random.uniform(0, 1):
                 # if chance of fight is greater than ranom float 
                 Combat(player, self.getTile(x,y).getBiome())
-                return
         else:
             self.getTile(x,y).placeFunction(player)
 
     def goToCurrentLocation(self, player):
         self.goTo(player.currentLocationX, player.currentLocationY, player)
-        world(player)
         

@@ -50,8 +50,17 @@ class Player:
         self.currentLocationY = 5 # maintown
         self.map = Map() # make a new map for the player. Yeah this is stored in the player class rather than the game class. Should make accessing the map easier
         self.day = 1
+        # sound
+        self.addMixers()
+        # UI
+        self.inCombat = False
+        # misc
+        setFolderLocations(self)
 
 #### misc ##############################################
+
+    def stopMusic(self):
+        self.musicMixer.stop()
 
     def getInput(self, oneTry=False): # redundency for easier coding
         return getInput(self, oneTry)
@@ -75,11 +84,19 @@ class Player:
         if includeClantags:
             for c in self.clantags:
                 s += " " + str(c)
-        else:
-            return  s
+        return s
 
+    def addMixers(self):
+        self.musicMixer = pygame.mixer
+        self.musicMixer.pre_init(44100, -16, 1, 512)
+        self.musicMixer.init()
+        self.oneShotMixer = pygame.mixer
+        self.oneShotMixer.pre_init(44100, -16, 8, 512)
+        self.oneShotMixer.init()
 
-
+    def removeMixers(self):
+        self.musicMixer = None
+        self.oneShotMixer = None
 
 #### inventory #########################################
 
@@ -127,9 +144,9 @@ class Player:
         return l
 
     def openInventory(self):
-        x = InventoryUI(self)
-        x.run()
-        return x.result
+        ui = InventoryUI(self)
+        ui.run()
+        return ui.result
 
     def addToInventory(self, item, printAboutIt=True, activateNow=False):
         self.inventory.insert(0, item) # add to front of list so most recent items are in front
@@ -264,7 +281,8 @@ class Player:
 
 #### leveling ####################################################
 
-    def levelUp(self, printAboutIt=True):
+    def levelUp(self, printAboutIt=True, sound=True):
+        if sound==True: Sound(self, 'achieve.wav')
         while True:
             self.level = self.level + 1
             if printAboutIt:printWithColor(str(self.level), before='\nYou are now level ', color="magenta", after= "!")
@@ -300,7 +318,7 @@ class Player:
         #TODO italisize
 
     def gainXp(self, xp, scale = True, returnString=False):
-        Sound('etheral_unlock_1.mp3')
+        Sound( self,'etheral_unlock_1.mp3')
         if scale:
             xp = self.scale(xp) # gain xp based on base xp * 2^level
         self.xp = self.xp + xp
@@ -358,17 +376,17 @@ class Player:
 
     def die(self, customText=None): self.death(customText)
     def death(self, customText=None):
+        Sound(self, 'etheral plunge.wav')
         if customText:
-            printSlowly(str(customText), skipable=False)
+            printSlowly(str(customText), skipable=False, quotes=False)
         else:
-            printSlowly("Suddenly the clouds crack and rain begins to pour.", skipable=False)
-            printSlowly("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:", skipable=False)
-            printSlowly(getRandomFinalThought(), skipable=False) # TODO flavor
-        printSlowly("With that, everything goes dark.", skipable=False)
-        printSlowly('...')
+            printSlowly("Suddenly the clouds crack and rain begins to pour.", skipable=False, quotes=False)
+            printSlowly("You fall to your knees, then the ground, clutching at your chest as your last thought passes through your mind:", skipable=False, quotes=False)
+            printSlowly(getRandomFinalThought(), skipable=False, quotes=False) # TODO flavor
+        printSlowly("With that, everything goes dark.", skipable=False, quotes=False)
+        printSlowly('...', quotes=False)
         show("@YOU ARE DEAD@red@")
-        show("The End", dots=False)
-        sys.exit()
+        theEnd(self)
 
     
     def regenHealth(self, health = None, returnString=False, showCurrentHealth=True, showText=True):
