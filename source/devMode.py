@@ -14,9 +14,6 @@ def devMode(player):
     player.hp = 3000
     player.devmode = True
 
-    player.currentLocationX += 1
-
-
     player.levelUp(printAboutIt=False, sound=False)
     player.levelUp(printAboutIt=False, sound=False)
     player.levelUp(printAboutIt=False, sound=False)

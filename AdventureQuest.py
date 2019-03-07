@@ -42,14 +42,14 @@ class Game:
             setConsoleWindowSize(WINDOW_WIDTH, 16) # set dimensions of window (imported from utils)
             Animation('introAnimation')
             n = newOrLoad(self.player) # loads or returns true
-            #setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             if n == True: 
                 charCreation(self.player) 
                 introduction(self.player)
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            setConsoleWindowSize(WINDOW_WIDTH, 15)
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             
             
 
@@ -57,7 +57,7 @@ class Game:
             #Sound(self.player, 'yes.wav')
 
             # saveGame(self.player, printAboutIt=True)
-            # loadGame(self.player)
+            #loadGame(self.player)
 
             #yesno(self.player)
             

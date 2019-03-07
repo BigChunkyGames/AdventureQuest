@@ -344,9 +344,12 @@ def loadGame(player): # loads most recent save file
         show("There are no saved games yet! You need to go somewhere first!")
         return
     try: # try to load newest save file
-        with open(player.stats['saveDirectory'] +'/'+ newestFile, "rb") as file:
-            unpickler = pickle.Unpickler(file)
-            player = unpickler.load()
+        # with open(player.stats['saveDirectory'] + newestFile, "rb") as file:
+        #     unpickler = pickle.Unpickler(file)
+        #     player = unpickler.load()
+        f = open(player.stats['saveDirectory'] + newestFile, "rb")
+        unpickler = pickle.Unpickler(f)
+        player = unpickler.load()
     except FileNotFoundError:
         printc("@Couldn't find any files to load!@red@")
         return False
@@ -369,6 +372,7 @@ def newOrLoad(player):
         if 'new' in x or checkInput(x, 'new'):
             return True
         elif 'load' in x or 'continue' in x or checkInput(x, 'load') or checkInput(x, 'continue'):
+            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
             loadGame(player)
             return False
  
@@ -388,14 +392,14 @@ def getNewestFile(player):
     return None
 
 def setFolderLocations(player):
-    try:
+    try: # check if dist/saves exists
         files = os.listdir('dist/saves')
         player.stats['saveDirectory'] = 'dist/saves/'
     except:
-        try: 
+        try:  # check if saves folder exists
             files = os.listdir('saves')
             player.stats['saveDirectory'] = 'saves/'
-        except:
+        except: # make a saves folder 
             makeDirectory('saves')
             player.stats['saveDirectory'] = 'saves/'
             
@@ -656,6 +660,7 @@ class Animation():
             self.t1.start() 
             self.t2.start()
             self.t1.join()
+            print('\n')
         except:
             print("Animation: '" + animationName + "' failed to do its sweet thang.")
 

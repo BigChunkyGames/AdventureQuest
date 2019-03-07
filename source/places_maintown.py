@@ -160,7 +160,7 @@ def blacksmith(player):
         # TODO crafting
 
 def tavern(player):
-    Sound(player, 'cumulus.wav')
+    s = Sound(player, 'cumulus.wav')
     if player.registerVisit("Main Town Tavern") == 1:
         show("You walk into the old tavern, wanting to visit the old place "
              "once again.")
@@ -199,6 +199,7 @@ def tavern(player):
         elif action == "game" or action == "g":
                 tavernGame(player)
         elif action == "leave" or action == "l":
+            s.stopSound()
             break
         else:
             print("You need to choose something to do!")
