@@ -277,7 +277,7 @@ def tavernGame(player):
                 break
     else:
         printSlowly('"Just as I figured, maybe you can come back when you\'re not '
-             'such a fuckin whimp lol')
+             'such a fuckin wimp lol')
         show("You're so upset by his unkind words that you don't even want "
              "to be here anymore.")
     print("")

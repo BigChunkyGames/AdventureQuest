@@ -34,7 +34,7 @@ clear()
 class Game:
     def __init__(self):
         self.player= Player()
-        self.player.devMode = False 
+        self.player.devMode = True 
 
     def start(self):
         if not self.player.devMode: # not dev mode
@@ -49,7 +49,7 @@ class Game:
                 maintown(self.player)
         else: # dev mode
             devMode(self.player)
-            setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+            setConsoleWindowSize(WINDOW_WIDTH, 14) # so i can see it in vs code
             
             
 
@@ -64,7 +64,9 @@ class Game:
             # places 
 
             #pod(self.player)
-            #grandpasTrailer(self.player)
+            i = Item(self.player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ', _type='consumable', consumable=Consumable(self.player, heal=10, karma=-3, consumeText='Hope Grandpa won\'t be mad that you ate his lasagna!'))
+            self.player.addToInventory(i)
+            grandpasTrailer(self.player)
             #burntTown(self.player)
             #babel(self.player)
             #introduction(self.player)
