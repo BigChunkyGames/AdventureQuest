@@ -59,7 +59,7 @@ def grandpasTrailer(player):
             if player.checkIfInInventory("Lasagna"): # if has lasagna
                 printSlowly('"Hey... is that your mom\'s lasagna I smell? "', secondsBetweenChars=gspeed)
                 if yesno(player):
-                    player.choices.append("gave lasagna to grandpa")
+                    player.history.append("gave lasagna to grandpa")
                     if player.removeFromInventory('Lasagna'):
                         player.stats['relation with grandpa'] += 1
                         printSlowly('"Your mother\'s lasagna always fills my belly right to the brim. "', secondsBetweenChars=gspeed)
