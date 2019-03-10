@@ -99,7 +99,7 @@ def introduction(player):
     printSlowly("What the? How the hell did you get in here?", secondsBetweenChars=.08)
     # TODO transition
     clear()
-    show("You wake up and peel you face off of the sticky tavern floor.")
+    show("You wake up and peel your face off of the sticky tavern floor.")
     printSlowly("Boy, you should take a little more time between sips!")
     show("The barmen chuckle.")
     show("You stand up and brush yourself off, trying to make sense of what just happened.")

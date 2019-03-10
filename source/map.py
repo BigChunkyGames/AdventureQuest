@@ -11,6 +11,7 @@ from source.places_flowers import flowers
 from source.places_grandpasTrailer import grandpasTrailer
 from source.world import world
 from source.places_babel import babel
+from source.places_furnitureTown import furnitureTown
 
 class Map:
 
@@ -94,6 +95,9 @@ class Map:
         #            x,y
         self.getTile(7,1).description = "a number of cute doggos prancing about."
         self.getTile(7,1).placeFunction = dogeTown
+
+        self.getTile(4,4).description = 'a large building with big windows.'
+        self.getTile(4,4).description = furnitureTown
 
         self.getTile(10,4).description = "Grandpa's trailer."
         self.getTile(10,4).placeFunction = grandpasTrailer

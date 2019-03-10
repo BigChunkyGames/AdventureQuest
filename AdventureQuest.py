@@ -22,6 +22,7 @@ from source.places_grandpasTrailer import grandpasTrailer
 from source.places_babel import babel
 import sys
 from source.places_pod import pod
+from source.places_furnitureTown import furnitureTown
 # except Exception as e:
 #     print(e)
 #     print('Failed to do initial import.')
@@ -50,7 +51,7 @@ class Game:
         else: # dev mode
             devMode(self.player)
             setConsoleWindowSize(WINDOW_WIDTH, 14) # so i can see it in vs code
-            
+            furnitureTown(self.player)
             
 
 
