@@ -136,6 +136,7 @@ def introduction(player):
     # printSlowly('"k."')
     # show("You sprint to your house to grab your shit.")
     print('You enter your house and exclaim to your mom about what just happend.')
+    # TODO make player decide to go home
     player.getInput()
     show('She looks up from the '+getRandomDankClothing()+' sock she\'s knitting.')
     # printSlowly("Alright sweetie, be safe! Here, take this.")

@@ -56,20 +56,24 @@ def grandpasTrailer(player):
             printSlowly('"I see you\'ve met TROG. Little exuberant guy ain\'t he?"', secondsBetweenChars=gspeed)
             printSlowly('"Well he\'s been around here ever since I found him out in the woods and fixed em up."', secondsBetweenChars=gspeed)
             printSlowly('"(I can\'t get him to leave.)"', secondsBetweenChars=gspeed)
-            if player.checkIfInInventory("Lasagna"): # if has lasagna
-                printSlowly('"Hey... is that your mom\'s lasagna I smell? "', secondsBetweenChars=gspeed)
-                if yesno(player):
-                    player.history.append("gave lasagna to grandpa")
-                    if player.removeFromInventory('Lasagna'):
-                        player.stats['relation with grandpa'] += 1
-                        printSlowly('"Your mother\'s lasagna always fills my belly right to the brim. "', secondsBetweenChars=gspeed)
+            try:
+                if player.checkIfInInventory("Lasagna"): # if has lasagna
+                    printSlowly('"Hey... is that your mom\'s lasagna I smell? "', secondsBetweenChars=gspeed)
+                    if yesno(player):
+                        player.history.append("gave lasagna to grandpa")
+                        if player.removeFromInventory('Lasagna'):
+                            player.stats['relation with grandpa'] += 1
+                            printSlowly('"Your mother\'s lasagna always fills my belly right to the brim. "', secondsBetweenChars=gspeed)
+                        else:
+                            printSlowly("Don't fool me like that, I'm hungry!", secondsBetweenChars=gspeed)
+                            player.stats['relation with grandpa'] -= 1
                     else:
-                        printSlowly("Don't fool me like that, I'm hungry!", secondsBetweenChars=gspeed)
-                        player.stats['relation with grandpa'] -= 1
-                else:
-                    player.stats['relation with grandpa'] += -1
-                    printSlowly('"Well that\'s too bad."', secondsBetweenChars=gspeed)
-                    printSlowly('"Must be your breath I\'m smelling then."', secondsBetweenChars=gspeed)
+                        player.stats['relation with grandpa'] += -1
+                        printSlowly('"Well that\'s too bad."', secondsBetweenChars=gspeed)
+                        printSlowly('"Must be your breath I\'m smelling then."', secondsBetweenChars=gspeed)
+            except Exception as e:
+                print (e)
+                input('dang it')
             printSlowly('"Well come inside then."', secondsBetweenChars=gspeed)
             show("You step up into the trailer which is revealed to be cluttered with beakers and scientific equipment with no place to practice science.")
             if player.equippedArmourFeet != None:
