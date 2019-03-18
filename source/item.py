@@ -26,8 +26,10 @@ class Item():
         if self.type == 'armour': self.armourSlot = armourSlot
         else: self.armourSlot = None
 
-        if sellValue == None: self.sellValue = self.generateSellValue() 
-        else: self.sellValue = sellValue
+        if sellValue == None: 
+            self.sellValue = self.generateSellValue() 
+        else: 
+            self.sellValue = sellValue
 
         if scale: self.scale()
 
@@ -113,7 +115,6 @@ class Item():
         '''change an items stats to scale with player level'''
         self.damage = self.player.scale(self.damage)
         self.block = self.player.scale(self.block)
-        self.sellValue = self.sellValue + self.player.level # TODO not sure about this
 
 def generateRandomArmourOrWeapon(player, _type='armour',rarity = None, armourSlot=None, bonus=0, extreme=False, customDescription='', prefix=True, scale=True): 
     ''' bonus makes the weapon a lot better (or worse if neg)
@@ -226,10 +227,11 @@ def consume(item): # for consuming consumables
 
         if item.consumable.heal != 0:
             item.player.regenHealth(health = item.consumable.heal, returnString=True, showCurrentHealth=False)
-            text += "You regained " + str(item.consumable.heal) + " HP!\n"
+            text += "You regained " 
+            text += str(item.consumable.heal) 
+            text += " HP!\n"
 
         if item.consumable.xpgain != 0:
-
             text += str(item.player.gainXp(item.consumable.xpgain, returnString=True)) + '\n' 
 
         if item.consumable.karma != 0:
@@ -244,11 +246,13 @@ def consume(item): # for consuming consumables
         text = "You can't use that!"
     return text
 
-def checkForSpecialItems(item, text):
+def checkForSpecialItems(item):
     name = item.name
+    player = item.player
     if name == 'beer' or name == 'Bottle of Vodka' or name == 'Jar of Moonshine':
         if player.aspect['age'] <21:
             return "You're not old enough to have that!\nYou throw it on the ground."
+    return ''
 
 
 def generateRandomConsumable(player, name = None, consumableType=None, customDescription='', consumable=None, powerLevel=0, returnItem=True):

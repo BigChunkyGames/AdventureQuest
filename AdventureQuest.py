@@ -29,6 +29,7 @@ from source.places_furnitureTown import furnitureTown
 #     input('dang it')
 
 
+
 clear() 
 
 
@@ -51,11 +52,16 @@ class Game:
         else: # dev mode
             devMode(self.player)
             setConsoleWindowSize(WINDOW_WIDTH, 14) # so i can see it in vs code
-            furnitureTown(self.player)
+            # furnitureTown(self.player)
+
+            self.player.addToInventory(Item(self.player, 'Furniture Tom\'s business card', customDescription='Hi my name is Furniture Tom and welcome to Furniture Town. If you want to buy some furniture just call 1-800-FRN-TOWN', _type='misc', sellValue=0))
+            self.player.getInput()
             
 
 
             #Sound(self.player, 'yes.wav')
+            # self.player.sleep()
+
 
             # saveGame(self.player, printAboutIt=True)
             #loadGame(self.player)
@@ -65,8 +71,8 @@ class Game:
             # places 
 
             #pod(self.player)
-            i = Item(self.player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ', _type='consumable', consumable=Consumable(self.player, heal=10, karma=-3, consumeText='Hope Grandpa won\'t be mad that you ate his lasagna!'))
-            self.player.addToInventory(i)
+            # i = Item(self.player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ', _type='consumable', consumable=Consumable(self.player, heal=10, karma=-3, consumeText='Hope Grandpa won\'t be mad that you ate his lasagna!'))
+            # self.player.addToInventory(i)
             grandpasTrailer(self.player)
             #burntTown(self.player)
             #babel(self.player)

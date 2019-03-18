@@ -410,6 +410,7 @@ class Player:
                 printc(text)
 
     def sleep(self, customText=None):
+        printSlowly("zzzzzzzzz", secondsBetweenChars=.3, quotes=False)
         self.hp = self.maxhp
         if customText == None: 
             print("After a long night's rest, you are rejuvenated.")

@@ -41,7 +41,7 @@ def yesno(player):
     # if user types 'absolutely not' it counts as yes
     while True:
         userinput = getInput(player)
-        if 'y' in userinput or 'sure' in userinput or 'ok' in userinput:
+        if 'ye' in userinput or 'ya' in userinput or 'sure' in userinput or 'ok' in userinput or userinput == 'y':
             Sound(player, 'yes.wav')
             return True
         elif 'n' in userinput:
@@ -150,9 +150,12 @@ def wrap(text, limit=40, padding=True):
             continue
         out += pad
         w=0 
-        for d in s.split(): # for each word
+        words = s.split()
+        for d in words: # for each word
             if w + len(d) + 2 < limit: # if fits in limit
-                out += d + " "
+                out += d
+                if d != words[len(words)-1]: # if not last word
+                    out += " "
                 w += len(d) + 1 
             else: # if goes over limit
                 out += "\n" + pad
