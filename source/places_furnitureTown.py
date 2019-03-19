@@ -12,10 +12,14 @@ def furnitureTown(player):
         show("Not today.")
         return
     else:
+        player.registerVisit("Furniture Town")
         show("The automatic sliding doors open and reveal a lavish world of furniture basking in flourecent light.")
+        if 'talked to furniture tom' in player.history:
+            insideFurnitureTown(player)
         show("Through the aisles of furniture, a sales person, pretending not to notice you, quickly places himself in your path.")
         print("Approach him?")
         if yesno(player):
+            player.history.append("talked to furniture tom")
             printSlowly("Whoa hey there welcome to Furniture Town my name is Furniture Tom what brings you in today?!", secondsBetweenChars=salesGuySpeed)
             x = input('> ')
             printSlowly("Well that's great listen I have just have got to tell you about these great deals we're having today I mean they are seriously outragious and I'm sure you're not going to find any deals on furniture (especially furniture of this caliber) anywhere else in all of "+player.aspect['land']+".", secondsBetweenChars=salesGuySpeed)
@@ -38,11 +42,11 @@ def furnitureTown(player):
 
 
 def insideFurnitureTown(player): # offer places to go here (couchtown...)
-    show("There is furniture being displayed in every direction.")
-    show("You look around and notice that there is furniture as far as the eye can see.")
+    show("There is furniture on display in every direction.")
+    show("You cannot see an end to the sea of furniture.")
     show("The furniture fades off into the horizon.")
     show("This is a really large store.")
-    show("Hanging in the fluorescent lights above you are signs indicating the different sections of Furniture Town. ")
+    show("Hanging in the lights above you are signs indicating the different sections of Furniture Town. ")
     while True:
         printc("Would you like to go to @'sofa city'@yellow@, @'bed heaven'@yellow@, @'rug road'@yellow@, or @'employee's only'@yellow@?")
         x = player.getInput()
@@ -82,9 +86,14 @@ def rugRoad(player):
     return
 
 def bedHeaven(player):
+    name = 'Alice'
+
     show("You head towards bed heaven.")
-    show("You begin to notice many more beds through the sea of furniture.")
-    show("You stumble upon a woman sleeping in one of the beds.")
+    show("The beds begin to get so tightly packed that you have to crawl over them.")
+    if 'woke up '+name in player.history:
+        show("You notice "+name+" still sleeping in the bed.")
+    else:
+        show("You stumble upon a girl sleeping in one of the beds.")
     print("Wake her up?")
     if not yesno(player):
         show("Yeah, that would be rude.")
@@ -98,6 +107,43 @@ def bedHeaven(player):
         show("That was nice.")
         show("You decide to head back to the entrance.")
         return
+    else: #waking her up
+        printSlowly("Whhuuaa?", secondsBetweenChars=.2)
+        if "woke up "+name in player.history:
+            printSlowly('You again?')
+            printSlowly("Are you going to help me get back at this place?")
+        else:
+            player.history.append("woke up "+name)
+            show("The girl sits up in the bed and stretches her arms.")
+            show("She is more beautiful than you realized.")
+            printSlowly("Huh, I guess I dozed off.", secondsBetweenChars=.15)
+            printSlowly("Who are you?", secondsBetweenChars=.1)
+            playerName = getInput(player)
+            playerName = playerName.title()
+            printSlowly(playerName + "?")
+            printSlowly("That's a weird name.")
+            printSlowly("I'm "+name+".")
+            show(name + " hops off of the bed and looks you in the eyes.")
+            printSlowly("So, "+playerName+", you want to help me out?")
+            printSlowly("This place has been ripping people off for forever.")
+            printSlowly("I walked in here and talked to Furniture Tom and then next thing I knew I was completely broke.")
+            printSlowly("I've got so much debt and I've got no where to go...")
+            printSlowly("So I just live here.")
+            printSlowly("They keep trying to kick me out, but this store is so large they can never find me.")
+            printSlowly("It's time we get back at them.")
+            printSlowly("I've been scheming about this for a while, but my plan requires two people.")
+            printSlowly("Are you in?")
+        if yesno(player):
+            printSlowly("Great.")
+            printSlowly("")
+        else:
+            printSlowly("Huh. Whatever.")
+            show(name +" is done talking to you and gets back in the bed.")
+            show("She immediately falls asleep.")
+            show("You decided to head back to the entrance.")
+            return
+
+
 
 def sofaCity(player):
     show("You follow the path towards an endless display of couches and coffee tables.")
