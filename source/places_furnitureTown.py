@@ -10,9 +10,10 @@ def furnitureTown(player):
     print("Go inside?")
     if not yesno(player):
         show("Not today.")
-        return
+        
     else:
         player.registerVisit("Furniture Town")
+        s = Sound(player, 'mall.wav')
         show("The automatic sliding doors open and reveal a lavish world of furniture basking in flourecent light.")
         if 'talked to furniture tom' in player.history:
             insideFurnitureTown(player)
@@ -31,14 +32,15 @@ def furnitureTown(player):
                 printSlowly("What is it the price? We can make something work. I can go lower. It's not my furniture! The lowest I can go is FIVE hundo. I don't make commission anyways.", secondsBetweenChars=salesGuySpeed)
                 printSlowly("So what do you say?", secondsBetweenChars=salesGuySpeed)
                 if yesno(player):
-                    return buyFurniture(player, 499.99)
+                    buyFurniture(player, 499.99)
                 else:
                     printSlowly("Alright well if you're seriously not going to buy any furniture I better help some legitimate customers.", secondsBetweenChars=salesGuySpeed)
                     show("Furniture Tom gives you his business card and walks away.")
                     player.addToInventory(Item(player, 'Furniture Tom\'s business card', customDescription='Hi my name is Furniture Tom and welcome to Furniture Town. If you want to buy some furniture just call 1-800-FRN-TOWN', _type='misc', sellValue=0))
         else: # didnt wantn to approach sales guy
             show("You squeeze through the gaps between a "+getRandomCouch()+" and a "+getRandomCouch()+".")
-            return insideFurnitureTown(player)
+            insideFurnitureTown(player)
+        s.stopSounds()
 
 
 def insideFurnitureTown(player): # offer places to go here (couchtown...)
@@ -62,13 +64,22 @@ def insideFurnitureTown(player): # offer places to go here (couchtown...)
             if not yesno(player):
                 show("Yeah, you probably shouldn't go in there anyway.")
             else:
-                if player.equippedArmourChest.name == 'Furniture Town Employee Polo':
-                    pass
+                if player.equippedArmourChest.name == 'Furniture Town Employee Polo on day':
+                    inflitrationQuest(player)
                 else:
                     show("You crack open the door and get a glimpse of an immense warehouse.")
                     show("A burly man in a Furniture Town polo notices you and and crosses his arms.")
                     show("You are obviously not welcome here.")
                     show("You close the door.")
+
+def inflitrationQuest(player):
+    show("A burly man in a Furniture Town polo notices you and and crosses his arms.")
+    printSlowly("I don't remember seeing you around here.")
+
+
+ ADD MORE STUFF
+
+
 
 def rugRoad(player):
     show("You walk down the road of rugs.")
@@ -116,7 +127,7 @@ def bedHeaven(player):
             player.history.append("woke up "+name)
             show("The girl sits up in the bed and stretches her arms.")
             show("She is more beautiful than you realized.")
-            printSlowly("Huh, I guess I dozed off.", secondsBetweenChars=.15)
+            printSlowly("Huh, I guess I dozed off.", secondsBetweenChars=.2)
             printSlowly("Who are you?", secondsBetweenChars=.1)
             playerName = getInput(player)
             playerName = playerName.title()
@@ -126,16 +137,38 @@ def bedHeaven(player):
             show(name + " hops off of the bed and looks you in the eyes.")
             printSlowly("So, "+playerName+", you want to help me out?")
             printSlowly("This place has been ripping people off for forever.")
-            printSlowly("I walked in here and talked to Furniture Tom and then next thing I knew I was completely broke.")
+            printSlowly("I walked in here and talked to Furniture Tom and then next thing I knew I was completely broke.", secondsBetweenChars=.02)
             printSlowly("I've got so much debt and I've got no where to go...")
             printSlowly("So I just live here.")
             printSlowly("They keep trying to kick me out, but this store is so large they can never find me.")
             printSlowly("It's time we get back at them.")
-            printSlowly("I've been scheming about this for a while, but my plan requires two people.")
+            printSlowly("I've been scheming about this for a while, but my plan needs two people.")
             printSlowly("Are you in?")
         if yesno(player):
-            printSlowly("Great.")
-            printSlowly("")
+            printSlowly("Great!")
+            printSlowly("Come with me.")
+            show(name +' grabs your hand and runs to a door marked "Employee\'s Only".')
+            printSlowly("I found this. I need you to put it on.")
+            item = Item(player, 'Furniture Town Employee Polo')
+            player.addToInventory(item)
+            while True:
+                print("Put it on?")
+                if yesno(player):
+                    player.equippedArmourChest = item
+                    show("@You equipped the Polo.@green@")
+                    break
+                else:
+                    printSlowly("What the heck I need you to put this on!")
+            printSlowly("Yes! You look just like one of them!")
+            printSlowly("Now I need you to sneak into the back of this place and find out where they keep the money.")
+            printSlowly("When you find it, grab as much as you can and then come back here.")
+            printSlowly("But don't let anyone see you while you're doing that.")
+            printSlowly("Got it!?")
+            x = player.getInput()
+            printSlowly("Great!")
+            show(name + " shoves you through the doorway into the Employee's Only section.")
+            return inflitrationQuest(player)
+
         else:
             printSlowly("Huh. Whatever.")
             show(name +" is done talking to you and gets back in the bed.")

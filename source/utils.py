@@ -41,7 +41,7 @@ def yesno(player):
     # if user types 'absolutely not' it counts as yes
     while True:
         userinput = getInput(player)
-        if 'ye' in userinput or 'ya' in userinput or 'sure' in userinput or 'ok' in userinput or userinput == 'y':
+        if 'ye' in userinput or 'ya' in userinput or 'sure' in userinput or 'ok' in userinput or userinput == 'y' or userinput == 'mhm':
             Sound(player, 'yes.wav')
             return True
         elif 'n' in userinput:

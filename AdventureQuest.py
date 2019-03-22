@@ -52,7 +52,7 @@ class Game:
         else: # dev mode
             devMode(self.player)
             setConsoleWindowSize(WINDOW_WIDTH, 14) # so i can see it in vs code
-            # furnitureTown(self.player)
+            furnitureTown(self.player)
 
             self.player.addToInventory(Item(self.player, 'Furniture Tom\'s business card', customDescription='Hi my name is Furniture Tom and welcome to Furniture Town. If you want to buy some furniture just call 1-800-FRN-TOWN', _type='misc', sellValue=0))
             self.player.getInput()
