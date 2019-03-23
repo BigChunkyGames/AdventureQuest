@@ -238,6 +238,9 @@ class Player:
             if s.visitedOnDay % 3 == 0:
                 s.restock()
 
+    def addMoney(self, amount):
+        show("@"+str(amount) + "$ was added to your bank account.@green@")
+        self.money += amount
 
 #### map ######################################################
 

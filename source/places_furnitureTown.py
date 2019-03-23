@@ -2,6 +2,7 @@
 from source.utils import *
 from source.item import *
 from source.lists import getRandomCouch, getRandomFeeling
+import random
 salesGuySpeed = .01
 
 def furnitureTown(player):
@@ -40,7 +41,7 @@ def furnitureTown(player):
         else: # didnt wantn to approach sales guy
             show("You squeeze through the gaps between a "+getRandomCouch()+" and a "+getRandomCouch()+".")
             insideFurnitureTown(player)
-        s.stopSounds()
+        s.stopSound()
 
 
 def insideFurnitureTown(player): # offer places to go here (couchtown...)
@@ -73,11 +74,229 @@ def insideFurnitureTown(player): # offer places to go here (couchtown...)
                     show("You close the door.")
 
 def inflitrationQuest(player):
-    show("A burly man in a Furniture Town polo notices you and and crosses his arms.")
+    show("A burly man in a Furniture Town polo notices you and crosses his arms.")
+    show('His name tag says, "Hank".')
     printSlowly("I don't remember seeing you around here.")
+    printSlowly("What's your name again?")
+    nameTagName = player.getInput()
+    printSlowly(nameTagName.title() + "?")
+    printSlowly("Well put on a name tag so people don't have to ask.")
+    item = Item(player, 'Name Tag', customDescription="It says \"My name is "+nameTagName+".\" The safety pin part looks kind of sharp.", _type="weapon", damage=1, scale=False)
+    player.addToInventory(item)
+    player.equippedWeapon == item
+    show("@You equipped the name tag.@green@")
+    printSlowly("Oh and by the way there's a stack of EP500's on floor 10 and they need processing.")
+    printSlowly("Get on that would you?")
+    show('Hank goes back to staring at the door with his arms crossed.')
+    show("You take a look around the warehouse and find that it too is tremendously large.")
+    show("The broken and used furniture is piled to the ceiling.")
+    show("You walk around a bit and find an elevator.")
+    show("You press the button and wait.")
+    printSlowly("5")
+    printSlowly("4")
+    printSlowly("3")
+    printSlowly("2")
+    printSlowly("1")
+    Sound(player,'elevator_ding.wav', loop=0)
+    show("The elevator arrives and 4 huge burly men in Furniture Town Polos walk out.")
+    show("You step inside the elevator and examine the array of buttons.")
+    show("The buttons stretch from the floor to the ceiling and range from @1@yellow@ to @112@yellow@.")
+    show("There is also a button labled @'Directory'@yellow@.")
+    currentFloor = 1
+    total = 0
+    while True:
+        print("Which button do you press?")
+        floor = player.getInput()
+        if checkInput(floor, 'Directory'):
+            directory(currentFloor)
+            continue
+        else:
+            try:
+                floor = int(floor)
+                assert floor >0
+                assert floor < 113
+            except Exception:
+                print("That is not one of the buttons.")
+                continue
+            currentFloor = floor
+            printSlowly(". . .", quotes=False)
+            Sound(player,'elevator_ding.wav', loop=0)
+            o = "The doors open and"
+            if floor == 1:
+                show(o+" you are back in the warehouse.")
+                if 'Got the money from furniture town' not in player.history:
+                    show("You can't go back to Alice empty-handed...")
+                    show("You get back in the elevator.")
+                else:
+                    return part2(player,total, nameTagName)
+            elif floor == 2:
+                show(o+" you see an office of men that all look exactly like Furniture Tom filing papers and making small talk by the watercooler.")
+            elif floor == 3:
+                show(o+' you enter a triangular room with a pedestal in the center.')
+                show("There is a triangle shaped hole in the pedestal.")
+                show("You look around and see something shining in the corner of the room.")
+                print("Check it out?")
+                if yesno(player):
+                    show("You walk over a find a square shaped key.")
+                    print("Try it in the hole?")
+                    if yesno(player):
+                        show("It obviously doesn't fit.")
+                    show("You toss it on the ground and get back into the elevator.")
+                    continue
+                show("You step back into the elevator.")
+            elif floor == 4:
+                show(o+" you are immediately bombarded by intense radiation.")
+                show("You can feel the cancer developing in your small intestine.")
+                player.takeDamage(1)
+                show("You hit the close door button as fast as you can.")
+            elif floor == 5:
+                show(o+' a blast of humid sweaty air accompanied by relaxing zen music rushes into the elevator.')
+                if 'yoga floor' in player.history:
+                    show("Though the scent of yoga is alluring, you decided to go to a different floor.")
+                else:
+                    player.history.append("yoga floor")                
+                    show("You see someone walking towards the elevator.")
+                    printSlowly("Hey hold the door for me!")
+                    print("Hold the door for them?")
+                    if yesno(player):
+                        show("You hold the door for the person.")
+                        show('Their name tag says, "Jebra".')
+                        printSlowly("Thanks!")
+                        show("Jebra lays down in the corner of the elevator and quickly falls asleep.")
+                    else:
+                        printSlowly("What the f...")
+            elif floor == 6:
+                show(o+" there is blood all over the floor.")
+                show("A large alligator-camel hybrid with a disconcerting smirk is galloping towards the elevator door.")
+                printc("Mash the door close button by typing, @'Close the door'@yellow@ as fast as you can!")
+                while True:
+                    x = player.getInput()
+                    if x == 'close the door':
+                        break
+                    else:
+                        printc("It's getting closer!")
+            elif floor == 7:
+                show(o+" you are dazzled by the brilliant amorphous triangles that float about the room." )
+                show("You stare at their geometric wonders and begin to lose track of time and space.")
+            elif floor == 8:
+                show(o+" the room is completely empty.")
+                show("There is nothing in it.")
+            elif floor == 9:
+                show(o+" there you are.")
+                show("It's you, standing just a few feet ahead.")
+                show("You look at yourself, face to face.")
+                show("You feel a confused horror but the face you see has a look of calm contentment.")
+                show("You begin to speak but...")
+            elif floor == 10:
+                show(o+" you walk down a hallway looking for where the money might be.")
+                show('You turn the corner and see a door labled, "Capital Storage".')
+                show("You start to turn the handle but suddenly you hear a scolding voice from behind you.")
+                show("An angry woman in a manager's outfit is pointing her finger at your pants.")
+                show("Her name tag says, \"Loreen\".")
+                printSlowly("What the heck are you doing?")
+                x = player.getInput()
+                printSlowly("I don't want to hear it!")
+                printSlowly("You can't wear those "+str(player.equippedArmourLegs.name)+" around here!")
+                printSlowly("Think of the customers!")
+                printSlowly("Go into that storage room and change into some slacks this instant!")
+                show("You hang your head low and enter the storage room across the hall.")
+                show("You open a box labled, \"SLACKS\" and find some slacks that are your size.")
+                slacks = Item(player, 'Slacks', 'You found these in a box labled, "SLACKS".', _type='Armour', armourSlot='legs')
+                player.addToInventory(slacks)
+                print("Put them on?")
+                if yesno(player):
+                    show("@You put on the slacks.@green@")
+                else:
+                    show("@You put on the slacks even though you don't want to.@green@")
+                player.equippedArmourLegs = slacks
+                show('You exit the storage room and try the handle to the door labled, "Capital Storage".')
+                show("It's locked.")
+                show("Loreen appears behind you.")
+                printSlowly("Oh now I've got you!")
+                printSlowly("And I assume you've misplaced your master key as well?")
+                printSlowly("Don't you know some crook could be trying to steal our money and all he would need is that key.")
+                printSlowly("This is going on your permanent record, "+nameTagName.title()+".")
+                printSlowly("I'll open this for you now, but if you don't have that key by tomorrow there will be serious consequences.")
+                printSlowly("What do you need in here anyways?")
+                print("> ")
+                wait(1)
+                printSlowly("Actually don't answer that. I don't care.")
+                printSlowly("Just get back to work.")
+                show("Loreen opens the door for you and you go inside.")
+                show("The door closes behind you and you turn on the lights.")
+                show('In front of you there is a huge safe with a complicated looking keypad.')
+                print("Enter password?")
+                while True:
+                    if yesno(player):
+                        print("The computer terminal is awaiting input:")
+                        pw = player.getInput()
+                        if pw == '123':
+                            player.history.append("Got the money from furniture town")
+                            show("Click.")
+                            show("The safe opens and a huge amount of money spills out onto the ground.")
+                            show("You begin stuffing as much of it as you can into your pants, but your "+str(player.equippedArmourLegs.name)+" have shallow pockets.")
+                            player.addMoney(5035)
+                            total = 5035
+                            while True:
+                                print("Grab some more?")
+                                if yesno(player):
+                                    show("You stuff some more money in your pants.")
+                                    show("They are bulging at the seams.")
+                                    r = random.randint(98, 432)
+                                    player.addMoney(r)
+                                    total+=r
+                                else:
+                                    break
+                            show("You exit the room and make a break for the elevator.")
+                            break
+                        else:
+                            show("The safe beeps angrily.")
+                            show("Wrong password.")
+                    else:
+                        show('You look around the room for a hint.')
+                        show('On the wall next to the safe is a sticky note with the numbers, "1 2 3" on it.')
+                    print("Try again?")
+            else:
+                show("The computerized voice comes over the speakers.")
+                printSlowly("That floor is on lockdown.")
+                printSlowly("Thank you.")
+                continue
+            show("The elevator doors slowly close.")
+            
+def part2(player, total, name):
+    show("You quickly head towards the exit of the Employee's Only area.")
+    show("Hank steps in your path and crosses his arms.")
+    printSlowly("Huh. I remember you looking skinnier.")
+    printSlowly("Have you put on some weight?")
+    printSlowly("You must just look fat in those "+player.equippedArmourLegs+".")
+    printSlowly("Well anyways, thanks for sorting out all those issues with the EP500's.")
+    printSlowly("It's nice to know someone around here has my back.")
+    printSlowly("Now get back out there and sell some furniture!")
+    show("Hank gives you a shove through the exit.")
+    show("It doesn't take you long to find Alice.")
+    show("She is sleeping on a "+getRandomCouch()+".")
+    print("Wake her up?")
+    if not yesno(player):
+        show("Your deliberation wakes Alice.")
+    printSlowly("Whhhuuaaa?", secondsBetweenChars=.1)
+    printSlowly(name +)
 
 
- ADD MORE STUFF
+def directory(floor):
+    show("A computerized voice begins listing the floor names:")
+    printSlowly("You are on floor "+str(floor)+".")
+    printSlowly("Floor 1: Warehouse")
+    printSlowly("Floor 2: Sales")
+    printSlowly("Floor 3: Administration")
+    printSlowly("Floor 4: Bio-Waste")
+    printSlowly("Floor 5: Yoga Club")
+    printSlowly("Floor 6: DNA Sequencing Lab")
+    printSlowly("Floor 7: Triangles")
+    printSlowly("Floor 8: Nothing")
+    printSlowly("Floor 9: Chamber of Retroflection")
+    printSlowly("Floor 10: EP500 Realignment Facility")
+    printSlowly("All other floors are on lockdown.")
+    printSlowly("Thank you.")
 
 
 
@@ -127,7 +346,7 @@ def bedHeaven(player):
             player.history.append("woke up "+name)
             show("The girl sits up in the bed and stretches her arms.")
             show("She is more beautiful than you realized.")
-            printSlowly("Huh, I guess I dozed off.", secondsBetweenChars=.2)
+            printSlowly("Huh, I guess I dozed off.", secondsBetweenChars=.1)
             printSlowly("Who are you?", secondsBetweenChars=.1)
             playerName = getInput(player)
             playerName = playerName.title()
@@ -176,8 +395,6 @@ def bedHeaven(player):
             show("You decided to head back to the entrance.")
             return
 
-
-
 def sofaCity(player):
     show("You follow the path towards an endless display of couches and coffee tables.")
     print('Would you like to take a seat in one of the couches?')
@@ -196,13 +413,12 @@ def couch(player):
     if yesno(player):
         return couch(player)
     
-
 def buyFurniture(player, price):
     printSlowly("GREAT we'll get this taken care of right away.", secondsBetweenChars=salesGuySpeed)
     show("@$"+str(price)+" has been deducted from your bank account.@red@")
     player.money -= price
     printSlowly("Our guys will have this delivered faster than you can get home! Ahhahhhahhhhahh.", secondsBetweenChars=salesGuySpeed)
     printSlowly("Well let me know if you want to buy any more furniture.")
-    printSlowly("Feel free to browse around.")
+    show("Furniture Tom walks off into the distance.")
     return insideFurnitureTown(player)
     
