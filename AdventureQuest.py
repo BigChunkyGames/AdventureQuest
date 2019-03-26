@@ -22,7 +22,7 @@ from source.places_grandpasTrailer import grandpasTrailer
 from source.places_babel import babel
 import sys
 from source.places_pod import pod
-from source.places_furnitureTown import furnitureTown
+from source.places_furnitureTown import *
 # except Exception as e:
 #     print(e)
 #     print('Failed to do initial import.')
@@ -52,10 +52,8 @@ class Game:
         else: # dev mode
             devMode(self.player)
             setConsoleWindowSize(WINDOW_WIDTH, 14) # so i can see it in vs code
-            furnitureTown(self.player)
-
-            self.player.addToInventory(Item(self.player, 'Furniture Tom\'s business card', customDescription='Hi my name is Furniture Tom and welcome to Furniture Town. If you want to buy some furniture just call 1-800-FRN-TOWN', _type='misc', sellValue=0))
-            self.player.getInput()
+            # furnitureTown(self.player)
+            inflitrationQuest(self.player)
             
 
 
