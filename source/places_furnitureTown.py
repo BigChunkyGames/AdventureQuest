@@ -99,6 +99,7 @@ def inflitrationQuest(player):
     printSlowly("1")
     Sound(player,'elevator_ding.wav', loop=0)
     show("The elevator arrives and 4 huge burly men in Furniture Town Polos walk out.")
+    music = Sound(player, 'elevator.wav')
     show("You step inside the elevator and examine the array of buttons.")
     show("The buttons stretch from the floor to the ceiling and range from @1@yellow@ to @112@yellow@.")
     show("There is also a button labled @'Directory'@yellow@.")
@@ -128,6 +129,7 @@ def inflitrationQuest(player):
                     show("You can't go back to Alice empty-handed...")
                     show("You get back in the elevator.")
                 else:
+                    music.stopSounds()
                     return part2(player,total, nameTagName)
             elif floor == 2:
                 show(o+" you see an office of men that all look exactly like Furniture Tom filing papers and making small talk by the watercooler.")
@@ -279,7 +281,7 @@ def part2(player, total, name):
     if not yesno(player):
         show("Your deliberation wakes Alice.")
     printSlowly("Whhhuuaaa?", secondsBetweenChars=.1)
-    printSlowly(name +)
+    printSlowly(name ) # TODO finish
 
 
 def directory(floor):

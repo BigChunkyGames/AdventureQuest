@@ -52,6 +52,11 @@ class Game:
         else: # dev mode
             devMode(self.player)
             setConsoleWindowSize(WINDOW_WIDTH, 14) # so i can see it in vs code
+
+
+
+
+
             # furnitureTown(self.player)
             inflitrationQuest(self.player)
             

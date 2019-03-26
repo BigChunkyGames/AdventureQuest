@@ -560,7 +560,11 @@ class Sound():
 
         self.loop = loop
         self.player = player
-        folder = player.stats['audioDirectory']
+        try:
+            folder = player.stats['audioDirectory']
+        except AttributeError as e:
+            print(e)
+            print("did you forget to include the player object?")
         # dist/audio/ or audio/
 
         if   os.path.exists(folder+'music_loops/' + fileName):
@@ -592,6 +596,16 @@ class Sound():
         except:
             print("Couldn't load " +fileName + ' >:O')
 
+    def pause(self): 
+        self.mixer.pause()
+    def unpause(self):
+        self.mixer.unpause()
+    def resume(self):
+        self.mixer.unpause()
+    def fadeOut(self, seconds=1): # have to redeclare sound object to resume
+        self.mixer.fadeout(seconds)
+
+
     def setMixer(self, whichOne): # also makes channels
         if self.player == None:
             self.makeNewMixer()
@@ -605,15 +619,12 @@ class Sound():
             except:
                 self.makeNewMixer()
 
-
     def makeNewMixer(self):
         self.mixer = pygame.mixer
         self.mixer.pre_init(44100, -16, 1, 512)
         self.mixer.init()
         self.channel = self.mixer.Channel(0)
         
-
-
     def getLength(self): # returns duration of wav file in seconds
         import wave
         import contextlib
