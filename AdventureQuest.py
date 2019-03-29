@@ -58,7 +58,7 @@ class Game:
 
 
             # furnitureTown(self.player)
-            inflitrationQuest(self.player)
+            # inflitrationQuest(self.player)
             
 
 
@@ -76,11 +76,11 @@ class Game:
             #pod(self.player)
             # i = Item(self.player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ', _type='consumable', consumable=Consumable(self.player, heal=10, karma=-3, consumeText='Hope Grandpa won\'t be mad that you ate his lasagna!'))
             # self.player.addToInventory(i)
-            grandpasTrailer(self.player)
+            # grandpasTrailer(self.player)
             #burntTown(self.player)
             #babel(self.player)
             #introduction(self.player)
-            maintown(self.player)
+            # maintown(self.player)
             
             #dogeTown(self.player)
             #flowers(self.player)

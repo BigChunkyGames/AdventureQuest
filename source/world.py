@@ -9,10 +9,10 @@ def world(player): # returning from world should always immedietly call world ag
     while True:
         clear()
         # TODO flavorize make seperate biome synomyms for this part
-        printc("To the @'North'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY - 1)), 
-        printc("To the @'East'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX +1 , player.currentLocationY )), 
-        printc("To the @'South'@blue@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),
-        printc("To the @'West'@blue@  you can see " + player.map.getTileDescription(player.currentLocationX -1, player.currentLocationY )), 
+        printc("To the @'North'@yellow@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY - 1)), 
+        printc("To the @'East' @yellow@ you can see " + player.map.getTileDescription(player.currentLocationX +1 , player.currentLocationY )), 
+        printc("To the @'South'@yellow@ you can see " + player.map.getTileDescription(player.currentLocationX , player.currentLocationY +1)),
+        printc("To the @'West' @yellow@ you can see " + player.map.getTileDescription(player.currentLocationX -1, player.currentLocationY )), 
         x = getInput(player)
         if x == 'load': return 
         if( x == "north" or x == "n"):
