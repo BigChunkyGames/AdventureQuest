@@ -160,7 +160,7 @@ def blacksmith(player):
         # TODO crafting
 
 def tavern(player):
-    s = Sound(player, 'cumulus.wav')
+    s = Sound(player, 'harp.wav')
     if player.registerVisit("Main Town Tavern") == 1:
         show("You walk into the old tavern, wanting to visit the old place "
              "once again.")
@@ -177,8 +177,7 @@ def tavern(player):
         printSlowly('Make sure to watch how much '+drink+' you have this time!') 
         show('Several of the bar\'s guests chuckle jovially.')
     else:
-        show("You walk into the old tavern once again, determined to find some "
-          "dank shit to do here or something.")
+        show("You walk into the old tavern once again, this place is great.")
     while True:
         print("You have a look around to see what's up:")
         printc("In front of you lies a pretty dope looking @'slot'@yellow@ machine.")

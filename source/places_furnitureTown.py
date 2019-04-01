@@ -85,7 +85,7 @@ def inflitrationQuest(player):
     player.addToInventory(item)
     player.equippedWeapon == item
     show("@You equipped the name tag.@green@")
-    printSlowly("Oh and by the way there's a stack of EP500's on floor 10 and they need processing.")
+    printSlowly("Oh and by the way there's a stack of EP500s on floor 10 and they need processing.")
     printSlowly("Get on that would you?")
     show('Hank goes back to staring at the door with his arms crossed.')
     show("You take a look around the warehouse and find that it too is tremendously large.")
@@ -190,80 +190,99 @@ def inflitrationQuest(player):
                 show("You feel a confused horror but the face you see has a look of calm contentment.")
                 show("You begin to speak but...")
             elif floor == 10:
-                show(o+" you walk down a hallway looking for where the money might be.")
-                show('You turn the corner and see a door labled, "Capital Storage".')
-                show("You start to turn the handle but suddenly you hear a scolding voice from behind you.")
-                show("An angry woman in a manager's outfit is pointing her finger at your pants.")
-                show("Her name tag says, \"Loreen\".")
-                printSlowly("What the heck are you doing?")
-                x = player.getInput()
-                printSlowly("I don't want to hear it!")
-                printSlowly("You can't wear those "+str(player.equippedArmourLegs.name)+" around here!")
-                printSlowly("Think of the customers!")
-                printSlowly("Go into that storage room and change into some slacks this instant!")
-                show("You hang your head low and enter the storage room across the hall.")
-                show("You open a box labled, \"SLACKS\" and find some slacks that are your size.")
-                slacks = Item(player, 'Slacks', 'You found these in a box labled, "SLACKS".', _type='Armour', armourSlot='legs')
-                player.addToInventory(slacks)
-                print("Put them on?")
-                if yesno(player):
-                    show("@You put on the slacks.@green@")
+                if "realigned ep500s" in player.history:
+                    show("Ed is still hard at work proceessing those ep500s.")
                 else:
-                    show("@You put on the slacks even though you don't want to.@green@")
-                player.equippedArmourLegs = slacks
-                show('You exit the storage room and try the handle to the door labled, "Capital Storage".')
-                show("It's locked.")
-                show("Loreen appears behind you.")
-                printSlowly("Oh now I've got you!")
-                printSlowly("And I assume you've misplaced your master key as well?")
-                printSlowly("Don't you know some crook could be trying to steal our money and all he would need is that key.")
-                printSlowly("This is going on your permanent record, "+nameTagName.title()+".")
-                printSlowly("I'll open this for you now, but if you don't have that key by tomorrow there will be serious consequences.")
-                printSlowly("What do you need in here anyways?")
-                print("> ")
-                wait(1)
-                printSlowly("Actually don't answer that. I don't care.")
-                printSlowly("Just get back to work.")
-                show("Loreen opens the door for you and you go inside.")
-                show("The door closes behind you and you turn on the lights.")
-                show('In front of you there is a huge safe with a complicated looking keypad.')
-                print("Enter password?")
-                while True:
-                    if yesno(player):
-                        print("The computer terminal is awaiting input:")
-                        pw = player.getInput()
-                        if pw == '123':
-                            player.history.append("Got the money from furniture town")
-                            show("Click.")
-                            show("The safe opens and a huge amount of money spills out onto the ground.")
-                            show("You begin stuffing as much of it as you can into your pants, but your "+str(player.equippedArmourLegs.name)+" have shallow pockets.")
-                            player.addMoney(5035)
-                            total = 5035
-                            while True:
-                                print("Grab some more?")
-                                if yesno(player):
-                                    show("You stuff some more money in your pants.")
-                                    show("They are bulging at the seams.")
-                                    r = random.randint(98, 432)
-                                    player.addMoney(r)
-                                    total+=r
-                                else:
-                                    break
-                            show("You exit the room and make a break for the elevator.")
-                            break
-                        else:
-                            show("The safe beeps angrily.")
-                            show("Wrong password.")
-                    else:
-                        show('You look around the room for a hint.')
-                        show('On the wall next to the safe is a sticky note with the numbers, "1 2 3" on it.')
-                    print("Try again?")
+                    player.history.append("realigned ep500s")
+                    show(o+" walk into a room filled with misaligned EP500s.")
+                    show("The EP500s are piled in boxes and cover all of the walls in the room.")
+                    show("Each of the boxes has an huge red @UNPROCESSED@red@ sticker.")
+                    show("It is going to take weeks to realign/process these.")
+                    Sound(player,'elevator_ding.wav', loop=0)
+                    show("The elevator door opens behind you and a thin lanky man with wearing a nametag that says \"Ed\" enters the room.")
+                    printSlowly("Boy I bet you're glad I'm here to relieve your shift!")
+                    printSlowly("You must be so tired after a whole shift of realignment!")
+                    printSlowly("Seriously these things are the worst but you did you time so I'll take it from here.")
+                    show("Ed begins opening boxes.")
+                show("You get back into the elevator.")
+            elif floor == 11:
+                storage(player)
             else:
                 show("The computerized voice comes over the speakers.")
                 printSlowly("That floor is on lockdown.")
                 printSlowly("Thank you.")
                 continue
             show("The elevator doors slowly close.")
+
+def storage(player):
+    show("The doors open and you walk down a hallway looking for where the money might be.")
+    show('You turn the corner and see a door labled, "Capital Storage".')
+    show("You start to turn the handle but suddenly you hear a scolding voice from behind you.")
+    show("An angry woman in a manager's outfit is pointing her finger at your pants.")
+    show("Her name tag says, \"Loreen\".")
+    printSlowly("What the heck are you doing?")
+    x = player.getInput()
+    printSlowly("I don't want to hear it!")
+    printSlowly("You can't wear those "+str(player.equippedArmourLegs.name)+" around here!")
+    printSlowly("Think of the customers!")
+    printSlowly("Go into that storage room and change into some slacks this instant!")
+    show("You hang your head low and enter the storage room across the hall.")
+    show("You open a box labled, \"SLACKS\" and find some slacks that are your size.")
+    slacks = Item(player, 'Slacks', 'You found these in a box labled, "SLACKS".', _type='Armour', armourSlot='legs')
+    player.addToInventory(slacks)
+    print("Put them on?")
+    if yesno(player):
+        show("@You put on the slacks.@green@")
+    else:
+        show("@You put on the slacks even though you don't want to.@green@")
+    player.equippedArmourLegs = slacks
+    show('You exit the storage room and try the handle to the door labled, "Capital Storage".')
+    show("It's locked.")
+    show("Loreen appears behind you.")
+    printSlowly("Oh now I've got you!")
+    printSlowly("And I assume you've misplaced your master key as well?")
+    printSlowly("Don't you know some crook could be trying to steal our money and all he would need is that key.")
+    printSlowly("This is going on your permanent record, "+nameTagName.title()+".")
+    printSlowly("I'll open this for you now, but if you don't have that key by tomorrow there will be serious consequences.")
+    printSlowly("What do you need in here anyways?")
+    print("> ")
+    wait(1)
+    printSlowly("Actually don't answer that. I don't care.")
+    printSlowly("Just get back to work.")
+    show("Loreen opens the door for you and you go inside.")
+    show("The door closes behind you and you turn on the lights.")
+    show('In front of you there is a huge safe with a complicated looking keypad.')
+    print("Enter password?")
+    while True:
+        if yesno(player):
+            print("The computer terminal is awaiting input:")
+            pw = player.getInput()
+            if pw == '123':
+                player.history.append("Got the money from furniture town")
+                show("Click.")
+                show("The safe opens and a huge amount of money spills out onto the ground.")
+                show("You begin stuffing as much of it as you can into your pants, but your "+str(player.equippedArmourLegs.name)+" have shallow pockets.")
+                player.addMoney(5035)
+                total = 5035
+                while True:
+                    print("Grab some more?")
+                    if yesno(player):
+                        show("You stuff some more money in your pants.")
+                        show("They are bulging at the seams.")
+                        r = random.randint(98, 432)
+                        player.addMoney(r)
+                        total+=r
+                    else:
+                        break
+                show("You exit the room and make a break for the elevator.")
+                break
+            else:
+                show("The safe beeps angrily.")
+                show("Wrong password.")
+        else:
+            show('You look around the room for a hint.')
+            show('On the wall next to the safe is a sticky note with the numbers, "1 2 3" on it.')
+        print("Try again?")
             
 def part2(player, total, name):
     show("You quickly head towards the exit of the Employee's Only area.")
@@ -271,7 +290,7 @@ def part2(player, total, name):
     printSlowly("Huh. I remember you looking skinnier.")
     printSlowly("Have you put on some weight?")
     printSlowly("You must just look fat in those "+player.equippedArmourLegs+".")
-    printSlowly("Well anyways, thanks for sorting out all those issues with the EP500's.")
+    printSlowly("Well anyways, thanks for sorting out all those issues with the EP500s.")
     printSlowly("It's nice to know someone around here has my back.")
     printSlowly("Now get back out there and sell some furniture!")
     show("Hank gives you a shove through the exit.")
@@ -297,6 +316,7 @@ def directory(floor):
     printSlowly("Floor 8: Nothing")
     printSlowly("Floor 9: Chamber of Retroflection")
     printSlowly("Floor 10: EP500 Realignment Facility")
+    printSlowly("Floor 11: Storage")
     printSlowly("All other floors are on lockdown.")
     printSlowly("Thank you.")
 

@@ -53,12 +53,14 @@ class Game:
             devMode(self.player)
             setConsoleWindowSize(WINDOW_WIDTH, 14) # so i can see it in vs code
 
+            # self.player.die()
 
 
 
 
-            # furnitureTown(self.player)
-            # inflitrationQuest(self.player)
+
+            furnitureTown(self.player)
+            #inflitrationQuest(self.player)
             
 
 

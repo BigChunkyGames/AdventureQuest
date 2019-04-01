@@ -379,7 +379,8 @@ class Player:
 
     def die(self, customText=None): self.death(customText)
     def death(self, customText=None):
-        Sound(self, 'etheral plunge.wav')
+        clear()
+        Sound(self, 'sad goth.wav')
         if customText:
             printSlowly(str(customText), skipable=False, quotes=False)
         else:

@@ -115,7 +115,7 @@ def bye():
     sys.exit()
 
 def theEnd(player):
-    printSlowly("The End\n\n\n", secondsBetweenChars=.4)
+    printSlowly("The End\n\n\n", secondsBetweenChars=.4, quotes=False)
     print("Continue?")
     if yesno(player):
         loadGame(player)
@@ -250,7 +250,7 @@ class printSlowly():
     def __init__(self, text, secondsBetweenChars=.03, newline=True, pause=.45, initialWait=True, skipable=True, quotes=True,):
         # .03 is a pretty good talking speed
         # you no longer need to have parenthesis around dialogue when addparanthesis=true
-        self.text = wrap(text, limit=int(WINDOW_WIDTH), padding=False)
+        self.text = wrap(text, limit=int(WINDOW_WIDTH), padding=False).strip()
         self.secondsBetweenChars=secondsBetweenChars
         self.newline=newline
         self.pause=pause
@@ -275,10 +275,11 @@ class printSlowly():
         pausePoints = ['.', ',', '!', '?', ':']
         skipThese = ['"', "'"]
         waitOnNextChar=False
+        if self.text[0] == '.': self.interuptableWait(self.pause) # special case for starting with .
         if self.initialWait: self.interuptableWait(self.pause)
         for self.i in range(len(self.text)):
             if self.finishNow:
-                self.secondsBetweenChars = 0
+                self.secondsBetweenChars = 0 # FIXME this should just print the rest instantly
                 self.pause = 0
             print(str(self.text[self.i]), end='')
             if waitOnNextChar: 
@@ -341,7 +342,7 @@ def saveGame(player, printAboutIt=False): # just do yourself a favor and don't l
         printc("@Game "+saveIndex+" saved!@green@")
     
 
-def loadGame(player): # loads most recent save file
+def loadGame(player, revival=True): # loads most recent save file
     newestFile = getNewestFile(player)
     if newestFile==None:
         show("There are no saved games yet! You need to go somewhere first!")
@@ -356,7 +357,11 @@ def loadGame(player): # loads most recent save file
     except FileNotFoundError:
         printc("@Couldn't find any files to load!@red@")
         return False
-    show("@Game loaded!@green@")
+    if revival:
+        show("Suddenly there is an otherworldly shift in the spacetime continuum!")
+        show("@You live again in the past!@green@")
+    else:
+        show("@Game loaded!@green@")
     player.addMixers()
     player.map.goToCurrentLocation(player)
 
@@ -376,7 +381,7 @@ def newOrLoad(player):
             return True
         elif 'load' in x or 'continue' in x or checkInput(x, 'load') or checkInput(x, 'continue'):
             setConsoleWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-            loadGame(player)
+            loadGame(player, revival=False)
             return False
  
 def generateTimeStamp(): 
@@ -556,7 +561,7 @@ class Sound():
     # more fun functions https://www.pygame.org/docs/ref/mixer.html#pygame.mixer.Channel.queue
     # NOTE: make loop -1 to loop forever, loop 0 to loop once
     # NOTE: volume adjustments (fade in out) only work with wav files
-    def __init__(self, player=None, fileName=None, playNow=True, waitUntilFinished=False, queue=True, volume=1, loop=0, stopOtherMusicLoops=True):
+    def __init__(self, player=None, fileName=None, playNow=True, waitUntilFinished=False, volume=1, loop=0, stopOtherMusicLoops=True):
 
         self.loop = loop
         self.player = player
