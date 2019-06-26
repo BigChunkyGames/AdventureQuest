@@ -38,14 +38,14 @@ def maintown(player):
         elif place == "leave" or place == "l":
             if player.getVisits(townName) == 1:
                 show("Just before you set foot outside of "+townName+", mom catches up with you.")
-                printSlowly('"Sweety I almost forgot!"', secondsBetweenChars=.05, initialWait=False)
+                printSlowly('"Sweetie I almost forgot!"', secondsBetweenChars=.05, initialWait=False)
                 printSlowly('"While you\'re out would you mind taking this lasagna to Grandpa?"', secondsBetweenChars=.03) 
                 i = Item(player, "Lasagna", customDescription='A steamy lasagna in a large plastic container. Mom said to take this to Grandpa. She also said that he lives to the East of ' + townName +'.', _type='consumable', consumable=Consumable(player, heal=10, karma=-3, consumeText='Hope Grandpa won\'t be mad that you ate his lasagna!'))
                 player.addToInventory(i)
                 printSlowly("He's seen a thing or two and can probably help you out with your adventure.", secondsBetweenChars=.03) 
                 printSlowly('"He lives to the East."', secondsBetweenChars=.03) 
                 printSlowly('"You know the way."', secondsBetweenChars=.03) 
-                printSlowly('"Come back soon sweety!"', secondsBetweenChars=.03) 
+                printSlowly('"Come back soon sweetie!"', secondsBetweenChars=.03) 
                 show("And with that, you are finally free.")
                 
             else:

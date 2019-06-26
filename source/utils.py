@@ -137,6 +137,20 @@ def show(text, dots=True):
     else: text = ''
     x=getpass.getpass(text) # waits for enter, doesnt show typed input becuase it's treated like a password
 
+def aan(text):  # Turns "a/A" into "an/An" when appropriate. Works on vowels, not vowel sounds, and not "Y"
+    try:
+        if text.lower().startswith("a ") and (text[text.lower().index("a ")+2].lower()) in ["a", "e", "i", "o", "u"]:
+            # look for "a " if it is the beginning of a string
+            text = (text[:text.lower().index("a ")+1] + "n" + text[text.lower().index("a ")+1:])
+        if (text[text.lower().index(" a ")+3].lower()) in ["a", "e", "i", "o", "u"]:  # find " a " and check if it precedes a vowel
+            text = (text[:text.lower().index(" a ")+2] + "n" + aan(text[text.lower().index(" a ")+2:]))  # perform recursively
+        else:  # note that anything that reaches this point has " a " in it otherwise it would've triggered ValueError
+            if (text[text.lower().index(" a ")+3].lower()) == "@" and (text[text.lower().index(" a ")+4].lower()) in ["a", "e", "i", "o", "u"]:
+                text = (text[:text.lower().index(" a ")+2] + "n" + aan(text[text.lower().index(" a ")+2:]))
+            else: text = (text[:text.lower().index(" a ")+2] + aan(text[text.lower().index(" a ")+2:]))
+    except ValueError: pass
+    return text
+
 # the only reason i made this was so that it would preserve newlines because the textwrap module doesnt do that
 def wrap(text, limit=40, padding=True):
     text = str(text)
@@ -190,6 +204,7 @@ def printc(text, stringList=False):
     # now supports multiple colors per call
     #  Given syntax like "this word is @colored@yellow@" will color all text between first two @'s. ie colored becomes yellow
     #printc('@test@red@uncollored@colored@blue@@color@yellow@')
+    text = aan(text)
     text = wrap(text, limit=int(WINDOW_WIDTH), padding=False)
     return printcHelper(text, stringList)
 
@@ -325,7 +340,7 @@ def saveGame(player, printAboutIt=False): # just do yourself a favor and don't l
             pickle.dump(player, output, protocol=pickle.HIGHEST_PROTOCOL)
     except Exception as e:
         printc("@(The game should have saved right there but it didn't D: )@red@")
-        print(e)
+        if player.debugmode: print(e)
         #pickle2.detect.trace(True)
         #print(pickle.detect.baditems(player))
         input('dang it')
@@ -569,8 +584,9 @@ class Sound():
             self.fileName = folder+'one_shots/' + fileName
             self.setMixer('one_shots')
         else:
-            print("(couldn't find sound file: " + folder + '/?/'+ fileName + ")")
-            input('halt')
+            if player.debugmode:
+                print("(couldn't find sound file: " + folder + '/?/'+ fileName + ")")
+                input('halt')
 
         try:
             if '.wav' in self.fileName:
@@ -587,7 +603,7 @@ class Sound():
                 if playNow:
                     self.mixer.music.play(self.loop)
         except:
-            print("Couldn't load " +fileName + ' >:O')
+            if player.debugmode: print("Couldn't load " +fileName + ' >:O')
 
     def setMixer(self, whichOne): # also makes channels
         if self.player == None:
