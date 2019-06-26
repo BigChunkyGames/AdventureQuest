@@ -141,7 +141,7 @@ def introduction(player):
     show('She looks up from the '+getRandomDankClothing()+' sock she\'s knitting.')
     # printSlowly("Alright sweetie, be safe! Here, take this.")
     # player.addToInventory(Item(player, 'Camera', customDescription='Mom got this for you.', _type='misc'))
-    printSlowly("Oh sweety I'm glad you're alright!")
+    printSlowly("Oh sweetie, I'm glad you're alright!")
     printSlowly("Your grandpa used to pass out in bars all the time.")
     printSlowly("Maybe you should go and give him a visit.")
     printSlowly("Oh!")

@@ -244,11 +244,12 @@ def consume(item): # for consuming consumables
         text = "You can't use that!"
     return text
 
-def checkForSpecialItems(item, text):
+def checkForSpecialItems(item):
     name = item.name
     if name == 'beer' or name == 'Bottle of Vodka' or name == 'Jar of Moonshine':
         if player.aspect['age'] <21:
             return "You're not old enough to have that!\nYou throw it on the ground."
+    return ""
 
 
 def generateRandomConsumable(player, name = None, consumableType=None, customDescription='', consumable=None, powerLevel=0, returnItem=True):

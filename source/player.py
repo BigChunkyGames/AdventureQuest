@@ -14,6 +14,7 @@ class Player:
 
     def __init__(self): 
         self.devmode = False
+        self.debugmode = False
         # dicts
         self.aspect = {'name' : 'no name'}  # Beginning inputs (name, gender, etc) used in storytelling
         self.stats = {} # name : int
@@ -328,14 +329,12 @@ class Player:
             else:
                 show("You have gained @" + str(xp) + " XP@yellow@! That's enough to level up!")
                 self.levelUp()
-        else: 
-            s = ''
+        else:
             if self.xp < self.levelupxp:
-                s += "You have gained " + str(xp) + " XP!"
+                return "You have gained " + str(xp) + " XP!"
             else:
                 self.levelUp(printAboutIt=False)
-                s += "You have gained " + str(xp) + " XP! That's enough to level up!\nYou are now level " + str(self.level) +"!"
-            return s
+                return "You have gained " + str(xp) + " XP! That's enough to level up!\nYou are now level " + str(self.level) +"!"
 
 #### Combat ##########################################
 
