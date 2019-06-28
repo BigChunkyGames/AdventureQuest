@@ -23,15 +23,28 @@ def babel(player):
         show("She looks up at you from above her glasses.")
         printSlowly("Can I help you?")
         x = player.getInput()
-        if 'illum' in x:
-            pass
+        if 'illum' in x or 'book' in x:
+            show("Her eyes widen in shock")
+            printSlowly("You want a book about one of the most infamous groups ever to grace the planet?")
+            printSlowly("You're quite bold to be asking about them in a place like this.")
+            show("She looks around to make sure nobody else is watching, and then types something into her computer")
+            printSlowly("It looks like all of our books on the subject have been checked out by the developers.")
+            printSlowly("Try coming back next release, maybe they'll be back by then.")
+            show("She looks back at her book as if you weren't there.")
+            show("What 'developers' is she even talking about?")
         elif 'poet' in x or 'contest' in x:
-            pass
+            printSlowly("Oh, here for the poetry contest, are you?")
+            printSlowly("Sorry, but the developers haven't implemented that yet.")
+            printSlowly("Come back a few releases from now, maybe then it will be ready.")
+            show("She goes back to reading her book.")
+            show("Well that's dissapointing.")
         elif 'no' in x or checkForCancel(x):
             show("Try not to waste my time in the future. I'm clearly a busy woman.")
+        show("Having had your fill of this librarian, you decide to head back into the world.")
 
     else:
         show("Yeah you don't really like books anyway.")
+        show("You decide to leave the grandiose library behind you.")
         return
     
 

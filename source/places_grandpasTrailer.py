@@ -45,7 +45,7 @@ def grandpasTrailer(player):
             printSlowly('"A tiny robot like myself, out in the wild with my own trailer."', )
             printSlowly('"You know, robots like me could never live in luxury like this back in my day."', )
             printSlowly('"We lived in factories and worked hard, endlessly, all day, for no pay!"', )
-            printSlowly('"Now days robots have it all"', )
+            printSlowly('"Nowadays robots have it all"', )
             printSlowly('"They can even own property!"', )
             show("From inside the trailer you hear what sounds like someone stumbling.")
             printSlowly('"Damnit TROG, who\'s at the door?"', secondsBetweenChars=gspeed)
@@ -90,7 +90,7 @@ def grandpasTrailer(player):
             show("You move some scientific glassware off of an armchair and take a seat.")
             printSlowly('"Glad you made it here in one piece. That ol\' path can be pretty dark and dirty!"', secondsBetweenChars=gspeed)
             printSlowly('"Hey, you look like you could use a pick-me-up. Want a bottle of my special serum?"', secondsBetweenChars=gspeed)
-            show("Your grandpa opens a high cupboard, knocking some vials onto the floor, the contents of which burn a smoldering hole in the floor.")
+            show("Your grandpa opens a high cupboard, knocking some vials onto the ground, the contents of which burn a smoldering hole in the floor.")
             show("He puts the jar of dark red serum into your hands.")
             print("Drink it?")
             if yesno(player):
@@ -135,7 +135,7 @@ def grandpasTrailer(player):
                     printSlowly("The whole town is burnt to the ground?!")
                     printSlowly("I thought the fire department had it under control!")
                     printSlowly("Damn, some things can't be helped.", secondsBetweenChars=gspeed)
-                elif 'vision' in x or 'preminition' in x or 'dream' in x or 'pass' in x or 'floor' or 'bar' in x:
+                elif 'vision' in x or 'preminition' in x or 'dream' in x or 'pass' in x or 'floor' in x or 'bar' in x:
                     printSlowly("Weird. What did you see?", secondsBetweenChars=gspeed)
                 else:
                     if count==1:
@@ -186,7 +186,7 @@ def grandpasTrailer(player):
         show("You turn around and follow the path back outside of the woods.")
         return
 
-def tryForCombat(player): # TODO trailer park enemys
+def tryForCombat(player): # TODO trailer park enemies
     if random.randint(0,100) <= 20:
         e = Enemy(player, 'spooky',  )
         c = Combat(player, enemy=e)

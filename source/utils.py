@@ -103,7 +103,7 @@ def getInput(player, oneTry=False, prompt='> '): # lowers and strips input
     return inp
 
 def checkForCancel(inp):
-    if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp:
+    if  'back' in inp or  'cancel' in inp or  'return' in inp or  'bye' in inp or  'leave' in inp or  'exit' in inp or  'never mind' in inp:
         return True
     else:
         return False

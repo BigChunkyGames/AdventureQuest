@@ -21,7 +21,7 @@ def pod(player):
             invert('Try harder?', showIt=False)
             if yesno(player):
                 # TODO brightness combat
-                pass
+                invert('You try as hard as you can, but are unable to overcome the power of light itself')
             else:
                 invert('You submit to waking up.')
         invert('You sit up and swing your feet over the bed.')
@@ -45,7 +45,7 @@ def pod(player):
         printSlowly('You are safe.')
         printSlowly('Did you have a bad dream?')
         printSlowly('Was it me?')
-        printSlowly('Have I displeased you in some wa_')
+        printSlowly('Have I displeased you in some wa-')
         printSlowly('Oh!')
         printSlowly('Oh! Oh! Oh!')
         printSlowly('The light!')
@@ -81,7 +81,7 @@ def pod(player):
         printSlowly('Having company puts me on edge.')
         printSlowly('The calculations become much more complex.')
         printSlowly('So please, go back to sleep.')
-        invert("Would you like to go back to 'sleep', look out the 'window', sit in the 'chair', or mess around with the 'controls'?", showit=False)
+        invert("Would you like to go back to 'sleep', look out the 'window', sit in the 'chair', or mess around with the 'controls'?", showIt=False)
         while True:
             x = player.getInput()
             if 'sleep' in x or checkInput(x, 'sleep'):
@@ -92,12 +92,12 @@ def pod(player):
                 invert('You stand up on the bed and peer out of the window.')
                 invert('Outside of the pod you can see streaks of black whizzing by you through an infinite plane of white.')
                 invert('The white is so powerful that you can feel your eyes trembling as the whites around your iris attempt to assimilate with the purity of all that you see.')
-                invert('Suddenly you are filled with the fear that if you stare into this vastness of white for too long then you will be completely absorbed by it and your eyes will be forever glued to the sight of it.')
-                invert('You tear yourself away.')
+                invert('Suddenly you are filled with the fear that if you stare into this vastness of white for too long then you will be completely absorbed by it, forever captivated by its unyeilding beauty and unable- no, unwilling to ever stop.')
+                invert('You tear yourself away.')  # TODO: something bad happens if you look at the window several times
             if 'chair' in x or checkInput(x, 'chair'):
-                pass
+                invert("(not yet implemented)")
             if 'controls' in x or checkInput(x, 'controls'):
-                pass
+                invert("(not yet implemented)")
         
 
 def invert(text, showIt=True):

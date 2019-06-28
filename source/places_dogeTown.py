@@ -49,7 +49,7 @@ def dogeTown(player):
             print('"Gruph."')
             print("Look at his wares?")
             if yesno(player):
-                bonysShop(player)
+                bonysShop(player)  # NOTE: "The terminal process terminated with exit code: 3221225786"
             show("That was fun, but now it's time to leave.")
         elif (x == "king" or x == "k" or x == "king's"):
             show("You approach an impractically large marble door at the top of another set of white marble steps.")
@@ -77,32 +77,46 @@ def dogeTown(player):
                         if checkInput(x,"leave"):
                             break
                         elif checkInput(x,"bork bork bork woof bork"): # TODO find this code somewhere
-                            # TODO accesss granted
-                            show("The king opens the door wide and allows you to enter.")
+                            # TODO access granted
+                            show("Recognizing the secret access code, the king nods.")
+                            show("He opens the door wide and allows you to enter.")
                             show("Then he slams it shut in your face because this part of the game is unfinished.")
                             break
                         
 
             show("You head back down the stairs to the courtyard.")
         elif checkInput(x, "Synadogue"):
-            if player.registerVisit("dogetownChurch") == 1: # if first time here
-                if not player.equippedArmourChest and not player.equippedArmourChest.name == "Doggy-Style Costume": # if not naked and chest doggy style constume not equipped
-                    show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
-                    show("The Synadogue has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
-                    show("Though threatened by the colossal artistry, you slowly creek open the mighty door and enter.")
-                    show("As you open the door the entire doggo quire stops singing and looks directly at you.")
-                    show("It is completely silent.")
-                    show("At the end of the chancel and behind the alter stands a duggo holding his paws to the sky as if to cast his radiance around the room.  ")
-                    show("It is no ordinary duggo.")
-                    show("It is...")
-                    show("It must be...")
-                    show("Buddhog")
-                    show("The entire quire of doogles starts growling and barking at the sight of you.")
-                    show("You exit the building.")
-                    show("There was something oddly familiar about that dog.")
+            if player.registerVisit("dogetownChurch") == 1 and not player.equippedArmourChest.name == "Doggy-Style Costume": # if first time here and chest doggy style costume not equipped
+                show("The soulful doggos inside are howling a hymn in unison. It sounds beautiful and you're touched knowing it's even possible for diggies to sound this good. ")
+                show("The Synadogue has massive stained glass windows of grand grizlords, slippery tube dudes, and big scary teeth doggos. ")
+                show("Though threatened by the colossal artistry, you slowly creek open the mighty door and enter.")
+                show("As you open the door the entire doggo quire stops singing and looks directly at you.")
+                show("It is completely silent.")
+                show("At the end of the chancel and behind the alter stands a duggo holding his paws to the sky as if to cast his radiance around the room.  ")
+                show("It is no ordinary duggo.")
+                show("It is...")
+                show("It must be...")
+                show("Buddhog Himself.")
+                show("The entire quire of doogles starts growling and barking at the sight of you.")
+                show("You quickly exit the building.")
+                show("There was something oddly familiar about that dog...")
 
-            elif player.equippedArmourChest and player.equippedArmourChest.name == "Doggy-Style Costume": # if not naked and wearing costume
-                show("Fitting right in, you crawl to the nearest pew and take a seat.")
+            if "Bud joined the party" in player.history:  # should not be elif
+                if not "Prayed at alter in dogetown" in player.history:
+                    show("There is nothing left to do inside the Synadogue except pray at the alter.")
+                    print("Pray?")
+                    if yesno(player):
+                        show("You kneel down next to the huge alter of DOG and wisper some words of repentance:")
+                        getInput(player)
+                        show("@Your sins are forgiven.@magenta@")
+                        player.history.append("Prayed at alter in dogetown")
+                        if player.karma < 0:
+                            player.karma += 1
+                else:
+                    show("Approaching the Synadogue, you remember your reunion with your beloved dog Bud.")
+                    show("You wipe a single tear from your eye before deciding that there's nothing else to do here.")
+            elif player.equippedArmourChest.name == "Doggy-Style Costume": # if wearing costume
+                show("Fitting right in with your Doggy-Style Costume, you crawl to the nearest pew and take a seat.")
                 print( "Sing along?")
                 if yesno(player):
                     show("You try to sing along to the hymns but they are completely unpredictable.")
@@ -136,36 +150,37 @@ def dogeTown(player):
                     show(s) 
                 show("This chanting continues for several minutes, but you cannot leave. Something about Buddhog captivates you.")
                 show("The sermon finishes and all of the dogles leave.")
-                show("You can talk to @'Buddhog'@yellow@ or @'leave'@yellow@.")
-                x = getInput(player)
-                if checkInput(x, "Buddhog"):
-                    show("You approach the holy dog.")
-                    show("You're nervous, something about him makes your heart beat fast.")
-                    show("He turns to face you, and you realize what you've been missing all along.")
-                    show('"' + player.aspect["name"] + '?!"')
-                    show("You both embrace in a hug that lasts a lifetime.")
-                    show("Tears roll down your face as you realize that you are now reunited with your childhood dog, Bud.")
-                    show('"It has been so long, ' + player.aspect["name"] + '".')
-                    printc("@Bud has joined the party!@cyan@") # TODO party members, 
-                    player.history.append("Bud joined the party")
-                    for i in player.inventory: # change description of crumpled paper
-                        if i.name == 'Crumped Paper':
-                            i.customDescription = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!" 
-                    input("... ")
-                    show("Bud will aid you in your quest. With your efforts combined, you are one step closer to defeating your greatest enemy.")
+                while True:
+                    show("You can talk to @'Buddhog'@yellow@ or @'leave'@yellow@.")
+                    x = getInput(player)
+                    if checkInput(x, "Buddhog"):
+                        show("You approach the holy dog.")
+                        show("You're nervous, something about him makes your heart beat fast.")
+                        show("He turns to face you, and you realize what you've been missing all along.")
+                        show('"' + player.aspect["name"] + '?!"')
+                        show("You both embrace in a hug that lasts a lifetime.")
+                        show("Tears roll down your face as you realize that you are now reunited with your childhood dog, Bud.")
+                        show('"It has been so long, ' + player.aspect["name"] + '".')
+                        printc("@Bud has joined the party!@cyan@") # TODO party members, 
+                        player.history.append("Bud joined the party")
+                        for i in player.inventory: # change description of crumpled paper
+                            if i.name == 'Crumped Paper':
+                                i.customDescription = "An extremely old missing dog poster that you made for Bud when you were trying to find him. You finally did!" 
+                        input("... ")
+                        show("Bud will aid you in your quest. With your efforts combined, you are one step closer to defeating your greatest enemy.")
+                        break
+                    if checkinput(x, "leave"):
+                        show("You feel unworthy of the presence of such a holy figure, and decide to take your leave.")
+                        break
+                    else: print(getInvalidOptionText())
 
-            elif "Bud joined the party" in player.history and not "Prayed at alter in dogetown" in player.history:
-                show("There is nothing left to do inside the Synadogue except pray at the alter.")
-                print("Pray?")
-                if yesno(player):
-                    show("You kneel down next to the huge alter of DOG and wisper some words of repentance:")
-                    getInput(player)
-                    show("@Your sins are forgiven.@magenta@")
-                    player.history.append("Prayed at alter in dogetown")
-                    if player.karma < 0:
-                        player.karma += 1
+
+            
+                else:
+                    show("Though the beautiful chorus of singing doggos sounds amazing from outside, you don't want to go back in there.")
             else:
-                show("Though the sound of the doggos singing sounds amazing from outside, you don't want to go back in there.")
+                show("After causing a scene last time, you don't want to go back in.")
+                show("You would feel much better if you found some way to fit in first.")
 
         elif (x == "leave" or x == "l"):
             show("Because you are insane, you decide to leave Dogetown. After all, the rest of the world can't be that much worse.")
@@ -188,8 +203,9 @@ def party(player):
             print("Consider his selection?")
             if yesno(player):
                 # TODO buy things at bar
-                pass
-            show("The pulsing of the sudwoofers shakes the room.")
+                show("You order the house specialty and in no time at all the barktender brings you out a dog bowl full of some sort of liquid.")
+                show("You don't really feel like drinking out of a dog bowl right now, and decide to head back into the crowd.")
+            show("The pulsing of the subwoofers shakes the room.")
             print("Ask for rumors?")
             if yesno(player):
                 show('"Bork bark. Roof bork riffity bork ruff.')
@@ -213,12 +229,12 @@ def party(player):
                 c = Combat(player, alert=False, enemy=e)
                 show("You finally thrash your way out of the mosh pit.")
             else:
-                show("You don't really want to go back in there.")
+                show("You don't really want to go back into the mosh pit after what happened last time.")
         elif x == 'leave' or x == 'l':
             return
         elif x == 'hallway' or x == 'h':
             if player.registerVisit("dogetown hallway") >1 :
-                show("You don't have to go to the bathroom anymore.")
+                show("You don't feel the need to go to the bathroom right now.")
                 continue
             show("You make your way down the hallway and come to a set of two doors each with their own sign.")
             show( "The door on the @'left'@yellow@ has a symbol that looks like this:")

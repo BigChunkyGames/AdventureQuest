@@ -288,7 +288,7 @@ def store(player):
          "are sold. ")
     show("You approach the shopkeeper, an old and wary gentleman with age on his face and experience in his eyes.")
     printSlowly('"What\'ll it be for ya today?"', pause=1.2)
-    maintownShop(player)
+    maintownShop(player)  # TODO: make shop return a value depending on whether or not you made a transaction, or just compare inv before and after
     # show("You make a point of considering the shopkeeper's wares, but you're "
     #      "not in the market for anything he's selling at the moment.")
     # show("He looks a little irritated that you didn't buy anything as you "
